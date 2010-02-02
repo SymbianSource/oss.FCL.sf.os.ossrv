@@ -1,0 +1,885 @@
+/**
+@mainpage 
+
+@par Overview 
+
+@par
+
+This document describes new core APIs for semi-automatic resource
+management designed to begin to increase the baseline usability of
+Symbian OS for developers. We would welcome feedback, improvement
+suggestions, and defect reports. Note that there is a Q&A section at
+the bottom of this page that explains some of the background rationale
+behind the design choices we have made to get to this point.
+
+Please send any questions or review feedback you have to: core.idioms@symbian.com
+
+The new APIs include the following:
+
+- A new type category: the L-class
+  - Allows leaving constructors and can rely on automatic destructor execution for
+    cleanup (explained in more detail below)
+- New general purpose, self-managing string classes that can be used much 
+  like T-classes 
+  - LString16 
+    - For manipulating strings of 16 bit characters
+    - Usually used via the ::LString typedef
+  - LString8 
+    - For manipulating strings of 8 bit characters
+  - ::LData
+    - Type alias for LString8 allowing the intent to use it as a raw (non-character) data buffer to be expressed
+  - The LString classes are based on the descriptor APIs and are fully interoperable with descriptors
+  - The LString classes can grow on demand and do not always need to be
+    initialized with a fixed reserve maximum length
+- New "smart pointer" style utility classes for managing resources referenced from local variables, 
+  which may be used instead of the existing cleanup stack API
+  - LCleanedupPtr
+    - Alternative to PushL(CBase*)/Pop()/PopAndDestroy() code sequences
+  - LCleanedupHandle
+    - Alternative to CleanupClosePushL()/Pop()/PopAndDestroy() code sequences
+  - See also the more rarely used LCleanedupRef, LCleanedupArray, and LCleanedupGuard
+- New "smart pointer" style utility classes for managing resources referenced from data members, 
+  which reduce the need for manually-written destructors 
+  - LManagedPtr
+    - Alternative to calling delete manually in a destructor for the managed data member
+  - LManagedHandle
+    - Alternative to calling Close() manually in a destructor for the managed data member
+  - See also the more rarely used LManagedRef, LManagedArray, and LManagedGuard
+- Enablers for the (optional, typically private) use of single-phase construction
+  - #CONSTRUCTORS_MAY_LEAVE 
+    - A class declaration flagging that the class's constructors may leave
+  - Normally used in combination with the LManagedXxx classes to ensure reliable cleanup in case of a constructor leaving
+  - Normally hidden behind a conventional Symbian NewL() abstraction
+- New utilities for making correct, error checking code easier to read
+  - New #OR_LEAVE postfix macro
+    - Alternative to wrapping User::LeaveIfError() around an expression
+
+The motivation for the new APIs is to make it easier to write correct,
+less brittle code in the first instance, but perhaps more so to make
+the resulting code easier to read and easier to modify safely later.
+
+Some guiding principles:
+
+- Resource management should be handled either fully automatically or declaratively 
+  at point of definition as far as possible
+  - Helps to eliminate mismatches between code that pushes and code that pops
+  - Helps to eliminate mismatches between code that constructs and code that destructs
+  - Removes the need to duplicate cleanup code (or modify your code's structure) to correctly handle functions with multiple return points 
+  - Makes changing code safer and easier by reducing dependencies between different areas of the code
+- It should be easier and lighter weight to write and maintain leave-safe code
+  - So that more people are prepared to make the investment to do it right
+- The primary function of code should not be swamped by auxiliary error checking and resource management 
+  - The key logic should be front and centre, and read as straightforwardly as possible
+- It should be easier to write fully general code
+  - Unsafe and/or overly conservative maximum size limitations should not be 
+    encouraged by making that style of code easier to write
+- Terminology should be as conventional as possible
+  - We call a string a string
+
+To help illustrate the new APIs, here is a sampling of idiomatic code
+implemented first in terms of the current Symbian APIs, and alongside
+in terms of the new APIs.
+
+<table width="100%">
+
+<tr valign="top">
+<td>Current APIs</td><td>New APIs</td>
+</tr>
+
+<tr valign="top">
+<td>
+@code
+{
+TBuf<KMaxQuery> query; // fixed worst-case max
+query.Format(KQueryFormat, param);
+ExecuteQueryL(query);
+}
+@endcode
+</td>
+<td>
+@code
+{
+LString query; // can grow its heap buffer on demand
+query.FormatL(KQueryFormat, param);
+ExecuteQueryL(query);
+} // query buffer released on normal scope exit or leave
+@endcode
+</td>
+</tr>
+
+<tr valign="top">
+<td>
+@code
+{
+HBufC* queryc = HBufC::NewLC(KTooBigForStackMaxQuery);
+TPtr query(queryc->Des());
+BuildQueryL(query);
+ExecuteQueryL(query);
+CleanupStack::PopAndDestroy();
+}
+@endcode
+</td>
+<td>
+@code
+{
+LString query;
+BuildQueryL(query);
+ExecuteQueryL(query);
+}
+@endcode
+</td>
+</tr>
+
+<tr valign="top">
+<td>
+@code
+{
+RBuf query;
+query.CleanupClosePushL();
+query.CreateL(TooBigForStackMaxQuery);
+BuildQueryL(query);
+ExecuteQueryL(query);
+CleanupStack::PopAndDestroy();
+}
+@endcode
+</td>
+<td>
+@code
+{
+LString query;
+BuildQueryL(query);
+ExecuteQueryL(query);
+}
+@endcode
+</td>
+</tr>
+
+<tr valign="top">
+<td>
+
+@code
+{
+CQuery* query = CQuery::NewL();
+CleanupStack::PushL(query);
+query->BuildQueryL();
+query->ExecuteQueryL();
+CleanupStack::PopAndDestroy();
+}
+@endcode
+
+</td>
+<td>
+
+@code
+{
+LCleanedupPtr<CQuery> query(CQuery::NewL()); 
+query->BuildQueryL();
+query->ExecuteQueryL();
+} // query deleted on normal scope exit or leave
+@endcode
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>
+
+@code
+{
+CQuery* query = CQuery::NewL();
+CleanupStack::PushL(query);
+query->BuildQueryL();
+CleanupStack::Pop();
+return query;
+}
+@endcode
+
+</td>
+<td>
+
+@code
+{
+LCleanedupPtr<CQuery> query(CQuery::NewL()); 
+query->BuildQueryL();
+return query.Unmanage(); 
+// query was protected until Unmanage() was called
+}
+@endcode
+
+</td>
+</tr>
+
+<tr valign="top">
+<td>
+
+@code
+{
+RQuery query;
+CleanupClosePushL(query);
+query.BuildQueryL();
+query.ExecuteQueryL();
+CleanupStack::PopAndDestroy();
+}
+@endcode
+
+</td>
+<td>
+
+@code
+{
+LCleanedupHandle<RQuery> query;
+query->BuildQueryL();
+query->ExecuteQueryL();
+} // query is closed on normal scope exit or leave
+@endcode
+
+</td>
+</tr>
+
+</table>
+
+@par Concepts
+
+These APIs introduce a new category of Symbian type: the
+L-class. L-classes have characteristics close to standard C++ value
+and handle classes, including the following:
+
+- Constructors, operators, and implicit operations may leave
+- They are self-managing and do not require auxiliary memory management logic
+
+L-classes may be used like T-classes except that they can own
+resources, they typically rely on guaranteed execution of their
+destructors, and they cannot necessarily be naively bitwise
+copied. Any code that manipulates L-class instances must be
+leave-safe. The only exception to this rule is if the particular
+operations being used are explicitly documented not to leave (e.g. the
+default LString constructor and all the LManagedXXX constructors).
+
+The L prefix denotes that these classes may be Liberal when it comes
+to Leaving, while being Leave-safe themselves. 
+
+The implementation of many L classes relies on the leave=throw mapping
+current in Symbian OS since v9.1 because this guarantees destructor
+execution for objects allocated on the stack.
+
+@par Notes on Usage
+
+For ease of experimentation during review, all the new APIs are
+packaged for use as a statically-linked bundle:
+
+- #include <euserhl.h> in your code
+- STATICLIBRARY euserhl.lib in your mmp
+
+Some important dos and don'ts (most of which leavescan will reliably flag):
+
+- The LCleanedupXXX classes are for managing locals only, and may not be used to manage data members. This is because the LCleanedupXXX classes are implemented in terms of the legacy cleanup stack.
+- The LCleanedupXXX classes must not be used in the same function as the legacy cleanup stack APIs. They can interact unintuitively and this is best avoided. It is all or nothing at function granularity.
+- Use L-suffix method variants with LCleanedupXXX, never LC-suffix variants that manipulate the cleanup stack. This is for the same reason as the previous point. 
+- The LManagedXXX classes should only be used for data members. If they are used for locals, they can interact unintuitively with cleanup stack based cleanup (from other functions on the call stack) with respect to cleanup ordering.
+- Whenever you write code that manipulates LString or other L-prefix classes, always conservatively leave-safe your code. This is now easier with the LCleanedupXXX utilities.
+
+On the resource management utility classes:
+
+- A managed object's member functions may be called directly on the managing container, but -> notation must be used to access them
+- Implicit coercions from managing containers to managed types are not defined; instead the dereference operator * must be used e.g. to obtain a reference suitable for passing as a parameter to another function 
+- Pop()-like semantics (as opposed to PopAndDestroy()) is achieved by calling Unmanage() on the managing container before it goes out of scope; Unmanage() returns the managed object which can then be returned from your function, or passed to a different function which takes over ownership. Unlike Pop(), however, Unmanage() simply sets a flag to disable cleanup and may be called at any time without worrying about stack discipline
+- It is still typically necessary to declare, define, and export a destructor, even if its implementation (currently) contains no hand-written code
+  - The destructor must be available wherever delete may be called on an instance of the class
+  - The compiler will automatically generate destruction logic behind the scenes for LString and LManagedXxx data members, even if you don't write any code yourself
+  - The destructor may of course change over time anyway
+
+On the LString classes:
+
+- Existing library functions that accept a modifiable TDes cannot take advantage of LString's on-demand growth behaviour; the necessary capacity must first be explicitly reserved in the LString before calling such functions (this can be done either with a constructor parameter or by calling SetMaxLengthL())
+- Any descriptor method that could panic due to lack of capacity is replaced with a leaving variant that grows the heap e.g. instead of Append(), LString defines AppendL(). The non-leaving TDes versions are hidden to avoid accidental use, although they can still be accessed via a TDes typed (as opposed to LString typed) ref or pointer
+- Programmers new to Symbian OS could first be introduced to descriptors and string handling via just const TDesC& (for input parameter contracts), TDes (for output parameter contracts), and LString for implementation. LStrings can be initialized by value from any descriptor return type, and by automatically taking ownership in the HBufC* return case.
+
+On single-phase construction:
+
+- This option is enabled by LString and the LManagedXxx classes
+  - However you implement construction behind the scenes, NewL is an important abstraction
+  - Think hard before using single-phase construction in a framework class designed for derivation in client code
+- LString and the LManagedXxx classes may be used safely in conventional Symbian two-phase construction as well as standard C++ style single-phase construction
+  - LManagedXxx construction never leaves, and is safe to perform at any stage
+  - Default construction of an empty LString never leaves, but other initializations must be deferred to ConstructL
+- An understanding of standard C++ construction semantics is required before attempting to use single-phase construction
+  - If a constructor throws mid-way through, its matching destructor is not invoked to clean up
+  - Instead all data members fully-constructed to the point of the leave are automatically destructed
+  - Therefore, in effect, all class cleanup must typically be achieved via data member destruction
+  - The presence of a non-empty destructor is a warning sign if you are using single-phase construction
+
+An annotated example using the new APIs follows (the
+euserhl_walkthrough example goes into much more detail than we do
+here).
+
+@code
+#include <e32std.h>
+#include <f32file.h>
+#include <euserhl.h> // Includes all the new APIs
+
+class CFinder : public CBase
+	{
+public:
+	// We have opted to use single-phase construction here, and some of 
+	// our constructor's initialization actions may leave. In order to 
+	// guarantee full cleanup in all cases, we have to declare this fact.
+	CONSTRUCTORS_MAY_LEAVE
+	static CFinder* NewL(const TDesC& aPattern);
+	~CFinder();
+	void GetNextMatchL(TDes& aMatch);
+
+protected:
+	CFinder(const TDesC& aPattern);
+
+protected:
+	LString iPattern;
+	LManagedHandle<RFs> iFs; // We always use LManagedXxx for data members
+	// ...
+	};
+
+CFinder* CFinder::NewL(const TDesC& aPattern)
+	{
+	return new(ELeave) CFinder(aPattern);
+	}
+
+CFinder::CFinder(const TDesC& aPattern) 
+	// This initializer may leave, since the LString will allocate a
+	// heap buffer large enough to contain a copy of aPattern's data
+	: iPattern(aPattern) 
+	{
+	// If connection fails and we leave here, iPattern's destructor
+	// will be called automatically, and the string's resources will
+	// be released
+	iFs->Connect() OR_LEAVE;
+	}
+
+CFinder::~CFinder()
+	{
+	// Automatic destruction of each of the data members does all of the
+	// work for us: iPattern's heap buffer if freed, while Close() is
+	// called on the managed RFs in iFs.
+
+	// Even though this destructor is textually empty, it should
+	// still be exported; the compiler is generating destruction logic
+	// for us in this case
+	}
+
+void CFinder::GetNextMatchL(TDes& aMatch)
+	{
+	// ...
+	LString possible;
+	// ...
+	LCleanedupHandle<RFile> file; // We always use CleanedupXXX for locals
+	TInt status = file->Open(*iFs, possible, EFileRead); // Note use of -> and * here
+	// ...
+	aMatch = possible;
+	// ...
+	}
+@endcode
+
+For comparison, the original code in terms of existing APIs:
+
+@code
+#include <e32std.h>
+#include <f32file.h>
+
+class CFinder : public CBase
+	{
+public:
+	static CFinder* NewL(const TDesC& aPattern);
+	~CFinder();
+	void GetNextMatchL(TDes& aMatch);
+
+protected:
+	CFinder();
+	void ConstructL(const TDesC& aPattern);
+
+protected:
+	HBufC* iPattern;
+	RFs iFs;
+	// ...
+	};
+
+CFinder* CFinder::NewL(const TDesC& aPattern)
+	{
+	CFinder* self = new(ELeave) CFinder;
+	CleanupStack::PushL(self);
+	self->ConstructL(aPattern);
+	CleanupStack::Pop();
+	return self;
+	}
+
+CFinder::CFinder() 
+	{
+	}
+
+void CFinder::ConstructL(const TDesC& aPattern)
+	{
+	iPattern = aPattern.AllocL();
+	User::LeaveIfError(iFs.Connect());
+	}
+
+CFinder::~CFinder()
+	{
+	iFs.Close();
+	delete iPattern;
+	}
+
+void CFinder::GetNextMatchL(TDes& aMatch)
+	{
+	// ...
+	RFile file;
+	CleanupClosePushL(file);
+	TInt status = file.Open(iFs, possible, EFileRead);
+	// ...
+	aMatch = possible;
+	// ...
+	CleanupStack::PopAndDestroy();
+	}
+@endcode
+
+@par Q&A
+
+\b General.1 <em>Why start at the bottom? Shouldn't improving the usability of Symbian
+OS and its APIs be a top-down initiative?</em>
+
+There is a product-wide usability initiative within Symbian which aims
+to address all of APIs, documentation, and tools. On the API side,
+there are tracks that try to improve the design process for good API
+usability going forward, and tracks like this one that try to improve
+the usability of existing functionality. This is just the first
+deliverable of the latter effort, but other work is ongoing.
+
+\b General.2 <em>Will Core Idioms changes like these be backed up by tools support?</em>
+
+Yes, support for tools like Leavescan and Coverity, as well as more
+basic debugger presentation support for the new descriptor types and
+resource management classes, is being planned into the roll-out
+project.
+
+\b General.3 <em>Will Core Idioms changes like these be backed up by matching
+documentation, examples, and coding standards updates?</em>
+
+Yes, we understand this to be essential and this is our goal.
+
+\b General.4 <em>Symbian will support STL as part of Open Environment, and
+Symbian's STL implementation includes std::string and
+std::auto_ptr. Why not just use them?</em>
+
+We investigated this option to the point of creating a native Symbian
+C++ interoperable STL subset for experimentation. This was ultimately
+rejected for the following reasons:
+
+- Hybrid-style code (with mixed Symbian-style and standard-style naming) is
+  harder to read and to work with than code in a single consistent style
+- Beyond basic naming conventions, supporting two very different APIs 
+  for manipulating strings (the descriptor methods alongside the 
+  std::string methods) similarly does not help usability
+- Interoperability between std::string and TDesC/TDes accepting APIs 
+  implemented via implicit coercion is more limited than the direct placement
+  of new string classes within the existing descriptor hierarchy can
+  achieve
+- Because we need a number of Symbian-specific resource management 
+  utilities (cleanup-stack aware, R-class aware, and so on), auto_ptr
+  on its own does not provide much leverage
+- It would require maintaining two subtly variant STL builds: the Open
+  Environment version with standard C++ new and exception 
+  behaviour, and a Symbian C++ version with new(ELeave) and leaving
+  behaviour
+
+Instead we opted to give Symbian C++ a "programming philosophy
+upgrade"; more aligned with standard C++ but still in the style of
+Symbian C++ and its existing APIs. The result is something that can be
+more easily and more incrementally adopted by existing Symbian C++
+projects and teams. Note that this decision to focus first on building
+out the usability of native Symbian C++ does not preclude the
+possibility of an official hybridized Symbian embedding of STL being
+developed at a later date
+
+Finally, we could have used Symbian-ized names like XAutoPtrYyy as the
+basis for the resource management utility classes. However, this was
+deliberately avoided because the semantics of our classes are
+different from auto_ptr e.g. they can't support copy construction or
+transfer of ownership through parameter passing and return, and
+different variants are required for use with locals than with data
+members. We did not want to give the Symbian classes names that could
+result in developers making natural but incorrect assumptions about
+their behaviour based experience with similarly-named classes
+elsewhere.
+
+\b General.5 <em>These new template classes seem more conceptually
+complex than what they're replacing. How can this improve
+usability?</em>
+
+Template classes can be complex to implement, but they're not
+particularly difficult to understand or use in the way they're
+employed here. Symbian programmers are already familiar with the
+basics from RArray<T> and RPointerArray<T>. And to anyone coming from
+standard C++ and STL it's second nature, as in fact is this general
+style of parameterised declaration to desktop Java and C# programmers
+used to generics.
+
+In the end, it's just a concise, declarative annotation that takes
+leaky code and helps turn it into robust code.
+
+Leaky:
+
+@code
+{
+CFoo* foo = CFoo::NewL();
+foo->ExecuteL(); // the CFoo leaks if this leaves
+if (foo->IsAsync())
+   {
+   // ...
+   return; // the CFoo leaks if we return
+   }
+// ...
+} // the CFoo leaks if we exit scope normally
+@endcode
+
+Safe (new style):
+
+@code
+{
+LCleanedupPtr<CFoo> foo(CFoo::NewL());
+foo->ExecuteL(); // the CFoo is automatically deleted if we leave
+if (foo->IsAsync())
+   {
+   // ...
+   return; // the CFoo is automatically deleted if we return
+   }
+// ...
+} // the CFoo is automatically deleted if we exit scope normally
+@endcode
+
+Safe (classic style):
+
+@code
+{
+CFoo* foo = CFoo::NewL();
+CleanupStack::PushL(foo);
+foo->ExecuteL(); // the CFoo is automatically deleted if we leave
+if (foo->IsAsync())
+   {
+   // ...
+   CleanupStack::PopAndDestroy(foo); // the CFoo is deleted manually
+   return; 
+   }
+// ...
+CleanupStack::PopAndDestroy(foo); // the CFoo is deleted manually
+} 
+@endcode
+
+\b General.6 <em>Don't some of these APIs simply trade depth for width? There are less lines of code but the statements are longer and more complex</em>
+
+Placing as much information at point of declaration as possible guards
+against separate lines of code becoming inconsistent with one-another,
+particularly over time in the face of later code changes. Where
+cleanup code is duplicated, for example in the case of a function with
+multiple exit points, or where the cleanup point is separated by tens
+of lines of code from the creation point, these risks increase
+further.
+
+Another way to look at this is that it is far easier in a real,
+non-trivial piece of code to take an unprotected local (a raw pointer
+to an object) and to apply cleanup protection to it (for example if a
+call to a leaving function has been added) once at its point of
+creation, than it is to study what might be a quite complex flow of
+control in order to determine where all the matching calls to
+CleanupStack::PopAndDestroy() need to go. 
+
+In some cases, faced with the CleanupStack, you might actually choose
+to rework an existing function to have a single exit point to simplify
+the process of leave-protecting its code. The risks inherent in that
+are not necessary using the mode of protection offered by these new
+APIs.
+
+\b General.7 <em>These APIs seem to come with a lot of new rules,
+particularly when it comes to interoperating with existing
+functionality. If it turns out people need to understand both the new
+and old idioms in order to mix them safely, where's the benefit?
+Doesn't it actually make things worse?</em>
+
+The interoperability constraints are far from ideal, but we believe
+they are manageable and that the benefits outweigh the issues,
+particularly so for developers working on new code that uses these new
+APIs and idioms consistently. 
+
+Wherever possible sanity checking will be offered in code analysis
+tools like Leavescan and/or in UDEB runtime checking via assertions.
+
+\b Cleanedup.1 <em>The LCleanedupXxx/LManagedXxx distinction is confusing. Why can't we
+just use the same classes everywhere?</em>
+
+We would much prefer to be able to use the same classes to protect
+objects referenced from local variables as we do to project objects
+referenced from data members. In an ideal world, the LManagedXxx
+classes would be used in both scenarios (just like auto_ptr is
+elsewhere); LCleanedupXxx would not be necessary.
+
+In fact, the LManagedXxx classes can be used to protect locals if you
+wish:
+
+@code
+{
+LManagedPtr<CQuery> query(CQuery::NewL()); 
+query->BuildQueryL();
+query->ExecuteQueryL();
+} // query deleted on normal scope exit or leave
+@endcode
+
+This works fine in isolation. Unfortunately, cleanup order becomes
+counter-intuitive if calls to functions that use LManagedXxx are mixed
+with functions that use the cleanup stack with the same call stack. 
+
+Here is an example. Call order is top-to-bottom.
+
+@code
+void CFramework::StartMainLoopL()
+     {
+     CFramework* fw = CFramework::NewL(); 
+     CleanupStack::PushL(fw); // #1
+     // ...
+     CleanupStack::PushL(event); // #2
+     fw->DispatchL(*event);
+     CleanupStack::PopAndDestroy(event);
+     // ...
+     CleanupStack::PopAndDestroy(fw);
+     }
+
+void CFramework::DispatchL(CEvent& aEvent)
+     {
+     this->UserCallback()(*this, aEvent);
+     }
+
+void MyUserCallback(CFramework& aFw, CEvent& aEvent)
+     {
+     LManagedPtr<CMyEventWrapper> myEvent(CMyEventWrapper::NewL(aEvent)); // #3
+     // ...
+     aFw->LookupL(arg);
+     // ...
+     }
+
+void CFramework::LookupL(const TDesC& aArg)
+     {
+     //
+     CleanupStack::PushL(tmp); // #4
+     // ...
+     User::LeaveIfError(status);
+     // ...
+     CleanupStack::PopAndDestroy(tmp);
+     }
+@endcode
+
+If the User::LeaveIfError() expression triggers an unhandled leave in
+the above, the cleanup order would be: #4, #2, #1, #3. If out-of-order
+execution of CMyEventWrapper's destructor can never cause problems,
+then there is not an issue. However, if CMyEventWrapper's destructor
+were to e.g. decrement a reference count on the (deleted) CEvent, this
+would lead to a panic.
+
+The cleanup order is this way because of the way User::Leave()
+processing works. It locates all pushed CleanupStack items up to the
+point of the handling TRAP and executes their cleanups. Then, finally,
+it uses C++ throw to unwind the C stack to the point of the TRAP. It
+is during C stack unwinding that the destructors for objects stored in
+locals get run, and LManagedPtr (like auto_ptr) relies exclusively on
+destructor execution to trigger cleanup.
+
+On the other hand, if MyUserCallback uses LCleanedupPtr instead of
+LManagedPtr, then its associated cleanup is triggered as part of
+CleanupStack processing and in the more intuitive sequence: #4, #3,
+#2, #1. Note that although it also has a destructor, LCleanedupPtr's
+cleanup action is only ever run once; execution of the cleanup action
+via the destructor is disabled if the cleanup action has already been
+run as part of CleanupStack processing.
+
+This is why the LCleanedupXxx classes exist. Because the situations
+where use of LManagedXxx for locals (or more precisely the resulting
+out-of-order cleanup) may cause problems are subtle to characterise,
+we guide conservatively that LCleanedupXxx should always be used to
+protect locals.
+
+\b Cleanedup.2 <em>If you are forced to call an LC method, how should you deal with it?</em>
+
+APIs should always offer pure L variants (after all, what if you want
+to store the result directly in a data member?) and this scenario
+should be rare. If it does arise, however, you have a few options.
+
+Note that code checking tools like Leavescan can flag dangerous
+combinations of LC method calls and the LCleanedupXxx classes within
+the same function.
+
+Option 1 (preferred):
+
+@code
+// Define your own popping L wrapper function
+CFoo* NewCFooL(TFooArg aArg)
+       {
+       CFoo* foo = CFoo::NewLC(aArg);
+       CleanupStack::Pop();
+       return foo;
+       }
+
+// Then call that instead...
+{
+LCleanedupPtr<CFoo> foo(NewCFooL(arg));
+// ...
+}
+
+@endcode
+
+Option 2:
+
+@code
+{
+LCleanedupPtr<CFoo> foo; // pushes our "smart" cleanup item on the stack
+foo = CFoo::NewLC(arg); // leaves a classic cleanup item on the stack
+CleanupStack::Pop(); // gets rid of the classic cleanup item right away
+// ...
+}
+@endcode
+
+Never do this:
+
+@code
+{
+LCleanedupPtr<CFoo> foo(CFoo::NewLC(arg));
+// Execution order of the above statement leaves our "smart" cleanup item
+// on top of the cleanup stack and we can't get at the LC-introduced cleanup
+// item beneath it to pop it
+// ...
+}
+@endcode
+
+\b Cleanedup.3 <em>How do you create your own custom cleanup operation a la TCleanupItem?</em>
+
+The direct analog to pushing a TCleanupItem is ::LCleanedupGuard; see
+its documentation for an example of how to register a function pointer
+with argument data to get invoked on cleanup.
+
+See also #DEFINE_CLEANUP_FUNCTION and #DEFINE_CLEANUP_STRATEGY for
+creating custom cleanup operations for use with particular classes.
+
+\b Managed.1 <em>For LManagedXxx, is destruction order based on order of 
+declaration?</em>
+
+Yes, fields are destroyed (and so the cleanup operation run in the
+case of LManagedXxx fields) in reverse order of declaration as
+specified by the C++ standard.
+
+\b Managed.2 <em>Does tying cleanup order to data member order make it
+harder to maintain binary compatibility? If I want to change
+construction/destruction order I'm forced to change my header and
+reorder my data members?</em>
+
+Reordering private fields would not constitute a BC break because the
+class would not change size. In situations where your data members are
+anything other than private, including being directly revealed by
+inline methods, you always have to take great care, and will continue
+to have to do so.
+
+As a general guideline, if you are concerned about BC never make data
+members (LManagedXxx or otherwise) anything other than private. Always
+expose them via non-inline accessor methods, both to clients and to
+derived classes.
+
+\b Managed.3 <em>What happens when you mix managed and unmanaged
+pointers in the same class? Should it be avoided?</em>
+
+Your manually-written destructor code for a class will get run before
+the managed fields of that class get cleaned up, as per the C++
+standard. As long as this is understood, there is no particular reason
+to avoid mixing if it makes sense to your problem.
+
+Note, though, that if you are using single-phase construction and the
+constructor leaves, your destructor will not be run; only the
+instance's fully-constructed data members at the point of the leave
+will be destroyed.
+
+In some cases using ::LManagedGuard may be preferable to adding code
+to the destructor.
+
+\b SinglePhase.1 <em>Do you have to use single-phase construction with
+these APIs?</em>
+
+No. The primary benefit of using the LManagedXxx classes to look after
+your data members is to avoid having to write and maintain destructor
+code manually. It's fine to initialize your LManagedXxx fields by
+assignment in ConstructL if you're using two-phase construction; the
+automatic cleanup benefit is the same.
+
+The LManagedXxx classes also happen to enable the use of single-phase
+construction, but you need to consider carefully when and whether to
+use it.
+
+\b SinglePhase.2 <em>The single-phase constructor solution with
+CONSTRUCTORS_MAY_LEAVE is a bit of a mess, and not really helping to
+simplify code?</em>
+
+Yes. Unfortunately the need for #CONSTRUCTORS_MAY_LEAVE is forced by
+Symbian's legacy handling new(ELeave).
+
+\b SinglePhase.3 <em>Why and where would I ever use single-phase
+construction?</em>
+
+For classes not intended for derivation there is no issue, and it's
+quite reasonable to use the more concise single-phase construction
+idiom, typically still hidden behind a NewL.
+
+For abstract framework classes intended for derivation outside the
+defining module, the single-phase/two-phase distinction would need to
+be clearly documented and so would force awareness of at least some of
+the issues described here, even in scenarios where the deriving client
+was not intending to use the new idioms. This is probably not
+desirable.
+
+\b OrLeave.1 <em>Can you still use User::LeaveIfError() now that
+OR_LEAVE is available?  What if you want to locally-handle some error
+cases but not others.</em>
+
+Yes, #OR_LEAVE is simply a convenience macro that allows you to
+deemphasize auxiliary error checking code in most cases. You can still
+bind an error code manually, check it, and then use
+User::LeaveIfError().
+
+\b Strings.1 <em>Why derive LString from RBuf and then hide parts of
+the inherited RBuf/TDes API?</em>
+
+We want maximum interoperability with existing code and APIs for
+LString in order to maximise its usefulness. In order to achieve that
+we derive from RBuf, allowing an LString instance to be passed
+directly as a const TDesC, a TDes, or an RBuf.
+
+The trade-off is that parts of the RBuf API don't fit well with
+LString. To be conservative, we have hidden anything inherited from
+RBuf or TDes that we have found to be confusing to direct users of
+LString (you can add things later to a new API, but you can less
+easily take them away). The most obvious of these is the mass hiding
+of of the non-leaving descriptor methods for which LString provides
+leaving, auto-growing alternatives: e.g. for direct users of LString,
+we hide Append() so that it can't be used accidentally instead of
+AppendL().
+
+Note that when passed as a TDes or RBuf, and viewed through a variable
+of that type, this localised hiding within LString does not have any
+effect; existing code handed an LString will be able to manipulate it
+as it expects to.
+
+\b Strings.2 <em>Does LString support TDesC/TDes features like char*
+interop?</em>
+
+LString is an RBuf, a TDes, and a TDesC, and retains all the
+functionality of those classes.
+
+LString8 retains the same level of char* interop as existing
+descriptor classes through support for initialization from TUint8*
+zero-terminated C strings, the ZeroTerminateL() utility method, Ptr(),
+and so on.
+
+\b Strings.3 <em>Does LString auto-compress as well as auto-grow?</em>
+
+They don't. It can be hard to avoid pathologies when second-guessing
+when client code if finished with buffer capacity.
+
+*/
