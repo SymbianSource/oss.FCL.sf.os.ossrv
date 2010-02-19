@@ -35,6 +35,8 @@
 #include <commdbconnpref.h>
 #include <rpipe.h>
 
+#include<tz.h>
+
 #ifdef SYMBIAN_OE_POSIX_SIGNALS
 #include "signalclient.h"
 #include "tsignalmessage.h"
@@ -112,7 +114,7 @@ class TCLSICleanup
 */
 	{
 public:
-	void StorePtrs(RHeap* aHeap, RFs* aFs, RSocketServ* aSs, RCommServ* aCs, RFastLock* aSsLock, RFastLock* aCsLock)
+	void StorePtrs(RHeap* aHeap, RFs* aFs, RSocketServ* aSs, RCommServ* aCs, RFastLock* aSsLock, RFastLock* aCsLock, RTz * aTzs)
 		{
 		iHeap = aHeap;
 		iFs = aFs;
@@ -120,6 +122,7 @@ public:
 		iCs = aCs;
 		iSsLock = aSsLock;
 		iCsLock = aCsLock;
+		iTzS = aTzs;
 		}
 
 	~TCLSICleanup()
@@ -130,6 +133,7 @@ public:
 		iCs->Close();
 		iCsLock->Close();
 		iHeap->Close();
+		iTzS->Close();
 		}
 private:
 	RHeap* iHeap;
@@ -138,6 +142,7 @@ private:
 	RCommServ* iCs;
 	RFastLock* iSsLock;
 	RFastLock* iCsLock;
+	RTz * iTzS;
 	};
 
 
@@ -651,7 +656,7 @@ private:
 	
 	// Default connection settings, set/cleared using setdefaultif
 	TConnPref* iDefConnPref;
-	
+    RTz     iTzServer;	
 #ifdef SYMBIAN_OE_POSIX_SIGNALS
 	// Signal handler thread
 	RThread 				iSignalHandlerThread;
@@ -803,6 +808,11 @@ private:
 	
 #endif // SYMBIAN_OE_POSIX_SIGNALS
 public:
+
+   inline RTz & TZServer()
+        {
+        return iTzServer;
+        } 
 //ipc server session
 RIpcSession iIpcS;
 friend class RFileDesTransferSession;

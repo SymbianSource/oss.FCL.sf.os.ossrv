@@ -52,6 +52,9 @@ USERINCLUDE    ../inc
 USERINCLUDE    ../../libc/inc
 USERINCLUDE    ../../backend/inc
 USERINCLUDE     ../../backend/ipcserver/ipccli/inc
+
+// Illegal dependancy on tz.h in MW layer. Needs fixing
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
 OS_LAYER_SYSTEMINCLUDE_SYMBIAN
 OS_LAYER_LIBC_SYSTEMINCLUDE
 

@@ -110,7 +110,17 @@ basic_ios<_CharT, _Traits>::init(basic_streambuf<_CharT, _Traits>* __sb)
   this->imbue(locale());
   this->tie(0);
   this->_M_set_exception_mask(ios_base::goodbit);
-  this->_M_clear_nothrow(__sb != 0 ? ios_base::goodbit : ios_base::badbit);
+  /*
+    this->_M_clear_nothrow(__sb != 0 ? ios_base::goodbit : ios_base::badbit);
+	
+  The ternary expression above, throws an undefined reference link error (for goodbit and badbit)
+  when compiled with GCCE 4.3.2. Replacing ternary statement with an if-else block fixes this.
+  */
+  if(__sb != 0) {
+	this->_M_clear_nothrow(ios_base::goodbit);
+  } else {
+	this->_M_clear_nothrow(ios_base::badbit);
+  }
   ios_base::flags(ios_base::skipws | ios_base::dec);
   ios_base::width(0);
   ios_base::precision(6);
