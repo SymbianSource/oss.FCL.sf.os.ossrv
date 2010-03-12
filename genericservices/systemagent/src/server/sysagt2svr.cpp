@@ -136,6 +136,8 @@ static void CreateSwiPropertiesL()
 		
 	DefinePSPropertyL(KUidSystemCategory, KSAUidSoftwareInstallKeyValue, RProperty::EInt, KSecurityPolicyNone, KSecurityPolicySwiSIDTrustedUi, 0);
 	DefinePSPropertyL(KUidSystemCategory, KUidSwiLatestInstallation, RProperty::EInt, KSecurityPolicyNone, KSecurityPolicySwiSIDTrustedUi, 0);
+
+	DefinePSPropertyL(KUidSystemCategory, KSWIUidsCurrentlyBeingProcessed, RProperty::EByteArray, KSecurityPolicyNone, KSecurityPolicySwiSIDTrustedUi, 0);
 		
 	}
 

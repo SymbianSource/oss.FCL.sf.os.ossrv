@@ -56,7 +56,7 @@
  * [including the GNU Public Licence.]
  */
 /*
- © Portions copyright (c) 2006 Nokia Corporation.  All rights reserved.
+ © Portions copyright (c) 2006-2010 Nokia Corporation.  All rights reserved.
  */
 
 #ifndef HEADER_ENVELOPE_H
@@ -617,6 +617,14 @@ IMPORT_C const EVP_MD *EVP_sha(void);
 IMPORT_C const EVP_MD *EVP_sha1(void);
 IMPORT_C const EVP_MD *EVP_dss(void);
 IMPORT_C const EVP_MD *EVP_dss1(void);
+#endif
+#ifndef OPENSSL_NO_SHA256
+IMPORT_C const EVP_MD *EVP_sha224(void);
+IMPORT_C const EVP_MD *EVP_sha256(void);
+#endif
+#ifndef OPENSSL_NO_SHA512
+IMPORT_C const EVP_MD *EVP_sha384(void);
+IMPORT_C const EVP_MD *EVP_sha512(void);
 #endif
 IMPORT_C const EVP_CIPHER *EVP_enc_null(void);		/* does nothing :-) */
 #ifndef OPENSSL_NO_DES

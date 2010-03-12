@@ -39,5 +39,8 @@ SOURCE      crypto/sha/sha_dgst.c
 SOURCE      crypto/sha/sha1dgst.c
 SOURCE      crypto/sha/sha_one.c
 SOURCE      crypto/sha/sha1_one.c 
+SOURCE      crypto/sha/sha256.c
+SOURCE      crypto/sha/sha512.c
+
 // End of File
 

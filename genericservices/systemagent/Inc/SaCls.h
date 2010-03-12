@@ -365,6 +365,16 @@ state. The publish and subscribe key is defined by SysAgent2 server.
 */
 const TUint KUidBackupRestoreKey = 0x10202792;
 
+/**
+This is the publish and subscribe property used by Secure Software Install to 
+Publish package UIDs which are currently being processed. The publish and subscribe key is defined by 
+SysAgent2 server, but we do not want to have a dependency to the security subsystem, so we define a 
+constant in sacls.h , By doing this it will be available for Core OS layer components. 
+
+@publishedAll
+@released
+*/
+const TUint KSWIUidsCurrentlyBeingProcessed= 0x2002D4F4;
 
 // Deprecated - redundant method no longer used by system software
 IMPORT_C TInt StartSysAgt2();
