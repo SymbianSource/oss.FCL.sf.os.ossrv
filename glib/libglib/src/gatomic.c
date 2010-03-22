@@ -38,7 +38,44 @@
 
 
 #if defined (__GNUC__)
-# if defined (G_ATOMIC_I486)
+#define GCC_VERSION (__GNUC__ * 10000 \
+                               + __GNUC_MINOR__ * 100 \
+                               + __GNUC_PATCHLEVEL__)
+
+/* Test for GCC > 4.4.0 */
+# if (GCC_VERSION > 40400)
+
+EXPORT_C gint
+g_atomic_int_exchange_and_add (volatile gint *atomic,
+			       gint           val)
+{
+   return __sync_fetch_and_add(atomic, val);
+}
+
+EXPORT_C void
+g_atomic_int_add (volatile gint *atomic,
+		  gint           val)
+{
+   __sync_fetch_and_add(atomic, val);
+}
+
+EXPORT_C gboolean
+g_atomic_int_compare_and_exchange (volatile gint *atomic,
+				   gint           oldval,
+				   gint           newval)
+{
+  return __sync_val_compare_and_swap(atomic, oldval, newval);
+}
+
+EXPORT_C gboolean
+g_atomic_pointer_compare_and_exchange (volatile gpointer *atomic,
+				       gpointer           oldval,
+				       gpointer           newval)
+{
+  return __sync_val_compare_and_swap(atomic, oldval, newval);
+}
+
+#elif defined (G_ATOMIC_I486)
 /* Adapted from CVS version 1.10 of glibc's sysdeps/i386/i486/bits/atomic.h 
  */
 EXPORT_C gint
