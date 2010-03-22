@@ -242,57 +242,50 @@ int _dbus_file_open_and_write(unsigned const char* sid_directory)
 
 int _dbus_file_open_for_write(const unsigned char* data)
 {
-	
-  	const unsigned char* sid_directory;
-  	const DBusString *homedir;
-  	dbus_bool_t retval;
-	DBusString dirname;
+	const DBusString *homedir;
 
- 	 retval = FALSE;
- 
-  	if(!_dbus_homedir_from_current_process(&homedir))		      //getting the private or homedir directory of the process
-  	{
-  	 goto out_0;	
-  	}
-  
- 	//*(char*)(homedir->dummy1) = 'C'; 
-  	if(!_dbus_string_init(&dirname))
-  		return FALSE;
-  	
-  	_dbus_string_copy(homedir,0,&dirname,0);
-  	*(char*)(dirname.dummy1) = 'C'; 
-  	
-  	//sid_directory = (const unsigned char*)_dbus_string_get_const_data(homedir);
-    sid_directory = (const unsigned char*)_dbus_string_get_const_data(&dirname);
-	
-	TBuf8<100>Filename8;
-	Filename8.Append(sid_directory,strlen((const char*)sid_directory));
-	Filename8.Append(_L8("\\foobar_"));
-	Filename8.Append(sid_directory + 11,strlen((const char*)sid_directory + 11));
-	
-	TBuf16<50>Filename16;
-	Filename16.Copy(Filename8);
-	
-	RFs fs;
-	User::LeaveIfError(fs.Connect());
-	
-	RFile file;
-	
-	User::LeaveIfError(file.Open(fs,Filename16,EFileRead));
-	file.Close();
-	
-	User::LeaveIfError(file.Open(fs,Filename16,EFileWrite));
-	
-	TBuf8<100>pid_data(data); 
-	User::LeaveIfError(file.Write(pid_data)); 
-	
-	retval = TRUE;
-	
-out_0 : 
-	_dbus_string_free(&dirname);
-	file.Close();
-	fs.Close();
- 	return retval;
+        // getting the private or homedir directory of the process
+	if(!_dbus_homedir_from_current_process(&homedir))
+        	return FALSE;
+
+        const unsigned char* sid_directory;
+        DBusString dirname;
+        //*(char*)(homedir->dummy1) = 'C';
+        if(!_dbus_string_init(&dirname))
+                return FALSE;
+
+        _dbus_string_copy(homedir,0,&dirname,0);
+        *(char*)(dirname.dummy1) = 'C';
+
+        //sid_directory = (const unsigned char*)_dbus_string_get_const_data(homedir);
+        sid_directory = (const unsigned char*)_dbus_string_get_const_data(&dirname);
+
+        TBuf8<100>Filename8;
+        Filename8.Append(sid_directory,strlen((const char*)sid_directory));
+        Filename8.Append(_L8("\\foobar_"));
+        Filename8.Append(sid_directory + 11,strlen((const char*)sid_directory + 11));
+
+        TBuf16<50>Filename16;
+        Filename16.Copy(Filename8);
+
+        RFs fs;
+        User::LeaveIfError(fs.Connect());
+
+        RFile file;
+
+        User::LeaveIfError(file.Open(fs,Filename16,EFileRead));
+        file.Close();
+
+        User::LeaveIfError(file.Open(fs,Filename16,EFileWrite));
+
+        TBuf8<100>pid_data(data);
+        User::LeaveIfError(file.Write(pid_data));
+
+        _dbus_string_free(&dirname);
+        file.Close();
+        fs.Close();
+
+        return TRUE;
 }
 
 int _dbus_open_file_for_read(const unsigned char* pid,const unsigned char* hash,const unsigned char* sid_directory)
