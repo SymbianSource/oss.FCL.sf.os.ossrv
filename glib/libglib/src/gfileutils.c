@@ -60,6 +60,8 @@
 #endif /* __SYMBIAN32__ */
 
 
+static gint create_temp_file (gchar *tmpl, int permissions);
+
 /**
  * g_mkdir_with_parents:
  * @pathname: a pathname in the GLib file name encoding

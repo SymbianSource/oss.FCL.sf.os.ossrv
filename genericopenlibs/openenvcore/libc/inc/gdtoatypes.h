@@ -27,7 +27,8 @@
 #define PRIVATE_mem ((PRIVATE_MEM+sizeof(double)-1)/sizeof(double))
 #endif
 
-#ifndef ULong
+#ifndef ULong_DEF
+#define ULong_DEF
 typedef unsigned long ULong;
 #endif
 

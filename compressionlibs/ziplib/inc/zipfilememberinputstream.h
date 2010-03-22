@@ -76,7 +76,7 @@ private:
 	RZipFileMemberReaderStream(CZipFile&, TUint32, TUint32, TUint32, TUint32);
 	
 	static RZipFileMemberReaderStream* NewL(CZipFile&, TUint32, TUint32, TUint32, TUint32);
-	void RZipFileMemberReaderStream::ConstructL();
+	void ConstructL();
 	
 	virtual TInt Read(void);
 	virtual TInt Read(TByte*, TUint32, TUint32*);

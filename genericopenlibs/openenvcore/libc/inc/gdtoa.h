@@ -43,7 +43,8 @@ THIS SOFTWARE.
 #ifndef Long
 #define Long long
 #endif
-#ifndef ULong
+#ifndef ULong_DEF
+#define ULong_DEF
 typedef unsigned Long ULong;
 #endif
 #ifndef UShort
