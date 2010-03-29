@@ -165,13 +165,23 @@ iTLDInfoList(CLocalSystemInterface::KTLDInfoListGran)
 	        err |= iDefConnLock.CreateLocal();
 			}
 
+        if(err == KErrNone)
+            {
+            err = iTzServer.Connect();
+            if(!err)
+                {
+                err = iTzServer.ShareAuto();
+                }
+            }
+
+
 		//Panic if any of the above operation returns with error
 		if (err)
 			{
 			User::Panic(KEstlibInit, err);
 			}
 
-		iCleanup.StorePtrs(iPrivateHeap, &iFs, &iSs, &iCs, &iSSLock, &iCSLock);
+		iCleanup.StorePtrs(iPrivateHeap, &iFs, &iSs, &iCs, &iSSLock, &iCSLock, &iTzServer);
 		
 		// No connection settings by default
 		iDefConnPref = NULL;
@@ -1600,13 +1610,13 @@ int CLocalSystemInterface::accept (int fid, struct sockaddr *addr, size_t *size,
 				{
 				err=iFids.Attach(fd,newf);
 				if (!err)
-					return fd;
-				delete newf;
+					return fd;				
+				newf->Close();
 				}
 			else if(newf != NULL)
 				{
 				//coverity[leave_without_push]
-				delete newf;
+				newf->Close();
 				}
 			iFids.Attach(fd,0);	// cancel the reservation
 			}

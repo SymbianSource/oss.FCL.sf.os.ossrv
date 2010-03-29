@@ -39,6 +39,8 @@ USERINCLUDE     		../../ewsd/inc
 USERINCLUDE			../ipcserver/ipccli/inc
 USERINCLUDE			../ipcserver/ipcsrv/inc
 
+// Illegal dependancy on tz.h in MW layer. Needs fixing
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
 OS_LAYER_SYSTEMINCLUDE_SYMBIAN
 OS_LAYER_LIBC_SYSTEMINCLUDE
 
@@ -146,7 +148,7 @@ LIBRARY 	insock.lib
 LIBRARY		rpipe.lib
 LIBRARY		charconv.lib
 LIBRARY     estor.lib 
-
+LIBRARY     tzclient.lib 
 
 #ifdef WINSCW
 //wsd solution
