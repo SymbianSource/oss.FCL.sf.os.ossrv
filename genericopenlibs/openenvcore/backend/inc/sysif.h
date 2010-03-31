@@ -327,7 +327,7 @@ public:
 	static int rmdir(RFs& aFs, const wchar_t* path, int& anErrno);
 	static int chmod(RFs& aFs, const wchar_t* path, int perms, int& anErrno);
 	static int reg_unlink(RFs& aFs, const wchar_t* path, int& anErrno);
-	static int stat(RFs& aFs, const wchar_t* name, struct stat* st, int& anErrno);
+	static int statbackend(RFs& aFs, const wchar_t* name, struct stat* st, int& anErrno);
 	static int rename(RFs& aFs, const wchar_t* oldname, const wchar_t* newname, int& anErrno);
 	static TInt ResolvePath(TParse& aResult, const wchar_t* path, TDes* aFilename);
 	static TInt SetDefaultDir(RFs& aFs);
@@ -425,6 +425,7 @@ public:
 	int rmdir (const wchar_t* path, int& anErrno);
 	int chmod (const wchar_t* path, int perms, int& anErrno);
 	int stat (const wchar_t* name, struct stat* st, int& anErrno);
+	int lstat (const wchar_t* name, struct stat *st, int& anErrno);
 	int rename (const wchar_t* oldname, const wchar_t* newname, int& anErrno);
 
 	IMPORT_C TInt ResolvePath (TParse& aResult, const wchar_t* path, TDes* aFilename);

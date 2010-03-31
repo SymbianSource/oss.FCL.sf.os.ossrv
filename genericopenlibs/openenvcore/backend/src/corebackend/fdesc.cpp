@@ -117,15 +117,21 @@ CFileDescBase* CFileDescBase::Open(const wchar_t* name, int mode, int perms, TIn
 	else //It's a special file, directory or normal file
 		{
 		RFs& rfs = Backend()->FileSession();
-		TSpecialFileType fileType = _SystemSpecialFileBasedFilePath(name, err, rfs);
-		if(fileType  == EFileTypeMkFifo) //special file, FIFO
-    		{
-    		ret = CFileTable::FifoOpen(name, mode, perms, err);
-    		}
-		else if(fileType  == EFileTypeSymLink) //special file, symlink
-			{
-			ret = CFileTable::LinkOpen(name, mode, perms, err, rfs);
-			}
+        TUint attribval;
+        TPtrC16 filename1 = (const TText16*)name;       
+        int ret1 = rfs.Att(filename1, attribval);
+        if (ret1 == 0 && ((attribval & (KEntryAttHidden | KEntryAttSystem))== (KEntryAttHidden | KEntryAttSystem)))
+            {
+            TSpecialFileType fileType = _SystemSpecialFileBasedFilePath(name, err, rfs);
+            if(fileType  == EFileTypeMkFifo) //special file, FIFO
+                {
+                ret = CFileTable::FifoOpen(name, mode, perms, err);
+                }
+            else if(fileType  == EFileTypeSymLink) //special file, symlink
+                {
+                ret = CFileTable::LinkOpen(name, mode, perms, err, rfs);
+                }
+            }
 		else //normal file or directory
 		    {
 		    TFullName fullName;
@@ -634,14 +640,14 @@ TInt CFileDesc::Open(RFs& aSession, const TDesC& aName, int mode, int perms)
 	int mapped=MapMode(mode, fMode);
 	// if the file is in \sys, use EFileShareReadersOnly not EFileShareReadersOrWriters
 	TParsePtrC pars(aName);
-	if (pars.Path().FindC(_L("\\SYS\\")) == 0)
+	if (pars.Path().FindF(_L("\\SYS\\")) == 0)
 		{
 		fMode &= ~EFileShareReadersOrWriters;
 		fMode |= EFileShareReadersOnly;
 		}
 	
 	// if the file is in \resource, dont use EFileShareReadersOrWriters
-	if (pars.Path().FindC(_L("\\resource\\")) == 0)
+	if (pars.Path().FindF(_L("\\resource\\")) == 0)
 		{
 		fMode &= ~EFileShareReadersOrWriters;
 		fMode |= EFileShareReadersOnly;

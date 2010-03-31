@@ -169,3 +169,5 @@ EXPORTS
 	_sigenable_r @ 168 NONAME ABSENT
 	_memcpy_r @ 169 NONAME
 	_memmove_r @ 170 NONAME
+	_lstat_r @ 171 NONAME
+

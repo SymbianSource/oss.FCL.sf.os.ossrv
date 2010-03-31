@@ -63,5 +63,10 @@ PRJ_EXPORTS
 // exporting openc_liblogger stub sis
 ../stdlibs/install/openc_liblogger_stub.sis	/epoc32/data/z/system/install/openc_liblogger_stub.sis
 
+// exporting openc_signalserver_stub sis
+../stdlibs/install/openc_signalserver_stub.sis	/epoc32/data/z/system/install/openc_signalserver_stub.sis
+
+
 //  End of File
+
 

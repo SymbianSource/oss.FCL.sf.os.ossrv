@@ -31,6 +31,8 @@
 #include "fdesc.h"
 #include "ltime.h"
 #include "lposix.h"
+#include "systemspecialfilercg.h"
+#include "link.h"
 #ifdef SYMBIAN_OE_POSIX_SIGNALS
 #include <stdlib.h>
 #include <signal.h>
@@ -296,9 +298,12 @@ void CLocalSystemInterface::TerminateProcess(int status)
 void CLocalSystemInterface::Exit(int code)
 	{
 #ifdef SYMBIAN_OE_POSIX_SIGNALS
+    TRequestStatus status = KRequestPending;
+    iSignalHandlerThread.Logon(status);
 	iSignalLoopRunning = EFalse;
+	iSignalHandlerThread.RequestSignal();
+	User::WaitForRequest(status);
 #endif
-
 	iFids.Close();
 	User::SetCritical(User::EProcessPermanent);
 	User::Exit(code);
@@ -327,9 +332,39 @@ int CLocalSystemInterface::mkdir (const wchar_t* aPath, int perms, int& anErrno)
 	}
 
 int CLocalSystemInterface::stat (const wchar_t* name, struct stat *st, int& anErrno)
-	{
-	return PosixFilesystem::stat(iFs, name, st, anErrno);
-	}
+    {
+    const wchar_t* filename = name;
+    TSpecialFileType fileType;
+    struct SLinkInfo enBuf;
+    TInt err = 0;
+    // Check the type of file
+    fileType = _SystemSpecialFileBasedFilePath(name, err, iFs);
+    // If it is a symbolic link, follow the link
+    // If _SystemSpecialFileBasedFilePath fails, treat it as normal file
+    // and try to proceed
+    if( fileType == EFileTypeSymLink && err == KErrNone )
+        {
+        err = _ReadSysSplFile(name, (char*)&enBuf, sizeof(struct SLinkInfo), anErrno, iFs);
+        if (err == KErrNone)
+            {
+            filename = (wchar_t*)enBuf.iParentPath;
+            }
+        else
+            {
+            return -1;
+            }
+        }
+    else if ( fileType != EFileGeneralError && err != KErrNone )
+        {
+        return MapError(err,anErrno);
+        }
+    return PosixFilesystem::statbackend(iFs, filename, st, anErrno);
+    }
+
+int CLocalSystemInterface::lstat (const wchar_t* name, struct stat *st, int& anErrno)
+    {
+    return PosixFilesystem::statbackend(iFs, name, st, anErrno);
+    }
 
 int CLocalSystemInterface::utime (const wchar_t* name, const struct utimbuf *filetimes, int& anErrno)
 	{
@@ -540,7 +575,10 @@ TInt CLocalSystemInterface::SignalHandler()
 		iSignalInitSemaphore.Signal();
 		return lRetVal;
 		}
-
+	
+	/* Closing the end of the pipe that's been sent to the server */
+	iSignalWritePipe.Close();
+	
 	iSignalsInitialized = ETrue;
 	iSignalInitSemaphore.Signal();
 	iSignalLoopRunning = ETrue;
@@ -549,6 +587,9 @@ TInt CLocalSystemInterface::SignalHandler()
 	while(iSignalLoopRunning)
 		{
 		User::WaitForAnyRequest();
+		if(iSignalLoopRunning == false) {
+            break;
+		}
 		// Check if it is a pipe read
 		if(iPipeReadStatus != KRequestPending)
 			{
@@ -707,6 +748,8 @@ TInt CLocalSystemInterface::SignalHandler()
 		{
 		iSignalReadPipe.CancelDataAvailable();
 		}
+	iSignalReadPipe.Close();
+	
 	if(iAlarmStatus == KRequestPending)
 		{
 		iAlarmTimer.Cancel();
@@ -720,10 +763,11 @@ TInt CLocalSystemInterface::SignalHandler()
 			if(lProcess.Open(TProcessId(iChildWaiterArray[lCounterIdx].iWaiterPid)) == KErrNone)
 				{
 				lProcess.LogonCancel(iChildWaiterArray[lCounterIdx].iWaiterStatus);
+				lProcess.Close();
 				}
 			}
-		}
-
+		}                                                                             
+	iSignalSession.Close();
 	return KErrNone;
 	}
 

@@ -338,9 +338,7 @@
        (__offsetof__ (type,field))
 #endif
 #else
-#define	__offsetof(type, field)	(reinterpret_cast <size_t>			\
-    (&reinterpret_cast <const volatile char &>	\
-               (static_cast<type *> (0)->field)))
+#define	__offsetof(type, field)	((size_t)(&((type *)0)->field))
 #endif
 #endif
 

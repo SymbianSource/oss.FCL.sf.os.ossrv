@@ -106,6 +106,7 @@ IMPORT_C int	_wrename_r	(int *, const wchar_t *_old, const wchar_t *_new);
 IMPORT_C int	_rmdir_r	(int *, const wchar_t *);
 IMPORT_C int	_wrmdir_r	(int *, const wchar_t *);
 IMPORT_C int	_stat_r		(int *, const wchar_t *, struct stat *);
+IMPORT_C int    _lstat_r    (int *, const wchar_t *, struct stat *);
 IMPORT_C int	_wstat_r	(int *, const wchar_t *, struct stat *);
 IMPORT_C int	_unlink_r	(int *, const wchar_t *);
 IMPORT_C int	_wunlink_r	(int *, const wchar_t *);
