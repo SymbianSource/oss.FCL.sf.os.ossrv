@@ -68,7 +68,7 @@ private:
 ====================================================================================*/
 void test_bit_vector()
 {
-#define __WORD_BIT (int(CHAR_BIT*sizeof(unsigned int)))
+#define __WORD_BIT_LOCAL (int(CHAR_BIT*sizeof(unsigned int)))
 
   // Make some bit vectors to work with.
   BitVector emptyVector;
@@ -79,7 +79,7 @@ void test_bit_vector()
   size_t BitVectorSize = random_number( random_base );
   // Half the time, choose a size that will guarantee immediate reallocation
   if ( random_number(2) )
-    BitVectorSize = BitVectorSize / __WORD_BIT * __WORD_BIT;
+    BitVectorSize = BitVectorSize / __WORD_BIT_LOCAL * __WORD_BIT_LOCAL;
 
   EH_ASSERT( testVector.size() == 0 );
   testVector.reserve(BitVectorSize);

@@ -69,30 +69,343 @@ public:                         // Constructors, destructor.
                                       = ios_base::in | ios_base::out);
   explicit basic_stringbuf(const _String& __s, ios_base::openmode __mode
                                       = ios_base::in | ios_base::out);
-  virtual ~basic_stringbuf();
+  virtual ~basic_stringbuf(){}
 
 public:                         // Get or set the string.
   _String str() const { _M_append_buffer(); return _M_str; }
   void str(const _String& __s);
 
 protected:                      // Overridden virtual member functions.
-  virtual int_type underflow();
-  virtual int_type uflow();
-  virtual int_type pbackfail(int_type __c);
-  virtual int_type overflow(int_type __c);
+  
+  // Precondition: gptr() >= egptr().  Returns a character, if one is available.
+  virtual int_type underflow() {
+    return this->gptr() != this->egptr()
+      ? _Traits::to_int_type(*this->gptr())
+      : _Traits::eof();
+  }
+  
+  virtual int_type uflow() {
+      if (this->gptr() != this->egptr()) {
+        int_type __c = _Traits::to_int_type(*this->gptr());
+        this->gbump(1);
+        return __c;
+      }
+      else
+        return _Traits::eof();
+  }
+  
+  virtual int_type pbackfail(int_type __c) {
+      if (this->gptr() != this->eback()) {
+        if (!_Traits::eq_int_type(__c, _Traits::eof())) {
+          if (_Traits::eq(_Traits::to_char_type(__c), this->gptr()[-1])) {
+            this->gbump(-1);
+            return __c;
+          }
+          else if (_M_mode & ios_base::out) {
+            this->gbump(-1);
+            *this->gptr() = _Traits::to_char_type(__c);
+            return __c;
+          }
+          else
+            return _Traits::eof();
+        }
+        else {
+          this->gbump(-1);
+          return _Traits::not_eof(__c);
+        }
+      }
+      else
+        return _Traits::eof();
+  }
+  
+  virtual int_type overflow(int_type __c) {
+      // fbp : reverse order of "ifs" to pass Dietmar's test.
+      // Apparently, standard allows overflow with eof even for read-only streams.
+      if (!_Traits::eq_int_type(__c, _Traits::eof())) {
+        if (_M_mode & ios_base::out) {
+          if (!(_M_mode & ios_base::in)) {
+            // It's a write-only streambuf, so we can use special append buffer.
+            if (this->pptr() == this->epptr())
+              this->_M_append_buffer();
+
+            if (this->pptr() != this->epptr()) {
+              *this->pptr() = _Traits::to_char_type(__c);
+              this->pbump(1);
+              return __c;
+            }
+            else
+              return _Traits::eof();
+          }
+          else {
+            // We're not using a special append buffer, just the string itself.
+            if (this->pptr() == this->epptr()) {
+              ptrdiff_t __offset = this->gptr() - this->eback();
+              _M_str.push_back(_Traits::to_char_type(__c));
+
+              _CharT* __data_ptr = __CONST_CAST(_CharT*,_M_str.data());
+              size_t __data_size = _M_str.size();
+
+              this->setg(__data_ptr, __data_ptr + __offset, __data_ptr+__data_size);
+              this->setp(__data_ptr, __data_ptr + __data_size);
+              this->pbump((int)__data_size);
+              return __c;
+            }
+            else {
+              *this->pptr() = _Traits::to_char_type(__c);
+              this->pbump(1);
+              return __c;
+            }
+          }
+        }
+        else                          // Overflow always fails if it's read-only
+          return _Traits::eof();
+      }
+      else                        // __c is EOF, so we don't have to do anything
+        return _Traits::not_eof(__c);
+  }
+
   int_type pbackfail() {return pbackfail(_Traits::eof());}
   int_type overflow() {return overflow(_Traits::eof());}
 
-  virtual streamsize xsputn(const char_type* __s, streamsize __n);
-  virtual streamsize _M_xsputnc(char_type __c, streamsize __n);
+  
+  virtual streamsize xsputn(const char_type* __s, streamsize __n) {
+      streamsize __nwritten = 0;
 
-  virtual _Base* setbuf(_CharT* __buf, streamsize __n);
+      if ((_M_mode & ios_base::out) && __n > 0) {
+        // If the put pointer is somewhere in the middle of the string,
+        // then overwrite instead of append.
+        if (this->pbase() == _M_str.data() ) {
+          ptrdiff_t __avail = _M_str.data() + _M_str.size() - this->pptr();
+          if (__avail > __n) {
+            _Traits::copy(this->pptr(), __s, __STATIC_CAST(size_t, __n));
+            this->pbump((int)__n);
+            return __n;
+          }
+          else {
+            _Traits::copy(this->pptr(), __s, __avail);
+            __nwritten += __avail;
+            __n -= __avail;
+            __s += __avail;
+            this->setp(_M_Buf, _M_Buf + __STATIC_CAST(int,_S_BufSiz));
+          }
+        }
+
+        // At this point we know we're appending.
+        if (_M_mode & ios_base::in) {
+          ptrdiff_t __get_offset = this->gptr() - this->eback();
+          _M_str.append(__s, __s + __STATIC_CAST(ptrdiff_t, __n));
+
+          _CharT* __data_ptr = __CONST_CAST(_CharT*, _M_str.data());
+          size_t __data_size = _M_str.size();
+
+          this->setg(__data_ptr, __data_ptr + __get_offset, __data_ptr + __data_size);
+          this->setp(__data_ptr, __data_ptr + __data_size);
+          this->pbump((int)__data_size);
+        }
+        else {
+          _M_append_buffer();
+          _M_str.append(__s, __s + __STATIC_CAST(ptrdiff_t, __n));
+        }
+
+        __nwritten += __n;
+      }
+
+      return __nwritten;
+  }
+  
+  virtual streamsize _M_xsputnc(char_type __c, streamsize __n) {
+      streamsize __nwritten = 0;
+
+           if ((_M_mode & ios_base::out) && __n > 0) {
+        // If the put pointer is somewhere in the middle of the string,
+        // then overwrite instead of append.
+        if (this->pbase() == _M_str.data()) {
+          ptrdiff_t __avail = _M_str.data() + _M_str.size() - this->pptr();
+          if (__avail > __n) {
+            _Traits::assign(this->pptr(), __STATIC_CAST(size_t, __n), __c);
+            this->pbump(__STATIC_CAST(int, __n));
+            return __n;
+          }
+          else {
+            _Traits::assign(this->pptr(), __avail, __c);
+            __nwritten += __avail;
+            __n -= __avail;
+            this->setp(_M_Buf, _M_Buf + __STATIC_CAST(int,_S_BufSiz));
+          }
+        }
+
+
+        // At this point we know we're appending.
+        size_t __app_size = sizeof(streamsize) > sizeof(size_t) ? __STATIC_CAST(size_t, (min)(__n, __STATIC_CAST(streamsize, _M_str.max_size())))
+                                                                : __STATIC_CAST(size_t, __n);
+        if (this->_M_mode & ios_base::in) {
+          ptrdiff_t __get_offset = this->gptr() - this->eback();
+          _M_str.append(__app_size, __c);
+
+          _CharT* __data_ptr = __CONST_CAST(_CharT*,_M_str.data());
+          size_t __data_size = _M_str.size();
+
+          this->setg(__data_ptr, __data_ptr + __get_offset, __data_ptr + __data_size);
+          this->setp(__data_ptr, __data_ptr + __data_size);
+          this->pbump((int)__data_size);
+        }
+        else {
+          _M_append_buffer();
+          _M_str.append(__app_size, __c);
+        }
+
+        __nwritten += __app_size;
+      }
+
+      return __nwritten;
+  }
+  
+  virtual _Base* setbuf(_CharT*, streamsize __n) {
+      if (__n > 0) {
+        bool __do_get_area = false;
+        bool __do_put_area = false;
+        ptrdiff_t __offg = 0;
+        ptrdiff_t __offp = 0;
+
+        if (this->pbase() == _M_str.data()) {
+          __do_put_area = true;
+          __offp = this->pptr() - this->pbase();
+        }
+
+        if (this->eback() == _M_str.data()) {
+          __do_get_area = true;
+          __offg = this->gptr() - this->eback();
+        }
+
+        if ((_M_mode & ios_base::out) && !(_M_mode & ios_base::in))
+          _M_append_buffer();
+
+        _M_str.reserve(sizeof(streamsize) > sizeof(size_t) ? __STATIC_CAST(size_t, (min)(__n, __STATIC_CAST(streamsize, _M_str.max_size())))
+                                                           : __STATIC_CAST(size_t, __n));
+
+        _CharT* __data_ptr = __CONST_CAST(_CharT*, _M_str.data());
+        size_t __data_size = _M_str.size();
+
+        if (__do_get_area) {
+          this->setg(__data_ptr, __data_ptr + __offg, __data_ptr + __data_size);
+        }
+
+        if (__do_put_area) {
+          this->setp(__data_ptr, __data_ptr + __data_size);
+          this->pbump((int)__offp);
+        }
+      }
+
+      return this;
+  }
   virtual pos_type seekoff(off_type __off, ios_base::seekdir __dir,
-                           ios_base::openmode __mode
-                                      = ios_base::in | ios_base::out);
-  virtual pos_type seekpos(pos_type __pos, ios_base::openmode __mode
-                                      = ios_base::in | ios_base::out);
+                             ios_base::openmode __mode
+                                        = ios_base::in | ios_base::out) {
+      __mode &= _M_mode;
 
+      bool __imode  = (__mode & ios_base::in) != 0;
+      bool __omode = (__mode & ios_base::out) != 0;
+
+      if ( !(__imode || __omode) )
+        return pos_type(off_type(-1));
+
+      if ( (__imode && (this->gptr() == 0)) || (__omode && (this->pptr() == 0)) )
+        return pos_type(off_type(-1));
+
+    #ifndef SYMBIAN_OE_ENHANCED_LOCALE_SUPPORT
+      if ((_M_mode & ios_base::out) && !(_M_mode & ios_base::in))
+        _M_append_buffer();
+    #endif
+
+      streamoff __newoff;
+      switch(__dir) {
+      case ios_base::beg:
+        __newoff = 0;
+        break;
+      case ios_base::end:
+        __newoff = _M_str.size();
+        break;
+      case ios_base::cur:
+        __newoff = __imode ? this->gptr() - this->eback() : this->pptr() - this->pbase();
+    #ifdef SYMBIAN_OE_ENHANCED_LOCALE_SUPPORT
+          if ( __off == 0 ) {
+            return pos_type(__newoff);
+          }
+    #endif
+        break;
+      default:
+        return pos_type(off_type(-1));
+      }
+
+      __off += __newoff;
+    #ifdef SYMBIAN_OE_ENHANCED_LOCALE_SUPPORT
+      _CharT* __data_ptr = __CONST_CAST(_CharT*, _M_str.data());
+      size_t __data_size = _M_str.size();
+    #endif
+
+      if (__imode) {
+        ptrdiff_t __n = this->egptr() - this->eback();
+
+        if (__off < 0 || __off > __n)
+          return pos_type(off_type(-1));
+        this->setg(this->eback(), this->eback() + __STATIC_CAST(ptrdiff_t, __off),
+                                  this->eback() + __STATIC_CAST(ptrdiff_t, __n));
+      }
+
+      if (__omode) {
+        ptrdiff_t __n = this->epptr() - this->pbase();
+
+        if (__off < 0 || __off > __n)
+          return pos_type(off_type(-1));
+    #ifdef SYMBIAN_OE_ENHANCED_LOCALE_SUPPORT
+     this->setp(__data_ptr, __data_ptr+__data_size);
+    #else
+        this->setp(this->pbase(), this->pbase() + __n);
+    #endif
+        this->pbump((int)__off);
+      }
+
+      return pos_type(__off);
+  }
+  
+    virtual pos_type seekpos(pos_type __pos, ios_base::openmode __mode
+                                        = ios_base::in | ios_base::out) {
+        __mode &= _M_mode;
+
+        bool __imode  = (__mode & ios_base::in) != 0;
+        bool __omode = (__mode & ios_base::out) != 0;
+
+        if ( !(__imode || __omode) )
+          return pos_type(off_type(-1));
+
+        if ( (__imode && (this->gptr() == 0)) || (__omode && (this->pptr() == 0)) )
+          return pos_type(off_type(-1));
+
+        const off_type __n = __pos - pos_type(off_type(0));
+        if ((_M_mode & ios_base::out) && !(_M_mode & ios_base::in))
+          _M_append_buffer();
+
+        if (__imode) {
+          if (__n < 0 || __n > this->egptr() - this->eback())
+            return pos_type(off_type(-1));
+          this->setg(this->eback(), this->eback() + __STATIC_CAST(ptrdiff_t, __n), this->egptr());
+        }
+
+        if (__omode) {
+          if (__n < 0 || size_t(__n) > _M_str.size())
+            return pos_type(off_type(-1));
+
+          _CharT* __data_ptr = __CONST_CAST(_CharT*,_M_str.data());
+          size_t __data_size = _M_str.size();
+
+          this->setp(__data_ptr, __data_ptr+__data_size);
+          this->pbump((int)__n);
+        }
+
+        return __pos;
+    }
+  
+                                                                            
 private:                        // Helper functions.
   // Append the internal buffer to the string if necessary.
   void _M_append_buffer() const;
@@ -134,7 +447,7 @@ public:                         // Constructors, destructor.
   basic_istringstream(ios_base::openmode __mode = ios_base::in);
   basic_istringstream(const _String& __str,
                       ios_base::openmode __mode = ios_base::in);
-  ~basic_istringstream();
+  ~basic_istringstream(){}
 
 public:                         // Member functions
 
@@ -177,7 +490,7 @@ public:                         // Constructors, destructor.
   basic_ostringstream(ios_base::openmode __mode = ios_base::out);
   basic_ostringstream(const _String& __str,
                       ios_base::openmode __mode = ios_base::out);
-  ~basic_ostringstream();
+  ~basic_ostringstream(){}
 
 public:                         // Member functions.
 
@@ -223,7 +536,7 @@ public:                         // Constructors, destructor.
   basic_stringstream(openmode __mod = ios_base::in | ios_base::out);
   basic_stringstream(const _String& __str,
                      openmode __mod = ios_base::in | ios_base::out);
-  ~basic_stringstream();
+  ~basic_stringstream(){}
 
 public:                         // Member functions.
 

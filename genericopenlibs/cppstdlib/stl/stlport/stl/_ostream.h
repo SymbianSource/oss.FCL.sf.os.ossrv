@@ -68,8 +68,13 @@ public:                         // Types
   typedef basic_ios<_CharT, _Traits> _Basic_ios;
 
 public:                         // Constructor and destructor.
+
   explicit basic_ostream(basic_streambuf<_CharT, _Traits>* __buf);
-  ~basic_ostream();
+  
+
+  
+  ~basic_ostream() {}
+
 
 public:                         // Hooks for manipulators.
   typedef basic_ios<_CharT, _Traits>& (_STLP_CALL *__ios_fn)(basic_ios<_CharT, _Traits>&);

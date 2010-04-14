@@ -47,7 +47,7 @@ TARGET        libssl.dll
 
 CAPABILITY   All -Tcb
 VENDORID 	0x101FB657
-VERSION 				0.9
+VERSION 				0.10
 
 //START WINS
 //WIN32_LIBRARY   kernel32.lib

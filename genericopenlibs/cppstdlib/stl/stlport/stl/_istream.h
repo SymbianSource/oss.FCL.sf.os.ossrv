@@ -334,7 +334,7 @@ public:
   typedef basic_ios<_CharT, _Traits> _Basic_ios;
 
   explicit basic_iostream(basic_streambuf<_CharT, _Traits>* __buf);
-  virtual ~basic_iostream();
+  virtual ~basic_iostream(){}
 };
 
 # if defined (_STLP_USE_TEMPLATE_EXPORT)

@@ -252,8 +252,12 @@ private:
 							  TBool aLegitimateImpl);
 	static void ResetTInterfaceIndex(TAny* aObject);
 
-	/** Remove the pointer from iImplIndex */
-	TBool RemoveImplFromImplIndex(CImplementationData* aPtr) const;
+	/** Remove the pointer from iImplIndex based on the impl address*/
+    TBool RemoveImplByAddrFromImplIndex(CImplementationData* aPtr) const;
+
+    /** Used to restore the impIndex sanity in case of a leave */
+	static void RemoveImplFromImplIndexCleanUp(TAny* aPtr);
+	
 	/** Insert aNewImpl into iImplIndex. */
 	TInt InsertImplIntoImplIndex(CImplementationData* aNewImpl) const;
 	/** Store change in drive state - addition or removal*/
@@ -490,4 +494,14 @@ void CRegistryData::TImplContainer::Reset()
  	iUnusedImpls.Reset();
    	}
 
+    
+    class TCleanupImplIndexEntry
+        {
+        public:
+        TCleanupImplIndexEntry(CRegistryData* aRegData, CRegistryData::CImplementationData* aImpl)
+        : iRegistryData(aRegData), iImplEntry(aImpl)   
+        {}
+        CRegistryData*         iRegistryData;
+        CRegistryData::CImplementationData*   iImplEntry;
+        };
 #endif //__REGISTRYDATA_H__

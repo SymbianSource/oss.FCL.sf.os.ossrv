@@ -72,7 +72,7 @@ private:                        // Data members.
 //  _STLP_mutex _M_lock;
 
 public:                         // Destructor.
-  virtual ~basic_streambuf();
+	virtual ~basic_streambuf(){}
 
 protected:                      // The default constructor.
   basic_streambuf()
@@ -122,24 +122,34 @@ protected:                      // Protected interface to the put area
     _M_pend   = __pend;
   }
 
-protected:                      // Virtual buffer management functions.
-
-  virtual basic_streambuf<_CharT, _Traits>* setbuf(char_type*, streamsize);
-
+protected:                   // Virtual buffer management functions.                                     
+  
+  
+  
+  virtual basic_streambuf<_CharT, _Traits>* setbuf(char_type*, streamsize) {
+      return this; 
+  }
+  
   // Alters the stream position, using an integer offset.  In this
   // class seekoff does nothing; subclasses are expected to override it.
+  
   virtual pos_type seekoff(off_type, ios_base::seekdir,
-                           ios_base::openmode = ios_base::in | ios_base::out);
-
+                             ios_base::openmode = ios_base::in | ios_base::out) {
+      return pos_type(-1); 
+  }
+  
   // Alters the stream position, using a previously obtained streampos.  In
   // this class seekpos does nothing; subclasses are expected to override it.
   virtual pos_type
-  seekpos(pos_type, ios_base::openmode = ios_base::in | ios_base::out);
-
+    seekpos(pos_type, ios_base::openmode = ios_base::in | ios_base::out) {
+      return pos_type(-1); 
+  }
+  
   // Synchronizes (i.e. flushes) the buffer.  All subclasses are expected to
   // override this virtual member function.
-  virtual int sync();
-
+  virtual int sync() {
+      return 0; 
+  }                             
 
 public:                         // Buffer management.
   basic_streambuf<_CharT, _Traits>* pubsetbuf(char_type* __s, streamsize __n)
@@ -155,46 +165,133 @@ public:                         // Buffer management.
 
   int pubsync() { return this->sync(); }
 
-protected:                      // Virtual get area functions, as defined in
-                                // 17.5.2.4.3 and 17.5.2.4.4 of the standard.
+protected:            // Virtual get area functions, as defined in
+                   // 17.5.2.4.3 and 17.5.2.4.4 of the standard.     
   // Returns a lower bound on the number of characters that we can read,
   // with underflow, before reaching end of file.  (-1 is a special value:
   // it means that underflow will fail.)  Most subclasses should probably
   // override this virtual member function.
-  virtual streamsize showmanyc();
-
+  
+  virtual streamsize showmanyc() {
+      return 0; 
+  }
+  
   // Reads up to __n characters.  Return value is the number of
   // characters read.
-  virtual streamsize xsgetn(char_type* __s, streamsize __n);
+  virtual streamsize xsgetn(char_type* __s, streamsize __n) {
+      streamsize __result = 0;
+      const int_type __eof = _Traits::eof();
 
+      while (__result < __n) {
+        if (_M_gnext < _M_gend) {
+          size_t __chunk = (min) (__STATIC_CAST(size_t,_M_gend - _M_gnext),
+                                  __STATIC_CAST(size_t,__n - __result));
+          _Traits::copy(__s, _M_gnext, __chunk);
+          __result += __chunk;
+          __s += __chunk;
+          _M_gnext += __chunk;
+        }
+        else {
+          int_type __c = this->sbumpc();
+          if (!_Traits::eq_int_type(__c, __eof)) {
+            *__s = _Traits::to_char_type(__c);
+            ++__result;
+            ++__s;
+          }
+          else
+            break;
+        }
+      }
+
+      return __result;
+  }
+  
   // Called when there is no read position, i.e. when gptr() is null
   // or when gptr() >= egptr().  Subclasses are expected to override
   // this virtual member function.
-  virtual int_type underflow();
-
+  virtual int_type underflow() {
+      return _Traits::eof(); 
+  }
+  
   // Similar to underflow(), but used for unbuffered input.  Most
   // subclasses should probably override this virtual member function.
-  virtual int_type uflow();
-
+  virtual int_type uflow() {
+      return ( _Traits::eq_int_type(this->underflow(),_Traits::eof()) ?
+               _Traits::eof() :
+               _Traits::to_int_type(*_M_gnext++));
+  }
+  
   // Called when there is no putback position, i.e. when gptr() is null
   // or when gptr() == eback().  All subclasses are expected to override
   // this virtual member function.
-  virtual int_type pbackfail(int_type = traits_type::eof());
+  virtual int_type pbackfail(int_type = traits_type::eof()) {
+      return _Traits::eof();                                    
+  }                                                             
+  
 
-protected:                      // Virtual put area functions, as defined in
-                                // 27.5.2.4.5 of the standard.
+protected:                  // Virtual put area functions, as defined in
+                           // 27.5.2.4.5 of the standard.
+              
+    // Writes up to __n characters.  Return value is the number of characters
+  	// written.
 
-  // Writes up to __n characters.  Return value is the number of characters
-  // written.
-  virtual streamsize xsputn(const char_type* __s, streamsize __n);
+    virtual streamsize xsputn(const char_type* __s, streamsize __n) {
+      streamsize __result = 0;
+      const int_type __eof = _Traits::eof();
 
-  // Extension: writes up to __n copies of __c.  Return value is the number
+      while (__result < __n) {
+        if (_M_pnext < _M_pend) {
+          size_t __chunk = (min) (__STATIC_CAST(size_t,_M_pend - _M_pnext),
+                               __STATIC_CAST(size_t,__n - __result));
+          _Traits::copy(_M_pnext, __s, __chunk);
+          __result += __chunk;
+          __s += __chunk;
+          _M_pnext += __chunk;
+        }
+
+        else if (!_Traits::eq_int_type(this->overflow(_Traits::to_int_type(*__s)),
+                                       __eof)) {
+          ++__result;
+          ++__s;
+        }
+        else
+          break;
+      }
+      return __result;
+  }
+  
+    // Extension: writes up to __n copies of __c.  Return value is the number
   // of characters written.
-  virtual streamsize _M_xsputnc(char_type __c, streamsize __n);
 
-  // Called when there is no write position.  All subclasses are expected to
+  virtual streamsize _M_xsputnc(char_type __c, streamsize __n) {
+      streamsize __result = 0;
+      const int_type __eof = _Traits::eof();
+
+      while (__result < __n) {
+        if (_M_pnext < _M_pend) {
+          size_t __chunk = (min) (__STATIC_CAST(size_t,_M_pend - _M_pnext),
+                               __STATIC_CAST(size_t,__n - __result));
+          _Traits::assign(_M_pnext, __chunk, __c);
+          __result += __chunk;
+          _M_pnext += __chunk;
+        }
+
+        else if (!_Traits::eq_int_type(this->overflow(_Traits::to_int_type(__c)),
+                                       __eof))
+          ++__result;
+        else
+          break;
+      }
+      return __result;
+  }
+  
+    // Called when there is no write position.  All subclasses are expected to
   // override this virtual member function.
-  virtual int_type overflow(int_type = traits_type::eof());
+
+  virtual int_type overflow(int_type = traits_type::eof()) {
+      return _Traits::eof();                                  
+  }                                                                 
+  
 
 public:                         // Public members for writing characters.
   // Write a single character.
@@ -259,7 +356,8 @@ protected:                      // Virtual locale functions.
   // sets the streambuf's locale to __loc.  Note that imbue should
   // not (and cannot, since it has no access to streambuf's private
   // members) set the streambuf's locale itself.
-  virtual void imbue(const locale&);
+
+  virtual void imbue(const locale&) {}
 
 public:                         // Locale-related functions.
   locale pubimbue(const locale&);
@@ -280,6 +378,7 @@ private: // Data members.
   char_type* _M_pend; // End of put area
 #endif
 };
+
 
 #if defined (_STLP_USE_TEMPLATE_EXPORT)
 _STLP_EXPORT_TEMPLATE_CLASS basic_streambuf<char, char_traits<char> >;

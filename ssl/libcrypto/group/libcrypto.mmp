@@ -51,7 +51,7 @@ TARGET			libcrypto.dll
 
 CAPABILITY   All -Tcb
 VENDORID 	0x101FB657
-VERSION 				0.9
+VERSION 				0.10
 
 
 TARGETTYPE		dll

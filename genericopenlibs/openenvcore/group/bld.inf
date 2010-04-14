@@ -39,6 +39,7 @@
 PRJ_EXPORTS
 openenv.iby  /epoc32/rom/include/openenv.iby
 openc_stdlibs_stub.sis		/epoc32/data/z/system/install/openc_stdlibs_stub.sis
+openc_signalserver_stub.sis		/epoc32/data/z/system/install/openc_signalserver_stub.sis
 ../include/pipsversion.h		SYMBIAN_OS_LAYER_PUBLIC_EXPORT_PATH(stdapis/pipsversion.h)
 
 //  End of File

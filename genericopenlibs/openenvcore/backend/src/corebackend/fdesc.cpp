@@ -118,8 +118,11 @@ CFileDescBase* CFileDescBase::Open(const wchar_t* name, int mode, int perms, TIn
 		{
 		RFs& rfs = Backend()->FileSession();
         TUint attribval;
-        TPtrC16 filename1 = (const TText16*)name;       
-        int ret1 = rfs.Att(filename1, attribval);
+        TFullName fullName;
+        err = GetFullFile(fullName, (const TText16*)name, rfs);
+        if(err != KErrNone)
+            return NULL;
+        int ret1 = rfs.Att(fullName, attribval);
         if (ret1 == 0 && ((attribval & (KEntryAttHidden | KEntryAttSystem))== (KEntryAttHidden | KEntryAttSystem)))
             {
             TSpecialFileType fileType = _SystemSpecialFileBasedFilePath(name, err, rfs);
@@ -134,12 +137,7 @@ CFileDescBase* CFileDescBase::Open(const wchar_t* name, int mode, int perms, TIn
             }
 		else //normal file or directory
 		    {
-		    TFullName fullName;
-		    err = GetFullFile(fullName, (const TText16*)name, rfs);
-		    if(err != KErrNone)
-		    	return NULL;
-		    
-		    //Try opening as a file
+     	    //Try opening as a file
 		    CFileDesc* file = new CFileDesc;
 			if(file != NULL)
 				{

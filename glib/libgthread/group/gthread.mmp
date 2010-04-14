@@ -30,7 +30,7 @@ CAPABILITY All -Tcb
 VENDORID 	0x101FB657
 #endif
 
-VERSION	2.103
+VERSION	2.104
 
 #ifndef WINSCW
 EpocAllowDllData

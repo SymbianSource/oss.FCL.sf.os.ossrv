@@ -1403,6 +1403,7 @@ basic_istream<_CharT, _Traits>
 // basic_iostream<> class
 // ----------------------------------------------------------------
 
+
 template <class _CharT, class _Traits>
 basic_iostream<_CharT, _Traits>
   ::basic_iostream(basic_streambuf<_CharT, _Traits>* __buf)
@@ -1412,9 +1413,6 @@ basic_iostream<_CharT, _Traits>
   this->init(__buf);
 }
 
-template <class _CharT, class _Traits>
-basic_iostream<_CharT, _Traits>::~basic_iostream()
-{}
 
 _STLP_END_NAMESPACE
 
