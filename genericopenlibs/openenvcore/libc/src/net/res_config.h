@@ -1,3 +1,19 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: 
+*
+*/
 /* $FreeBSD: src/lib/libc/net/res_config.h,v 1.8 2002/03/22 23:41:54 obrien Exp $ */
 
 #define	DEBUG	1	/* enable debugging code (needed for dig) */

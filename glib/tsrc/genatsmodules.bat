@@ -103,7 +103,7 @@ EOHelp
 		exit();
 }
 my $do_armv5 = 1;
-my $do_winscw = 1;
+my $do_winscw = 0;
 
 if(scalar @ARGV == 1)
 {
@@ -202,9 +202,9 @@ else
 	 	$srcPrefix =~ /(.*)stdlibs.*/;
 	 	$srcPrefix = $1;
 	 	
-	 	if($suite eq "glib")
+	 	if($suite eq "glib-2.20.4")
 	 	{
-	 		$templateRoot = $srcPrefix."/glib/tsrc/";
+	 		$templateRoot = $srcPrefix."/glib-2.20.4/";
 	 	}
 	 	elsif($suite eq "ssl")
 	 	{
@@ -217,9 +217,9 @@ else
 	 	}
 	 }
 	 
-	if(rindex($templateRoot, "glib") != -1)
+	if(rindex($templateRoot, "glib-2.20.4") != -1)
 	{
-		$suite = "glib";
+		$suite = "glib-2.20.4";
 	}
 	elsif(rindex($templateRoot, "ssl") != -1)
 	{
@@ -311,27 +311,23 @@ my @stdcpplist = (
 );
 
 my @gliblist = (
-  				 ["1.gmarkup", "markup_test", "/epoc32/winscw/c/", "/General/", "C:"],
-   				 ["1.gmarkup", "markup-test", "/epoc32/winscw/c/", "/General/", "C:"],
+  				 ["valid-1.gmarkup", "markup_test", "/epoc32/winscw/c/", "/General/", "C:"],
+				 ["valid-01.xbel", "bookmarkfile_test", "/epoc32/winscw/c/", "/General/", "C:"],
   				 ["iochannel-test-infile", "iochannel_test",  "/epoc32/winscw/c/", "/General/", "C:"],
-  				 ["iochannel-test-infile", "iochannel-test",  "/epoc32/winscw/c/", "/General/", "C:"],
-#  				 ["casemap.bin",  "unicode-caseconv",  "/epoc32/winscw/c/", "/General/", "C:"],
-#  				 ["casefold.bin", "unicode-caseconv",  "/epoc32/winscw/c/", "/General/", "C:"],
-  				 ["utf8.txt", "unicode-encoding","/epoc32/winscw/c/", "/General/", "C:"],
-  				 ["casecollate.txt", "unicode-collate","/epoc32/winscw/c/", "/General/", "C:"],
-  				 ["utf8_hindi.txt", "tutf8","/epoc32/winscw/c/", "/General/", "C:"],
-  				 ["scanfile.txt", "tscanner","/epoc32/winscw/c/", "/General/", "C:"],
-  				 ["test.txt", "dir_test","/epoc32/winscw/c/temp/tmp/", "/General/", "C:\\temp\\tmp"],
-  				 ["NormalizationTest.txt", "unicode-normalize","/epoc32/winscw/c/", "/General/", "C:"],
-  				 
+  				 ["casemap.txt",  "unicode_caseconv",  "/epoc32/winscw/c/", "/General/", "C:"],
+  				 ["casefold.txt", "unicode_caseconv",  "/epoc32/winscw/c/", "/General/", "C:"],
+  				 ["utf8.txt", "unicode_encoding","/epoc32/winscw/c/", "/General/", "C:"],
+  				 ["collate-1.unicode", "unicode_collate","/epoc32/winscw/c/", "/General/", "C:"],
+  				 ["NormalizationTest.txt", "unicode_normalize","/epoc32/winscw/c/", "/General/", "C:"],
+  				 ["4096-random-bytes", "strfuncs", "/epoc32/winscw/c/", "/General/", "C:"],
   				 ["helloworld.exe", "spawn_test","/epoc32/release/armv5/urel/", "/armv5_urel/", "C:\\sys\\bin"],
   				 ["helloworld.exe", "spawn_test","/epoc32/release/winscw/udeb/", "/winscw_udeb/", "Z:\\sys\\bin"],
   				 
-  				 ["libmoduletestplugin_a.dll", "module-test","/epoc32/release/armv5/urel/", "/armv5_urel/", "C:\\sys\\bin"],
-  				 ["libmoduletestplugin_a.dll", "module-test","/epoc32/release/winscw/udeb/", "/winscw_udeb/", "Z:\\sys\\bin"],
+  				 ["libmoduletestplugin_a.dll", "module_test","/epoc32/release/armv5/urel/", "/armv5_urel/", "C:\\sys\\bin"],
+  				 ["libmoduletestplugin_a.dll", "module_test","/epoc32/release/winscw/udeb/", "/winscw_udeb/", "Z:\\sys\\bin"],
   				 
-  				 ["libmoduletestplugin_b.dll", "module-test","/epoc32/release/armv5/urel/", "/armv5_urel/", "C:\\sys\\bin"],
-  				 ["libmoduletestplugin_b.dll", "module-test","/epoc32/release/winscw/udeb/", "/winscw_udeb/", "Z:\\sys\\bin"],
+  				 ["libmoduletestplugin_b.dll", "module_test","/epoc32/release/armv5/urel/", "/armv5_urel/", "C:\\sys\\bin"],
+  				 ["libmoduletestplugin_b.dll", "module_test","/epoc32/release/winscw/udeb/", "/winscw_udeb/", "Z:\\sys\\bin"],
   				 
   			  				 
   				 );
@@ -356,7 +352,7 @@ my @ngilist = (
 
 
 my $validexpansions = "all stdlibs combined";
-my $validLibraries = "ltp opts lsb glib ssl ngi pcts stdcpp gcce libc-locale play_new";
+my $validLibraries = "ltp opts lsb glib-2.20.4 ssl ngi pcts stdcpp gcce libc-locale play_new";
 if(rindex($validexpansions, $suite)== -1 && rindex($validLibraries, $suite) == -1)
 {
 	die("$suite is not a valid library. Valid options are $validexpansions $validLibraries");
@@ -462,14 +458,76 @@ if ($suite eq "ltp" || $suite eq "all")
 	DoGen("opts",".dll");
 
 }
-if ($suite eq "glib")
+if ($suite eq "glib-2.20.4")
 {
-	my $bldfile = $templateRoot."/glib_nonstif/group/bld.inf";
+	my $bldfile = $templateRoot."/group/bld.inf";
+	my $fileName = $templateRoot;
+	#chopn("$fileName", 5);
+	chop($fileName);
+	chop($fileName);
+	chop($fileName);
+	chop($fileName);
+	chop($fileName);
+	
+	$bldfile = $fileName."/build/symbian/tests/group/bld.inf";
+	print "bldfile: $bldfile\n";	
 	my @glibModules = GetCompiledModules($bldfile);
+	#mahesh
+	print "glibModules: @glibModules\n";
 	@generatedModules = @glibModules;
-	DoGen("glib",".exe");
+	
+	$bldfile = $fileName."/build/symbian/tests/gobject/group/bld.inf";
+	print "bldfile: $bldfile\n";	
+	my @glibModules = GetCompiledModules($bldfile);
+	#mahesh
+	print "glibModules: @glibModules\n";
+	my $i =0;
+	foreach my $name(@glibModules){
+		@glibModules[$i] =~ s/ //;
+		$i = $i + 1;
+	}
+	push(@generatedModules, @glibModules);
+	
+	$bldfile = $fileName."/build/symbian/tests/refcount/group/bld.inf";
+	print "bldfile: $bldfile\n";	
+	my @glibModules = GetCompiledModules($bldfile);
+	#mahesh
+	print "glibModules: @glibModules\n";
+	my $i =0;
+	foreach my $name(@glibModules){
+		@glibModules[$i] =~ s/ //;
+		$i = $i + 1;
+	}
+	push(@generatedModules, @glibModules);
+	
+	$bldfile = $fileName."/build/symbian/glib/tests/group/bld.inf";
+	print "bldfile: $bldfile\n";	
+	my @glibModules = GetCompiledModules($bldfile);
+	#mahesh
+	print "glibModules: @glibModules\n";
+	my $i =0;
+	foreach my $name(@glibModules){
+		@glibModules[$i] =~ s/ //;
+		$i = $i + 1;
+	}
+	push(@generatedModules, @glibModules);
+	
+	$bldfile = $fileName."/build/symbian/gobject/tests/group/bld.inf";
+	print "bldfile: $bldfile\n";	
+	my @glibModules = GetCompiledModules($bldfile);
+	#mahesh
+	print "glibModules: @glibModules\n";
+	my $i =0;
+	foreach my $name(@glibModules){
+		@glibModules[$i] =~ s/ //;
+		$i = $i + 1;
+	}
+	
+	push(@generatedModules, @glibModules);
+	
+	DoGen("glib-2.20.4",".exe");
 	my $gDataRef = \@gliblist;
-	CopyArbitDatFiles("glib",$gDataRef);
+	CopyArbitDatFiles("glib-2.20.4",$gDataRef);
 	
 	if($install eq "yes")
 	{
@@ -479,12 +537,12 @@ if ($suite eq "glib")
                 
    my  @glib1List = ( "libgobject.dll", "libgmodule.dll", "libgthread.dll",  "libglib.dll", );
   @dllList = @glib2dllList;
-  CopySharedDlls("glib",\@dllList);     	
-  TransformXmls("glib", "shared");
+  CopySharedDlls("glib-2.20.4",\@dllList);     	
+  TransformXmls("glib-2.20.4", "shared");
    	
 		@dllList = @saved;
 	}#if install
-}#glib
+}#glib-2.20.4
 
 
 if ($suite eq "ssl")
@@ -1031,7 +1089,7 @@ sub DoGen($$)
 	{
 		CopyOptsCfg($libname);
 	}
-	elsif($libname eq "ltp" || $libname eq "lsb" || $libname eq "glib")
+	elsif($libname eq "ltp" || $libname eq "lsb" || $libname eq "glib-2.20.4")
 	{
 	  #copy latter and  dont copy respectively for ltp and lsb
 	}
@@ -1715,7 +1773,7 @@ sub CopyDatFiles()
 }#fn
 
 
-#glib dat file copy
+#glib-2.20.4 dat file copy
 sub CopyArbitDatFiles($$)
 {
 	
@@ -1759,7 +1817,7 @@ sub CopyArbitDatFiles($$)
   		}
   		foreach my $file(@filesFound)
   		{
-  			copy($file, $dst) || die("DIED: unable to copy $file to $dst");
+  			copy($file, $dst) || warn("DIED: unable to copy $file to $dst");
   		}
   		
   		if($targetDst ne "")

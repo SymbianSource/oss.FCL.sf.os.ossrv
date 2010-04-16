@@ -1975,12 +1975,13 @@ TInt CTestPThread::PThreadExitMemLeak()
 		const char* const KThreadName = "THRD1";
 		pthread_t threadId = 0;
 		int err = 0;
-		if( err = pthread_create(&threadId, 0, &ThreadFunc, (void*)KThreadName) != 0 )
+		err = pthread_create(&threadId, 0, &ThreadFunc, (void*)KThreadName);
+		if( err  != 0 )
 			{
 			INFO_PRINTF2(_L("Error in pthread_create() and the value returned is %d\n"),err);
 			}
-		
-		if( err = pthread_join(threadId, 0) != 0)
+		err = pthread_join(threadId, 0);
+		if( err  != 0)
 			{
 			 INFO_PRINTF2(_L("Error in pthread_join() and the value returned is %d\n"),err);
 			}

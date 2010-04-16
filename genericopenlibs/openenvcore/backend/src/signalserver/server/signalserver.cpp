@@ -158,6 +158,7 @@ void CSignalServer::RemoveSession()
 		RProcess lProcHdl;
 		if(lProcHdl.Open(lPid) != KErrNone)
 			{
+            iProcessHdlList[lIdx].mPipe.Close();
 			iProcessHdlList.Remove(lIdx);
 			}
 		else
@@ -261,6 +262,9 @@ void CSignalServer::ServiceL(const RMessage2& aMessage)
 					aMessage.Complete(KErrGeneral);
 				}
 			aMessage.Complete(KErrNone);
+			
+			lProcess.Close();
+			lClientThread.Close();
 			break;
 		default:
 			aMessage.Complete(KErrNotSupported);

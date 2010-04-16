@@ -20,6 +20,7 @@
 #include <dbus/dbus.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #define LOG_FILE "c:\\logs\\dbus_message_get_no_reply0_log1.txt"
 #include "std_log_result.h"

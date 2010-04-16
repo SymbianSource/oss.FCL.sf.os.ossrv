@@ -63,8 +63,8 @@ SOURCE           rc4test.c
 SOURCE           rsa_test.c
 SOURCE           shatest.c
 SOURCE           sha1test.c
-
-
+SOURCE           sha256t.c
+SOURCE           sha512t.c
 
 USERINCLUDE     ../inc 
 USERINCLUDE     ../../../include

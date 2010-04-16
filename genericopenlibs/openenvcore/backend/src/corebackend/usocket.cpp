@@ -1792,7 +1792,10 @@ TInt CSocketDesc::OpenUsingPreference()
 			ret = iSocket.Open(*iSockServPtr,iAddrFamily,iStyle,iProtocol);
 		}
 		}
-	iSocketPtr = &iSocket;
+	if(KErrNone == ret)
+		{
+		iSocketPtr = &iSocket;
+		}
 	iConnectInProgress = EFalse;
 	return ret;
 	}

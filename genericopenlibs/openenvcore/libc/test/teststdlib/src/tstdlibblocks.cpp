@@ -8107,7 +8107,8 @@ TInt CTestStdlib::calloc_Test3()
 TInt CTestStdlib::calloc_Test4()
     {
     INFO_PRINTF1(_L("In calloc_Test4L"));
-	char  *pc = (char *)calloc(-10,10);	
+    size_t  nelem = (size_t)-10;
+	char  *pc = (char *)calloc(nelem,10);	
    
     bool i = (pc == NULL);
 	INFO_PRINTF2(_L("{Expected: 1} %d"), (int)i);

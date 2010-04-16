@@ -268,7 +268,7 @@ int PosixFilesystem::mkdir (RFs& aFs, const wchar_t* aPath, int perms, int& anEr
 		return MapError(err,anErrno);
 			}
 
-int PosixFilesystem::stat (RFs& aFs, const wchar_t* name, struct stat *st, int& anErrno)
+int PosixFilesystem::statbackend (RFs& aFs, const wchar_t* name, struct stat *st, int& anErrno)
 	{
 	TFullName fullName;
 	TInt err=0;
@@ -323,8 +323,9 @@ int PosixFilesystem::stat (RFs& aFs, const wchar_t* name, struct stat *st, int& 
 #endif /* SYMBIAN_OE_LARGE_FILE_SUPPORT && !SYMBIAN_OE_NO_LFS */
 			
 			st->st_dev = st->st_rdev = (dev_t)TDriveUnit(fullName);
-            if( !(entry.iAtt & (KEntryAttHidden | KEntryAttSystem)) || (entry.iAtt & KEntryAttDir))
-                {
+			if( ( (entry.iAtt & (KEntryAttHidden | KEntryAttSystem)) != (KEntryAttHidden | KEntryAttSystem) )
+			        || (entry.iAtt & KEntryAttDir))
+			    {
 			    CFileDesc::MapStat(*st, entry.iModified, entry.iAtt);
                 }
             else

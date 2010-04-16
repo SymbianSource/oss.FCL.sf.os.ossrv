@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/time.h> // gettimeofday
+#include <stdlib.h>
 
 #define quick_rand32()  (rand_accu = 1664525 * rand_accu + 1013904223, rand_accu)
 static guint    prime_size = 1021; // 769; // 509

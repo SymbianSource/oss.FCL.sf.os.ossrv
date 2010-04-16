@@ -43,6 +43,11 @@ OPTION CW   -w off
 OPTION MSVC /W0
 OPTION GCC  -w
 
+// Insignificant warnings in this FreeBSD library code are suppressed
+OPTION ARMCC --diag_suppress 111
+OPTION ARMCC --diag_suppress 1293
+
+
 TARGET        libssl.dll
 
 CAPABILITY   All -Tcb

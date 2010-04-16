@@ -54,7 +54,7 @@ PRJ_TESTMMPFILES
 // NOTE: If using ARS requirements .mmp file operation should be done under this.
 // 'abld test build'
 
-PRJ_TESTMMPFILES
+
 // Specify the .mmp files required for building the important component
 // releasables.
 //

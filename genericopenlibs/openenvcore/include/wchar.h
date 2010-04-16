@@ -337,6 +337,7 @@ struct _wfinddata_t
 #define _A_NORMAL 0x0000	//Normal. File has no other attributes set and can be read or written to without restriction. Value: 0x00.
 #define _A_RDONLY 0x0001		//Read-only. File cannot be opened for writing and a file with the same name cannot be created. Value: 0x01.
 #define _A_SYSTEM  0x0004		//System file. Not normally seen with the DIR command, unless the /A or /A:S option is used
+#define _A_SUBDIR 0x0010        // Subdirectory.        
 
 IMPORT_C size_t	wcslcat(wchar_t *, const wchar_t *, size_t);
 IMPORT_C size_t	 wcslcpy(wchar_t *, const wchar_t *, size_t);

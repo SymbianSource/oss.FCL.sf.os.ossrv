@@ -45,7 +45,9 @@ DBUS_BEGIN_DECLS
  * @brief Internal system-dependent API available on UNIX only
  * @{
  */
-
+#ifdef __SYMBIAN32__
+IMPORT_C
+#endif
 dbus_bool_t 
 _dbus_close     (int               fd,
                  DBusError        *error);

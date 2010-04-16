@@ -179,9 +179,20 @@ EXPORT_C int unlink(const char *pathname)
 
 EXPORT_C int lstat(const char *file_name, struct stat *buf)
 	{
-	return stat(file_name, buf);
+    if(!buf)
+       {
+        errno = EFAULT ;
+        return -1 ; 
+       }
+    
+    wchar_t tmpbuf[MAXPATHLEN+1];   
+    if ((size_t)-1 != mbstowcs(tmpbuf, file_name, MAXPATHLEN))
+        {
+        return _lstat_r(&errno, tmpbuf, buf);
+        }
+    errno = EILSEQ;     
+    return -1;    
 	}
-
 EXPORT_C int __xstat(int /*vers*/, const char *file, struct stat *buf)
 	{
 	return stat(file, buf);
@@ -189,7 +200,7 @@ EXPORT_C int __xstat(int /*vers*/, const char *file, struct stat *buf)
 
 EXPORT_C int __lxstat (int /*version*/, const char *file, struct stat *buf)
 	{
-	return stat(file, buf);
+	return lstat(file, buf);
 	}
 
     

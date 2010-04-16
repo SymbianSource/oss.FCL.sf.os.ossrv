@@ -35,6 +35,7 @@
 #include "../cryptogaphy_related_api/group/bld.inf"
 #include "../debug/group/bld.inf"
 #include "../exceptions/group/bld.inf"
+/*
 #include "../gboxed/group/bld.inf"
 
 #include "../glib_arrays/group/bld.inf"
@@ -92,7 +93,7 @@
 #include "../gtype/group/bld.inf"
 #include "../gtypemodule/group/bld.inf"
 #include "../gtypeplugin/group/bld.inf"
-
+*/
 #include "../io_stream_api/group/bld.inf"
 
 #include "../localization_function_api/group/bld.inf"

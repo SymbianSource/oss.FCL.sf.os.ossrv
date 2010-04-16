@@ -35,6 +35,8 @@
 #include <commdbconnpref.h>
 #include <rpipe.h>
 
+#include<tz.h>
+
 #ifdef SYMBIAN_OE_POSIX_SIGNALS
 #include "signalclient.h"
 #include "tsignalmessage.h"
@@ -112,7 +114,7 @@ class TCLSICleanup
 */
 	{
 public:
-	void StorePtrs(RHeap* aHeap, RFs* aFs, RSocketServ* aSs, RCommServ* aCs, RFastLock* aSsLock, RFastLock* aCsLock)
+	void StorePtrs(RHeap* aHeap, RFs* aFs, RSocketServ* aSs, RCommServ* aCs, RFastLock* aSsLock, RFastLock* aCsLock, RTz * aTzs)
 		{
 		iHeap = aHeap;
 		iFs = aFs;
@@ -120,6 +122,7 @@ public:
 		iCs = aCs;
 		iSsLock = aSsLock;
 		iCsLock = aCsLock;
+		iTzS = aTzs;
 		}
 
 	~TCLSICleanup()
@@ -130,6 +133,7 @@ public:
 		iCs->Close();
 		iCsLock->Close();
 		iHeap->Close();
+		iTzS->Close();
 		}
 private:
 	RHeap* iHeap;
@@ -138,6 +142,7 @@ private:
 	RCommServ* iCs;
 	RFastLock* iSsLock;
 	RFastLock* iCsLock;
+	RTz * iTzS;
 	};
 
 
@@ -322,7 +327,7 @@ public:
 	static int rmdir(RFs& aFs, const wchar_t* path, int& anErrno);
 	static int chmod(RFs& aFs, const wchar_t* path, int perms, int& anErrno);
 	static int reg_unlink(RFs& aFs, const wchar_t* path, int& anErrno);
-	static int stat(RFs& aFs, const wchar_t* name, struct stat* st, int& anErrno);
+	static int statbackend(RFs& aFs, const wchar_t* name, struct stat* st, int& anErrno);
 	static int rename(RFs& aFs, const wchar_t* oldname, const wchar_t* newname, int& anErrno);
 	static TInt ResolvePath(TParse& aResult, const wchar_t* path, TDes* aFilename);
 	static TInt SetDefaultDir(RFs& aFs);
@@ -420,6 +425,7 @@ public:
 	int rmdir (const wchar_t* path, int& anErrno);
 	int chmod (const wchar_t* path, int perms, int& anErrno);
 	int stat (const wchar_t* name, struct stat* st, int& anErrno);
+	int lstat (const wchar_t* name, struct stat *st, int& anErrno);
 	int rename (const wchar_t* oldname, const wchar_t* newname, int& anErrno);
 
 	IMPORT_C TInt ResolvePath (TParse& aResult, const wchar_t* path, TDes* aFilename);
@@ -651,7 +657,7 @@ private:
 	
 	// Default connection settings, set/cleared using setdefaultif
 	TConnPref* iDefConnPref;
-	
+    RTz     iTzServer;	
 #ifdef SYMBIAN_OE_POSIX_SIGNALS
 	// Signal handler thread
 	RThread 				iSignalHandlerThread;
@@ -803,6 +809,11 @@ private:
 	
 #endif // SYMBIAN_OE_POSIX_SIGNALS
 public:
+
+   inline RTz & TZServer()
+        {
+        return iTzServer;
+        } 
 //ipc server session
 RIpcSession iIpcS;
 friend class RFileDesTransferSession;

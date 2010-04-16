@@ -480,9 +480,8 @@ TInt CFileSocketDesc::SockName(int anEnd, struct sockaddr* aAddr,unsigned long* 
 		if( ret == EFAULT )
 		    return ret;
 		
-		struct sockaddr_un* addr = (struct sockaddr_un*)aAddr;
 		// If the length passed is greater than or equal to 0 but less than the first field i.e sun_family  , return kErrnone and dont  fill  any field into aAddr structure passed.
-		if( (aAddrLen != 0) && (*aAddrLen < sizeof(addr->sun_family)) )
+		if( (aAddrLen != 0) && (*aAddrLen < sizeof(((struct sockaddr_un*)aAddr)->sun_family)) )
             {
             return KErrNone;
             }

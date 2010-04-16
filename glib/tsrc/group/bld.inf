@@ -11,11 +11,10 @@
 *
 * Contributors:
 *
-* Description:   This is a bld file to generate all the test applications
- *
+* Description: 
+*
 */
-
-
-
-#include "../glib_nonstif/group/bld.inf"
-#include "../glib_stif_test/group/bld.inf"
+//This is an auto-generated bld.inf file
+#include "../../build/symbian/tests/group/bld.inf"
+#include "../../build/symbian/glib/tests/group/bld.inf"
+#include "../../build/symbian/gobject/tests/group/bld.inf"

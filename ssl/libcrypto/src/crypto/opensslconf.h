@@ -49,12 +49,6 @@
 #ifndef OPENSSL_NO_RIPEMD
 # define OPENSSL_NO_RIPEMD
 #endif
-#ifndef OPENSSL_NO_SHA256
-# define OPENSSL_NO_SHA256
-#endif
-#ifndef OPENSSL_NO_SHA512
-# define OPENSSL_NO_SHA512
-#endif
 #ifndef OPENSSL_NO_STATIC_ENGINE
 # define OPENSSL_NO_STATIC_ENGINE
 #endif
@@ -120,12 +114,6 @@
 
 # if defined(OPENSSL_NO_RIPEMD) && !defined(NO_RIPEMD)
 #  define NO_RIPEMD
-# endif
-# if defined(OPENSSL_NO_SHA256) && !defined(NO_SHA256)
-#  define NO_SHA256
-# endif
-# if defined(OPENSSL_NO_SHA512) && !defined(NO_SHA512)
-#  define NO_SHA512
 # endif
 # if defined(OPENSSL_NO_STATIC_ENGINE) && !defined(NO_STATIC_ENGINE)
 #  define NO_STATIC_ENGINE

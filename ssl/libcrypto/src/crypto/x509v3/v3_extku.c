@@ -56,7 +56,7 @@
  *
  */
 /*
- © Portions copyright (c) 2006 Nokia Corporation.  All rights reserved.
+ © Portions copyright (c) 2006, 2010 Nokia Corporation.  All rights reserved.
  */
 
 #include <stdio.h>
@@ -95,8 +95,8 @@ EXPORT_C const X509V3_EXT_METHOD v3_ext_ku = {
 	0,0,
 	NULL
 };
-
 #endif
+
 #ifndef EMULATOR
 /* NB OCSP acceptable responses also is a SEQUENCE OF OBJECT */
 EXPORT_C X509V3_EXT_METHOD v3_ocsp_accresp = {
@@ -120,8 +120,8 @@ EXPORT_C const X509V3_EXT_METHOD v3_ocsp_accresp = {
 	0,0,
 	NULL
 };
-
 #endif
+
 ASN1_ITEM_TEMPLATE(EXTENDED_KEY_USAGE) = 
 	ASN1_EX_TEMPLATE_TYPE(ASN1_TFLG_SEQUENCE_OF, 0, EXTENDED_KEY_USAGE, ASN1_OBJECT)
 ASN1_ITEM_TEMPLATE_END(EXTENDED_KEY_USAGE)

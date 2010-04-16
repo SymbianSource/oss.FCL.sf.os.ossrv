@@ -1,4 +1,4 @@
-// Copyright (c) 2005-2009 Nokia Corporation and/or its subsidiary(-ies).
+// Copyright (c) 2005-2010 Nokia Corporation and/or its subsidiary(-ies).
 // All rights reserved.
 // This component and the accompanying materials are made available
 // under the terms of "Eclipse Public License v1.0"
@@ -67,68 +67,115 @@
 
 #include <stdlib.h>
 #include <wchar.h>
-#include <bafindf.h>
 #include <errno.h> 
 #include "sysif.h"
-
+#include<e32base.h>
 #include<e32cmn.h>
 #include<ltime.h>
-#define	MAXPATHLEN	260	
+#define MAXPATHLEN  260 
+#define ATTMASK (_A_ARCH|_A_HIDDEN|_A_NORMAL|_A_RDONLY|_A_SYSTEM|_A_SUBDIR )
+
+class CFindFileByPath : public CBase
+    {
+    public:
+        CFindFileByPath(RFs& aFs) : iFinder(aFs),iLastCount(-1)
+            {  
+            }
+        ~CFindFileByPath()
+            {
+            delete iDir;
+            iDir = NULL;
+            }
+        const TEntry& Entry()
+            {
+            return (*iDir)[iLastCount];
+            }
+        TInt FindFirst(const TDesC&,const TDesC&);
+        TInt FindNext();
+    private:
+        TFindFile iFinder;
+        CDir* iDir;
+        TInt iLastCount;
+        TBuf<MAXPATHLEN> iPath;
+    };
+
+TInt CFindFileByPath::FindFirst(const TDesC &aPattern, const TDesC& aPath)
+    {
+    iPath = aPath;
+    TInt ret = iFinder.FindWildByPath(aPattern,&iPath,iDir);
+    if(ret != KErrNone)
+        {
+        return ret;
+        }
+    return FindNext();
+    }
+
+TInt CFindFileByPath::FindNext()
+    {
+    TInt count = iDir->Count();
+//    Results from the search either in pattern path or in the cwd.
+    if(++iLastCount<count)
+        {
+        return KErrNone;
+        }
+    return KErrNotFound;
+    }
+
+void UpdateFileInfo(struct _wfinddata_t* aFileinfo, CFindFileByPath& aFinder)
+    {
+    wcscpy(aFileinfo->name ,(wchar_t *)aFinder.Entry().iName.Ptr());
+    TInt k = aFinder.Entry().iName.Size()/sizeof(wchar_t);
+    aFileinfo->name[k] = L'\0';
+
+
+    aFileinfo->size = aFinder.Entry().iSize;
+
+    // Unmask unnecessary attributes in iAtt. 
+    // All constant definitions are in sync with what is expected in finddata structure.
+    aFileinfo->attrib = aFinder.Entry().iAtt;    
+    aFileinfo->attrib &= (ATTMASK);
+
+    time_t time_modify = as_time_t(aFinder.Entry().iModified); 
+    aFileinfo->time_write = time_modify;
+
+    aFileinfo->time_create = -1L;
+    aFileinfo->time_access = -1L;
+
+    }
 
 extern "C" 
 {
-	 //RFs FileServerSession ; 
+     //RFs FileServerSession ; 
 EXPORT_C intptr_t wfindfirst(const wchar_t*  filespec, struct _wfinddata_t* fileinfo)
  {
    
    if(!filespec||!fileinfo)
    return EINVAL;
    
-   long handle = -1;	
+   long handle = -1;    
    wchar_t *dirf =(wchar_t*)malloc(MAXPATHLEN * sizeof(wchar_t)); // getting the cuurent directory
    wgetcwd(dirf,MAXPATHLEN);
    TPtrC16 dird((const TUint16*)dirf); // converting it into descriptor
    TPtrC16 fsd((const TUint16*)filespec );
-   TUidType uid(KNullUid, KNullUid, KNullUid);
-   //FileServerSession.Connect() ;	
-   
-   CFindFileByType *temp1= new CFindFileByType(Backend()->FileSession()); // #include <bafindf.h> 	
-   if(temp1== NULL)
-   {
-  		return EINVAL;
-  	}
-   int k = temp1->FindFirst(fsd,dird,uid);
-   if(k==KErrNone)
-   {
-   	    	
-   	wcscpy(fileinfo->name ,(wchar_t *)temp1->Entry().iName.Ptr());
-   	k = temp1->Entry().iName.Size()/sizeof(wchar_t);
-   	fileinfo->name[k] = L'\0';
-   	
-   	
-   	fileinfo->size = temp1->Entry().iSize;
-   	
-   	fileinfo->attrib = temp1->Entry().iAtt; // we have to eport defined 
-   	//also like KEntryAttNormal all this are availabel in f32file.h one 
-   	//attribte _A_SUBDIR will not be suuported 
-
-   	time_t time_modify = as_time_t(temp1->Entry().iModified); 
-    fileinfo->time_write = time_modify;
-    
-   	fileinfo->time_create = -1L;
-   	fileinfo->time_access = -1L;
-   	
-   	
-   	handle = reinterpret_cast<long>(temp1);
-   }
-   else
-   {
-   	handle = -1;
-  	errno = ENOENT ;
-   }
-   delete dirf; // delete directory pointer	
-   //FileServerSession.Close(); 
  
+   CFindFileByPath *temp1= new CFindFileByPath(Backend()->FileSession());    
+   if(temp1== NULL)
+       {
+       return EINVAL;
+       }
+   int k = temp1->FindFirst(fsd,dird);
+   if(k==KErrNone)
+       {        
+       UpdateFileInfo(fileinfo,*temp1);
+       handle = reinterpret_cast<long>(temp1);
+       }
+   else
+       {
+        handle = -1;
+        delete temp1;
+        errno = ENOENT ;
+       }
+   delete dirf; // delete directory pointer 
    return handle;
  
  }
@@ -136,37 +183,33 @@ EXPORT_C intptr_t wfindfirst(const wchar_t*  filespec, struct _wfinddata_t* file
 
 EXPORT_C intptr_t wfindnext(intptr_t handle, struct _wfinddata_t * fileinfo)
  {
- 		if((handle<=0)||!fileinfo)
-   	return EINVAL;	
- 	
- 	CFindFileByType *temp1 = reinterpret_cast<CFindFileByType *>(handle); 
- 	int k = temp1->FindNext();
- 	if(KErrNone==k)
- 	{
- 		wcscpy(fileinfo->name , (wchar_t *)temp1->Entry().iName.Ptr());
- 		k = temp1->Entry().iName.Size()/sizeof(wchar_t);
-   	fileinfo->name[k] = L'\0';
-   	fileinfo->size = temp1->Entry().iSize;
-   	return 0;	
- 	}
- 	else 
- 	{
- 	 	errno = ENOENT ;
-	 	return -1;
-	}
+        if((handle<=0)||!fileinfo)
+    return EINVAL;  
+    
+    CFindFileByPath *temp1 = reinterpret_cast<CFindFileByPath *>(handle); 
+    int k = temp1->FindNext();
+    if(KErrNone==k)
+    {
+    UpdateFileInfo(fileinfo,*temp1);
+    return 0;   
+    }
+    else 
+    {
+        errno = ENOENT ;
+        return -1;
+    }
  }
-	
+    
  EXPORT_C int findclose( intptr_t handle)
  {
- 	if(handle <=0)
- 	{
-		errno = ENOENT ;
-	 	return -1;
- 	}
- 	CFindFileByType *temp1 = reinterpret_cast<CFindFileByType *>(handle); 
- //FileServerSession.Close(); 
- 	delete temp1;
- 	return 0;
+    if(handle <=0)
+    {
+        errno = ENOENT ;
+        return -1;
+    }
+    CFindFileByPath *temp1 = reinterpret_cast<CFindFileByPath *>(handle); 
+    delete temp1;
+    return 0;
   }
 } 
 

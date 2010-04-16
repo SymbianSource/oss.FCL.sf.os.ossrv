@@ -3,6 +3,7 @@
 
 #include <glib.h>
 #include <stdio.h>
+#include <unistd.h>
 
 #ifdef SYMBIAN
 #include <glib_global.h>

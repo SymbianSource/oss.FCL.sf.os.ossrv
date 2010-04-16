@@ -392,7 +392,6 @@ void CSockDescBase::TweakWatchedEvents(TUint& events)
 //
 TInt CSockDescBase::TweakReadyEvents(TInt errval)
     {
-    int errno_local=0;
     TInt returnEvents = 0;
     if( errval >= KErrNone )
         {

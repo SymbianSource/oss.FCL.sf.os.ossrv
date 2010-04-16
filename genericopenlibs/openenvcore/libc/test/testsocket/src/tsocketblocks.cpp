@@ -1635,6 +1635,11 @@ TInt CTestSocket::AcceptTestZeroAddrLen()
 		}
 	
 	newsock_fd = accept(sock_fd,(sockaddr*)&new_socket,0);	
+	if (newsock_fd >  0)
+        {       
+            ret = KErrAccept;
+            goto close;
+        }
 	if (errno != EINVAL )
         {
         INFO_PRINTF2(_L("Accept return with errno = %d"), errno);
@@ -2096,7 +2101,7 @@ if (ret < 0)
 printf("[Client] send data to server fail\n");
 break;
 }
-int bytes = ret;
+//int bytes = ret;
 
 printf("[Client] send %d bytes: %s\n",ret,tcpdata);
 char buff[50];
@@ -2127,7 +2132,7 @@ return 0;
 
 TInt CTestSocket::TestSendReturnValue( )
 	{
-	 int  ret1=0;
+	// int  ret1=0;
 	 pthread_t t;
 	 int flag = 0;
 	 _LIT(KWelcome,"Hello Open C and OPENENV!\n");
@@ -2142,7 +2147,7 @@ TInt CTestSocket::TestSendReturnValue( )
 	 int set = 1;
 	 setsockopt(servsockid, SOL_SOCKET, SO_REUSEADDR, &set, sizeof(set));
 
-	 int result = -1;
+	// int result = -1;
 	 struct sockaddr_in addr;
 	 addr.sin_family = AF_INET;
 	 addr.sin_port = htons(5000);
@@ -2165,7 +2170,7 @@ TInt CTestSocket::TestSendReturnValue( )
 	 }
 	 
 	 
-	 ret1= pthread_create(&t, 0 , myclie, (void*) 5000 );
+	 ret = pthread_create(&t, 0 , myclie, (void*) 5000 );
 	 
 
 	 socklen_t len = sizeof(addr);
@@ -2202,7 +2207,7 @@ TInt CTestSocket::TestSendReturnValue( )
 	 printf("[Server] send data to client %d bytes: %s\n", ret, buff);
 	 }      
 	 close(clientid);
-	 result = 0;
+	// result = 0;
 	 }
 	 while (0);
 	 close(servsockid);
@@ -3415,6 +3420,10 @@ static void* clientfun(void* /*param*/)
 	sleep(5);
 	ret = sendto(sock,&buf,sizeof(buf),0,(struct sockaddr*)&server,sizeof(struct sockaddr));
 	ret = sendto(sock,&buf,sizeof(buf),0,(struct sockaddr*)&server,sizeof(struct sockaddr));
+	if( ret == -1 )
+	    {
+        printf("sendto failed \n");
+	    }
 	close(sock);
 	return NULL;
 	}

@@ -167,6 +167,13 @@ EXPORT_C int _stat_r (int *aErrno, const wchar_t *name, struct stat *st)
 	return Backend()->stat(name, st, *aErrno);
 	}
 	
+/* A reentrant version of lstat().
+*/
+EXPORT_C int _lstat_r (int *aErrno, const wchar_t *name, struct stat *st) 
+    {
+    return Backend()->lstat(name, st, *aErrno);
+    }
+
 EXPORT_C int _utime_r (int *aErrno, const wchar_t *name,const  struct utimbuf *filetimes) 
 	{
 	return Backend()->utime(name, filetimes, *aErrno);

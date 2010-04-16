@@ -31,6 +31,8 @@
 #include "fdesc.h"
 #include "ltime.h"
 #include "lposix.h"
+#include "systemspecialfilercg.h"
+#include "link.h"
 #ifdef SYMBIAN_OE_POSIX_SIGNALS
 #include <stdlib.h>
 #include <signal.h>
@@ -165,13 +167,23 @@ iTLDInfoList(CLocalSystemInterface::KTLDInfoListGran)
 	        err |= iDefConnLock.CreateLocal();
 			}
 
+        if(err == KErrNone)
+            {
+            err = iTzServer.Connect();
+            if(!err)
+                {
+                err = iTzServer.ShareAuto();
+                }
+            }
+
+
 		//Panic if any of the above operation returns with error
 		if (err)
 			{
 			User::Panic(KEstlibInit, err);
 			}
 
-		iCleanup.StorePtrs(iPrivateHeap, &iFs, &iSs, &iCs, &iSSLock, &iCSLock);
+		iCleanup.StorePtrs(iPrivateHeap, &iFs, &iSs, &iCs, &iSSLock, &iCSLock, &iTzServer);
 		
 		// No connection settings by default
 		iDefConnPref = NULL;
@@ -286,9 +298,12 @@ void CLocalSystemInterface::TerminateProcess(int status)
 void CLocalSystemInterface::Exit(int code)
 	{
 #ifdef SYMBIAN_OE_POSIX_SIGNALS
+    TRequestStatus status = KRequestPending;
+    iSignalHandlerThread.Logon(status);
 	iSignalLoopRunning = EFalse;
+	iSignalHandlerThread.RequestSignal();
+	User::WaitForRequest(status);
 #endif
-
 	iFids.Close();
 	User::SetCritical(User::EProcessPermanent);
 	User::Exit(code);
@@ -317,9 +332,58 @@ int CLocalSystemInterface::mkdir (const wchar_t* aPath, int perms, int& anErrno)
 	}
 
 int CLocalSystemInterface::stat (const wchar_t* name, struct stat *st, int& anErrno)
-	{
-	return PosixFilesystem::stat(iFs, name, st, anErrno);
-	}
+    {
+    const wchar_t* filename;
+    // This needs to be zero terminated
+    TBuf<KMaxFileName> inputName;
+    TUint pathAtt = 0;
+    TInt err = GetFullFile(inputName,(const TText16*)name,iFs);
+    if( !err )
+        {
+        TInt err = iFs.Att(inputName,pathAtt);
+        if ( (err == KErrNone) && (pathAtt & KEntryAttDir) )
+            {                    
+            inputName.Append(_L("\\"));            
+            }
+        filename = (wchar_t*)inputName.PtrZ();
+        }
+    // try to stat anyway
+    else
+        {
+        inputName.Copy((const TText16*)name);
+        filename = (wchar_t*)inputName.PtrZ();
+        }
+    TSpecialFileType fileType;
+    struct SLinkInfo enBuf;
+    // Check the type of file
+    fileType = _SystemSpecialFileBasedFilePath(filename, err, iFs);
+    // If it is a symbolic link, follow the link
+    // If _SystemSpecialFileBasedFilePath fails, treat it as normal file
+    // and try to proceed
+    if( fileType == EFileTypeSymLink && err == KErrNone )
+        {
+        err = _ReadSysSplFile(filename, (char*)&enBuf, sizeof(struct SLinkInfo), anErrno, iFs);
+        if (err == KErrNone)
+            {
+            filename = (wchar_t*)enBuf.iParentPath;
+            }
+        else
+            {
+            // errno is already set by _ReadSysSplFile
+            return -1;
+            }
+        }
+    else if ( fileType != EFileGeneralError && err != KErrNone )
+        {
+        return MapError(err,anErrno);
+        }
+    return PosixFilesystem::statbackend(iFs, filename, st, anErrno);
+    }
+
+int CLocalSystemInterface::lstat (const wchar_t* name, struct stat *st, int& anErrno)
+    {
+    return PosixFilesystem::statbackend(iFs, name, st, anErrno);
+    }
 
 int CLocalSystemInterface::utime (const wchar_t* name, const struct utimbuf *filetimes, int& anErrno)
 	{
@@ -530,7 +594,10 @@ TInt CLocalSystemInterface::SignalHandler()
 		iSignalInitSemaphore.Signal();
 		return lRetVal;
 		}
-
+	
+	/* Closing the end of the pipe that's been sent to the server */
+	iSignalWritePipe.Close();
+	
 	iSignalsInitialized = ETrue;
 	iSignalInitSemaphore.Signal();
 	iSignalLoopRunning = ETrue;
@@ -539,6 +606,9 @@ TInt CLocalSystemInterface::SignalHandler()
 	while(iSignalLoopRunning)
 		{
 		User::WaitForAnyRequest();
+		if(iSignalLoopRunning == false) {
+            break;
+		}
 		// Check if it is a pipe read
 		if(iPipeReadStatus != KRequestPending)
 			{
@@ -697,6 +767,8 @@ TInt CLocalSystemInterface::SignalHandler()
 		{
 		iSignalReadPipe.CancelDataAvailable();
 		}
+	iSignalReadPipe.Close();
+	
 	if(iAlarmStatus == KRequestPending)
 		{
 		iAlarmTimer.Cancel();
@@ -710,10 +782,11 @@ TInt CLocalSystemInterface::SignalHandler()
 			if(lProcess.Open(TProcessId(iChildWaiterArray[lCounterIdx].iWaiterPid)) == KErrNone)
 				{
 				lProcess.LogonCancel(iChildWaiterArray[lCounterIdx].iWaiterStatus);
+				lProcess.Close();
 				}
 			}
-		}
-
+		}                                                                             
+	iSignalSession.Close();
 	return KErrNone;
 	}
 
@@ -1600,13 +1673,13 @@ int CLocalSystemInterface::accept (int fid, struct sockaddr *addr, size_t *size,
 				{
 				err=iFids.Attach(fd,newf);
 				if (!err)
-					return fd;
-				delete newf;
+					return fd;				
+				newf->Close();
 				}
 			else if(newf != NULL)
 				{
 				//coverity[leave_without_push]
-				delete newf;
+				newf->Close();
 				}
 			iFids.Attach(fd,0);	// cancel the reservation
 			}

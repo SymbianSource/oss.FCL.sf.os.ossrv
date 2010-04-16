@@ -89,6 +89,7 @@ void handle_reply_variable_args(DBusPendingCall* pending, void* data)
 
 		dbus_message_iter_get_basic(&return_iter, return_value);
 		ret = *return_value; 
+		RDebug::Printf("return value is:%d\n", ret);
 		dbus_message_unref(msg1);  
 	}
 
@@ -642,7 +643,7 @@ static void* send_msg(void* data)
 	
 	pthread_mutex_lock(&thrData->mutex);
 	 
-	static int cnt = 1;
+	//static int cnt = 1;
 	dbus_int32_t no = 5;
 	DBusPendingCall* pending;
 	DBusMessage* msg1;
@@ -757,7 +758,7 @@ static void* send_msg1(void* data)
 {
 	DBusConnection* connection;
 	DBusError error;
-	static int cnt = 1;
+	//static int cnt = 1;
 	dbus_int32_t no = 5;
 	DBusPendingCall* pending;
 	DBusMessage* msg1;
@@ -891,7 +892,7 @@ TestModuleIf().SetBehavior( CTestModuleIf::ETestLeaksHandles );
 	DBusConnection* connection;
 	DBusError error;
 	DBusMessage* msg;
-	dbus_int32_t arg_int32 = 1010;
+	//dbus_int32_t arg_int32 = 1010;
 	DBusObjectPathVTable vtable =
 	{
 	NULL,NULL,NULL	
@@ -969,7 +970,7 @@ TestModuleIf().SetBehavior( CTestModuleIf::ETestLeaksHandles );
 		return 1;
 	}
 	iLog->Log(_L8("Requesting name"));	
-	if(!dbus_bus_request_name (connection, "test.Signal.Send1", DBUS_NAME_FLAG_ALLOW_REPLACEMENT, &error) == -1)
+	if(!dbus_bus_request_name (connection, "test.Signal.Send1", DBUS_NAME_FLAG_ALLOW_REPLACEMENT, &error) == (unsigned int)-1)
 	{
 		iLog->Log(_L8("Requesting name fail"));	
 		return 1;
@@ -1025,7 +1026,7 @@ TestModuleIf().SetBehavior( CTestModuleIf::ETestLeaksRequests );
 TestModuleIf().SetBehavior( CTestModuleIf::ETestLeaksHandles ); 
 
 
-	_LIT(KOOM, "Out Of Memory");
+	//_LIT(KOOM, "Out Of Memory");
 	FILE* fp;
 	unsigned char arr[200];
 	const unsigned char* p_arr = arr;
@@ -1225,7 +1226,7 @@ TestModuleIf().SetBehavior( CTestModuleIf::ETestLeaksHandles );
 	}
 	iLog->Log(_L8("Requesting name"));	
 	
-	if(!dbus_bus_request_name (connection, "test.Signal.Send1", DBUS_NAME_FLAG_ALLOW_REPLACEMENT, &error) == -1)
+	if(!dbus_bus_request_name (connection, "test.Signal.Send1", DBUS_NAME_FLAG_ALLOW_REPLACEMENT, &error) == (unsigned int)-1)
 	{
 		iLog->Log(_L8("Requesting name fail"));	
 		return 1;
@@ -1573,7 +1574,7 @@ int Cstif_1::send_file(DBusConnection* connection, char* file_name)
 	FILE* fp;
 	unsigned char arr[200];
 	unsigned char* data;
-	const unsigned char* p_arr = arr;
+	//const unsigned char* p_arr = arr;
 	DBusError error;
 	DBusMessage* msg;
 	DBusMessage* reply;
@@ -1788,6 +1789,7 @@ int read_fifo(char* fifopath, char* str)
 	if(fd > 0)
 	{
 		err = read (fd, buf, 80);
+		RDebug::Printf("error value is:%d\n", err);
 		close(fd);
 	}
 	else
