@@ -23,7 +23,7 @@ TARGET			t_cacheddriveinfo.exe
 CAPABILITY All -Tcb
 TARGETTYPE		EXE
 
-SYSTEMINCLUDE   /epoc32/include
+OS_LAYER_SYSTEMINCLUDE_SYMBIAN
 
 SOURCEPATH	.
 SOURCE		t_cacheddriveinfo.cpp

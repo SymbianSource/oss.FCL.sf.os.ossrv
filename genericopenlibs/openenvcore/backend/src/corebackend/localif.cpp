@@ -220,6 +220,8 @@ EXPORT_C CLocalSystemInterface::~CLocalSystemInterface()
 	RHeap* oldHeap = User::SwitchHeap(iPrivateHeap);
 	// Close the array that maintains aselect request details 
 	iASelectRequest.Close();
+	//close the RTz connection
+	iTzServer.Close();
 	// Switch back to old heap
 	User::SwitchHeap(oldHeap);
 
@@ -333,24 +335,43 @@ int CLocalSystemInterface::mkdir (const wchar_t* aPath, int perms, int& anErrno)
 
 int CLocalSystemInterface::stat (const wchar_t* name, struct stat *st, int& anErrno)
     {
-    const wchar_t* filename = name;
+    const wchar_t* filename;
+    // This needs to be zero terminated
+    TBuf<KMaxFileName> inputName;
+    TUint pathAtt = 0;
+    TInt err = GetFullFile(inputName,(const TText16*)name,iFs);
+    if( !err )
+        {
+        TInt err = iFs.Att(inputName,pathAtt);
+        if ( (err == KErrNone) && (pathAtt & KEntryAttDir) )
+            {                    
+            inputName.Append(_L("\\"));            
+            }
+        filename = (wchar_t*)inputName.PtrZ();
+        }
+    // try to stat anyway
+    else
+        {
+        inputName.Copy((const TText16*)name);
+        filename = (wchar_t*)inputName.PtrZ();
+        }
     TSpecialFileType fileType;
     struct SLinkInfo enBuf;
-    TInt err = 0;
     // Check the type of file
-    fileType = _SystemSpecialFileBasedFilePath(name, err, iFs);
+    fileType = _SystemSpecialFileBasedFilePath(filename, err, iFs);
     // If it is a symbolic link, follow the link
     // If _SystemSpecialFileBasedFilePath fails, treat it as normal file
     // and try to proceed
     if( fileType == EFileTypeSymLink && err == KErrNone )
         {
-        err = _ReadSysSplFile(name, (char*)&enBuf, sizeof(struct SLinkInfo), anErrno, iFs);
+        err = _ReadSysSplFile(filename, (char*)&enBuf, sizeof(struct SLinkInfo), anErrno, iFs);
         if (err == KErrNone)
             {
             filename = (wchar_t*)enBuf.iParentPath;
             }
         else
             {
+            // errno is already set by _ReadSysSplFile
             return -1;
             }
         }

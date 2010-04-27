@@ -8107,7 +8107,8 @@ TInt CTestStdlib::calloc_Test3()
 TInt CTestStdlib::calloc_Test4()
     {
     INFO_PRINTF1(_L("In calloc_Test4L"));
-	char  *pc = (char *)calloc(-10,10);	
+    size_t  nelem = (size_t)-10;
+	char  *pc = (char *)calloc(nelem,10);	
    
     bool i = (pc == NULL);
 	INFO_PRINTF2(_L("{Expected: 1} %d"), (int)i);
@@ -8984,4 +8985,36 @@ TInt CTestStdlib::tmpfile_fseek(  )
 		ret = KErrGeneral;
  		}  
  	return ret;
+    }
+TInt CTestStdlib::testSymLink()
+    {
+    int ret = KErrNone;
+    const char* file = "C:\\file.dat";
+    const char* hlnk = "c:\\hard.lnk";
+    const char* hlnk2 = "c:\\\\hard.lnk";
+    
+    const char* data = "1234567890";
+    const char* data1 = "abcdefghij";
+    const char* data2 = "ABCDEFGHIJ";
+    FILE* fp = fopen(file, "w");
+    fwrite(data, 1, 10, fp);
+    fclose(fp);
+    
+    ret = link(file, hlnk);
+    if (ret)
+     {
+     printf("create hard link fail :%d\n", ret);
+     return ret;
+     }
+    
+    fp = fopen(hlnk, "r+");
+    if( fp )
+     fwrite(data1, 1, 10, fp);
+    fclose(fp);
+    
+    fp = fopen(hlnk2, "r+");
+    if( fp )
+     fwrite(data2, 1, 10, fp);
+    fclose(fp);
+    return ret;
     }

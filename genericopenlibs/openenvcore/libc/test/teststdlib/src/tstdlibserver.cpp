@@ -868,6 +868,10 @@ CTestStep* CStdlibTestServer::CreateTestStep(const TDesC& aStepName)
 		{
 		testStep = new CTestStdlib(aStepName);
 		}
+	if(aStepName == KtestSymLink)
+	        {
+	        testStep = new CTestStdlib(aStepName);
+	        }
 	return testStep;
 	}
 
