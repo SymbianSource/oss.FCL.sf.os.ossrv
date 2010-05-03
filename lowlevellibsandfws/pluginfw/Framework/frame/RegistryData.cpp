@@ -2158,6 +2158,11 @@ void CRegistryData::ResetTInterfaceIndex(TAny* aObject)
 	TInterfaceIndex* index=reinterpret_cast<TInterfaceIndex*>(aObject);
 	index->Reset();
 	}
+void CRegistryData::RemoveImplFromImplIndexCleanUp(TAny* aPtr)
+    {
+    TCleanupImplIndexEntry *aCleanup = (TCleanupImplIndexEntry*)aPtr;
+    aCleanup->iRegistryData->RemoveImplByAddrFromImplIndex(aCleanup->iImplEntry);
+    }
 
 /**
 This method retrieves the data for security checks from the iInterfaceImplIndex
@@ -2287,7 +2292,7 @@ void CRegistryData::InsertImplInIndexesL(TInsertImplMode aInsertMode,
 		TImplContainer& implContainer = implContainerArray[aImplPosInContainerArray];
 		CImplementationData* oldImpl =  implContainer.iCurrentImpl;
 		implContainer.iUnusedImpls.AppendL(oldImpl);
-		RemoveImplFromImplIndex(oldImpl); // ignore return code
+		RemoveImplByAddrFromImplIndex(oldImpl); // ignore return code
 		implContainer.iCurrentImpl = aNewImpl;
 
 		// We are replacing existing impl with aNewImpl.  If existing  
@@ -2324,7 +2329,10 @@ void CRegistryData::InsertImplInIndexesL(TInsertImplMode aInsertMode,
 	
 	if(aIfPosInInterfaceImplIndex==KErrNotFound)
 		{		
-		iInterfaceImplIndex.InsertInOrderL(aNewIfIndexEl, TLinearOrder<TInterfaceIndex>(TInterfaceStruct::CompareInfUid));		
+        TCleanupImplIndexEntry aCleanup(this, aNewImpl);
+        CleanupStack::PushL(TCleanupItem(RemoveImplFromImplIndexCleanUp,&aCleanup));
+		iInterfaceImplIndex.InsertInOrderL(aNewIfIndexEl, TLinearOrder<TInterfaceIndex>(TInterfaceStruct::CompareInfUid));
+		CleanupStack::Pop();
 		}
 	}
 
@@ -2347,11 +2355,13 @@ void CRegistryData::RemoveFromIndexL(CDllData* aDllData) const
 		index.iInterfaceUid = interface->iInterfaceUid;
 		
 		TInt indexPos = iInterfaceImplIndex.FindInOrder(index,TLinearOrder<TInterfaceIndex>(TInterfaceStruct::CompareInfUid));
-
+        TImplContainerArray* impDataArray = NULL;
+		TInt implCount=0;
+		
 		if(indexPos!=KErrNotFound)
 			{
-			TImplContainerArray* impDataArray = &(iInterfaceImplIndex[indexPos].iImpData);
-			TInt implCount=interface->iImplementations->Count();
+            impDataArray = &(iInterfaceImplIndex[indexPos].iImpData);
+            implCount=interface->iImplementations->Count();
 			for(TInt i=0; i<implCount; i++)
 				{
 				implStruct.iCurrentImpl = (*interface->iImplementations)[i];
@@ -2374,7 +2384,7 @@ void CRegistryData::RemoveFromIndexL(CDllData* aDllData) const
 					if(implContainer.iCurrentImpl->iParent->iParent == aDllData)
 						{
 						// do not care about the return code.
-						RemoveImplFromImplIndex(implContainer.iCurrentImpl);
+						RemoveImplByAddrFromImplIndex(implContainer.iCurrentImpl);
 						
 						TInt implContainerUnusedImplCount=implContainer.iUnusedImpls.Count();
 						// no unused impl's therefore no rollback and remove entry
@@ -2417,6 +2427,13 @@ void CRegistryData::RemoveFromIndexL(CDllData* aDllData) const
 							}
 						}
 					}
+				//To make sure it is removed from the implIndex no matter what and that the return code is ignored.
+				//The previous removal is still required so that a subsequent InsertImplIntoImplIndex is possible
+				//for an implementation. e.g. an implementaion is on different drives and only one of htem was removed.
+				// The other one should now make it to the iImplIndex through InsertImplIntoImplIndex. If it wasn't 
+				// removed, before the insert operation, it will fail since both the implementations hav the same
+				// impl UID.
+				RemoveImplByAddrFromImplIndex((*interface->iImplementations)[i]);
 				}
 			if(impDataArray->Count() == 0)
 				{
@@ -2460,22 +2477,26 @@ void CRegistryData::AddImplDataL(CDriveData* aDriveData)
  		}	
  	}
 
-/** This method removes the specified entry from iImplIndex.
 
-@param	aPtr is the entry to remove
+/** This method does a search by address and removes the specified entry from iImplIndex.
+
+@param  aPtr is the entry to remove
 @return True if aPtr is removed from iImplIndex. False if aPtr is not
-		in iImplIndex, i.e. nothing is removed.
+        in iImplIndex, i.e. nothing is removed.
 */
-TBool CRegistryData::RemoveImplFromImplIndex(CImplementationData* aPtr) const
-	{
-	TInt i = iImplIndex.FindInOrder(aPtr, TLinearOrder<CImplementationData>(CImplementationData::CompareImplUid));
-	if (i != KErrNotFound)
-		{
-		// The array does not own the pointer. Do not delete!
-		iImplIndex.Remove(i);
-		}
-	return (i != KErrNotFound);
-	}
+TBool CRegistryData::RemoveImplByAddrFromImplIndex(CImplementationData* aPtr) const
+    {
+    TInt aIdx = iImplIndex.Find(aPtr);
+    if (aIdx != KErrNotFound)
+        {
+        // This linear pointer search ensures a safe removal of the impl from iImplIndex so that it is free from a dead object.
+    
+        // The array does not own the pointer. Do not delete!
+        iImplIndex.Remove(aIdx);
+        return ETrue;
+        }
+    return EFalse;
+    }
 
 /** This method inserts the entry aNewImpl into iImplIndex.
 

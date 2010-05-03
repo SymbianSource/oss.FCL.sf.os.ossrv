@@ -49,7 +49,7 @@ namespace {
 
 struct results_reporter_impl : test_tree_visitor {
     // Constructor
-  EXPORT_C  results_reporter_impl()
+    results_reporter_impl()
     : m_output( &std::cerr )
     , m_stream_state_saver( new io_saver_type( std::cerr ) )
     , m_report_level( CONFIRMATION_REPORT )

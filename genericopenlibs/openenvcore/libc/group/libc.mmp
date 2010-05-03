@@ -41,7 +41,7 @@ OPTION ARMCC --diag_suppress 1294
 #ifdef ARMCC_3_1
 OPTION ARMCC --diag_remark 3017
 #endif
-VERSION 				1.0 
+VERSION 				1.1
 
 #ifndef WINSCW
 EPOCALLOWDLLDATA

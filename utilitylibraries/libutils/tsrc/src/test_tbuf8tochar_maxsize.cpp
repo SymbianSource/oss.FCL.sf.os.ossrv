@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-void main()
+int main()
 {
     __UHEAP_MARK;
     TBuf8<300>src((TText8*)"pppppppppppppppppppppppaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
@@ -41,4 +41,5 @@ void main()
     delete [] des;
     __UHEAP_MARKEND;
     testResultXml("Test_tbuf8tochar_maxsize");
+	return 0;
 }

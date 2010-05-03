@@ -61,7 +61,7 @@
 
 #ifndef _RWSTD_NO_PURE_C_HEADERS
 
-extern "C" int mkstemp (char*);
+IMPORT_C int mkstemp (char*);
 
 #endif   // _RWSTD_NO_PURE_C_HEADERS
 
@@ -290,9 +290,13 @@ size_t rw_fsize (const char *fname)
 #ifdef __SYMBIAN32__
 
     struct stat sb;
-
+    
+    #ifdef __ARMCC__
+    #pragma diag_suppress 63
+    #endif
     if (-1 == stat (fname, &sb))
         return _RWSTD_SIZE_MAX;
+       
 
     return sb.st_size;
 #elif defined (_WIN32) || defined (_WIN64)

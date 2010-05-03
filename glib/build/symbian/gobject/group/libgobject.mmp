@@ -23,7 +23,7 @@ target				libgobject.dll
 targettype			dll
 UID             0x1000008d  0x10281F39
 VENDORID 	0x101FB657
-VERSION	2.204
+VERSION	2.205
 //Macros list
 macro				MOBILE_PORT
 macro				HAVE_CONFIG_H

@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-void main()
+int main()
 {
     int retval =ESuccess;
     string s;
@@ -39,4 +39,5 @@ void main()
     }  	
     __UHEAP_MARK;
     testResultXml("test_tbufc8tostring_negative1");
+	return 0;
 }

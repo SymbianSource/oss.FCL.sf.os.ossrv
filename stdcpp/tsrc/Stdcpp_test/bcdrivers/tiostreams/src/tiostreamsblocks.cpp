@@ -35,6 +35,7 @@
 #include <iostream>
 #include <fstream>
 #include <stl/char_traits.h>
+#include <new>
  #include<e32std.h>
 
 #include<exception>
@@ -624,7 +625,7 @@ try
 	
 
 int length;
-char * buffer;
+//char * buffer;
 char getl[8] ;
  filebuf fb;
  fb.open ("c:\\TestFramework\\docs\\istream.txt",ios::in);
@@ -891,7 +892,7 @@ User::__DbgSetAllocFail(FALSE,RHeap::ENone,1);
   //____________________
    
    int arr[4] = { 3,4,7,8 };
-   int total=0;
+//   int total=0;
    deque<int> d(arr+0, arr+4);
    //
    // stream the whole vector and a sum to cout
@@ -1051,9 +1052,9 @@ TInt Ctiostreams::strstreamL(CStifItemParser& aItem )
   	#if  STDCPP_OOM
 User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
   #endif 
-  char* s;
-   int n;
-   ios_base::openmode mode;
+//  char* s;
+//   int n;
+//   ios_base::openmode mode;
 //  strstream ss3(s, n, mode);
   	strstream ss1,ss2;
   	 ss1 << "";
@@ -1121,9 +1122,9 @@ TInt Ctiostreams::ostrstreamL(CStifItemParser& aItem )
      #if  STDCPP_OOM
 User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
   #endif 
-  	char* s;
-  	int n;
-  	ios_base::openmode mode;
+//  	char* s;
+//  	int n;
+//  	ios_base::openmode mode;
 //  	ostrstream  oss3( s, n, mode);
   	ostrstream  oss1 ,oss2;
   	string str;
@@ -1318,23 +1319,23 @@ catch(bad_alloc&)
 User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
   #endif 
   
-  signed char* get;
+  signed char* get = NULL;
   streamsize n=10;
-  signed char* put;
-   unsigned char* uget;
-   unsigned char* uput;
-  const char* cget;
-  const signed char* csget;
+  signed char* put = NULL;
+   unsigned char* uget = NULL;
+   unsigned char* uput = NULL;
+  const char* cget = NULL;
+  const signed char* csget = NULL;
   
-  const unsigned char* cucget;
+  const unsigned char* cucget = NULL;
   
   
   typedef void* (*__alloc_fn)(size_t);
   typedef void (*__free_fn)(void*);
  
-  __alloc_fn  alloc_f;
+//  __alloc_fn  alloc_f;
  
-  __free_fn free_f;
+//  __free_fn free_f;
   
   	//overloaded
   	strstreambuf  buf1(get, n,put);
@@ -1491,7 +1492,7 @@ return KErrNone;
  {
  	
  
- streamoff s;
+// streamoff s;
    ifstream file( "c:\\TestFramework\\docs\\fpos_state.txt" );
   cout<<"";
     #if  STDCPP_OOM

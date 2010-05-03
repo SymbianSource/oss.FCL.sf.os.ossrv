@@ -113,8 +113,12 @@ Cstlport_ptrbinf* Cstlport_ptrbinf::NewL(
 #ifdef LIBC_OLD_BACKEND
     MrtInit();
 #endif
+ #ifdef __ARMCC__
+    #pragma diag_suppress 830
+ #endif    
     Cstlport_ptrbinf* self = new (ELeave) Cstlport_ptrbinf( aTestModuleIf );
 
+ 
     CleanupStack::PushL( self );
     self->ConstructL();
     CleanupStack::Pop();

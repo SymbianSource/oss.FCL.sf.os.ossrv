@@ -56,6 +56,8 @@ inline void CComponentInfo_Dtor_Transition::TransitMethodL()
 	Context().DataLogger().LogInformation(KComponentInfoDtorTransitMethod);
 	delete Context().iComponentInfo;
 	Context().iComponentInfo = NULL;
+	__UHEAP_MARKEND; /*removed from leaktransitiontest.cpp and added here to resolve alloc issue due to removal of reference to RHeap's member variable*/
+
 	}
 
 inline CComponentInfo_UnitTestContext& CComponentInfo_Dtor_Transition::Context() const

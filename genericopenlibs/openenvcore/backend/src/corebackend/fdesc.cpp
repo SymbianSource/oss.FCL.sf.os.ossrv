@@ -117,23 +117,27 @@ CFileDescBase* CFileDescBase::Open(const wchar_t* name, int mode, int perms, TIn
 	else //It's a special file, directory or normal file
 		{
 		RFs& rfs = Backend()->FileSession();
-		TSpecialFileType fileType = _SystemSpecialFileBasedFilePath(name, err, rfs);
-		if(fileType  == EFileTypeMkFifo) //special file, FIFO
-    		{
-    		ret = CFileTable::FifoOpen(name, mode, perms, err);
-    		}
-		else if(fileType  == EFileTypeSymLink) //special file, symlink
-			{
-			ret = CFileTable::LinkOpen(name, mode, perms, err, rfs);
-			}
+        TUint attribval;
+        TFullName fullName;
+        err = GetFullFile(fullName, (const TText16*)name, rfs);
+        if(err != KErrNone)
+            return NULL;
+        int ret1 = rfs.Att(fullName, attribval);
+        if (ret1 == 0 && ((attribval & (KEntryAttHidden | KEntryAttSystem))== (KEntryAttHidden | KEntryAttSystem)))
+            {
+            TSpecialFileType fileType = _SystemSpecialFileBasedFilePath(name, err, rfs);
+            if(fileType  == EFileTypeMkFifo) //special file, FIFO
+                {
+                ret = CFileTable::FifoOpen(name, mode, perms, err);
+                }
+            else if(fileType  == EFileTypeSymLink) //special file, symlink
+                {
+                ret = CFileTable::LinkOpen(name, mode, perms, err, rfs);
+                }
+            }
 		else //normal file or directory
 		    {
-		    TFullName fullName;
-		    err = GetFullFile(fullName, (const TText16*)name, rfs);
-		    if(err != KErrNone)
-		    	return NULL;
-		    
-		    //Try opening as a file
+     	    //Try opening as a file
 		    CFileDesc* file = new CFileDesc;
 			if(file != NULL)
 				{
@@ -634,14 +638,14 @@ TInt CFileDesc::Open(RFs& aSession, const TDesC& aName, int mode, int perms)
 	int mapped=MapMode(mode, fMode);
 	// if the file is in \sys, use EFileShareReadersOnly not EFileShareReadersOrWriters
 	TParsePtrC pars(aName);
-	if (pars.Path().FindC(_L("\\SYS\\")) == 0)
+	if (pars.Path().FindF(_L("\\SYS\\")) == 0)
 		{
 		fMode &= ~EFileShareReadersOrWriters;
 		fMode |= EFileShareReadersOnly;
 		}
 	
 	// if the file is in \resource, dont use EFileShareReadersOrWriters
-	if (pars.Path().FindC(_L("\\resource\\")) == 0)
+	if (pars.Path().FindF(_L("\\resource\\")) == 0)
 		{
 		fMode &= ~EFileShareReadersOrWriters;
 		fMode |= EFileShareReadersOnly;

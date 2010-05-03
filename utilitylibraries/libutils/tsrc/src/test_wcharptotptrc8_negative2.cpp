@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-void main()
+int main()
 {
     int retval =ESuccess;
     wchar_t* mywcharstring = NULL; 
@@ -39,4 +39,6 @@ void main()
     }   
     delete []myptr;   
     testResultXml("test_wcharptotptrc8_negative2");
+	
+	return 0;
 }

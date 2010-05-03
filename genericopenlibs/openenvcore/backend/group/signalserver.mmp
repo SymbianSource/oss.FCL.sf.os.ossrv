@@ -25,6 +25,7 @@ CAPABILITY ProtServ
 
 TARGETTYPE  exe
 UID         0x1000008D 0x2001F3C8
+VERSION 				10.1
 
 SOURCEPATH		../src/signalserver/server
 

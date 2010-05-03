@@ -113,8 +113,12 @@ Cstlport_swprnge* Cstlport_swprnge::NewL(
 #ifdef LIBC_OLD_BACKEND
     MrtInit();
 #endif
+ #ifdef __ARMCC__
+    #pragma diag_suppress 830
+ #endif    
     Cstlport_swprnge* self = new (ELeave) Cstlport_swprnge( aTestModuleIf );
 
+ 
     CleanupStack::PushL( self );
     self->ConstructL();
     CleanupStack::Pop();

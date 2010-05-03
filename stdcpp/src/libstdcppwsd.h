@@ -466,227 +466,227 @@ numpunct<wchar_t>::GetFacetLocaleId()
 inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 messages<wchar_t>::GetFacetLocaleId()
 	{
-		return get_libcpp_wsdptr().messages_wchar_id;
-	}
+        return get_libcpp_wsdptr().messages_wchar_id;
+    }
 
 template <class _CharT, class _InputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 num_get<_CharT, _InputIter>::GetFacetLocaleId(istreambuf_iterator<wchar_t, char_traits<wchar_t> >* )
     {
-   	 	return get_libcpp_wsdptr().num_get_wchar_istreambuf_iterator_id;
+        return get_libcpp_wsdptr().num_get_wchar_istreambuf_iterator_id;
     }
 
 template <class _CharT, class _InputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 num_get<_CharT, _InputIter>::GetFacetLocaleId(const wchar_t**)
     {
-    	return get_libcpp_wsdptr().num_get_wchar_wchar_const_id;
+        return get_libcpp_wsdptr().num_get_wchar_wchar_const_id;
     }
 
 template <class _CharT, class _OutputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+ _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 num_put<_CharT, _OutputIter>::GetFacetLocaleId(ostreambuf_iterator<wchar_t, char_traits<wchar_t> > *)
-	{
-		return get_libcpp_wsdptr().num_put_wchar_ostreambuf_iterator_id;
-	}
+    {
+        return get_libcpp_wsdptr().num_put_wchar_ostreambuf_iterator_id;
+    }
 
 template <class _CharT, class _OutputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 num_put<_CharT, _OutputIter>::GetFacetLocaleId(wchar_t**)
-	{
-		return get_libcpp_wsdptr().num_put_wchar_wchar_id;
-	}
+    {
+        return get_libcpp_wsdptr().num_put_wchar_wchar_id;
+    }
 
 template <class _CharT, class _InputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 time_get<_CharT, _InputIter>::GetFacetLocaleId(istreambuf_iterator<wchar_t, char_traits<wchar_t> >*)
     {
-		return get_libcpp_wsdptr().time_get_wchar_istreambuf_iterator_id;
+        return get_libcpp_wsdptr().time_get_wchar_istreambuf_iterator_id;
     }
 
 template <class _CharT, class _InputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 time_get<_CharT, _InputIter>::GetFacetLocaleId(const wchar_t**)
     {
-		return get_libcpp_wsdptr().time_get_wchar_wchar_const_id;
+        return get_libcpp_wsdptr().time_get_wchar_wchar_const_id;
     }
 
 template <class _CharT, class _OutputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 time_put<_CharT, _OutputIter>::GetFacetLocaleId(ostreambuf_iterator<wchar_t, char_traits<wchar_t> >*)
     {
-		return get_libcpp_wsdptr().time_put_wchar_ostreambuf_iterator_id;
+        return get_libcpp_wsdptr().time_put_wchar_ostreambuf_iterator_id;
     }
 
 template <class _CharT, class _OutputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 time_put<_CharT, _OutputIter>::GetFacetLocaleId(wchar_t**)
     {
-		return get_libcpp_wsdptr().time_put_wchar_wchar_id;
+        return get_libcpp_wsdptr().time_put_wchar_wchar_id;
     }
 
 template <class _CharT, class _InputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 money_get<_CharT, _InputIter>::GetFacetLocaleId(istreambuf_iterator<wchar_t, char_traits<wchar_t> >*)
     {
-		return get_libcpp_wsdptr().money_get_wchar_istreambuf_iterator_id;
+        return get_libcpp_wsdptr().money_get_wchar_istreambuf_iterator_id;
     }
 
 template <class _CharT, class _InputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 money_get<_CharT, _InputIter>::GetFacetLocaleId(const wchar_t**)
     {
-		return get_libcpp_wsdptr().money_get_wchar_wchar_const_id;
+        return get_libcpp_wsdptr().money_get_wchar_wchar_const_id;
     }
 
 template <class _CharT, class _OutputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 money_put<_CharT, _OutputIter>::GetFacetLocaleId(ostreambuf_iterator<wchar_t, char_traits<wchar_t> >*)
-	{
-		return get_libcpp_wsdptr().money_put_wchar_ostreambuf_iterator_id;
-	}
+    {
+        return get_libcpp_wsdptr().money_put_wchar_ostreambuf_iterator_id;
+    }
 
 template <class _CharT, class _OutputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 money_put<_CharT, _OutputIter>::GetFacetLocaleId(wchar_t**)
-	{
-		return get_libcpp_wsdptr().money_put_wchar_wchar_id;
-	}
+    {
+        return get_libcpp_wsdptr().money_put_wchar_wchar_id;
+    }
 # endif //_STLP_NO_WCHAR_T
 
 template <class _CharT, class _InputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 num_get<_CharT, _InputIter>::GetFacetLocaleId()
     {
-    	_InputIter* dummyPtr = NULL;
-   		return GetFacetLocaleId(dummyPtr);
+        _InputIter* dummyPtr = NULL;
+        return GetFacetLocaleId(dummyPtr);
     }
 
 template <class _CharT, class _OutputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 num_put<_CharT, _OutputIter>::GetFacetLocaleId()
-	{
-		_OutputIter* dummyPtr = NULL;
-		return GetFacetLocaleId(dummyPtr);
-	}
+    {
+        _OutputIter* dummyPtr = NULL;
+        return GetFacetLocaleId(dummyPtr);
+    }
 
 template <class _CharT, class _InputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 time_get<_CharT, _InputIter>::GetFacetLocaleId()
     {
-    	_InputIter* dummyPtr = NULL;
-    	return GetFacetLocaleId(dummyPtr);
+        _InputIter* dummyPtr = NULL;
+        return GetFacetLocaleId(dummyPtr);
     }
 
 template <class _CharT, class _OutputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 time_put<_CharT, _OutputIter>::GetFacetLocaleId()
-	{
-		_OutputIter* dummyPtr = NULL;
-		return GetFacetLocaleId(dummyPtr);
-	}
+    {
+        _OutputIter* dummyPtr = NULL;
+        return GetFacetLocaleId(dummyPtr);
+    }
 
 template <class _CharT, class _InputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 money_get<_CharT, _InputIter>::GetFacetLocaleId()
     {
-    	_InputIter* dummyPtr = NULL;
-    	return GetFacetLocaleId(dummyPtr);
+        _InputIter* dummyPtr = NULL;
+        return GetFacetLocaleId(dummyPtr);
     }
 template <class _CharT, class _OutputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 money_put<_CharT, _OutputIter>::GetFacetLocaleId()
-	{
-		_OutputIter* dummyPtr = NULL;
-		return GetFacetLocaleId(dummyPtr);
-	}
+    {
+        _OutputIter* dummyPtr = NULL;
+        return GetFacetLocaleId(dummyPtr);
+    }
 
 template <class _CharT, class _InputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 money_get<_CharT, _InputIter>::GetFacetLocaleId(istreambuf_iterator<char, char_traits<char> >*)
     {
-		return get_libcpp_wsdptr().money_get_char_istreambuf_iterator_id;
+        return get_libcpp_wsdptr().money_get_char_istreambuf_iterator_id;
     }
 
 template <class _CharT, class _InputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 money_get<_CharT, _InputIter>::GetFacetLocaleId(const char  **)
     {
-		return get_libcpp_wsdptr().money_get_char_char_const_id;
+        return get_libcpp_wsdptr().money_get_char_char_const_id;
     }
 
 template <class _CharT, class _OutputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 money_put<_CharT, _OutputIter>::GetFacetLocaleId(ostreambuf_iterator<char, char_traits<char> >*)
-	{
-		return get_libcpp_wsdptr().money_put_char_ostreambuf_iterator_id;
-	}
+    {
+        return get_libcpp_wsdptr().money_put_char_ostreambuf_iterator_id;
+    }
 
 template <class _CharT, class _OutputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 money_put<_CharT, _OutputIter>::GetFacetLocaleId(char**)
-	{
-		return get_libcpp_wsdptr().money_put_char_char_id;
-	}
+    {
+        return get_libcpp_wsdptr().money_put_char_char_id;
+    }
 
 template <class _CharT, class _InputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 num_get<_CharT, _InputIter>::GetFacetLocaleId(istreambuf_iterator<char, char_traits<char> >* )
     {
-   		return get_libcpp_wsdptr().num_get_char_istreambuf_iterator_id;
+        return get_libcpp_wsdptr().num_get_char_istreambuf_iterator_id;
     }
 
 template <class _CharT, class _InputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 num_get<_CharT, _InputIter>::GetFacetLocaleId(const char**)
     {
-    	return get_libcpp_wsdptr().num_get_char_char_const_id;
+        return get_libcpp_wsdptr().num_get_char_char_const_id;
     }
 
 template <class _CharT, class _OutputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 num_put<_CharT, _OutputIter>::GetFacetLocaleId(ostreambuf_iterator<char, char_traits<char> > *)
-	{
-		return get_libcpp_wsdptr().num_put_char_ostreambuf_iterator_id;
-	}
+    {
+        return get_libcpp_wsdptr().num_put_char_ostreambuf_iterator_id;
+    }
 
 template <class _CharT, class _OutputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 num_put<_CharT, _OutputIter>::GetFacetLocaleId(char**)
-	{
-		return get_libcpp_wsdptr().num_put_char_char_id;
-	}
+    {
+        return get_libcpp_wsdptr().num_put_char_char_id;
+    }
 
 template <class _CharT, class _OutputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 num_put<_CharT, _OutputIter>::GetFacetLocaleId(back_insert_iterator<string> *)
-	{
-		return get_libcpp_wsdptr().num_put_char_back_insert_iterator_id;
-	}
+    {
+        return get_libcpp_wsdptr().num_put_char_back_insert_iterator_id;
+    }
 
 template <class _CharT, class _InputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 time_get<_CharT, _InputIter>::GetFacetLocaleId(istreambuf_iterator<char, char_traits<char> >*)
     {
-		return get_libcpp_wsdptr().time_get_char_istreambuf_iterator_id;
+        return get_libcpp_wsdptr().time_get_char_istreambuf_iterator_id;
     }
 
 template <class _CharT, class _InputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 time_get<_CharT, _InputIter>::GetFacetLocaleId(const char**)
     {
-		return get_libcpp_wsdptr().time_get_char_char_const_id;
+        return get_libcpp_wsdptr().time_get_char_char_const_id;
     }
 
 template <class _CharT, class _OutputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 time_put<_CharT, _OutputIter>::GetFacetLocaleId(ostreambuf_iterator<char, char_traits<char> >*)
-	{
-		return get_libcpp_wsdptr().time_put_char_ostreambuf_iterator_id;
-	}
+    {
+        return get_libcpp_wsdptr().time_put_char_ostreambuf_iterator_id;
+    }
 
 template <class _CharT, class _OutputIter>
-inline _STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
+_STLP_STATIC_MEMBER_EXP_DECLSPEC locale::id&
 time_put<_CharT, _OutputIter>::GetFacetLocaleId(char**)
 	{
 		return get_libcpp_wsdptr().time_put_char_char_id;

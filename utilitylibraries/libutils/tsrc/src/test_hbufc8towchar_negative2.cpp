@@ -21,7 +21,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-void main()
+int main()
 {
     __UHEAP_MARK;
     int retval =ESuccess;
@@ -47,4 +47,5 @@ void main()
     mycharstring = NULL; 
     __UHEAP_MARKEND;
     testResultXml("test_hbufc8towchar_negative2");
+	return 0;
 }

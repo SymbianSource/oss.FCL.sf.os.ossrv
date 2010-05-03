@@ -88,10 +88,6 @@ LIBRARY           libc.lib
 LIBRARY           libpthread.lib
 LIBRARY           libm.lib
 LIBRARY           euser.lib
-// TODO: temporarily adding.  A problem with SBSv2 in adding stdnew automatically?
-#ifndef WINSCW    
-LIBRARY           stdnew.lib
-#endif
 
 #ifdef ARMCC_3_1
 DEFFILE			 ../eabi/libstdcppv5.def

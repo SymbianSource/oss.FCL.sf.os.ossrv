@@ -61,7 +61,7 @@ LANG            SC
 
 OPTION CW -wchar_t on
 MACRO  _WCHAR_T_DECLARED
-END
+//END
 
 // End of File
 

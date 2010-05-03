@@ -19,14 +19,14 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-void main()
+int main()
 {
     __UHEAP_MARK;
     {
     wstring des((const wchar_t*)"hellohello") ;
     TPtr8  src((unsigned char *)"Hello World", 11, 35);
     int retval=ESuccess;
-    int size=30;
+    //int size=30;
 //    int i=0;
 //    while (i<=1000)
 //    {
@@ -47,4 +47,6 @@ void main()
     }	
     __UHEAP_MARKEND;
     testResultXml("test_tptr8towstring_positive1");
+	
+	return 0;
 }

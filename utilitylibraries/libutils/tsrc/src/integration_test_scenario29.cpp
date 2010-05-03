@@ -20,7 +20,8 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-void main()
+#pragma diag_suppress 550
+int main()
 {
     bool assert_failed = false;
     __UHEAP_MARK;
@@ -147,6 +148,12 @@ void main()
     wchar_t* des25 = new wchar_t[150];                
     int size8=150;
     retval[29]= Tbuf8ToWchar(des24,des25,size8);
+    
+    for(int i=1; i<=29; i++)
+        {
+        if (retval[i]!= 0)
+                printf("Conversion failed for retval\n",retval[i]);
+        }
 
     ret= strncmp((char *)src1.c_str(),(char *)des24.Ptr(),7);
     if(ret == ESuccess)
@@ -181,5 +188,6 @@ void main()
     }
     __UHEAP_MARKEND;
     testResultXml("integration_test_scenario29");
+    return 0;
    
 }

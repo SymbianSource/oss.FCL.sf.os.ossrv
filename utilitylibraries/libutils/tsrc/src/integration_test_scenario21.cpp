@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-void main()
+int main()
 {
     __UHEAP_MARK;
     {
@@ -39,6 +39,12 @@ void main()
 
     wstring myFinalWstr(L"kjhskjfhsakhssjhfdkjshfdks") ;
     retval[4] = Hbufc16ToWstring(hbufc,myFinalWstr);
+    
+    for(int i=1; i<=4; i++)
+        {
+        if (retval[i]!= 0)
+                printf("Conversion failed for retval\n",retval[i]);
+        }
 
     if(!wcscmp((wchar_t *)mystring.c_str(),(wchar_t *)myFinalWstr.c_str()))
     {
@@ -54,4 +60,5 @@ void main()
     }
     __UHEAP_MARKEND;
     testResultXml("integration_test_scenario21");
+    return 0;
 }

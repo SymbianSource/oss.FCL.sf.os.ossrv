@@ -20,12 +20,12 @@
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
 
-void main()
+int main()
 {
-	int count = 2;
+	//int count = 2;
 	bool err = false;
 	__UHEAP_MARK;
-	__UHEAP_FAILNEXT(count);
+	__UHEAP_FAILNEXT(2);
 	{
 	string myString;
 	while(!err)
@@ -54,4 +54,6 @@ void main()
 	__UHEAP_MARKEND;
 	__UHEAP_RESET;
     testResultXml("test_tptrc8tostring_reliability");
+	
+	return 0;
 }

@@ -113,8 +113,12 @@ Cstlport_partsrt* Cstlport_partsrt::NewL(
 #ifdef LIBC_OLD_BACKEND
     MrtInit();
 #endif
+ #ifdef __ARMCC__
+    #pragma diag_suppress 830
+ #endif    
     Cstlport_partsrt* self = new (ELeave) Cstlport_partsrt( aTestModuleIf );
 
+ 
     CleanupStack::PushL( self );
     self->ConstructL();
     CleanupStack::Pop();

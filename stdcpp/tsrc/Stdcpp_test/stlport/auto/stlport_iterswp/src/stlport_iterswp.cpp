@@ -113,8 +113,12 @@ Cstlport_iterswp* Cstlport_iterswp::NewL(
 #ifdef LIBC_OLD_BACKEND
     MrtInit();
 #endif
+ #ifdef __ARMCC__
+    #pragma diag_suppress 830
+ #endif    
     Cstlport_iterswp* self = new (ELeave) Cstlport_iterswp( aTestModuleIf );
 
+ 
     CleanupStack::PushL( self );
     self->ConstructL();
     CleanupStack::Pop();

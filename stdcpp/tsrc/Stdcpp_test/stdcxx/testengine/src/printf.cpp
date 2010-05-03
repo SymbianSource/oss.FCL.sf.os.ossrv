@@ -53,6 +53,11 @@
 //#include <string>
 #include <string.h>
 
+#ifdef __ARMCC__
+#pragma diag_suppress 61
+#pragma diag_suppress 63
+#endif
+
 #define _RWSTD_NO_EXT_BIN_IO
 #define _RWSTD_NO_EXT_REENTRANT_IO
 

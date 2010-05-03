@@ -113,7 +113,11 @@ Cstlport_finsert* Cstlport_finsert::NewL(
 #ifdef LIBC_OLD_BACKEND
     MrtInit();
 #endif
+ #ifdef __ARMCC__
+    #pragma diag_suppress 830
+ #endif   
     Cstlport_finsert* self = new (ELeave) Cstlport_finsert( aTestModuleIf );
+
 
     CleanupStack::PushL( self );
     self->ConstructL();

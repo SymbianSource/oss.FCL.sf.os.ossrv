@@ -21,12 +21,12 @@
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
 
-void main()
+int main()
 {
-	int count = 3;
+	//int count = 3;
 	bool err = false;
 	__UHEAP_MARK;
-	__UHEAP_FAILNEXT(count);
+	__UHEAP_FAILNEXT(3);
 	{
 	wstring myString;
 	while(!err)
@@ -58,4 +58,5 @@ void main()
 	__UHEAP_RESET;
 
     testResultXml("test_hbufc8towstring_reliability");
+	return 0;
 }

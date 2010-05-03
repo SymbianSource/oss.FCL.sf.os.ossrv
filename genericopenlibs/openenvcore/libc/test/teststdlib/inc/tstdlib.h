@@ -286,6 +286,7 @@ _LIT(Kstrtoumaxbasic1, "strtoumaxbasic1");
 _LIT(Kstrtoumaxbasic2, "strtoumaxbasic2");
 _LIT(Kconfstr_Test2, "confstr_Test2");
 _LIT(Ktmpfile_fseek, "tmpfile_fseek");
+_LIT(KtestSymLink, "testSymLink");
 
 class CTestStdlib : public CTestStep
 	{
@@ -530,6 +531,8 @@ private:
 	TInt strtoumaxbasic2();
 	TInt confstr_Test2(  );
 	TInt tmpfile_fseek();
+	TInt testSymLink();
+	
 public:
 	TInt iParamCnt;
 	};

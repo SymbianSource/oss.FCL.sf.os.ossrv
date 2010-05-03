@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-void main()
+int main()
 {
     wstring des((const wchar_t*)"hellohello") ;
     __UHEAP_MARK;
@@ -39,4 +39,6 @@ void main()
     }	
     __UHEAP_MARKEND;
     testResultXml("test_tptr8towstring_positive2");
+	
+	return 0;
 }

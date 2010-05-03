@@ -1826,6 +1826,6 @@ int main (int argc, char *argv[])
     close_log_file();
   return failures;
  #endif
- return 0;
+// return 0;
 }
 

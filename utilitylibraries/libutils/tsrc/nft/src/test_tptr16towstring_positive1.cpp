@@ -27,7 +27,6 @@ void main()
     wstring des((const wchar_t*)"hello") ;
     TPtr16  src((unsigned short *)"",1, 30);
     int retval=ESuccess;
-    int size=30;
     int i=0;
     while (i<=1000)
     {

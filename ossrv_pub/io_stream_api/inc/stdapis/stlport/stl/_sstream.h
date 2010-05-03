@@ -71,11 +71,11 @@ public:                         // Typedefs.
   typedef basic_string<_CharT, _Traits, _Alloc>     _String;
 
 public:                         // Constructors, destructor.
-  _STLP_DECLSPEC explicit basic_stringbuf(ios_base::openmode __mode
+  _STLP_DUMMY_IMP_DECLSPEC explicit basic_stringbuf(ios_base::openmode __mode
                                       = ios_base::in | ios_base::out);
-  _STLP_DECLSPEC explicit basic_stringbuf(const _String& __s, ios_base::openmode __mode
+  _STLP_DUMMY_IMP_DECLSPEC explicit basic_stringbuf(const _String& __s, ios_base::openmode __mode
                                       = ios_base::in | ios_base::out);
-  _STLP_DECLSPEC virtual ~basic_stringbuf();
+  _STLP_DUMMY_IMP_DECLSPEC virtual ~basic_stringbuf();
 
 public:                         // Get or set the string.
   _String str() const { 
@@ -83,7 +83,7 @@ public:                         // Get or set the string.
            _M_append_buffer();
       return _M_str; 
    }
-  _STLP_DECLSPEC void str(const _String& __s);
+  _STLP_DUMMY_IMP_DECLSPEC void str(const _String& __s);
 
 protected:                      // Overridden virtual member functions.
   virtual int_type underflow();
@@ -231,8 +231,8 @@ public:                         // Typedefs
   typedef ios_base::openmode openmode;
 
 public:                         // Constructors, destructor.
-  _STLP_DECLSPEC basic_stringstream(openmode __mod = ios_base::in | ios_base::out);
-  _STLP_DECLSPEC basic_stringstream(const _String& __str,
+  _STLP_DUMMY_IMP_DECLSPEC basic_stringstream(openmode __mod = ios_base::in | ios_base::out);
+  _STLP_DUMMY_IMP_DECLSPEC basic_stringstream(const _String& __str,
                      openmode __mod = ios_base::in | ios_base::out);
   ~basic_stringstream();
 

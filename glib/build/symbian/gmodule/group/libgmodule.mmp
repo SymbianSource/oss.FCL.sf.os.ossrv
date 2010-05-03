@@ -19,7 +19,7 @@ target			libgmodule.dll
 targettype			dll
 UID               0x1000008d  0x10281F3B
 VENDORID 	0x101FB657
-VERSION	2.204
+VERSION	2.205
 //List of macros
 //macro			G_LOG_DOMAIN="GModule" 
 //macro			G_DISABLE_DEPRECATED 

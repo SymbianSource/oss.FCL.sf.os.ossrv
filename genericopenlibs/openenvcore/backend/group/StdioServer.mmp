@@ -26,6 +26,7 @@ CAPABILITY None
 
 TARGETTYPE  exe
 UID         0x1000008D 0x10283075
+VERSION 				10.1
 
 SOURCEPATH		../src/StdioRedir/Server
 

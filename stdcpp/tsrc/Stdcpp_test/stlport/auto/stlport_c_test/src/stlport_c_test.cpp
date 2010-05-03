@@ -113,6 +113,9 @@ Cstlport_c_test* Cstlport_c_test::NewL(
 #ifdef LIBC_OLD_BACKEND
     MrtInit();
 #endif
+ #ifdef __ARMCC__
+    #pragma diag_suppress 830
+ #endif    
     Cstlport_c_test* self = new (ELeave) Cstlport_c_test( aTestModuleIf );
 
     CleanupStack::PushL( self );

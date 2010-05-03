@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-void main()
+int main()
 {
     int retval =ESuccess, len = 0;
     wstring W(L"\xAE");
@@ -28,6 +28,8 @@ void main()
     TPtrC8 buf;
     char *temp = new char [23];
     retval = WstringToTptrc8(W, temp, buf);
+    if(retval == 0)
+    printf("Conversion successful\n");
 
     wchar_t *wChar = new wchar_t[2];
     len = wcslen(W.c_str());
@@ -48,4 +50,5 @@ void main()
     temp = NULL;
     __UHEAP_MARKEND;
     testResultXml("test_wstringtotptrc8_positive_unicode");
+	return 0;
 }

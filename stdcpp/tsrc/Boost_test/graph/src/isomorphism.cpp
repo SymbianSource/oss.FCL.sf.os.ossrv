@@ -118,19 +118,22 @@ void test_isomorphism(int n, double edge_probability)
 
   std::map<graph1::vertex_descriptor, graph2::vertex_descriptor> mapping;
 
-  bool isomorphism_correct;
+  bool isomorphism_correct = true;
   clock_t start = clock();
+  
+  isomorphism_correct = isomorphism(g1, g2, isomorphism_map(make_assoc_property_map(mapping)));
  
-  BOOST_CHECK(isomorphism_correct = isomorphism
-               (g1, g2, isomorphism_map(make_assoc_property_map(mapping))));
+  BOOST_CHECK(isomorphism_correct);
               
   clock_t end = clock();
 
   std::cout << "Elapsed time (clock cycles): " << (end - start) << std::endl;
 
-  bool verify_correct;
-  BOOST_CHECK(verify_correct =
-             verify_isomorphism(g1, g2, make_assoc_property_map(mapping)));
+  bool verify_correct = true;
+  
+  verify_correct = verify_isomorphism(g1, g2, make_assoc_property_map(mapping));
+  
+  BOOST_CHECK(verify_correct);
 
   if (!isomorphism_correct || !verify_correct) {
     // Output graph 1

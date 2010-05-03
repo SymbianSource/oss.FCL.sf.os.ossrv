@@ -83,24 +83,24 @@ class __rw_exception: public _STD::exception
 {
 public:
 
-    _RWSTD_EXPORT __rw_exception () _THROWS (());
+    IMPORT_C __rw_exception () _THROWS (());
 
-    _RWSTD_EXPORT __rw_exception (const __rw_exception&);
+    IMPORT_C __rw_exception (const __rw_exception&);
 
-   _RWSTD_EXPORT _EXPLICIT __rw_exception (const _STD::string&);
+   IMPORT_C _EXPLICIT __rw_exception (const _STD::string&);
     
-    _RWSTD_EXPORT _EXPLICIT __rw_exception (const char*);
+    IMPORT_C _EXPLICIT __rw_exception (const char*);
 
-    _RWSTD_EXPORT virtual ~__rw_exception () _THROWS (());
+    IMPORT_C virtual ~__rw_exception () _THROWS (());
 
     // empty exception specification necessary in order to preserve
     // the no-exception guarantee provided by std::exception to
     // derived classes (e.g., logic_error)
-_RWSTD_EXPORT    __rw_exception& operator= (const __rw_exception&) _THROWS (());
+IMPORT_C    __rw_exception& operator= (const __rw_exception&) _THROWS (());
 
- _RWSTD_EXPORT   virtual const char* what () const _THROWS (());
+ IMPORT_C   virtual const char* what () const _THROWS (());
 
- _RWSTD_EXPORT   __rw_exception&  _C_assign (const char*, _RWSTD_SIZE_T /*= _RWSTD_SIZE_MAX*/);
+ IMPORT_C   __rw_exception&  _C_assign (const char*, _RWSTD_SIZE_T /*= _RWSTD_SIZE_MAX*/);
 
 private:
     char *_C_what;   // description string

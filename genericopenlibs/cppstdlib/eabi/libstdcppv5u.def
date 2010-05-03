@@ -591,8 +591,8 @@ EXPORTS
 	_ZTIN9stlp_priv9_MessagesE @ 590 NONAME
 	_ZTINSt6locale5facetE @ 591 NONAME
 	_ZTINSt8ios_base7failureE @ 592 NONAME
-	_ZTISd @ 593 NONAME
-	_ZTISo @ 594 NONAME
+	_ZTISd @ 593 NONAME ABSENT
+	_ZTISo @ 594 NONAME ABSENT
 	_ZTISt10istrstream @ 595 NONAME
 	_ZTISt10moneypunctIcLb0EE @ 596 NONAME
 	_ZTISt10moneypunctIcLb1EE @ 597 NONAME
@@ -607,20 +607,20 @@ EXPORTS
 	_ZTISt12length_error @ 606 NONAME
 	_ZTISt12out_of_range @ 607 NONAME
 	_ZTISt12strstreambuf @ 608 NONAME
-	_ZTISt13basic_filebufIcSt11char_traitsIcEE @ 609 NONAME
-	_ZTISt13basic_filebufIwSt11char_traitsIwEE @ 610 NONAME
-	_ZTISt13basic_ostreamIwSt11char_traitsIwEE @ 611 NONAME
+	_ZTISt13basic_filebufIcSt11char_traitsIcEE @ 609 NONAME ABSENT
+	_ZTISt13basic_filebufIwSt11char_traitsIwEE @ 610 NONAME ABSENT
+	_ZTISt13basic_ostreamIwSt11char_traitsIwEE @ 611 NONAME ABSENT
 	_ZTISt13runtime_error @ 612 NONAME
-	_ZTISt14basic_iostreamIwSt11char_traitsIwEE @ 613 NONAME
+	_ZTISt14basic_iostreamIwSt11char_traitsIwEE @ 613 NONAME ABSENT
 	_ZTISt14codecvt_bynameIcc11_mb_state_tE @ 614 NONAME
 	_ZTISt14codecvt_bynameIwc11_mb_state_tE @ 615 NONAME
 	_ZTISt14collate_bynameIcE @ 616 NONAME
 	_ZTISt14collate_bynameIwE @ 617 NONAME
 	_ZTISt14overflow_error @ 618 NONAME
-	_ZTISt15basic_streambufIcSt11char_traitsIcEE @ 619 NONAME
-	_ZTISt15basic_streambufIwSt11char_traitsIwEE @ 620 NONAME
-	_ZTISt15basic_stringbufIcSt11char_traitsIcESaIcEE @ 621 NONAME
-	_ZTISt15basic_stringbufIwSt11char_traitsIwESaIwEE @ 622 NONAME
+	_ZTISt15basic_streambufIcSt11char_traitsIcEE @ 619 NONAME ABSENT
+	_ZTISt15basic_streambufIwSt11char_traitsIwEE @ 620 NONAME ABSENT
+	_ZTISt15basic_stringbufIcSt11char_traitsIcESaIcEE @ 621 NONAME ABSENT
+	_ZTISt15basic_stringbufIwSt11char_traitsIwESaIwEE @ 622 NONAME ABSENT
 	_ZTISt15messages_bynameIcE @ 623 NONAME
 	_ZTISt15messages_bynameIwE @ 624 NONAME
 	_ZTISt15numpunct_bynameIcE @ 625 NONAME
@@ -632,12 +632,12 @@ EXPORTS
 	_ZTISt17moneypunct_bynameIcLb1EE @ 631 NONAME
 	_ZTISt17moneypunct_bynameIwLb0EE @ 632 NONAME
 	_ZTISt17moneypunct_bynameIwLb1EE @ 633 NONAME
-	_ZTISt18basic_stringstreamIcSt11char_traitsIcESaIcEE @ 634 NONAME
-	_ZTISt18basic_stringstreamIwSt11char_traitsIwESaIwEE @ 635 NONAME
-	_ZTISt19basic_istringstreamIcSt11char_traitsIcESaIcEE @ 636 NONAME
-	_ZTISt19basic_istringstreamIwSt11char_traitsIwESaIwEE @ 637 NONAME
-	_ZTISt19basic_ostringstreamIcSt11char_traitsIcESaIcEE @ 638 NONAME
-	_ZTISt19basic_ostringstreamIwSt11char_traitsIwESaIwEE @ 639 NONAME
+	_ZTISt18basic_stringstreamIcSt11char_traitsIcESaIcEE @ 634 NONAME ABSENT
+	_ZTISt18basic_stringstreamIwSt11char_traitsIwESaIwEE @ 635 NONAME ABSENT
+	_ZTISt19basic_istringstreamIcSt11char_traitsIcESaIcEE @ 636 NONAME ABSENT
+	_ZTISt19basic_istringstreamIwSt11char_traitsIwESaIwEE @ 637 NONAME ABSENT
+	_ZTISt19basic_ostringstreamIcSt11char_traitsIcESaIcEE @ 638 NONAME ABSENT
+	_ZTISt19basic_ostringstreamIwSt11char_traitsIwESaIwEE @ 639 NONAME ABSENT
 	_ZTISt5ctypeIcE @ 640 NONAME
 	_ZTISt5ctypeIwE @ 641 NONAME
 	_ZTISt7codecvtIcc11_mb_state_tE @ 642 NONAME
@@ -662,26 +662,26 @@ EXPORTS
 	_ZTISt9money_putIcSt19ostreambuf_iteratorIcSt11char_traitsIcEEE @ 661 NONAME
 	_ZTISt9money_putIwSt19ostreambuf_iteratorIwSt11char_traitsIwEEE @ 662 NONAME
 	_ZTISt9strstream @ 663 NONAME
-	_ZTTSd @ 664 NONAME
-	_ZTTSi @ 665 NONAME
-	_ZTTSo @ 666 NONAME
+	_ZTTSd @ 664 NONAME ABSENT
+	_ZTTSi @ 665 NONAME ABSENT 
+	_ZTTSo @ 666 NONAME ABSENT
 	_ZTTSt10istrstream @ 667 NONAME
 	_ZTTSt10ostrstream @ 668 NONAME
 	_ZTTSt13basic_fstreamIcSt11char_traitsIcEE @ 669 NONAME ABSENT
 	_ZTTSt13basic_fstreamIwSt11char_traitsIwEE @ 670 NONAME  ABSENT
-	_ZTTSt13basic_istreamIwSt11char_traitsIwEE @ 671 NONAME
-	_ZTTSt13basic_ostreamIwSt11char_traitsIwEE @ 672 NONAME
+	_ZTTSt13basic_istreamIwSt11char_traitsIwEE @ 671 NONAME ABSENT
+	_ZTTSt13basic_ostreamIwSt11char_traitsIwEE @ 672 NONAME ABSENT
 	_ZTTSt14basic_ifstreamIcSt11char_traitsIcEE @ 673 NONAME  ABSENT
 	_ZTTSt14basic_ifstreamIwSt11char_traitsIwEE @ 674 NONAME ABSENT
-	_ZTTSt14basic_iostreamIwSt11char_traitsIwEE @ 675 NONAME
+	_ZTTSt14basic_iostreamIwSt11char_traitsIwEE @ 675 NONAME ABSENT
 	_ZTTSt14basic_ofstreamIcSt11char_traitsIcEE @ 676 NONAME  ABSENT
 	_ZTTSt14basic_ofstreamIwSt11char_traitsIwEE @ 677 NONAME  ABSENT
-	_ZTTSt18basic_stringstreamIcSt11char_traitsIcESaIcEE @ 678 NONAME
-	_ZTTSt18basic_stringstreamIwSt11char_traitsIwESaIwEE @ 679 NONAME
-	_ZTTSt19basic_istringstreamIcSt11char_traitsIcESaIcEE @ 680 NONAME
-	_ZTTSt19basic_istringstreamIwSt11char_traitsIwESaIwEE @ 681 NONAME
-	_ZTTSt19basic_ostringstreamIcSt11char_traitsIcESaIcEE @ 682 NONAME
-	_ZTTSt19basic_ostringstreamIwSt11char_traitsIwESaIwEE @ 683 NONAME
+	_ZTTSt18basic_stringstreamIcSt11char_traitsIcESaIcEE @ 678 NONAME ABSENT
+	_ZTTSt18basic_stringstreamIwSt11char_traitsIwESaIwEE @ 679 NONAME ABSENT
+	_ZTTSt19basic_istringstreamIcSt11char_traitsIcESaIcEE @ 680 NONAME ABSENT
+	_ZTTSt19basic_istringstreamIwSt11char_traitsIwESaIwEE @ 681 NONAME ABSENT
+	_ZTTSt19basic_ostringstreamIcSt11char_traitsIcESaIcEE @ 682 NONAME ABSENT
+	_ZTTSt19basic_ostringstreamIwSt11char_traitsIwESaIwEE @ 683 NONAME ABSENT
 	_ZTTSt9strstream @ 684 NONAME
 	_ZTVN9stlp_priv14_Messages_implE @ 685 NONAME
 	_ZTVN9stlp_priv16stdio_istreambufE @ 686 NONAME
@@ -690,8 +690,8 @@ EXPORTS
 	_ZTVN9stlp_priv9_MessagesE @ 689 NONAME
 	_ZTVNSt6locale5facetE @ 690 NONAME
 	_ZTVNSt8ios_base7failureE @ 691 NONAME
-	_ZTVSd @ 692 NONAME
-	_ZTVSo @ 693 NONAME
+	_ZTVSd @ 692 NONAME ABSENT
+	_ZTVSo @ 693 NONAME ABSENT
 	_ZTVSt10istrstream @ 694 NONAME
 	_ZTVSt10moneypunctIcLb0EE @ 695 NONAME
 	_ZTVSt10moneypunctIcLb1EE @ 696 NONAME
@@ -706,20 +706,20 @@ EXPORTS
 	_ZTVSt12length_error @ 705 NONAME
 	_ZTVSt12out_of_range @ 706 NONAME
 	_ZTVSt12strstreambuf @ 707 NONAME
-	_ZTVSt13basic_filebufIcSt11char_traitsIcEE @ 708 NONAME
-	_ZTVSt13basic_filebufIwSt11char_traitsIwEE @ 709 NONAME
-	_ZTVSt13basic_ostreamIwSt11char_traitsIwEE @ 710 NONAME
+	_ZTVSt13basic_filebufIcSt11char_traitsIcEE @ 708 NONAME ABSENT
+	_ZTVSt13basic_filebufIwSt11char_traitsIwEE @ 709 NONAME ABSENT
+	_ZTVSt13basic_ostreamIwSt11char_traitsIwEE @ 710 NONAME ABSENT
 	_ZTVSt13runtime_error @ 711 NONAME
-	_ZTVSt14basic_iostreamIwSt11char_traitsIwEE @ 712 NONAME
+	_ZTVSt14basic_iostreamIwSt11char_traitsIwEE @ 712 NONAME ABSENT
 	_ZTVSt14codecvt_bynameIcc11_mb_state_tE @ 713 NONAME
 	_ZTVSt14codecvt_bynameIwc11_mb_state_tE @ 714 NONAME
 	_ZTVSt14collate_bynameIcE @ 715 NONAME
 	_ZTVSt14collate_bynameIwE @ 716 NONAME
 	_ZTVSt14overflow_error @ 717 NONAME
-	_ZTVSt15basic_streambufIcSt11char_traitsIcEE @ 718 NONAME
-	_ZTVSt15basic_streambufIwSt11char_traitsIwEE @ 719 NONAME
-	_ZTVSt15basic_stringbufIcSt11char_traitsIcESaIcEE @ 720 NONAME
-	_ZTVSt15basic_stringbufIwSt11char_traitsIwESaIwEE @ 721 NONAME
+	_ZTVSt15basic_streambufIcSt11char_traitsIcEE @ 718 NONAME ABSENT
+	_ZTVSt15basic_streambufIwSt11char_traitsIwEE @ 719 NONAME ABSENT
+	_ZTVSt15basic_stringbufIcSt11char_traitsIcESaIcEE @ 720 NONAME ABSENT
+	_ZTVSt15basic_stringbufIwSt11char_traitsIwESaIwEE @ 721 NONAME ABSENT
 	_ZTVSt15messages_bynameIcE @ 722 NONAME
 	_ZTVSt15messages_bynameIwE @ 723 NONAME
 	_ZTVSt15numpunct_bynameIcE @ 724 NONAME
@@ -731,12 +731,12 @@ EXPORTS
 	_ZTVSt17moneypunct_bynameIcLb1EE @ 730 NONAME
 	_ZTVSt17moneypunct_bynameIwLb0EE @ 731 NONAME
 	_ZTVSt17moneypunct_bynameIwLb1EE @ 732 NONAME
-	_ZTVSt18basic_stringstreamIcSt11char_traitsIcESaIcEE @ 733 NONAME
-	_ZTVSt18basic_stringstreamIwSt11char_traitsIwESaIwEE @ 734 NONAME
-	_ZTVSt19basic_istringstreamIcSt11char_traitsIcESaIcEE @ 735 NONAME
-	_ZTVSt19basic_istringstreamIwSt11char_traitsIwESaIwEE @ 736 NONAME
-	_ZTVSt19basic_ostringstreamIcSt11char_traitsIcESaIcEE @ 737 NONAME
-	_ZTVSt19basic_ostringstreamIwSt11char_traitsIwESaIwEE @ 738 NONAME
+	_ZTVSt18basic_stringstreamIcSt11char_traitsIcESaIcEE @ 733 NONAME ABSENT
+	_ZTVSt18basic_stringstreamIwSt11char_traitsIwESaIwEE @ 734 NONAME ABSENT
+	_ZTVSt19basic_istringstreamIcSt11char_traitsIcESaIcEE @ 735 NONAME ABSENT
+	_ZTVSt19basic_istringstreamIwSt11char_traitsIwESaIwEE @ 736 NONAME ABSENT
+	_ZTVSt19basic_ostringstreamIcSt11char_traitsIcESaIcEE @ 737 NONAME ABSENT
+	_ZTVSt19basic_ostringstreamIwSt11char_traitsIwESaIwEE @ 738 NONAME ABSENT
 	_ZTVSt5ctypeIcE @ 739 NONAME
 	_ZTVSt5ctypeIwE @ 740 NONAME
 	_ZTVSt7codecvtIcc11_mb_state_tE @ 741 NONAME
@@ -763,16 +763,16 @@ EXPORTS
 	_ZTVSt9strstream @ 762 NONAME
 	_ZThn8_NSt9strstreamD0Ev @ 763 NONAME
 	_ZThn8_NSt9strstreamD1Ev @ 764 NONAME
-	_ZThn8_NSt9strstreamD9Ev @ 765 NONAME  ABSENT
+	_ZThn8_NSt9strstreamD9Ev @ 765 NONAME ABSENT
 	_ZTv0_n12_NSt10istrstreamD0Ev @ 766 NONAME
 	_ZTv0_n12_NSt10istrstreamD1Ev @ 767 NONAME
-	_ZTv0_n12_NSt10istrstreamD9Ev @ 768 NONAME  ABSENT
+	_ZTv0_n12_NSt10istrstreamD9Ev @ 768 NONAME ABSENT
 	_ZTv0_n12_NSt10ostrstreamD0Ev @ 769 NONAME
 	_ZTv0_n12_NSt10ostrstreamD1Ev @ 770 NONAME
-	_ZTv0_n12_NSt10ostrstreamD9Ev @ 771 NONAME  ABSENT
+	_ZTv0_n12_NSt10ostrstreamD9Ev @ 771 NONAME ABSENT
 	_ZTv0_n12_NSt9strstreamD0Ev @ 772 NONAME
 	_ZTv0_n12_NSt9strstreamD1Ev @ 773 NONAME
-	_ZTv0_n12_NSt9strstreamD9Ev @ 774 NONAME  ABSENT
+	_ZTv0_n12_NSt9strstreamD9Ev @ 774 NONAME ABSENT
 	_ZNK9stlp_priv9_Messages6do_getEiiiRKSs @ 775 NONAME
 	_ZNK9stlp_priv9_Messages7do_openERKSsRKSt6locale @ 776 NONAME
 	_ZNK9stlp_priv9_Messages8do_closeEi @ 777 NONAME

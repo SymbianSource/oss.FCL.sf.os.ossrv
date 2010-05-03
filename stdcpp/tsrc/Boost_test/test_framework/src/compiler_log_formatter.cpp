@@ -41,7 +41,7 @@ namespace output {
 // **************            compiler_log_formatter            ************** //
 // ************************************************************************** //
 
-void
+EXPORT_C void
 compiler_log_formatter::log_start( std::ostream& output, counter_t test_cases_amount )
 {
     if( test_cases_amount > 0 )
@@ -51,7 +51,7 @@ compiler_log_formatter::log_start( std::ostream& output, counter_t test_cases_am
 
 //____________________________________________________________________________//
 
-void
+EXPORT_C void
 compiler_log_formatter::log_finish( std::ostream& )
 {
     // do nothing
@@ -59,7 +59,7 @@ compiler_log_formatter::log_finish( std::ostream& )
 
 //____________________________________________________________________________//
 
-void
+EXPORT_C void
 compiler_log_formatter::log_build_info( std::ostream& output )
 {
     output  << "Platform: " << BOOST_PLATFORM            << '\n'
@@ -72,7 +72,7 @@ compiler_log_formatter::log_build_info( std::ostream& output )
 
 //____________________________________________________________________________//
 
-void
+EXPORT_C void
 compiler_log_formatter::test_unit_start( std::ostream& output, test_unit const& tu )
 {
     output << "Entering test " << tu.p_type_name << " \"" << tu.p_name << "\"" << std::endl;
@@ -80,7 +80,7 @@ compiler_log_formatter::test_unit_start( std::ostream& output, test_unit const& 
 
 //____________________________________________________________________________//
 
-void
+EXPORT_C void
 compiler_log_formatter::test_unit_finish( std::ostream& output, test_unit const& tu, unsigned long elapsed )
 {
     output << "Leaving test " << tu.p_type_name << " \"" << tu.p_name << "\"";
@@ -98,7 +98,7 @@ compiler_log_formatter::test_unit_finish( std::ostream& output, test_unit const&
 
 //____________________________________________________________________________//
 
-void
+EXPORT_C void
 compiler_log_formatter::test_unit_skipped( std::ostream& output, test_unit const& tu )
 {
     output  << "Test " << tu.p_type_name << " \"" << tu.p_name << "\"" << "is skipped" << std::endl;
@@ -106,7 +106,7 @@ compiler_log_formatter::test_unit_skipped( std::ostream& output, test_unit const
     
 //____________________________________________________________________________//
 
-void
+EXPORT_C void
 compiler_log_formatter::log_exception( std::ostream& output, log_checkpoint_data const& checkpoint_data, const_string explanation )
 {
     print_prefix( output, BOOST_TEST_L( "unknown location" ), 0 );
@@ -131,7 +131,7 @@ compiler_log_formatter::log_exception( std::ostream& output, log_checkpoint_data
 
 //____________________________________________________________________________//
 
-void
+EXPORT_C void
 compiler_log_formatter::log_entry_start( std::ostream& output, log_entry_data const& entry_data, log_entry_types let )
 {
     switch( let ) {
@@ -158,7 +158,7 @@ compiler_log_formatter::log_entry_start( std::ostream& output, log_entry_data co
 
 //____________________________________________________________________________//
 
-void
+EXPORT_C void
 compiler_log_formatter::log_entry_value( std::ostream& output, const_string value )
 {
     output << value;
@@ -166,7 +166,7 @@ compiler_log_formatter::log_entry_value( std::ostream& output, const_string valu
 
 //____________________________________________________________________________//
 
-void
+EXPORT_C void
 compiler_log_formatter::log_entry_finish( std::ostream& output )
 {
     output << std::endl;
@@ -174,7 +174,7 @@ compiler_log_formatter::log_entry_finish( std::ostream& output )
 
 //____________________________________________________________________________//
 
-void
+EXPORT_C void
 compiler_log_formatter::print_prefix( std::ostream& output, const_string file, std::size_t line )
 {
     output << file << '(' << line << "): ";

@@ -152,7 +152,7 @@ _STLP_EXP_DECLSPEC void CloseStdLibCpp()
 
 
 
-_STLP_EXP_DECLSPEC void *operator new(unsigned int aSize)
+_STLP_EXP_DECLSPEC void *operator new(unsigned int aSize)__NO_THROW
 	{
 	void* __y;
 
@@ -169,7 +169,7 @@ _STLP_EXP_DECLSPEC void *operator new(unsigned int aSize)
     return __y;
 	}
 
-_STLP_EXP_DECLSPEC void *operator new[](unsigned int aSize)
+_STLP_EXP_DECLSPEC void *operator new[](unsigned int aSize)__NO_THROW
     {
     return ::operator new(aSize);
     }

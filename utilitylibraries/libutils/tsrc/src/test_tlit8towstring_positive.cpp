@@ -19,7 +19,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-void main()
+int main()
 {
     __UHEAP_MARK;
     {
@@ -27,7 +27,7 @@ void main()
     TBuf8 <20>src;
     src.Copy(Kname);
     wstring str;
-    int size=10;
+    //int size=10;
     int retval =ESuccess;
 //    int i=0;
 //    while (i<=1000)
@@ -49,4 +49,5 @@ void main()
     }
     __UHEAP_MARKEND;
     testResultXml("Test_tlit8towstring_positive");
+	return 0;
 }

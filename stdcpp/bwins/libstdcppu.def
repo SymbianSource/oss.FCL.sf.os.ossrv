@@ -315,7 +315,7 @@ EXPORTS
 	?_M_insert@locale@std@@AAEXPAVfacet@12@AAVid@12@@Z @ 314 NONAME ; void std::locale::_M_insert(class std::locale::facet *, class std::locale::id &)
 	?_M_invoke_callbacks@ios_base@std@@IAEXW4event@12@@Z @ 315 NONAME ; void std::ios_base::_M_invoke_callbacks(enum std::ios_base::event)
 	?_M_mmap@_Filebuf_base@std@@QAEPAXJJ@Z @ 316 NONAME ; void * std::_Filebuf_base::_M_mmap(long, long)
-	?_M_open@_Filebuf_base@std@@QAE_NHH@Z @ 317 NONAME ; bool std::_Filebuf_base::_M_open(int, int)
+	?_M_open@_Filebuf_base@std@@QAE_NHH@Z @ 317 NONAME ABSENT ; bool std::_Filebuf_base::_M_open(int, int)
 	?_M_open@_Filebuf_base@std@@QAE_NPBDH@Z @ 318 NONAME ; bool std::_Filebuf_base::_M_open(char const *, int)
 	?_M_open@_Filebuf_base@std@@QAE_NPBDHJ@Z @ 319 NONAME ; bool std::_Filebuf_base::_M_open(char const *, int, long)
 	?_M_read@_Filebuf_base@std@@QAEHPADH@Z @ 320 NONAME ; int std::_Filebuf_base::_M_read(char *, int)

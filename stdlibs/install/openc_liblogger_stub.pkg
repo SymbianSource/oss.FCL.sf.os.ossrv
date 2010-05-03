@@ -17,7 +17,7 @@
 &EN
 
 ;Header
-#{"Open C LIBLOGGER"},(0x200110CD),1,7,0, TYPE=SA
+#{"Open C LIBLOGGER"},(0x200110CD),1,7,4
 
 ;Localised Vendor name
 %{"Nokia"}

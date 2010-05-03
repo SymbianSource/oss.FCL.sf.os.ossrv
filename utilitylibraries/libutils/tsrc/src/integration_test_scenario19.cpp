@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-void main()
+int main()
 {
     __UHEAP_MARK;
     {
@@ -52,6 +52,12 @@ void main()
     buf8.Close();
     int size8=35;
     retval[8]= Tbuf8ToWchar(tbuf1,myfinalstring,size8);
+    
+    for(int i=1; i<=8; i++)
+        {
+        if (retval[i]!= 0)
+                printf("Conversion failed for retval\n",retval[i]);
+        }
 
     if(!wcscmp(mycharstring,myfinalstring))
     {
@@ -66,4 +72,5 @@ void main()
     }
     __UHEAP_MARKEND;
     testResultXml("integration_test_scenario19");
+    return 0;
 }

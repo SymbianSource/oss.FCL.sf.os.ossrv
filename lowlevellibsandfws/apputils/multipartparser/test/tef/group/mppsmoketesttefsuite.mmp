@@ -23,9 +23,7 @@ SOURCEPATH     ../smoketest/src
 SOURCE		mppsmoketesttefserver.cpp 
 SOURCE		mppsmoketeststeps.cpp
 
-SYSTEMINCLUDE   /epoc32/include
-SYSTEMINCLUDE	  /epoc32/include/test
-SYSTEMINCLUDE	  /epoc32/include/bafl
+OS_LAYER_SYSTEMINCLUDE_SYMBIAN
 
 
 LIBRARY   euser.lib

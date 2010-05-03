@@ -20,14 +20,14 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-void main()
+int main()
 {
     wstring des((const wchar_t*)"test");
     __UHEAP_MARK;
     TBufC8<30> buf((unsigned char*)"My wide string");
     TPtrC8 src(buf);
     int retval=ESuccess;
-    int size=2;
+    //int size=2;
     retval= Tptrc8ToWstring(src,des);
 
     if(retval == ESuccess)
@@ -41,4 +41,6 @@ void main()
     }	
     __UHEAP_MARKEND;
     testResultXml("test_tptrc8towstring_negative1");
+	
+	return 0;
 }

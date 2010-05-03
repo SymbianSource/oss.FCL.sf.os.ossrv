@@ -220,6 +220,8 @@ EXPORT_C CLocalSystemInterface::~CLocalSystemInterface()
 	RHeap* oldHeap = User::SwitchHeap(iPrivateHeap);
 	// Close the array that maintains aselect request details 
 	iASelectRequest.Close();
+	//close the RTz server
+	iTzServer.Close();
 	// Switch back to old heap
 	User::SwitchHeap(oldHeap);
 

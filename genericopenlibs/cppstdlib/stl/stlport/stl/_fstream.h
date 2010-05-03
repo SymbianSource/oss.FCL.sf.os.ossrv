@@ -185,6 +185,15 @@ class _Underflow;
 
 _STLP_TEMPLATE_NULL class _Underflow< char, char_traits<char> >;
 
+// public:
+// helper class.
+template <class _CharT>
+struct _Filebuf_Tmp_Buf {
+  _CharT* _M_ptr;
+  _Filebuf_Tmp_Buf(ptrdiff_t __n) : _M_ptr(0) { _M_ptr = new _CharT[__n]; }
+  ~_Filebuf_Tmp_Buf() { delete[] _M_ptr; }
+};
+
 template <class _CharT, class _Traits>
 class basic_filebuf : public basic_streambuf<_CharT, _Traits> {
 public:                         // Types.
@@ -200,7 +209,11 @@ public:                         // Types.
 
 public:                         // Constructors, destructor.
   basic_filebuf();
-  ~basic_filebuf();
+  ~basic_filebuf()
+  {
+	this->close();
+	_M_deallocate_buffers();
+  }
 
 public:                         // Opening and closing files.
   bool is_open() const { return _M_base.__is_open(); }
@@ -236,22 +249,267 @@ public:                         // Opening and closing files.
 
   _Self* close();
 
-protected:                      // Virtual functions from basic_streambuf.
-  virtual streamsize showmanyc();
-  virtual int_type underflow();
+protected:         // Virtual functions from basic_streambuf.
+  
+  virtual streamsize showmanyc() {
 
-  virtual int_type pbackfail(int_type = traits_type::eof());
-  virtual int_type overflow(int_type = traits_type::eof());
+      // Is there any possibility that reads can succeed?
+      if (!this->is_open() || _M_in_output_mode || _M_in_error_mode)
+        return -1;
+      else if (_M_in_putback_mode)
+        return this->egptr() - this->gptr();
+      else if (_M_constant_width) {
+        streamoff __pos  = _M_base._M_seek(0, ios_base::cur);
+        streamoff __size = _M_base._M_file_size();
+        return __pos >= 0 && __size > __pos ? __size - __pos : 0;
+      }
+      else
+        return 0;
 
-  virtual basic_streambuf<_CharT, _Traits>* setbuf(char_type*, streamsize);
-  virtual pos_type seekoff(off_type, ios_base::seekdir,
-                           ios_base::openmode = ios_base::in | ios_base::out);
-  virtual pos_type seekpos(pos_type,
-                           ios_base::openmode = ios_base::in | ios_base::out);
+  }
+  virtual int_type underflow() {
 
-  virtual int sync();
-  virtual void imbue(const locale&);
+      return _Underflow<_CharT, _Traits>::_M_doit(this);
 
+  }
+
+  virtual int_type pbackfail(int_type __c= traits_type::eof()) {
+
+      const int_type __eof = traits_type::eof();
+
+      // If we aren't already in input mode, pushback is impossible.
+      if (!_M_in_input_mode)
+        return __eof;
+
+      // We can use the ordinary get buffer if there's enough space, and
+      // if it's a buffer that we're allowed to write to.
+      if (this->gptr() != this->eback() &&
+          (traits_type::eq_int_type(__c, __eof) ||
+           traits_type::eq(traits_type::to_char_type(__c), this->gptr()[-1]) ||
+           !_M_mmap_base)) {
+        this->gbump(-1);
+        if (traits_type::eq_int_type(__c, __eof) ||
+            traits_type::eq(traits_type::to_char_type(__c), *this->gptr()))
+          return traits_type::to_int_type(*this->gptr());
+      }
+      else if (!traits_type::eq_int_type(__c, __eof)) {
+        // Are we in the putback buffer already?
+        _CharT* __pback_end = _M_pback_buf + __STATIC_CAST(int,_S_pback_buf_size);
+        if (_M_in_putback_mode) {
+          // Do we have more room in the putback buffer?
+          if (this->eback() != _M_pback_buf)
+            this->setg(this->egptr() - 1, this->egptr() - 1, __pback_end);
+          else
+            return __eof;           // No more room in the buffer, so fail.
+        }
+        else {                      // We're not yet in the putback buffer.
+          _M_saved_eback = this->eback();
+          _M_saved_gptr  = this->gptr();
+          _M_saved_egptr = this->egptr();
+          this->setg(__pback_end - 1, __pback_end - 1, __pback_end);
+          _M_in_putback_mode = true;
+        }
+      }
+      else
+        return __eof;
+
+      // We have made a putback position available.  Assign to it, and return.
+      *this->gptr() = traits_type::to_char_type(__c);
+      return __c;
+
+  }
+  
+  virtual int_type overflow(int_type __c) {
+
+      // Switch to output mode, if necessary.
+      if (!_M_in_output_mode)
+        if (!_M_switch_to_output_mode())
+          return traits_type::eof();
+
+      _CharT* __ibegin = this->_M_int_buf;
+      _CharT* __iend   = this->pptr();
+      this->setp(_M_int_buf, _M_int_buf_EOS - 1);
+
+      // Put __c at the end of the internal buffer.
+      if (!traits_type::eq_int_type(__c, traits_type::eof()))
+        *__iend++ = _Traits::to_char_type(__c);
+
+      // For variable-width encodings, output may take more than one pass.
+      while (__ibegin != __iend) {
+        const _CharT* __inext = __ibegin;
+        char* __enext         = _M_ext_buf;
+        typename _Codecvt::result __status
+          = _M_codecvt->out(_M_state, __ibegin, __iend, __inext,
+                            _M_ext_buf, _M_ext_buf_EOS, __enext);
+        if (__status == _Codecvt::noconv) {
+          return _Noconv_output<_Traits>::_M_doit(this, __ibegin, __iend)
+            ? traits_type::not_eof(__c)
+            : _M_output_error();
+        }
+
+        // For a constant-width encoding we know that the external buffer
+        // is large enough, so failure to consume the entire internal buffer
+        // or to produce the correct number of external characters, is an error.
+        // For a variable-width encoding, however, we require only that we
+        // consume at least one internal character
+        else if (__status != _Codecvt::error &&
+                 (((__inext == __iend) &&
+                   (__enext - _M_ext_buf == _M_width * (__iend - __ibegin))) ||
+                  (!_M_constant_width && __inext != __ibegin))) {
+            // We successfully converted part or all of the internal buffer.
+          ptrdiff_t __n = __enext - _M_ext_buf;
+          if (_M_write(_M_ext_buf, __n))
+            __ibegin += __inext - __ibegin;
+          else
+            return _M_output_error();
+        }
+        else
+          return _M_output_error();
+      }
+
+      return traits_type::not_eof(__c);
+
+  }
+
+  virtual basic_streambuf<_CharT, _Traits>* setbuf(_CharT* __buf, streamsize __n) {
+
+      if (!_M_in_input_mode &&! _M_in_output_mode && !_M_in_error_mode &&
+          _M_int_buf == 0) {
+        if (__buf == 0 && __n == 0)
+          _M_allocate_buffers(0, 1);
+        else if (__buf != 0 && __n > 0)
+          _M_allocate_buffers(__buf, __n);
+      }
+      return this;
+
+  }
+  
+  virtual pos_type seekoff(off_type __off,
+          ios_base::seekdir __whence,
+          ios_base::openmode /* dummy */) {
+
+      if (this->is_open() &&
+          (__off == 0 || (_M_constant_width && this->_M_base._M_in_binary_mode()))) {
+
+        if (!_M_seek_init(__off != 0 || __whence != ios_base::cur))
+          return pos_type(-1);
+
+        // Seek to beginning or end, regardless of whether we're in input mode.
+        if (__whence == ios_base::beg || __whence == ios_base::end)
+          return _M_seek_return(_M_base._M_seek(_M_width * __off, __whence),
+                                _State_type());
+
+        // Seek relative to current position. Complicated if we're in input mode.
+        else if (__whence == ios_base::cur) {
+          if (!_M_in_input_mode)
+            return _M_seek_return(_M_base._M_seek(_M_width * __off, __whence),
+                                  _State_type());
+          else if (_M_mmap_base != 0) {
+            // __off is relative to gptr().  We need to do a bit of arithmetic
+            // to get an offset relative to the external file pointer.
+            streamoff __adjust = _M_mmap_len - (this->gptr() - (_CharT*) _M_mmap_base);
+
+            // if __off == 0, we do not need to exit input mode and to shift file pointer
+            return __off == 0 ? pos_type(_M_base._M_seek(0, ios_base::cur) - __adjust)
+                              : _M_seek_return(_M_base._M_seek(__off - __adjust, ios_base::cur), _State_type());
+          }
+          else if (_M_constant_width) { // Get or set the position.
+            streamoff __iadj = _M_width * (this->gptr() - this->eback());
+
+            // Compensate for offset relative to gptr versus offset relative
+            // to external pointer.  For a text-oriented stream, where the
+            // compensation is more than just pointer arithmetic, we may get
+            // but not set the current position.
+
+            if (__iadj <= _M_ext_buf_end - _M_ext_buf) {
+              streamoff __eadj =  _M_base._M_get_offset(_M_ext_buf + __STATIC_CAST(ptrdiff_t, __iadj), _M_ext_buf_end);
+
+              return __off == 0 ? pos_type(_M_base._M_seek(0, ios_base::cur) - __eadj)
+                                : _M_seek_return(_M_base._M_seek(__off - __eadj, ios_base::cur), _State_type());
+            }
+          } else {                    // Get the position.  Encoding is var width.
+            // Get position in internal buffer.
+            ptrdiff_t __ipos = this->gptr() - this->eback();
+
+            // Get corresponding position in external buffer.
+            _State_type __state = _M_state;
+            int __epos = _M_codecvt->length(__state, _M_ext_buf, _M_ext_buf_end,
+                                            __ipos);
+
+            if (__epos >= 0) {
+              // Sanity check (expensive): make sure __epos is the right answer.
+              _State_type __tmp_state = _M_state;
+              _Filebuf_Tmp_Buf<_CharT> __buf(__ipos);
+              _CharT* __ibegin = __buf._M_ptr; 
+              _CharT* __inext  = __ibegin;
+
+              const char* __dummy;
+              typename _Codecvt::result __status
+                = _M_codecvt->in(__tmp_state,
+                                 _M_ext_buf, _M_ext_buf + __epos, __dummy,
+                                 __ibegin, __ibegin + __ipos, __inext);
+              if (__status != _Codecvt::error &&
+                  (__status == _Codecvt::noconv ||
+                   (__inext == __ibegin + __ipos &&
+                    equal(this->eback(), this->gptr(), __ibegin, _STLP_PRIV _Eq_traits<traits_type>())))) {
+                // Get the current position (at the end of the external buffer),
+                // then adjust it.  Again, it might be a text-oriented stream.
+                streamoff __cur = _M_base._M_seek(0, ios_base::cur);
+                streamoff __adj =
+                  _M_base._M_get_offset(_M_ext_buf, _M_ext_buf + __epos) -
+                  _M_base._M_get_offset(_M_ext_buf, _M_ext_buf_end);
+                if (__cur != -1 && __cur + __adj >= 0)
+                  return __off == 0 ? pos_type(__cur + __adj)
+                                    : _M_seek_return(__cur + __adj, __state);
+                  //return _M_seek_return(__cur + __adj, __state);
+              }
+              // We failed the sanity check here.
+            }
+          }
+        }
+        // Unrecognized value for __whence here.
+      }
+
+      return pos_type(-1);
+
+  }
+  
+  virtual pos_type seekpos(pos_type __pos,
+          ios_base::openmode /* dummy */) {
+
+      if (this->is_open()) {
+        if (!_M_seek_init(true))
+          return pos_type(-1);
+
+        streamoff __off = off_type(__pos);
+        if (__off != -1 && _M_base._M_seek(__off, ios_base::beg) != -1) {
+          _M_state = __pos.state();
+          return _M_seek_return(__off, __pos.state());
+        }
+      }
+
+      return pos_type(-1);
+
+  }
+
+  virtual int sync() {
+
+      if (_M_in_output_mode)
+        return traits_type::eq_int_type(this->overflow(traits_type::eof()),
+                                        traits_type::eof()) ? -1 : 0;
+      return 0;
+
+  }
+  
+  virtual void imbue(const locale& __loc) {
+
+      if (!_M_in_input_mode && !_M_in_output_mode && !_M_in_error_mode) {
+        this->_M_setup_codecvt(__loc);
+      }
+
+  }
+  
+  
 private:                        // Helper functions.
 
   // Precondition: we are currently in putback input mode.  Effect:
@@ -378,16 +636,6 @@ _STLP_EXPORT_TEMPLATE_CLASS basic_filebuf<char, char_traits<char> >;
 _STLP_EXPORT_TEMPLATE_CLASS basic_filebuf<wchar_t, char_traits<wchar_t> >;
 #  endif
 #endif /* _STLP_USE_TEMPLATE_EXPORT */
-
-// public:
-// helper class.
-template <class _CharT>
-struct _Filebuf_Tmp_Buf {
-  _CharT* _M_ptr;
-  _Filebuf_Tmp_Buf(ptrdiff_t __n) : _M_ptr(0) { _M_ptr = new _CharT[__n]; }
-  ~_Filebuf_Tmp_Buf() { delete[] _M_ptr; }
-};
-
 
 //
 // This class had to be designed very carefully to work

@@ -113,6 +113,9 @@ Cstlport_count* Cstlport_count::NewL(
 #ifdef LIBC_OLD_BACKEND
     MrtInit();
 #endif
+ #ifdef __ARMCC__
+    #pragma diag_suppress 830
+ #endif    
     Cstlport_count* self = new (ELeave) Cstlport_count( aTestModuleIf );
 
     CleanupStack::PushL( self );

@@ -52,7 +52,6 @@ LIBRARY 		libstdcpp.lib
 LIBRARY         euser.lib
 LIBRARY 		libc.lib
 LIBRARY			libpthread.lib
-LIBRARY         euser.lib
 LIBRARY         stiftestinterface.lib
 
 LANG            SC

@@ -186,6 +186,8 @@ TInt PersistHAL()
 		        RHandleBase handle;
 		        handle.SetHandle(pS->iValue);
 		        handle.Close();
+				// We will not persisit the closed handle
+				continue;
 		        }
 		    }
 				

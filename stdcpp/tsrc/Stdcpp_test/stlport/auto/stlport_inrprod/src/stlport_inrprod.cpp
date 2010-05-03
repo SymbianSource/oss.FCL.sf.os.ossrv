@@ -113,8 +113,12 @@ Cstlport_inrprod* Cstlport_inrprod::NewL(
  #ifdef LIBC_OLD_BACKEND
     MrtInit();
 #endif
+ #ifdef __ARMCC__
+    #pragma diag_suppress 830
+ #endif    
     Cstlport_inrprod* self = new (ELeave) Cstlport_inrprod( aTestModuleIf );
 
+ 
     CleanupStack::PushL( self );
     self->ConstructL();
     CleanupStack::Pop();

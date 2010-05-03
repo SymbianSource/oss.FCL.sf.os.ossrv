@@ -1316,6 +1316,13 @@ TVerdict CTestStdlib::doTestStepL()
    	   		err = tmpfile_fseek();
    	   		SetTestStepResult(err ? static_cast<TVerdict>(err) : EPass);
    	   		}
+	
+    else if(TestStepName() == KtestSymLink)
+             {
+             INFO_PRINTF1(_L("testSymLink():"));
+             err = testSymLink();
+             SetTestStepResult(err ? static_cast<TVerdict>(err) : EPass);
+             }
    	return TestStepResult(); 
 	}
 

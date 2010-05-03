@@ -32,10 +32,6 @@ STDCPP
 
 library        euser.lib
 
-#ifndef WINSCW 
-library        drtaeabi.lib
-#endif
-
 #ifdef GCCXML
 macro __wchar_t_defined
 macro __SYMBIAN_STDCPP_SUPPORT__

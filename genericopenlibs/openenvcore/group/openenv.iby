@@ -33,6 +33,8 @@ data = EPOCROOT##epoc32\winscw\c\resource\pips\locales_new.txt	   \resource\pips
 data = EPOCROOT##epoc32\winscw\c\resource\pips\locales.txt	   \resource\pips\locales.txt
 data = EPOCROOT##epoc32\winscw\c\resource\pips\services	   \resource\pips\services
 data = EPOCROOT##epoc32\data\z\system\install\openc_stdlibs_stub.sis	\system\install\openc_stdlibs_stub.sis
+data = EPOCROOT##epoc32\data\z\system\install\openc_signalserver_stub.sis	\system\install\openc_signalserver_stub.sis
+
 #include <stdcpp.iby> 	/* StdC++ library*/
 
 #ifdef SYMBIAN_OE_POSIX_SIGNALS

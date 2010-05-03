@@ -28,7 +28,6 @@ void main()
     TBuf8 <20>src;
     src.Copy(Kname);
     wstring str;
-    int size=10;
     int retval =ESuccess;
     int i=0;
     while (i<=1000)

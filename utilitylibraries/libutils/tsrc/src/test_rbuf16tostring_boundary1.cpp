@@ -21,7 +21,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-void main()
+int main()
 {
     __UHEAP_MARK;
     {
@@ -31,7 +31,7 @@ void main()
     buf.Create(5);
     buf.Copy((TUint16 *)"Hello", 5);
     buf.CleanupClosePushL();
-    int size =15;
+    //int size =15;
     retval = Rbuf16ToString(buf, des);
 
     int rbuf_len = buf.Length();
@@ -50,4 +50,5 @@ void main()
     }
     __UHEAP_MARKEND;
     testResultXml("test_rbuf16tostring_boundary1");
+	return 0;
 }

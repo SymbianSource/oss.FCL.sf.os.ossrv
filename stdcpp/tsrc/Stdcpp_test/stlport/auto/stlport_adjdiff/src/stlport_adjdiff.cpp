@@ -113,12 +113,17 @@ Cstlport_adjdiff* Cstlport_adjdiff::NewL(
 #ifdef LIBC_OLD_BACKEND
     MrtInit();
 #endif
-    Cstlport_adjdiff* self = new (ELeave) Cstlport_adjdiff( aTestModuleIf );
+
+#ifdef __ARMCC__
+    #pragma diag_suppress 830
+#endif    
+    Cstlport_adjdiff* self = new (ELeave) Cstlport_adjdiff( aTestModuleIf );  
+
 
     CleanupStack::PushL( self );
     self->ConstructL();
     CleanupStack::Pop();
-
+ 
     return self;
 
     }
@@ -134,7 +139,6 @@ Cstlport_adjdiff::~Cstlport_adjdiff()
 
     // Delete logger
     delete iLog; 
-
     }
 
 // ========================== OTHER EXPORTED FUNCTIONS =========================
