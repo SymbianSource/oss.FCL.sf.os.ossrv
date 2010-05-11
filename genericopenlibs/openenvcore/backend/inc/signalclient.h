@@ -43,6 +43,11 @@ public:
 	TInt SendPipe(RPipe& aPipe);
 	TInt SendSignal(TInt aPid,TInt aSignal);
 	TInt SendSignalValue(TInt aPid,TInt aSignal,TInt aValue);
+	inline void Close()
+	    {
+	    iLock.Close();
+	    RSessionBase::Close();
+	    }
 
 private:
 	TInt OnDemandConnection();

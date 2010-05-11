@@ -29,6 +29,7 @@
 #include <sys/types.h>
 #include <sys/sem.h>
 
+
 struct msqid_ds;
 struct shmid_ds;
 
@@ -52,8 +53,14 @@ class RIpcSession : public RSessionBase
 	{
 	public:
 		RIpcSession():iIsConnected(EFalse)
-			{iLock.CreateLocal();}
-				
+			{
+            iLock.CreateLocal();
+			}
+		inline void Close()
+		    {
+		    iLock.Close();
+		    RSessionBase::Close();
+		    }
 		//msgqueue functions
 		int msgctl(int msqid, int cmd, struct msqid_ds *buf, int &aerrno);
 		int msgget(key_t key, int msgflg, int& aerrno);
