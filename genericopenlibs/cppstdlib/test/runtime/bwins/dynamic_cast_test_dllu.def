@@ -1,3 +1,0 @@
-EXPORTS
-	?Instance@DynamicCastTest@@SAPAV1@XZ @ 1 NONAME ; class DynamicCastTest * DynamicCastTest::Instance(void)
-

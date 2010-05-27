@@ -1,1 +1,0 @@
-This is a text file and it is used to test CResourceFile functionality.

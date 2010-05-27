@@ -1,3 +1,0 @@
-[D-BUS Service]
-Name=Test.Method.Call
-Exec=C:\\sys\\bin\\method.exe

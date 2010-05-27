@@ -1,3 +1,0 @@
-EXPORTS
-	?LoadHarnessActual@@YAHPAUHarnessCommand@@PAVCTestModuleBase@@@Z @ 1 NONAME ; int LoadHarnessActual(struct HarnessCommand *, class CTestModuleBase *)
-

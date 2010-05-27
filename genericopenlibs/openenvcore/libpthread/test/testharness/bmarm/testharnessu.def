@@ -1,3 +1,0 @@
-EXPORTS
-	LoadHarnessActual__FP14HarnessCommandP15CTestModuleBase @ 1 NONAME R3UNUSED ; LoadHarnessActual(HarnessCommand *, CTestModuleBase *)
-

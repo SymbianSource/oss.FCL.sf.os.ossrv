@@ -1,3 +1,0 @@
-[D-BUS Service]
-Name=org.designfu.SampleService
-Exec=z:\\sys\\bin\\example-service.exe
