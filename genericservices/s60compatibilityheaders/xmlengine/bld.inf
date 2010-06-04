@@ -1,0 +1,111 @@
+// Copyright (c) 2008-2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+//
+
+#include "../group/common.inf"
+
+PRJ_PLATFORMS
+
+DEFAULT
+
+PRJ_EXPORTS
+
+./xmlengdom.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengdom.h)
+./xmlengattr.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengattr.h)
+./xmlengnodelist_impl.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengnodelist_impl.h)
+./xmlengnode.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengnode.h)
+./xmlengbinarycontainer.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengbinarycontainer.h)
+./xmlenguserdata.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlenguserdata.h)
+./xmlengdomimplementation.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengdomimplementation.h)
+./xmlengdatacontainer.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengdatacontainer.h)
+./xmlengdataserializer.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengdataserializer.h)
+./xmlengnodelist.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengnodelist.h)
+./xmlengnamespace.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengnamespace.h)
+./xmlengdomutils.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengdomutils.h)
+./xmlengcharacterdata.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengcharacterdata.h)
+./xmlengserializationoptions.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengserializationoptions.h)
+./xmlengchunkcontainer.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengchunkcontainer.h)
+./xmlengerrors.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengerrors.h)
+./xmlengdocument.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengdocument.h)
+./xmlengcomment.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengcomment.h)
+./xmlengentityreference.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengentityreference.h)
+./xmlengdocumentfragment.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengdocumentfragment.h)
+./xmlengcdatasection.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengcdatasection.h)
+./xmlengdomparser.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengdomparser.h)
+./xmlengnodefilter.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengnodefilter.h)
+./xmlengprocessinginstruction.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengprocessinginstruction.h)
+./xmlengtext.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengtext.h)
+./xmlengoutputstream.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengoutputstream.h)
+./xmlengfilecontainer.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengfilecontainer.h)
+./xmlengelement.h     OS_LAYER_PUBLIC_EXPORT_PATH(xmlengelement.h)
+./libxml2_c14n.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_c14n.h)
+./libxml2_valid.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_valid.h)
+./libxml2_parser.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_parser.h)
+./libxml2_sax.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_sax.h)
+./libxml2_tree.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_tree.h)
+./libxml2_entities.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_entities.h)
+./libxml2_sax2.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_sax2.h)
+./libxml2_parserinternals.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_parserinternals.h)
+./xmlengxeconfig.h     OS_LAYER_PLATFORM_EXPORT_PATH(xmlengxeconfig.h)
+./xmlengtriodef.h     OS_LAYER_PLATFORM_EXPORT_PATH(xmlengtriodef.h)
+./xmlengconfig.h     OS_LAYER_PLATFORM_EXPORT_PATH(xmlengconfig.h)
+./libxml2_xmlstring.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_xmlstring.h)
+./libxml2_list.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_list.h)
+./libxml2_xmlio.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_xmlio.h)
+./libxml2_xmlversion.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_xmlversion.h)
+./libxml2_encoding.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_encoding.h)
+./libxml2_xmlmemory.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_xmlmemory.h)
+./libxml2_globals.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_globals.h)
+./libxml2_xmlexports.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_xmlexports.h)
+./xmlengtrionan.h     OS_LAYER_PLATFORM_EXPORT_PATH(xmlengtrionan.h)
+./libxml2_xmlerror.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_xmlerror.h)
+./libxml2_chvalid.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_chvalid.h)
+./libxml2_modules.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_modules.h)
+./libxml2_dict.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_dict.h)
+./libxml2_threads.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_threads.h)
+./libxml2_hash.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_hash.h)
+./libxml2_uri.h      OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_uri.h)
+./libxml2_xlink.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_xlink.h)
+./libxml2_xpointer.h            OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_xpointer.h)
+./libxml2_schemasinternals.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_schemasinternals.h)
+./libxml2_xmlschemasglobals.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_xmlschemasglobals.h)
+./libxml2_xpathinternals.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_xpathinternals.h)
+./libxml2_xpath.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_xpath.h)
+./xmlengdeserializer.h		        OS_LAYER_PLATFORM_EXPORT_PATH(xmlengdeserializer.h)
+./xmlengextendedcontenthandler.h	OS_LAYER_PLATFORM_EXPORT_PATH(xmlengextendedcontenthandler.h)
+./xmlengdeserializerdom.h		    OS_LAYER_PLATFORM_EXPORT_PATH(xmlengdeserializerdom.h)
+./xmlengparsingoptions.h		    OS_LAYER_PLATFORM_EXPORT_PATH(xmlengparsingoptions.h)
+./xmlengserializer.h		    OS_LAYER_PLATFORM_EXPORT_PATH(xmlengserializer.h)
+./xmlengserializeerrors.h		OS_LAYER_PLATFORM_EXPORT_PATH(xmlengserializeerrors.h)
+./xmlengxesys.h     OS_LAYER_PLATFORM_EXPORT_PATH(xmlengxesys.h)
+./xmlengxestd.h     OS_LAYER_PLATFORM_EXPORT_PATH(xmlengxestd.h)
+./xmlengxestrings.h     OS_LAYER_PLATFORM_EXPORT_PATH(xmlengxestrings.h)
+./xmlengmem.h     OS_LAYER_PLATFORM_EXPORT_PATH(xmlengmem.h)
+./xmlengutils.h     OS_LAYER_PLATFORM_EXPORT_PATH(xmlengutils.h)
+./xmlengxpath.h     OS_LAYER_PLATFORM_EXPORT_PATH(xmlengxpath.h)
+./xmlengxformsinstancemap.h     OS_LAYER_PLATFORM_EXPORT_PATH(xmlengxformsinstancemap.h)
+./xmlengxpathevaluator.h     OS_LAYER_PLATFORM_EXPORT_PATH(xmlengxpathevaluator.h)
+./xmlengxpathevaluationcontext.h     OS_LAYER_PLATFORM_EXPORT_PATH(xmlengxpathevaluationcontext.h)
+./xmlengxpathextensionfunction.h     OS_LAYER_PLATFORM_EXPORT_PATH(xmlengxpathextensionfunction.h)
+./xmlengnodeset.h     OS_LAYER_PLATFORM_EXPORT_PATH(xmlengnodeset.h)
+./xmlengxpathexpression.h     OS_LAYER_PLATFORM_EXPORT_PATH(xmlengxpathexpression.h)
+./xmlengxpathconfiguration.h     OS_LAYER_PLATFORM_EXPORT_PATH(xmlengxpathconfiguration.h)
+./xmlengnamespaceresolver.h     OS_LAYER_PLATFORM_EXPORT_PATH(xmlengnamespaceresolver.h)
+./xmlengxpathresult.h     OS_LAYER_PLATFORM_EXPORT_PATH(xmlengxpathresult.h)
+./xmlengxpathobject.h     OS_LAYER_PLATFORM_EXPORT_PATH(xmlengxpathobject.h)
+./xmlengxpathutils.h     OS_LAYER_PLATFORM_EXPORT_PATH(xmlengxpathutils.h)
+./xmlengxpatherrors.h     OS_LAYER_PLATFORM_EXPORT_PATH(xmlengxpatherrors.h)
+./libxml2_xinclude.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_xinclude.h)
+./libxml2_xmlreader.h     OS_LAYER_PLATFORM_EXPORT_PATH(libxml2_xmlreader.h)
+
