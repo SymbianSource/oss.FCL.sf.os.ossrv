@@ -67,3 +67,4 @@ LIBRARY			euser.lib
 DEFFILE ../~/libzcore.def
 
 SMPSAFE
+PAGED

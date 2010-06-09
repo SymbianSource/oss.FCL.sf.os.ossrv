@@ -21,8 +21,8 @@
 #include <e32cons.h>
 #include <tz.h>
 #include <tzconverter.h>
-#include "TzLocalizer.h" 
-#include "TzLocalizationDataTypes.h"
+#include "tzlocalizer.h" 
+#include "tzlocalizationdatatypes.h"
 #include "vtzrules.h"
 #include "utf.h" 
 #include "timefuncs.h"

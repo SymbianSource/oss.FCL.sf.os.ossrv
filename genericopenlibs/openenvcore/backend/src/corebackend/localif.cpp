@@ -309,11 +309,14 @@ void CLocalSystemInterface::TerminateProcess(int status)
 void CLocalSystemInterface::Exit(int code)
 	{
 #ifdef SYMBIAN_OE_POSIX_SIGNALS
-    TRequestStatus status = KRequestPending;
-    iSignalHandlerThread.Logon(status);
-	iSignalLoopRunning = EFalse;
-	iSignalHandlerThread.RequestSignal();
-	User::WaitForRequest(status);
+    if(iSignalsInitialized)
+        {
+        TRequestStatus status = KRequestPending;
+        iSignalHandlerThread.Logon(status);
+        iSignalLoopRunning = EFalse;
+        iSignalHandlerThread.RequestSignal();
+        User::WaitForRequest(status);
+        }
 #endif
 	iFids.Close();
 	User::SetCritical(User::EProcessPermanent);

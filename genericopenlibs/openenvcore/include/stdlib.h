@@ -49,6 +49,14 @@ extern "C" {
 
 #include <_ansi.h>
 
+#ifdef __SYMBIAN32__
+#ifdef __WINSCW__
+#ifndef __SOFTFP
+#define __SOFTFP
+#endif /* __SOFTFP */
+#endif//__WINSCW__
+#endif//__SYMBIAN32__
+
 #if __BSD_VISIBLE
 #ifndef _RUNE_T_DECLARED
 typedef	__rune_t	rune_t;
@@ -118,7 +126,7 @@ __BEGIN_DECLS
 IMPORT_C void	 abort(void) __dead2;
 IMPORT_C int	 abs(int) __pure2;
 IMPORT_C int	 atexit(void (*)(void));
-IMPORT_C double	 atof(const char *);
+IMPORT_C double	 atof(const char *) __SOFTFP;
 IMPORT_C int	 atoi(const char *);
 IMPORT_C long	 atol(const char *);
 IMPORT_C void	*bsearch(const void *, const void *, size_t,
@@ -139,16 +147,16 @@ IMPORT_C void	 qsort(void *, size_t, size_t,
 IMPORT_C int	 rand(void);
 IMPORT_C void	*realloc(void *, size_t);
 IMPORT_C void	 srand(unsigned);
-IMPORT_C double	 strtod(const char * __restrict, char ** __restrict);
+IMPORT_C double	 strtod(const char * __restrict, char ** __restrict) __SOFTFP;
 
 IMPORT_C 
-float	 strtof(const char * __restrict, char ** __restrict);
+float	 strtof(const char * __restrict, char ** __restrict) __SOFTFP;
 
 IMPORT_C long	 strtol(const char * __restrict, char ** __restrict, int);
 
 IMPORT_C 
 long double
-	 strtold(const char * __restrict, char ** __restrict);
+	 strtold(const char * __restrict, char ** __restrict) __SOFTFP;
 
 IMPORT_C
 unsigned long

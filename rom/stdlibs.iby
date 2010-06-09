@@ -48,7 +48,7 @@ file=ABI_DIR\BUILD_DIR\libcrypt.dll    					SHARED_LIB_DIR\libcrypt.dll
 //openc Data files
 //data=\epoc32\Data\z\resource\services       RESOURCE_FILES_DIR\services
 //data=\epoc32\Data\z\resource\locales.txt    RESOURCE_FILES_DIR\locales.txt
-data=\epoc32\release\armv5\urel\pipelib.ldd    \sys\bin\pipelib.ldd
+data=KERNEL_DIR\DEBUG_DIR\pipelib.ldd    \sys\bin\pipelib.ldd
 //openc_stdlibs stub
 //data=ZSYSTEM\INSTALL\openc_stdlibs_stub.sis	    System\Install\openc_stdlibs_stub.sis
 data=ZSYSTEM\INSTALL\openc_liblogger_stub.sis 	System\Install\openc_liblogger_stub.sis
