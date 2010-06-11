@@ -82,3 +82,4 @@ DEFFILE		libstdcppu_gcce.def
 
 
 SMPSAFE
+PAGED

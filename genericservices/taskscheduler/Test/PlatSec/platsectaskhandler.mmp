@@ -18,7 +18,7 @@
 // TaskHandler for platform security testing
 //
 
-TARGET          	platsectaskhandler.exe
+TARGET          	platsectaskhandler.exe	//RTEST
 TARGETTYPE		EXE
 
 SOURCEPATH	.

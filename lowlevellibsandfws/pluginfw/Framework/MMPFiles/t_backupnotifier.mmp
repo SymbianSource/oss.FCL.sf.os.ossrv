@@ -15,7 +15,7 @@
 // 
 //
 
-TARGET t_backupnotifier.exe
+TARGET t_backupnotifier.exe		//RTEST
 TARGETTYPE EXE
 
 UID 0x101FB5A8 0x10009E29

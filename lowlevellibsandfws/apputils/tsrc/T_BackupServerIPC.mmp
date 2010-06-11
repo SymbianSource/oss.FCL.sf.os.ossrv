@@ -13,7 +13,7 @@
 // Description:
 //
 
-target		t_backupserveripc.exe
+target		t_backupserveripc.exe	//RTEST
 CAPABILITY 	ALL -TCB
 targettype	exe
 

@@ -38,7 +38,7 @@ int main()
     char * src3= des2;
     TPtr16 des3((unsigned short*)"",30);
     wchar_t *aPtr1 = new wchar_t[20];
-    retval3= CharpToTptr16(src3,aPtr1,des3);
+    retval3= CharpToTptr16(src3,des3);
     printf("retval3 value is %d\n", retval3);
     
     TPtr16 src4= des3;

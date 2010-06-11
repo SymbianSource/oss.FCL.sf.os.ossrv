@@ -17,7 +17,7 @@
 // 
 //
 
-TARGET          LibCIpcServer.exe
+TARGET          libcipcserver.exe
 TARGETTYPE      exe
 // TODO : Update uid with the unused UID.
 UID             0 0x10207370
@@ -66,3 +66,4 @@ DOCUMENT     shutdown.dosc
 
 
 SMPSAFE
+PAGED

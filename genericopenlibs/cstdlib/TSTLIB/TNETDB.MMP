@@ -15,7 +15,7 @@
 // 
 //
 
-TARGET			tnetdb.exe
+TARGET			tnetdb_cstdlib.exe
 
 #include "GENERIC.MMP"
 

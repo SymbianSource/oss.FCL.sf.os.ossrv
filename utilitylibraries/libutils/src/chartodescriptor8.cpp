@@ -29,6 +29,8 @@
    * the result of conversion.aDes needs to be allocated with sufficient amount 
    * of memory before being passed to function. This Descriptor should have 
    * a allocation that is equal to or greater than char*
+   *
+   * @return Status code (0 is ESuccess, -1 is EInsufficientMemory, -4 is EInvalidPointer)
    */
    
 EXPORT_C  int CharToTbuf8 (const char* aSrc, TDes8& aDes)
@@ -57,6 +59,8 @@ EXPORT_C  int CharToTbuf8 (const char* aSrc, TDes8& aDes)
    * the result of conversion.aDes needs to be allocated with sufficient amount 
    * of memory before being passed to function. This Descriptor should have 
    * a allocation that is equal to or greater than char*
+   *
+   * @return Status code (0 is ESuccess, -1 is EInsufficientMemory, -4 is EInvalidPointer, -6 is EUseNewMaxL)
    */
    
 EXPORT_C int CharToHbufc8(const char* aSrc, HBufC8* aDes)
@@ -91,6 +95,8 @@ EXPORT_C int CharToHbufc8(const char* aSrc, HBufC8* aDes)
    * the result of conversion.aDes needs to be allocated with sufficient amount 
    * of memory before being passed to function. This Descriptor should have 
    * a allocation that is equal to or greater than char*
+   *
+   * @return Status code (0 is ESuccess, -1 is EInsufficientMemory, -4 is EInvalidPointer)
    */
    
 EXPORT_C int CharpToTptr8( const char* aSrc, TPtr8& aDes )
@@ -121,6 +127,8 @@ EXPORT_C int CharpToTptr8( const char* aSrc, TPtr8& aDes )
    * the result of conversion.aDes needs to be allocated with sufficient amount 
    * of memory before being passed to function. This Descriptor should have 
    * a allocation that is equal to or greater than char*
+   *
+   * @return Status code (0 is ESuccess, -4 is EInvalidPointer)  
    */
    
 EXPORT_C int CharpToTptrc8(const char* aSrc, TPtrC8& aDes)
@@ -142,27 +150,19 @@ EXPORT_C int CharpToTptrc8(const char* aSrc, TPtrC8& aDes)
    * the result of conversion.aDes needs to be allocated with sufficient amount 
    * of memory before being passed to function. This Descriptor should have 
    * a allocation that is equal to or greater than char*
+   *
+   * @return Status code (0 is ESuccess, -1 is EInsufficientMemory, -4 is EInvalidPointer)
    */
 
 EXPORT_C int CharToRbuf8(const char* aSrc, RBuf8& aDes)
-{   
-    int retval = ESuccess, ilen = 0;
-    
-    if ( !aSrc )
-    {
-    	return EInvalidPointer;
-    }
-    
-    ilen = strlen(aSrc);
-    
-    if (KErrNone == aDes.Create(ilen))
-    {
-    	aDes.Copy((const unsigned char *)aSrc, ilen);
-    }
-	else
-	{
-		retval = EInsufficientSystemMemory;
-	}
+{    
+  if ( !aSrc )
+  {
+    return EInvalidPointer;
+  }
+        
+  aDes.Copy((const unsigned char *)aSrc, strlen(aSrc));
 	
-	return retval;	
+	return ESuccess;	
 }
+

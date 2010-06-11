@@ -183,7 +183,7 @@ iTLDInfoList(CLocalSystemInterface::KTLDInfoListGran)
 			User::Panic(KEstlibInit, err);
 			}
 
-		iCleanup.StorePtrs(iPrivateHeap, &iFs, &iSs, &iCs, &iSSLock, &iCSLock, &iTzServer);
+		iCleanup.StorePtrs(iPrivateHeap, &iFs, &iSs, &iCs, &iSSLock, &iCSLock);
 		
 		// No connection settings by default
 		iDefConnPref = NULL;
@@ -200,9 +200,12 @@ EXPORT_C CLocalSystemInterface::~CLocalSystemInterface()
 	iASelectLock.Close();
 	// Close the default connection lock
 	iDefConnLock.Close();
+	
 	//close the default RConnection
 	if(iDefConnection.SubSessionHandle() != 0)
+	    {
 		iDefConnection.Close();
+	    }
 
 	RHeap* oHeap = User::SwitchHeap(iPrivateHeap);
 	for (TInt i = 0, count = iTLDInfoList.Count(); i < count; i++ )
@@ -216,14 +219,12 @@ EXPORT_C CLocalSystemInterface::~CLocalSystemInterface()
 	int err;
 	// passing 1 to cancelaselect will kill all the threads serving aselect
 	cancelaselect(NULL,err,1);
-	// Switch to backend heap
-	RHeap* oldHeap = User::SwitchHeap(iPrivateHeap);
+
 	// Close the array that maintains aselect request details 
 	iASelectRequest.Close();
-	//close the RTz server
+	//close the RTz connection
 	iTzServer.Close();
-	// Switch back to old heap
-	User::SwitchHeap(oldHeap);
+
 
 	if( iDefConnPref )
 	    {
@@ -231,20 +232,14 @@ EXPORT_C CLocalSystemInterface::~CLocalSystemInterface()
 	        {
 	        case TConnPref::EConnPrefSnap:
 	            {
-	            RHeap* oldHeap = User::SwitchHeap(iPrivateHeap);
 	            delete (TCommSnapPref*)iDefConnPref;
-	            // Switch back to old heap
-	            User::SwitchHeap(oldHeap);
 	            iDefConnPref = NULL;              
 	            }
 	            break;
 
 	        case TConnPref::EConnPrefCommDb:
 	            {
-	            RHeap* oldHeap = User::SwitchHeap(iPrivateHeap);
 	            delete (TCommDbConnPref*)iDefConnPref;
-	            // Switch back to old heap
-	            User::SwitchHeap(oldHeap);
 	            iDefConnPref = NULL;
 	            }
 	            break;              
@@ -257,11 +252,25 @@ EXPORT_C CLocalSystemInterface::~CLocalSystemInterface()
 	    }
 
 #if (defined SYMBIAN_OE_POSIX_SIGNALS && defined SYMBIAN_OE_LIBRT)
-	iTimerOverrunsMutex.Close();
+	iTimerOverrunsMutex.Close();	
 	iTimerOverruns.Close(); 
 #endif	
+	
+#if (defined SYMBIAN_OE_POSIX_SIGNALS)
+	iSigInitWaitMutex.Close();
+	iSigInitWaitSemaphore.Close();
+	iBlockedSAMutex.Close();
+	iSignalWaiterMutex.Close();
+	iSignalInitSemaphore.Close();
+#endif
 	//close the RpointerArray
 	iOpenDirList.Close();
+	
+	iSSLock.Close();
+	iCSLock.Close();
+	iSignalSession.Close();
+	iIpcS.Close();
+		
 	User::SwitchHeap(oHeap);
 	}
 
@@ -300,11 +309,14 @@ void CLocalSystemInterface::TerminateProcess(int status)
 void CLocalSystemInterface::Exit(int code)
 	{
 #ifdef SYMBIAN_OE_POSIX_SIGNALS
-    TRequestStatus status = KRequestPending;
-    iSignalHandlerThread.Logon(status);
-	iSignalLoopRunning = EFalse;
-	iSignalHandlerThread.RequestSignal();
-	User::WaitForRequest(status);
+    if(iSignalsInitialized)
+        {
+        TRequestStatus status = KRequestPending;
+        iSignalHandlerThread.Logon(status);
+        iSignalLoopRunning = EFalse;
+        iSignalHandlerThread.RequestSignal();
+        User::WaitForRequest(status);
+        }
 #endif
 	iFids.Close();
 	User::SetCritical(User::EProcessPermanent);
@@ -334,8 +346,8 @@ int CLocalSystemInterface::mkdir (const wchar_t* aPath, int perms, int& anErrno)
 	}
 
 int CLocalSystemInterface::stat (const wchar_t* name, struct stat *st, int& anErrno)
-    {
-    const wchar_t* filename;
+    {    
+    const wchar_t* filename  = name;
     // This needs to be zero terminated
     TBuf<KMaxFileName> inputName;
     TUint pathAtt = 0;
@@ -347,12 +359,6 @@ int CLocalSystemInterface::stat (const wchar_t* name, struct stat *st, int& anEr
             {                    
             inputName.Append(_L("\\"));            
             }
-        filename = (wchar_t*)inputName.PtrZ();
-        }
-    // try to stat anyway
-    else
-        {
-        inputName.Copy((const TText16*)name);
         filename = (wchar_t*)inputName.PtrZ();
         }
     TSpecialFileType fileType;

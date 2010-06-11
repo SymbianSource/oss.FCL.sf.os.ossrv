@@ -174,3 +174,86 @@ EXPORT_C TBool TBase64::Decode(const TDesC8& aSrcString, TDes8& rDestString)
 	
 	return maskShift<ESix;
 	}
+
+
+/**
+    Encodes an ASCII string to Base64 string.
+
+    @param aSrcString The source string in ASCII.
+    @param aDestString The destination string with converted base64 values.
+    @param aLineLength The maximum line length of the encoded base64 values.
+         A CR/LF sequence will be added after these many characters. 
+         The default value is -1, which means no CR/LF is added to output. The encoding is compliant with RFC 4648 
+    @return Number of characters in the source string that were not encoded.
+*/  
+EXPORT_C TInt TBase64::PortableEncode(const TDesC8& aSrcString, TDes8& aDestString, TInt aLineLength)
+    {
+    // Clears the destination string
+    aDestString.Zero();
+    // Initialise variables
+    const TUint8* srcStringPtr=aSrcString.Ptr();
+    const TUint8* srcStringEnd=aSrcString.Length()+srcStringPtr;
+    TUint8* destStringPtr=(TUint8*)aDestString.Ptr();
+    TUint8* destStringPtrBase=destStringPtr;
+    TInt character=0;
+    TUint8 encodedChar=0;
+    TInt charStorage=0;
+    TInt maskShift=EZero;
+    TInt destStringCharNum = 0;
+
+    while(srcStringPtr<=srcStringEnd)
+        {
+        // maskShift is used as a char read counter
+        if(maskShift==ESix)
+            {
+            // If the 3rd char read is also the last char then the while loop
+            // is broken on the next check.
+            if(srcStringPtr==srcStringEnd)
+                srcStringPtr++;
+            maskShift=EZero;
+            character=0;   
+            }
+        else
+            {
+            if(srcStringPtr==srcStringEnd)
+                character=0;
+            else
+                character=*srcStringPtr;
+ 
+            srcStringPtr++;
+            // Shifts charStorage ready for the next char
+            charStorage=charStorage<<8;
+            maskShift+=ETwo;
+            }
+        charStorage=charStorage|character;
+        // Shifts the mask to the correct bit location
+        // Masks (AND's) the valid bits from charStorage
+        // Shifts the valid bits into the low order 8bits
+        // Converts to BASE64 char, Casts the result to an unsigned char (which it should be ?....I hope)
+        encodedChar=(TUint8)Base64ToAscii[((charStorage>>maskShift)&ESixBitMask)];
+
+        *destStringPtr++=encodedChar;
+        destStringCharNum++;
+
+        // Add a CRLF every aLineLength number of characters 
+        if (destStringCharNum == aLineLength)
+            {
+            destStringCharNum = 0;
+            *destStringPtr++ = '\r';
+            *destStringPtr++ = '\n';
+            }
+        }
+     
+    // Check for not enough chars and pad if required
+    if (maskShift==EFour)
+        {
+        *destStringPtr++=KImcvConvEquals;
+        *destStringPtr++=KImcvConvEquals;
+        }
+    else
+        if(maskShift==ESix)
+            *destStringPtr++=KImcvConvEquals;   
+            
+    aDestString.SetLength((TInt)(destStringPtr-destStringPtrBase));
+    return ((TInt)(srcStringPtr-srcStringEnd));
+    }

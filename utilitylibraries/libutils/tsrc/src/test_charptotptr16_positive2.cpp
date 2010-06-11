@@ -28,7 +28,7 @@ int main()
     TBufC16<1> buf;
     TPtr16 myTptr= buf.Des();
     wchar_t* temp = new wchar_t[30];
-    retval = CharpToTptr16(mycharstring,temp,myTptr);
+    retval = CharpToTptr16(mycharstring, myTptr);
 
     if (retval ==ESuccess)
     {

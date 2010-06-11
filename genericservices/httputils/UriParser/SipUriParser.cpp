@@ -168,6 +168,10 @@ TInt CSIPUriParser::ParseAuthority(const TPtrC8& aUri, TPtrC8& aUserinfo, TPtrC8
 			}
 		else
 			{
+		// First, move past the opening brace
+		    authority.Set(authority.Mid(startHostIPv6 + 1));
+		    // auth now = X:X:X]?????
+
 			// This is an IPv6 address, so it MUST have the closing brace too....
 			TInt endIPv6Host = authority.Locate(KIPv6UriCloseBrace);
 
@@ -181,16 +185,13 @@ TInt CSIPUriParser::ParseAuthority(const TPtrC8& aUri, TPtrC8& aUserinfo, TPtrC8
 			// It's an ipv6  address, with an opening and closing brace. So now just extract it
 			// auth = [X:X:X]?????
 
-			// First, move past the opening brace
-			authority.Set(authority.Mid(startHostIPv6 + 1));
-			// auth now = X:X:X]?????
 
 			// Set the host, and need to remove the closing brace
-			aHost.Set(authority.Left(endIPv6Host - 1));
+			aHost.Set(authority.Left(endIPv6Host));
 			// host = X:X:X
 
 			// Move past the host
-			authority.Set(authority.Mid(endIPv6Host));
+			authority.Set(authority.Mid(endIPv6Host + 1 ));
 			}
 		
 		// Get the port...

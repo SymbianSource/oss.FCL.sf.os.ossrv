@@ -15,7 +15,7 @@
 // 
 //
 
-TARGET			ezexample.exe
+TARGET			ezexample.exe	//RTEST
 
 TARGETTYPE		exe
 

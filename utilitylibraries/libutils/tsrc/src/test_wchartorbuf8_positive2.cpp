@@ -27,6 +27,7 @@ int main()
     int retval =ESuccess;
     wchar_t* mywcharstring = L""; 
     RBuf8 myRBuf;
+    myRBuf.CreateL(10);
     myRBuf.CleanupClosePushL();
     retval = WcharToRbuf8(mywcharstring, myRBuf);
 

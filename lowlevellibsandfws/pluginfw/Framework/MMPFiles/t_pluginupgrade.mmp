@@ -17,7 +17,7 @@
 // RTest Dll recognition UID followed by the unique UID for this exe
 UID				0x101FB5A8 0x10009E2F
 
-TARGET			t_pluginupgrade.exe
+TARGET			t_pluginupgrade.exe		//RTEST
 TARGETTYPE		exe
 
 USERINCLUDE		../../Test_Bed/inc 

@@ -131,6 +131,7 @@ LIBRARY        libc.lib
 LIBRARY        backend.lib
 
 
+PAGED
 // End of File
 
 #ifdef WINSCW

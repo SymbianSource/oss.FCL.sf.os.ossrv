@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET		t_processfilemanrename.exe
+TARGET		t_processfilemanrename.exe			//RTEST
 // needed to access file system
 CAPABILITY  	TCB AllFiles
 

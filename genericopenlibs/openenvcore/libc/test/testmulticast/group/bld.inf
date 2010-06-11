@@ -23,9 +23,9 @@ multicastclient.mmp
 
 PRJ_TESTEXPORTS
 ../scripts/tmulticastclient.script	/epoc32/winscw/c/tstdapis/tmulticastclient.script
-ethernetced_staticIP.xml  	/epoc32/winscw/c/CommDb/ethernetced_staticip.xml
-ethernetced_dynamicIP.xml 	/epoc32/winscw/c/CommDb/ethernetced_dynamicip.xml
-eth_stat.bat 				/epoc32/winscw/c/CommDb/eth_stat.bat
-eth_dyn.bat 				/epoc32/winscw/c/CommDb/eth_dyn.bat
-autoexec.bat				/epoc32/winscw/c/CommDb/autoexec.bat
+ethernetced_staticIP.xml  	/epoc32/winscw/c/commdb/ethernetced_staticip.xml
+ethernetced_dynamicIP.xml 	/epoc32/winscw/c/commdb/ethernetced_dynamicip.xml
+eth_stat.bat 				/epoc32/winscw/c/commdb/eth_stat.bat
+eth_dyn.bat 				/epoc32/winscw/c/commdb/eth_dyn.bat
+autoexec.bat				/epoc32/winscw/c/commdb/autoexec.bat
 multicastclient.iby		/epoc32/rom/include/multicastclient.iby

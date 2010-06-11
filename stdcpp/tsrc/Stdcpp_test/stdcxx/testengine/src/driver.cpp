@@ -698,10 +698,22 @@ rw_vtest (int argc, char **argv,
 
         if (_rw_opt_no_stdout (0, 0) && file_name) {
             char fname [256] = "C:\\";
+            
+            char* temp_ret = strchr (file_name, '/');
+            
+            if(temp_ret != NULL)
+            {    
+             const char* const slash = strrchr (file_name, '/');
 
-            const char* const slash = strrchr (file_name, _RWSTD_PATH_SEP);
-            strcat (fname, slash ? slash + 1 : file_name);
+             strcat (fname, slash ? slash + 1 : file_name);
+            }
+            else
+            {    
+             const char* const slash = strrchr (file_name, _RWSTD_PATH_SEP);
 
+             strcat (fname, slash ? slash + 1 : file_name);
+            }
+            
             char* const dot = strchr (fname, '.');
             if (dot)
                 strcpy (dot, ".out");

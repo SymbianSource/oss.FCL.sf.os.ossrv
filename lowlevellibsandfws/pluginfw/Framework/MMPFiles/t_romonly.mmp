@@ -17,7 +17,7 @@
 // 
 //
 
-TARGET 		t_romonly.exe
+TARGET 		t_romonly.exe			//RTEST
 TARGETTYPE 	exe
 
 SOURCEPATH	../../Framework/RomOnlyTest

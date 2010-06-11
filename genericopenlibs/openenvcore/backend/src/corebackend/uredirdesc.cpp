@@ -152,6 +152,7 @@ TInt CRedirDesc::Fcntl(TUint /*anArg*/, TUint aCmd)
 //
 TInt CRedirDesc::FinalClose()
 	{
+    iLock.Close();
 	iSession.Close();
 	return KErrNone;
 	}

@@ -27,6 +27,7 @@ int main()
     int retval =ESuccess;
     char* mycharstring = NULL;
     RBuf8 myRBuf;
+    myRBuf.CreateL(5);
     myRBuf.CleanupClosePushL();
     retval = CharToRbuf8 (mycharstring, myRBuf);
 

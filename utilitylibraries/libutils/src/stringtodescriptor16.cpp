@@ -28,7 +28,7 @@
    * reference to the descriptor where the result of conversion 
    * is stored,n_size specifies the conversion size of the char array 
    * @return Status code (0 is ESuccess, -1 is EInsufficientMemory, 
-   * -3 is EStringNoData)
+   * -3 is EStringNoData, -9 is EInsufficientSystemMemory)
    */
 EXPORT_C  int StringToTbuf16(string& aSrc, TDes16& aDes)
 {
@@ -164,7 +164,8 @@ EXPORT_C  int StringToTptrc16(string& aSrc, wchar_t* wptr, TPtrC16& aDes)
    * reference to the descriptor where the result of conversion 
    * is stored 
    * @return Status code (0 is ESuccess, -1 is EInsufficientMemory, 
-   * -3 is EStringNoData)
+   * -3 is EStringNoData, -4 is EInvalidPointer, -6 is EUseNewMaxL,
+   * -9 is EInsufficientSystemMemory)
    */
 
 EXPORT_C int StringToHbufc16(string& aSrc , HBufC16* aDes)
@@ -223,7 +224,7 @@ EXPORT_C int StringToHbufc16(string& aSrc , HBufC16* aDes)
    * reference to the descriptor where the result of conversion 
    * is stored 
    * @return Status code (0 is ESuccess, -1 is EInsufficientMemory, 
-   * -3 is EStringNoData )
+   * -3 is EStringNoData, -7 is EInvalidMBSSequence, -9 is EInsufficientSystemMemory)
    */
 
 EXPORT_C int StringToRbuf16(const string& aSrc, RBuf16& aDes)
@@ -250,23 +251,13 @@ EXPORT_C int StringToRbuf16(const string& aSrc, RBuf16& aDes)
 
 	if(minusone != mbstowcs(buf, charString, ilen))
 	{
-	    int ret = aDes.Create(ilen);
-	    if (KErrNone == ret)
-	    {
-	    	aDes.Copy((const unsigned short *)buf, ilen);	
-	    }
-	    else 
-	    {
-	        retval = EInsufficientSystemMemory;	
-	    }
-		
+	  aDes.Copy((const unsigned short *)buf, ilen);		
 	}
 	else
 	{
-	    retval = EInvalidMBSSequence;
-		
+	  retval = EInvalidMBSSequence;		
 	}
 	
 	delete []buf;
-    return retval;	
+  return retval;	
 }

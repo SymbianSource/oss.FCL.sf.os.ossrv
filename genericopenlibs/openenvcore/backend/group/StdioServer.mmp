@@ -54,3 +54,4 @@ LIBRARY		efsrv.lib
 
 
 SMPSAFE
+PAGED

@@ -16,7 +16,7 @@
 // 
 //
 
-TARGET      t_extendedinterfaces.exe
+TARGET      t_extendedinterfaces.exe		//RTEST
 TARGETTYPE  exe
 
 USERINCLUDE ../../Framework/frame ../../Framework/inc

@@ -33,6 +33,5 @@ file=ABI_DIR\BUILD_DIR\TProcessKiller.exe       			System\Programs\TProcessKille
 file=ABI_DIR\BUILD_DIR\TSetHomeTime.exe					System\Programs\TSetHomeTime.exe
 file=ABI_DIR\BUILD_DIR\TSetUTCTime.exe					System\Programs\TSetUTCTime.exe
 
-data=EPOCROOT##Epoc32\release\winscw\udeb\z\TEF_SchSvr\te_floating_scheduleSuite.script TEF_SchSvr\te_floating_scheduleSuite.Script
 
 #endif

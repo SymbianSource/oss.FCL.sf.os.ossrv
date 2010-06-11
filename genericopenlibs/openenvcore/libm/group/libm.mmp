@@ -216,6 +216,7 @@ LIBRARY euser.lib
 #ifdef WINSCW
 LIBRARY ewsd.lib
 #endif
+PAGED
 // End of File
 
 SMPSAFE

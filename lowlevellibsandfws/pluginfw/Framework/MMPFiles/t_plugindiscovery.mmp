@@ -19,7 +19,7 @@
 UID				0x101FB5A8 0x10204502
 VENDORID 			0x70000001
 
-TARGET			t_plugindiscovery.exe
+TARGET			t_plugindiscovery.exe			//RTEST
 TARGETTYPE		exe
 
 USERINCLUDE		../../Test_Bed/inc 

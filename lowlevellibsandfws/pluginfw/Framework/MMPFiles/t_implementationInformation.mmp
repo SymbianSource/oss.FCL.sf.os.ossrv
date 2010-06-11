@@ -13,7 +13,7 @@
 // Description:
 //
 
-target 		t_implementationinformation.exe
+target 		t_implementationinformation.exe		//RTEST
 targettype 		exe
 // UIDs for loading
 // RTest Dll recognition UID followed by the unique UID for this exe

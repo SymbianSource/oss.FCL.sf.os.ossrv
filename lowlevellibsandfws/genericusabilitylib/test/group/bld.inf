@@ -28,27 +28,28 @@ DEFAULT GCCE -X86
 
 
 #ifdef SYMBIAN_EUSERHL_BUILD91
-
 PRJ_TESTEXPORTS
 euserhltests.bat   /epoc32/data/z/system/test/euserhltests.bat 
 euserhltest.iby   /epoc32/rom/include/euserhltest.iby
 
+#else // SYMBIAN_EUSERHL_BUILD91
+PRJ_TESTEXPORTS
+euserhltests.bat   /epoc32/data/z/system/test/euserhltests.bat 
+euserhltest.iby   /epoc32/rom/include/euserhltest.iby
+
+#endif // SYMBIAN_EUSERHL_BUILD91
+
+
 PRJ_TESTMMPFILES
+#ifdef SYMBIAN_EUSERHL_BUILD91
 t_lstring_build91.mmp
 t_lsformat_build91.mmp  
 t_emanaged_build91.mmp
 
-
 #else // SYMBIAN_EUSERHL_BUILD91
-
-PRJ_TESTEXPORTS
-euserhltests.bat   /epoc32/data/z/system/test/euserhltests.bat 
-euserhltest.iby   /epoc32/rom/include/euserhltest.iby
-
-PRJ_TESTMMPFILES
 t_lstring.mmp
 t_lsformat.mmp  
 t_emanaged.mmp
 
-
 #endif // SYMBIAN_EUSERHL_BUILD91
+

@@ -11,9 +11,9 @@
 // Contributors:
 //
 // Description:
-//
 
-TARGET			t_persisthal.exe
+
+TARGET			t_persisthal.exe 	//RTEST
 TARGETTYPE		exe
 CAPABILITY		None
 

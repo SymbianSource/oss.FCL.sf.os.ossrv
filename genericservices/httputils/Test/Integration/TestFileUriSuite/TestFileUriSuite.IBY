@@ -26,15 +26,6 @@ file=ABI_DIR\DEBUG_DIR\TestFileUriServer.exe		System\Libs\TestFileUriServer.exe
 file=ABI_DIR\DEBUG_DIR\TestFileUriServer.exe		Sys\Bin\TestFileUriServer.exe
 #endif
 
-// Script and ini files
-data=DATAZ_\TestData\Scripts\TestFileUriSuite.script	TestData\Scripts\TestFileUriSuite.script
-data=DATAZ_\TestData\Ini\TestFileUriSuite.ini		TestData\Ini\TestFileUriSuite.ini
-data=DATAZ_\TestData\Ini\TestFileUriSuite_Non_7_Bit.ini	TestData\Ini\TestFileUriSuite_Non_7_Bit.ini
-data=DATAZ_\TestData\Ini\TestFileUriSuite_16_Bit.ini	TestData\Ini\TestFileUriSuite_16_Bit.ini
-
-
-// The batch file to run the tests
-data=EPOCROOT##Epoc32\tools\TestFileUriSuite.bat	TestFileUriSuite.bat
 
 // Other dependencies
 #include <testexecute.iby>

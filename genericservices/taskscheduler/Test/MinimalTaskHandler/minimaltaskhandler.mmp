@@ -18,7 +18,7 @@
 // MinimalTaskHandler for component SCHSVR
 //
 
-TARGET          	minimaltaskhandler.exe
+TARGET          	minimaltaskhandler.exe		//RTEST
 TARGETTYPE		EXE
 
 SOURCEPATH	.

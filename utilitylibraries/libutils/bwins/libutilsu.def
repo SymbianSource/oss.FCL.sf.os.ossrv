@@ -5,7 +5,7 @@ EXPORTS
 	?CharToRbuf8@@YAHPBDAAVRBuf8@@@Z @ 4 NONAME ; int CharToRbuf8(char const *, class RBuf8 &)
 	?CharToTbuf16@@YAHPBDAAVTDes16@@@Z @ 5 NONAME ; int CharToTbuf16(char const *, class TDes16 &)
 	?CharToTbuf8@@YAHPBDAAVTDes8@@@Z @ 6 NONAME ; int CharToTbuf8(char const *, class TDes8 &)
-	?CharpToTptr16@@YAHPBDPAGAAVTPtr16@@@Z @ 7 NONAME ; int CharpToTptr16(char const *, unsigned short *, class TPtr16 &)
+	?CharpToTptr16@@YAHPBDAAVTPtr16@@@Z @ 7 NONAME ; int CharpToTptr16(char const *, class TPtr16 &)
 	?CharpToTptr8@@YAHPBDAAVTPtr8@@@Z @ 8 NONAME ; int CharpToTptr8(char const *, class TPtr8 &)
 	?CharpToTptrc16@@YAHPADPAGAAVTPtrC16@@@Z @ 9 NONAME ; int CharpToTptrc16(char *, unsigned short *, class TPtrC16 &)
 	?CharpToTptrc8@@YAHPBDAAVTPtrC8@@@Z @ 10 NONAME ; int CharpToTptrc8(char const *, class TPtrC8 &)

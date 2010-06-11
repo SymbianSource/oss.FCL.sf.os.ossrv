@@ -27,6 +27,7 @@ int main()
     __UHEAP_MARK;	
     int retval =ESuccess;
     RBuf16 buff;
+    buff.CreateL(30);
     buff.CleanupClosePushL();
     wchar_t *wptr = new wchar_t[15];
     retval = StringToRbuf16(s, buff);

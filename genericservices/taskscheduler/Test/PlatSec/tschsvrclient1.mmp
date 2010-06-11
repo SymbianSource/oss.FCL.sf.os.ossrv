@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET          tschsvrclient1.exe
+TARGET          tschsvrclient1.exe		//RTEST
 TARGETTYPE      exe
 
 UID 0 0x10203632

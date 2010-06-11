@@ -44,7 +44,6 @@
 
 
 
-#include <stdlib.h>
 #include <unistd.h>		/* for definition of _exit() */
 /* #include <signal.h> */
 

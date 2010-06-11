@@ -66,7 +66,7 @@ Workaround a built-in prototype in MSVC 5.0
 IMPORT_C int	_epoc32_atexit	(void (*_func)(void));
 
 #ifdef EKA2
-void	abort	(void);
+IMPORT_C void	abort	(void);
 #else
 IMPORT_C void	abort	(void);
 #endif

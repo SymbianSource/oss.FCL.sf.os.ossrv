@@ -156,6 +156,7 @@ LIBRARY		ewsd.lib
 #endif
 
 
+PAGED
 // End of File
 
 

@@ -27,6 +27,7 @@ int main()
     int retval =ESuccess;
     wchar_t* mywcharstring = L"Hello Widechar String";
     RBuf16 myRBuf;
+    myRBuf.CreateL(30);
     myRBuf.CleanupClosePushL();
     retval = WcharToRbuf16(mywcharstring, myRBuf);
 

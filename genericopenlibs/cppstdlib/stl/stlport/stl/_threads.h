@@ -26,6 +26,12 @@
 #ifndef _STLP_INTERNAL_THREADS_H
 #define _STLP_INTERNAL_THREADS_H
 
+
+#ifdef __SYMBIAN32__
+#include <e32atomics.h>  // For atomic increment and decrement
+#endif
+
+
 // Supported threading models are native SGI, pthreads, uithreads
 // (similar to pthreads, but based on an earlier draft of the Posix
 // threads standard), and Win32 threads.  Uithread support by Jochen
@@ -464,13 +470,22 @@ class _STLP_CLASS_DECLSPEC _Refcount_Base {
 #if defined (__DMC__)
 public:
 #endif
-  _STLP_VOLATILE __stl_atomic_t _M_ref_count;
+  _STLP_VOLATILE  __stl_atomic_t _M_ref_count;
 
 #if defined (_STLP_THREADS) && \
    (!defined (_STLP_ATOMIC_INCREMENT) || !defined (_STLP_ATOMIC_DECREMENT) || \
     (defined (_STLP_WIN32_VERSION) && (_STLP_WIN32_VERSION <= 0x0400)))
 #  define _STLP_USE_MUTEX
-  _STLP_mutex _M_mutex;
+    #ifndef __SYMBIAN32__  
+      _STLP_mutex _M_mutex;
+    #else
+    #define KSizeofStlpMutex 12
+      /* 
+       * Padding in order to ensure compatability. 
+       * The pad size is the size of the _STLP_mutex structure
+       */
+     char _pad[KSizeofStlpMutex];
+    #endif
 #endif
 
   public:
@@ -484,14 +499,25 @@ public:
    __stl_atomic_t _M_decr() { return _STLP_ATOMIC_DECREMENT(&_M_ref_count); }
 #  else
 #    undef _STLP_USE_MUTEX
-  __stl_atomic_t _M_incr() {
-    _STLP_auto_lock l(_M_mutex);
-    return ++_M_ref_count;
-  }
-  __stl_atomic_t _M_decr() {
-    _STLP_auto_lock l(_M_mutex);
-    return --_M_ref_count;
-  }
+    #ifndef __SYMBIAN32__
+      __stl_atomic_t _M_incr() {
+        _STLP_auto_lock l(_M_mutex);
+        return ++_M_ref_count;
+      }
+      __stl_atomic_t _M_decr() {
+        _STLP_auto_lock l(_M_mutex);
+        return --_M_ref_count;
+      }
+    #else
+      __stl_atomic_t _M_incr() {
+          __e32_atomic_tas_ord32(&_M_ref_count, 0, 1, 1);
+          return _M_ref_count;
+      }
+      __stl_atomic_t _M_decr() {
+          __e32_atomic_tas_ord32(&_M_ref_count, 1, -1, 0);
+          return _M_ref_count;
+      }
+    #endif
 #  endif
 #else  /* No threads */
   __stl_atomic_t _M_incr() { return ++_M_ref_count; }

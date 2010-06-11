@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET          tpropertydefine.exe
+TARGET          tpropertydefine.exe		//RTEST
 CAPABILITY		WriteDeviceData
 TARGETTYPE      exe
 

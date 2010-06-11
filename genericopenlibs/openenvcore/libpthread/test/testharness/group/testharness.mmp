@@ -52,7 +52,7 @@ SOURCE          testharness.cpp
 LIBRARY         euser.lib
 LIBRARY         libpthread.lib
 LIBRARY         libc.lib
-//LIBRARY         stiftestinterface.lib
+
 
 EPOCALLOWDLLDATA
 

@@ -15,7 +15,7 @@
 // 
 //
 
-TARGET			t_cntf.exe
+TARGET			t_cntf.exe	//RTEST
 CAPABILITY		WriteDeviceData
 TARGETTYPE		EXE
 UID				0x1000007a
