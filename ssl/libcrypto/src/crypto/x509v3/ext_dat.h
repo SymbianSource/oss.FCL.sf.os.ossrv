@@ -66,14 +66,9 @@
 #include "libcrypto_wsd.h"
 #endif
 
-/* Extra declerations are added only to satisfy the RVCT2.2.
- RVCT4.0 is perfectly fine with out the extra declerations
- (the first 2 lines below)*/
+/* No need to add IMPORT_C as these functions are in the same executable */
 extern X509V3_EXT_METHOD v3_ext_ku;
 extern X509V3_EXT_METHOD v3_ocsp_accresp;
-IMPORT_C extern X509V3_EXT_METHOD v3_ext_ku;
-IMPORT_C extern X509V3_EXT_METHOD v3_ocsp_accresp;
-
 extern X509V3_EXT_METHOD v3_bcons, v3_nscert, v3_key_usage;
 extern X509V3_EXT_METHOD v3_pkey_usage_period, v3_sxnet, v3_info, v3_sinfo;
 extern X509V3_EXT_METHOD v3_ns_ia5_list[], v3_alt[], v3_skey_id, v3_akey_id;
