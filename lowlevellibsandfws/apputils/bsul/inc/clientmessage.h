@@ -455,7 +455,7 @@ namespace BSUL
 	private:
 		virtual void LogBadMessageL(TInt aError);
 		virtual void CheckSecurityPolicyL(const TSecurityPolicy& aPolicy);	
-		CClientMessage(const RMessage2& aMessage,const TClientMessageServerData& aServerData);
+		IMPORT_C CClientMessage(const RMessage2& aMessage,const TClientMessageServerData& aServerData);
 		void ConstructL();
 		const TClientMessageSchema* FindMessageSchema();
 		void CheckValidatedL(TInt aParam);
