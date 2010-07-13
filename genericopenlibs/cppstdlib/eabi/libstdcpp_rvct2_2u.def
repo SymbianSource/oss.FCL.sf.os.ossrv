@@ -204,7 +204,7 @@ EXPORTS
 	_ZNSt10istrstreamD0Ev @ 203 NONAME
 	_ZNSt10istrstreamD1Ev @ 204 NONAME
 	_ZNSt10istrstreamD2Ev @ 205 NONAME
-	_ZNSt10istrstreamD9Ev @ 206 NONAME
+	_ZNSt10istrstreamD9Ev @ 206 NONAME ABSENT
 	_ZNSt10moneypunctIcLb0EE16GetFacetLocaleIdEv @ 207 NONAME
 	_ZNSt10moneypunctIcLb0EEC1Ej @ 208 NONAME
 	_ZNSt10moneypunctIcLb0EEC2Ej @ 209 NONAME
@@ -238,7 +238,7 @@ EXPORTS
 	_ZNSt10ostrstreamD0Ev @ 237 NONAME
 	_ZNSt10ostrstreamD1Ev @ 238 NONAME
 	_ZNSt10ostrstreamD2Ev @ 239 NONAME
-	_ZNSt10ostrstreamD9Ev @ 240 NONAME
+	_ZNSt10ostrstreamD9Ev @ 240 NONAME ABSENT
 	_ZNSt11logic_errorD0Ev @ 241 NONAME
 	_ZNSt11logic_errorD1Ev @ 242 NONAME
 	_ZNSt11logic_errorD2Ev @ 243 NONAME
@@ -510,7 +510,7 @@ EXPORTS
 	_ZNSt9strstreamD0Ev @ 509 NONAME
 	_ZNSt9strstreamD1Ev @ 510 NONAME
 	_ZNSt9strstreamD2Ev @ 511 NONAME
-	_ZNSt9strstreamD9Ev @ 512 NONAME
+	_ZNSt9strstreamD9Ev @ 512 NONAME ABSENT
 	_ZSt16_get_Locale_implPSt12_Locale_impl @ 513 NONAME
 	_ZSt23__stl_throw_range_errorPKc @ 514 NONAME
 	_ZSt24__stl_throw_length_errorPKc @ 515 NONAME
