@@ -69,10 +69,14 @@
 /* #undef G_ATOMIC_ALPHA */
 
 /* arm atomic implementation */
-/* #undef G_ATOMIC_ARM */
+#ifdef __MARM__
+#define G_ATOMIC_ARM 1
+#endif
 
 /* i486 atomic implementation */
+#ifdef __X86__
 #define G_ATOMIC_I486 1
+#endif
 
 /* ia64 atomic implementation */
 /* #undef G_ATOMIC_IA64 */
