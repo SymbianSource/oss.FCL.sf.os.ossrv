@@ -82,7 +82,7 @@ EXPORT_C CLocalSystemInterface* Backend()
 
 // Construction of Backend Object which is going to be singleton object for the process
 EXPORT_C CLocalSystemInterface::CLocalSystemInterface() : iOpenDirList(CLocalSystemInterface::KDirGran),
-iTLDInfoList(CLocalSystemInterface::KTLDInfoListGran)
+iTLDInfoList(CLocalSystemInterface::KTLDInfoListGran), iDefConnPref(NULL)
 		{
 #ifdef SYMBIAN_OE_POSIX_SIGNALS
 		iSignalsInitialized = EFalse;
@@ -184,9 +184,7 @@ iTLDInfoList(CLocalSystemInterface::KTLDInfoListGran)
 			}
 
 		iCleanup.StorePtrs(iPrivateHeap, &iFs, &iSs, &iCs, &iSSLock, &iCSLock);
-		
-		// No connection settings by default
-		iDefConnPref = NULL;
+
 		}
 
 EXPORT_C CLocalSystemInterface::~CLocalSystemInterface()
@@ -3771,7 +3769,7 @@ TInt CLocalSystemInterface::GetConnectionPreferencesL(TBuf<KCommsDbSvrMaxColumnN
 	}
 
 // -----------------------------------------------------------------------------
-// CLocalSystemInterface::RestartDefConnection
+// CLocalSystemInterface::StartDefConnection
 //
 // Helper function for the setdefaultif() API to restart the 
 // default RConnection with the new settings.
@@ -3779,18 +3777,20 @@ TInt CLocalSystemInterface::GetConnectionPreferencesL(TBuf<KCommsDbSvrMaxColumnN
 //
 TInt CLocalSystemInterface::StartDefConnection()
 	{
-	//Close the connection and re-open it with the new preferences
-	if(iDefConnection.SubSessionHandle() != 0)
-		iDefConnection.Close();
-
 	TInt err = iDefConnection.Open(iSs);
 	if( err != KErrNone )
 		return err;
-
-	err = iDefConnection.Start(*iDefConnPref);
-	if( err != KErrNone )
+	// If connection preference is set
+	if (iDefConnPref)
+	    {
+	    err = iDefConnection.Start(*iDefConnPref);
+	    }
+	else // No connection preference available
+	    {
+	    err = iDefConnection.Start();
+	    }
+	if (err != KErrNone)
 		iDefConnection.Close();
-
 	return err;
 	}
 
@@ -3807,8 +3807,20 @@ int CLocalSystemInterface::setdefaultif(const struct ifreq* aIfReq)
         {
         // Obtain lock on the iDefConnection
         iDefConnLock.Wait();
-        if(iDefConnection.SubSessionHandle() != 0)
-            iDefConnection.Close();
+
+    if (iDefConnection.SubSessionHandle() != 0)
+        {
+        TUint count = iSocketArray.Count();
+        for (TInt i = 0; i < count; ++i)
+            {                
+            iSocketArray[i]->TempClose();
+            }
+        iDefConnection.Close();        
+        RHeap* oheap = User::SwitchHeap(iPrivateHeap);
+        iSocketArray.Reset();
+        User::SwitchHeap(oheap);
+        }
+
         if( iDefConnPref )
             {
             switch( iDefConnPref->ExtensionId() )
@@ -3941,16 +3953,12 @@ int CLocalSystemInterface::setdefaultif(const struct ifreq* aIfReq)
 RConnection& CLocalSystemInterface::GetDefaultConnection()
     {
     // If GetDefaultConnection is called without calling
-    // setdefaultif then the connection is not started
+    // setdefaultif then the connection started without any preferences
     // Obtain lock on the iDefConnection
     iDefConnLock.Wait();
     if(iDefConnection.SubSessionHandle() == 0)
         {
-        // iDefConnPref should not be NULL for starting the connection
-        if( iDefConnPref )
-            {
-            StartDefConnection();
-            }
+        StartDefConnection();
         }
     // Release lock on the iDefConnection
     iDefConnLock.Signal();

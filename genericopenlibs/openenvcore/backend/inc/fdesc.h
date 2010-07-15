@@ -604,7 +604,7 @@ public:
 	TInt Poll(TPollMode aMode,TBool& aReadyStatus,TInt& aErrno);
 	TInt Poll(TUint aEvents);
 	void CancelNotify();
-	
+	void TempClose();
 	
 	void SetFids(void *aFids);
 	virtual TInt Type()

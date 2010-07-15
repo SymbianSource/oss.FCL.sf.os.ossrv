@@ -343,15 +343,19 @@ TInt CSocketDesc::Socket(RSocketServ& aSs, int family, int style, int protocol)
 
 TInt CSocketDesc::FinalClose()
 	{
-	RHeap* oheap = User::SwitchHeap(Backend()->Heap());
+	CLocalSystemInterface* backend = Backend();
+	backend->DefConnLock().Wait();
+	RHeap* oheap = User::SwitchHeap(backend->Heap());	
 	if (iSocketPtr != NULL)
 		{
 		iSocketPtr = NULL;	
 		StopInterface(NULL); // Checks for RConnection as well as RSubConnection
+	    backend->RemoveSocket(this);
 		}
 
 	CSockDescBase::FinalClose();
 	User::SwitchHeap(oheap);
+	backend->DefConnLock().Signal();
 	return KErrNone;
 	}
 
@@ -1744,54 +1748,35 @@ TInt CSocketDesc::StopInterface(void *)
 TInt CSocketDesc::OpenUsingPreference()
 	{
 	TInt ret = 0;	
-	RConnection defConnection = Backend()->GetDefaultConnection();
-
+    // Update when supporting INET6
+    TInt addrfamily = (iAddrFamily == AF_INET6 ? KAfInet : iAddrFamily);	
 	if (iConnectionPtr != NULL) // iConnection initialized
 		{
-		if (iAddrFamily == AF_INET6)
-			{
-			ret = iSocket.Open(*iSockServPtr,KAfInet,iStyle,iProtocol,iConnection);
-			}
-		else 
-			{
-			ret = iSocket.Open(*iSockServPtr,iAddrFamily,iStyle,iProtocol,iConnection);
-		}
+		ret = iSocket.Open(*iSockServPtr,addrfamily,iStyle,iProtocol,iConnection);
 		}
 	else if (iSubConnectionPtr != NULL) // iSubConnection initialized
 		{
-		if (iAddrFamily == AF_INET6)
-			{
-			ret = iSocket.Open(*iSockServPtr,KAfInet,iStyle,iProtocol,iSubConnection);
-			}
-		else 		
-			{
-			ret = iSocket.Open(*iSockServPtr,iAddrFamily,iStyle,iProtocol,iSubConnection);
+		ret = iSocket.Open(*iSockServPtr,addrfamily,iStyle,iProtocol,iSubConnection);
 		}
-		}
-	//Now check if the default connection is intialized. This is given lesser 
-	//priority than the socket specific preferences checked above.
-	else if(defConnection.SubSessionHandle() != 0)
-		{
-		if (iAddrFamily == AF_INET6)
-			{
-			ret = iSocket.Open(*iSockServPtr,KAfInet,iStyle,iProtocol,defConnection);
-			}
-		else 
-			{
-			ret = iSocket.Open(*iSockServPtr,iAddrFamily,iStyle,iProtocol,defConnection);
-		}
-		}
-	else // No connection preference is set
-		{
-		if (iAddrFamily == AF_INET6)
-			{
-			ret = iSocket.Open(*iSockServPtr,KAfInet,iStyle,iProtocol);
-			}
-		else 		
-			{
-			ret = iSocket.Open(*iSockServPtr,iAddrFamily,iStyle,iProtocol);
-		}
-		}
+	else
+	    {
+	    RConnection& defConnection = Backend()->GetDefaultConnection();
+	    //Now check if the default connection is intialized. This is given lesser 
+	     //priority than the socket specific preferences checked above.
+	     if(defConnection.SubSessionHandle() != 0)
+	         {
+	         ret = iSocket.Open(*iSockServPtr,addrfamily,iStyle,iProtocol,defConnection);	         
+	         if (!ret)
+	             {
+	             Backend()->AddSocket(this);
+	             }
+	         }
+	     else // No connection preference is set
+	         {
+             ret = iSocket.Open(*iSockServPtr,addrfamily,iStyle,iProtocol);	         
+	         }
+	    }
+	
 	if(KErrNone == ret)
 		{
 		iSocketPtr = &iSocket;
@@ -1799,6 +1784,19 @@ TInt CSocketDesc::OpenUsingPreference()
 	iConnectInProgress = EFalse;
 	return ret;
 	}
+
+void CSocketDesc::TempClose()
+    {
+    if (iSocket.SubSessionHandle() != 0)
+        {
+	    iSocketPtr = NULL;
+        iSocket.CancelAll();    
+        TRequestStatus status;
+        iSocket.Shutdown(RSocket::EImmediate, status);
+        User::WaitForRequest(status);
+        iSocket.Close();
+        }
+    }
 
 void CSocketDesc::AccessPointListL(CArrayFixFlat<TAccessPointRecord> *&aRecordPtr,
 		TInt &aCount)
