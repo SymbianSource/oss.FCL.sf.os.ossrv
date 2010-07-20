@@ -60,7 +60,8 @@ CStringPoolImplementation::~CStringPoolImplementation()
 					CStringPoolNode* theProblem = 
 						reinterpret_cast<CStringPoolNode*>(
 							iCIHashTable[i]->At(j).iVal & KTokenToNode);
-					__LOG(theProblem->iDes->Des());
+					if(theProblem->iDes)
+					    __LOG(theProblem->iDes->Des());
 					}
 				}
 			}
@@ -80,7 +81,8 @@ CStringPoolImplementation::~CStringPoolImplementation()
 					CStringPoolNode* theProblem = 
 						reinterpret_cast<CStringPoolNode*>(
 							iCSHashTable[i]->At(j).iVal & KTokenToNode);
-					__LOG(theProblem->iDes->Des());
+					if(theProblem->iDes)
+					    __LOG(theProblem->iDes->Des());
 					}
 				}
 			}

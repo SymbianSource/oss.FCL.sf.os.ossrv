@@ -286,5 +286,6 @@ LIBRARY		ewsd.lib
 
 
 
+PAGED
 // End of File
 SMPSAFE

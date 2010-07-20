@@ -316,10 +316,13 @@ void CRegistryData::CImplementationData::InternalizeL(RReadStream& aStore)
 		delete iImplInfo;
 		iImplInfo = NULL;
 		}
-	iImplInfo=CImplementationInformation::NewLC(EFalse,aStore);
+	CImplementationInformation* implInfo = 0;
+	implInfo=CImplementationInformation::NewLC(EFalse,aStore);
 	//as we never store the drive name we need to get this from the parent
-	iImplInfo->SetDrive(iParent->iParent->iParent->iDrive);
-	CleanupStack::Pop(1);	
+	implInfo->SetDrive(iParent->iParent->iParent->iDrive);
+	CleanupStack::Pop(1);
+	iImplInfo = implInfo;
+	implInfo = 0;
 	}
 
 

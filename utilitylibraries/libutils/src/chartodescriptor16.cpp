@@ -24,7 +24,7 @@
   * Converts a character stream to TBuf16
   * 
   * @param aSrc is char*, aDes is the reference to the descriptor
-  * @return Status code (0 is ESuccess, -1 is EInsufficientMemory, -4 is EInvalidPointer)
+  * @return Status code (0 is ESuccess, -1 is EInsufficientMemory, -4 is EInvalidPointer, -7 is EInvalidMBSSequence)
   */
      
 EXPORT_C  int CharToTbuf16(const char* aSrc, TDes16& aDes)
@@ -46,7 +46,7 @@ EXPORT_C  int CharToTbuf16(const char* aSrc, TDes16& aDes)
 	        return EInsufficientMemory;	
 	    }	
 	}    
-    wchar_t *WcharString = new wchar_t[ilen];
+    wchar_t *WcharString = new wchar_t[ilen+1];
     if(!WcharString)
     {
     	return EInsufficientSystemMemory;
@@ -69,7 +69,7 @@ EXPORT_C  int CharToTbuf16(const char* aSrc, TDes16& aDes)
      * Converts a character stream to HBufc16
      * 
      * @param aSrc is char*, aDes is the reference to the descriptor
-     * @return Status code (0 is ESuccess, -1 is EInsufficientMemory, -4 is EInvalidPointer)
+     * @return Status code (0 is ESuccess, -1 is EInsufficientMemory, -4 is EInvalidPointer, -6 is EUseNewMaxL, -7 is EInvalidMBSSequence)
      */
      
 EXPORT_C int CharToHbufc16(const char* aSrc, HBufC16* aDes)
@@ -121,17 +121,17 @@ EXPORT_C int CharToHbufc16(const char* aSrc, HBufC16* aDes)
 /**
   * Converts a character stream to TPtr16
   *
-  * @param aSrc is char*, aDes is the reference to the descriptor
-  * @return Status code (0 is ESuccess, -1 is EInsufficientMemory, -4 is EInvalidPointer)
+  * @param aSrc is char*, wPtr is wchar_t*, aDes is the reference to the descriptor
+  * @return Status code (0 is ESuccess, -1 is EInsufficientMemory, -4 is EInvalidPointer, -7 is EInvalidMBSSequence)
   */
      
-EXPORT_C int CharpToTptr16(const char* aSrc, wchar_t *wPtr, TPtr16& aDes)
+EXPORT_C int CharpToTptr16(const char* aSrc, TPtr16& aDes)
 {
     int retval = ESuccess;
     unsigned int ilen =0 , ilendes = 0;
     int minusone = -1;
     
-	if (!aSrc || !wPtr)
+	if (!aSrc)
 	{
 		return EInvalidPointer;
 	}
@@ -140,29 +140,37 @@ EXPORT_C int CharpToTptr16(const char* aSrc, wchar_t *wPtr, TPtr16& aDes)
 	    ilen = strlen(aSrc);
 	    ilendes = aDes.MaxLength();
 	    
-	    if (ilendes < ilen )
+	    if (ilendes < ilen)
 	    {
 	    	return EInsufficientMemory;
 	    }
 	}
 	
+  wchar_t *wPtr = new wchar_t[ilen+1];
+	
+	if (!wPtr)
+	{
+		return EInsufficientMemory;
+	}
+	
 	if(minusone != mbstowcs((wchar_t *)wPtr, (const char*)aSrc, ilen ))
 	{
-	    aDes.Set((unsigned short *)wPtr, ilen , ilendes);	
+		aDes.Copy((unsigned short *)wPtr, ilen);
 	}
 	else
 	{
 		retval = EInvalidMBSSequence;
 	}
 	
+	delete[] wPtr;
 	return retval;
 }
 
 /**
   * Converts a character stream to TPtrc16
   *
-  * @param aSrc is char*, aDes is the reference to the descriptor
-  * @return Status code (0 is ESuccess, -1 is EInsufficientMemory, -4 is EInvalidPointer)
+  * @param aSrc is char*, cPtr is wchar_t*, aDes is the reference to the descriptor
+  * @return Status code (0 is ESuccess, -1 is EInsufficientMemory, -4 is EInvalidPointer, -7 is EInvalidMBSSequence)
   */
      
 EXPORT_C int CharpToTptrc16(char* aSrc ,wchar_t* cPtr, TPtrC16& aDes)
@@ -194,7 +202,7 @@ EXPORT_C int CharpToTptrc16(char* aSrc ,wchar_t* cPtr, TPtrC16& aDes)
   * Converts a character stream to RBuf16
   * 
   * @param aSrc is char*, aDes is the reference to the descriptor
-  * @return Status code (0 is ESuccess, -1 is EInsufficientMemory, -4 is EInvalidPointer)
+  * @return Status code (0 is ESuccess, -1 is EInsufficientMemory, -4 is EInvalidPointer, -7 is EInvalidMBSSequence)
   */
   
   
@@ -217,10 +225,7 @@ EXPORT_C int CharToRbuf16(const char* aSrc, RBuf16& aDes)
     
 	if(minusone != mbstowcs(buf, aSrc, ilen))
 	{
-	    if (KErrNone == aDes.Create(ilen))
-	    {
-	        aDes.Copy((const unsigned short *)buf, ilen);	
-	    }
+	    aDes.Copy((const unsigned short *)buf, ilen);	
 	}   
 	else
 	{

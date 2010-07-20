@@ -15,7 +15,7 @@
 // 
 //
 
-TARGET				t_bitflags.exe
+TARGET				t_bitflags.exe	//RTEST
 TARGETTYPE			EXE
 UID				0x1000007a
 VENDORID 0x70000001

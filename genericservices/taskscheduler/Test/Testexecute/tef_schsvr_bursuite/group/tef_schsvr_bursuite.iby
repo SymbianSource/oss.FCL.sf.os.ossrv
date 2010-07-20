@@ -22,7 +22,5 @@
 
 file=ABI_DIR\BUILD_DIR\tef_schsvr_bursuite.exe		System\bin\tef_schsvr_bursuite.exe
 
-data=EPOCROOT##Epoc32\release\winscw\udeb\z\TEF_SchSvr\tef_schsvr_bursuite.script 	TEF_SchSvr\tef_schsvr_bursuite.script
-data=EPOCROOT##Epoc32\release\winscw\udeb\z\TEF_SchSvr\tef_schsvr_bursuite.ini 		TEF_SchSvr\tef_schsvr_bursuite.ini
 
 #endif // __TEF_SCHSVR_BURSUITE_IBY__

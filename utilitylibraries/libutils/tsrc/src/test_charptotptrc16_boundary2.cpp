@@ -28,7 +28,7 @@ int main()
     int char_length= strlen(mycharstring);
     TPtrC myTptrc;
     wchar_t* myptr= new wchar_t[strlen(mycharstring)+1];
-    retval = CharpToTptrc16(mycharstring,myptr, myTptrc);
+    retval = CharpToTptrc16(mycharstring, myptr , myTptrc);
 
     int buf_len = myTptrc.Length();
     if (retval ==ESuccess &&\

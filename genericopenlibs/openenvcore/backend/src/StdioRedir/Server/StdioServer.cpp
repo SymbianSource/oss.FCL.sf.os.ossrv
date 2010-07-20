@@ -135,9 +135,19 @@ CStdioServer::CStdioServer(CActive::TPriority aPriority) : CServer2(aPriority, E
 
 void CStdioServer::ConstructL()
 	{
-	StartL(KServerName);
-	iFs.Connect();
-	iCs.Connect();
+    TInt rf = KErrNone; 
+    TInt rc = KErrNone;
+    StartL(KServerName);
+    rf = iFs.Connect();
+    if (rf != KErrNone)
+        {
+            User::Leave(rf);
+        }
+    rc = iCs.Connect();
+    if (rc != KErrNone)
+        {
+            User::Leave(rc);
+        }
 	iShutDown = CShutDown::NewL();
 	iShutDown->Start();
 	}

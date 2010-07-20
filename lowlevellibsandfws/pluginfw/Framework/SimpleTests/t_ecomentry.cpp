@@ -49,7 +49,7 @@ static  void Check(TInt aValue, TInt aExpected, TInt aLine)
 #define TEST(arg) ::Check((arg), __LINE__)
 #define TEST2(aValue, aExpected) ::Check(aValue, aExpected, __LINE__)
 
-class CEComEntryTest
+class CEComEntryTest // codescanner::missingcclass
 	{
 public:
 	static void TestEComEntryL();

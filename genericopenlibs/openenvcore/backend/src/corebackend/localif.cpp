@@ -82,7 +82,7 @@ EXPORT_C CLocalSystemInterface* Backend()
 
 // Construction of Backend Object which is going to be singleton object for the process
 EXPORT_C CLocalSystemInterface::CLocalSystemInterface() : iOpenDirList(CLocalSystemInterface::KDirGran),
-iTLDInfoList(CLocalSystemInterface::KTLDInfoListGran)
+iTLDInfoList(CLocalSystemInterface::KTLDInfoListGran), iDefConnPref(NULL)
 		{
 #ifdef SYMBIAN_OE_POSIX_SIGNALS
 		iSignalsInitialized = EFalse;
@@ -183,10 +183,8 @@ iTLDInfoList(CLocalSystemInterface::KTLDInfoListGran)
 			User::Panic(KEstlibInit, err);
 			}
 
-		iCleanup.StorePtrs(iPrivateHeap, &iFs, &iSs, &iCs, &iSSLock, &iCSLock, &iTzServer);
-		
-		// No connection settings by default
-		iDefConnPref = NULL;
+		iCleanup.StorePtrs(iPrivateHeap, &iFs, &iSs, &iCs, &iSSLock, &iCSLock);
+
 		}
 
 EXPORT_C CLocalSystemInterface::~CLocalSystemInterface()
@@ -200,9 +198,12 @@ EXPORT_C CLocalSystemInterface::~CLocalSystemInterface()
 	iASelectLock.Close();
 	// Close the default connection lock
 	iDefConnLock.Close();
+	
 	//close the default RConnection
 	if(iDefConnection.SubSessionHandle() != 0)
+	    {
 		iDefConnection.Close();
+	    }
 
 	RHeap* oHeap = User::SwitchHeap(iPrivateHeap);
 	for (TInt i = 0, count = iTLDInfoList.Count(); i < count; i++ )
@@ -216,14 +217,12 @@ EXPORT_C CLocalSystemInterface::~CLocalSystemInterface()
 	int err;
 	// passing 1 to cancelaselect will kill all the threads serving aselect
 	cancelaselect(NULL,err,1);
-	// Switch to backend heap
-	RHeap* oldHeap = User::SwitchHeap(iPrivateHeap);
+
 	// Close the array that maintains aselect request details 
 	iASelectRequest.Close();
-	//close the RTz server
+	//close the RTz connection
 	iTzServer.Close();
-	// Switch back to old heap
-	User::SwitchHeap(oldHeap);
+
 
 	if( iDefConnPref )
 	    {
@@ -231,20 +230,14 @@ EXPORT_C CLocalSystemInterface::~CLocalSystemInterface()
 	        {
 	        case TConnPref::EConnPrefSnap:
 	            {
-	            RHeap* oldHeap = User::SwitchHeap(iPrivateHeap);
 	            delete (TCommSnapPref*)iDefConnPref;
-	            // Switch back to old heap
-	            User::SwitchHeap(oldHeap);
 	            iDefConnPref = NULL;              
 	            }
 	            break;
 
 	        case TConnPref::EConnPrefCommDb:
 	            {
-	            RHeap* oldHeap = User::SwitchHeap(iPrivateHeap);
 	            delete (TCommDbConnPref*)iDefConnPref;
-	            // Switch back to old heap
-	            User::SwitchHeap(oldHeap);
 	            iDefConnPref = NULL;
 	            }
 	            break;              
@@ -257,11 +250,25 @@ EXPORT_C CLocalSystemInterface::~CLocalSystemInterface()
 	    }
 
 #if (defined SYMBIAN_OE_POSIX_SIGNALS && defined SYMBIAN_OE_LIBRT)
-	iTimerOverrunsMutex.Close();
+	iTimerOverrunsMutex.Close();	
 	iTimerOverruns.Close(); 
 #endif	
+	
+#if (defined SYMBIAN_OE_POSIX_SIGNALS)
+	iSigInitWaitMutex.Close();
+	iSigInitWaitSemaphore.Close();
+	iBlockedSAMutex.Close();
+	iSignalWaiterMutex.Close();
+	iSignalInitSemaphore.Close();
+#endif
 	//close the RpointerArray
 	iOpenDirList.Close();
+	
+	iSSLock.Close();
+	iCSLock.Close();
+	iSignalSession.Close();
+	iIpcS.Close();
+		
 	User::SwitchHeap(oHeap);
 	}
 
@@ -300,11 +307,14 @@ void CLocalSystemInterface::TerminateProcess(int status)
 void CLocalSystemInterface::Exit(int code)
 	{
 #ifdef SYMBIAN_OE_POSIX_SIGNALS
-    TRequestStatus status = KRequestPending;
-    iSignalHandlerThread.Logon(status);
-	iSignalLoopRunning = EFalse;
-	iSignalHandlerThread.RequestSignal();
-	User::WaitForRequest(status);
+    if(iSignalsInitialized)
+        {
+        TRequestStatus status = KRequestPending;
+        iSignalHandlerThread.Logon(status);
+        iSignalLoopRunning = EFalse;
+        iSignalHandlerThread.RequestSignal();
+        User::WaitForRequest(status);
+        }
 #endif
 	iFids.Close();
 	User::SetCritical(User::EProcessPermanent);
@@ -334,8 +344,8 @@ int CLocalSystemInterface::mkdir (const wchar_t* aPath, int perms, int& anErrno)
 	}
 
 int CLocalSystemInterface::stat (const wchar_t* name, struct stat *st, int& anErrno)
-    {
-    const wchar_t* filename;
+    {    
+    const wchar_t* filename  = name;
     // This needs to be zero terminated
     TBuf<KMaxFileName> inputName;
     TUint pathAtt = 0;
@@ -347,12 +357,6 @@ int CLocalSystemInterface::stat (const wchar_t* name, struct stat *st, int& anEr
             {                    
             inputName.Append(_L("\\"));            
             }
-        filename = (wchar_t*)inputName.PtrZ();
-        }
-    // try to stat anyway
-    else
-        {
-        inputName.Copy((const TText16*)name);
         filename = (wchar_t*)inputName.PtrZ();
         }
     TSpecialFileType fileType;
@@ -3730,11 +3734,11 @@ TInt CLocalSystemInterface::GetConnectionPreferencesL(TBuf<KCommsDbSvrMaxColumnN
 	TInt err = KErrNone;
 
 	//Open the database and create the IAP view.
-	CCommsDatabase *iApDb = CCommsDatabase::NewL(EDatabaseTypeIAP);
-	CleanupStack::PushL(iApDb);
-	iApDb->ShowHiddenRecords();
+	CCommsDatabase *apDb = CCommsDatabase::NewL(EDatabaseTypeIAP);
+	CleanupStack::PushL(apDb);
+	apDb->ShowHiddenRecords();
 	//The following pushes the view onto the cleanup stack
-	CCommsDbTableView *view = iApDb->OpenTableLC(TPtrC(IAP));
+	CCommsDbTableView *view = apDb->OpenTableLC(TPtrC(IAP));
 
 	//Iterate through the records to find the matching entry
 	TAccessPointRecord apRecord;
@@ -3750,7 +3754,7 @@ TInt CLocalSystemInterface::GetConnectionPreferencesL(TBuf<KCommsDbSvrMaxColumnN
 		}
 
 	CleanupStack::PopAndDestroy(); //Free the view
-	CleanupStack::PopAndDestroy(iApDb); //Free the db itself
+	CleanupStack::PopAndDestroy(apDb); //Free the db itself
 
 	if(err != KErrNone) //Record not found
 		return KErrNotFound;
@@ -3765,7 +3769,7 @@ TInt CLocalSystemInterface::GetConnectionPreferencesL(TBuf<KCommsDbSvrMaxColumnN
 	}
 
 // -----------------------------------------------------------------------------
-// CLocalSystemInterface::RestartDefConnection
+// CLocalSystemInterface::StartDefConnection
 //
 // Helper function for the setdefaultif() API to restart the 
 // default RConnection with the new settings.
@@ -3773,18 +3777,20 @@ TInt CLocalSystemInterface::GetConnectionPreferencesL(TBuf<KCommsDbSvrMaxColumnN
 //
 TInt CLocalSystemInterface::StartDefConnection()
 	{
-	//Close the connection and re-open it with the new preferences
-	if(iDefConnection.SubSessionHandle() != 0)
-		iDefConnection.Close();
-
 	TInt err = iDefConnection.Open(iSs);
 	if( err != KErrNone )
 		return err;
-
-	err = iDefConnection.Start(*iDefConnPref);
-	if( err != KErrNone )
+	// If connection preference is set
+	if (iDefConnPref)
+	    {
+	    err = iDefConnection.Start(*iDefConnPref);
+	    }
+	else // No connection preference available
+	    {
+	    err = iDefConnection.Start();
+	    }
+	if (err != KErrNone)
 		iDefConnection.Close();
-
 	return err;
 	}
 
@@ -3801,8 +3807,20 @@ int CLocalSystemInterface::setdefaultif(const struct ifreq* aIfReq)
         {
         // Obtain lock on the iDefConnection
         iDefConnLock.Wait();
-        if(iDefConnection.SubSessionHandle() != 0)
-            iDefConnection.Close();
+
+    if (iDefConnection.SubSessionHandle() != 0)
+        {
+        TUint count = iSocketArray.Count();
+        for (TInt i = 0; i < count; ++i)
+            {                
+            iSocketArray[i]->TempClose();
+            }
+        iDefConnection.Close();        
+        RHeap* oheap = User::SwitchHeap(iPrivateHeap);
+        iSocketArray.Reset();
+        User::SwitchHeap(oheap);
+        }
+
         if( iDefConnPref )
             {
             switch( iDefConnPref->ExtensionId() )
@@ -3935,16 +3953,12 @@ int CLocalSystemInterface::setdefaultif(const struct ifreq* aIfReq)
 RConnection& CLocalSystemInterface::GetDefaultConnection()
     {
     // If GetDefaultConnection is called without calling
-    // setdefaultif then the connection is not started
+    // setdefaultif then the connection started without any preferences
     // Obtain lock on the iDefConnection
     iDefConnLock.Wait();
     if(iDefConnection.SubSessionHandle() == 0)
         {
-        // iDefConnPref should not be NULL for starting the connection
-        if( iDefConnPref )
-            {
-            StartDefConnection();
-            }
+        StartDefConnection();
         }
     // Release lock on the iDefConnection
     iDefConnLock.Signal();

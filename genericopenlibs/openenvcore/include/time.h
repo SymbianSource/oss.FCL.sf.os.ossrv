@@ -143,6 +143,11 @@ extern char *tzname[];
 
 __BEGIN_DECLS
 #ifdef __SYMBIAN32__
+#ifdef __WINSCW__
+#ifndef __SOFTFP
+#define __SOFTFP
+#endif /* __SOFTFP */
+#endif//__WINSCW__
 IMPORT_C char*** __tzname(void);
 #define	tzname		(*__tzname())
 #endif //__SYMBIAN32__
@@ -154,7 +159,7 @@ clock_t clock(void);
 IMPORT_C
 char *ctime(const time_t *);
 IMPORT_C
-double difftime(time_t, time_t);
+double difftime(time_t, time_t) __SOFTFP;
 /* XXX missing: getdate() */
 IMPORT_C
 struct tm *gmtime(const time_t *);

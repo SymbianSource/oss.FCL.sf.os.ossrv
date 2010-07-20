@@ -31,6 +31,7 @@ int main()
     retval[0] = Tlitc16ToWchar(myTlitc,myWchar,size);
 
     RBuf8 buf;
+    buf.CreateL(60);
     retval[1] = WcharToRbuf8(myWchar,buf);
 
     wstring str;

@@ -146,7 +146,7 @@ EXPORT_C int _gethostname_r (int *aErrno, char *name, size_t size)
 	/* Get the default RConnection instance and use it if configured. 
 	   NOTE: This RConnection, if configured, would be created using the
 	   socket server on backend. The same server has to be used here */
-	RConnection defConnection = Backend()->GetDefaultConnection();
+	RConnection& defConnection = Backend()->GetDefaultConnection();
 	if(defConnection.SubSessionHandle() != 0)
 	    {
 	    err = hr.Open(ss, AF_INET, IPPROTO_UDP,defConnection);
@@ -324,7 +324,7 @@ EXPORT_C struct hostent* _gethostbyaddr_r (struct _reent* rp, const char* addr, 
 		/* Get the default RConnection instance and use it if configured. 
 		   NOTE: This RConnection, if configured, would be created using the
 		   socket server on backend. The same server has to be used here */
-		RConnection defConnection = Backend()->GetDefaultConnection();
+		RConnection& defConnection = Backend()->GetDefaultConnection();
 		if(defConnection.SubSessionHandle() != 0)
 		    {
 			err=r.Open(ss, format, IPPROTO_UDP, defConnection);
@@ -418,7 +418,7 @@ EXPORT_C struct hostent* _gethostbyname_r (struct _reent* rp, const char* name)
     /* Get the default RConnection instance and use it if configured. 
        NOTE: This RConnection, if configured, would be created using the
        socket server on backend. The same server has to be used here */
-    RConnection defConnection = Backend()->GetDefaultConnection();
+    RConnection& defConnection = Backend()->GetDefaultConnection();
     if (defConnection.SubSessionHandle() != 0)
         {
         err = r.Open(ss, AF_INET, IPPROTO_UDP, defConnection);
@@ -637,7 +637,7 @@ EXPORT_C int _getaddrinfo_r(int* aErrno, const char* aHostName,
 	/* Get the default RConnection instance and use it if configured. 
 	   NOTE: This RConnection, if configured, would be created using the
 	   socket server on backend. The same server has to be used here */
-	RConnection defConnection = Backend()->GetDefaultConnection();
+	RConnection& defConnection = Backend()->GetDefaultConnection();
 	if(defConnection.SubSessionHandle() != 0)
 		err = resolver.Open(sockServ, KAfInet, KProtocolInetUdp, defConnection);
 	else

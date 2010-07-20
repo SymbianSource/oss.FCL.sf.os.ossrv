@@ -58,7 +58,7 @@ class RFileDesTransferSession;
 class CFileDescBase;
 /* TODO: We don't have to do this in CFileTable. Move to methods */
 class CFileSocketDesc;
-
+class CSocketDesc;
 struct TChild
 /*
 @internalComponent
@@ -114,7 +114,7 @@ class TCLSICleanup
 */
 	{
 public:
-	void StorePtrs(RHeap* aHeap, RFs* aFs, RSocketServ* aSs, RCommServ* aCs, RFastLock* aSsLock, RFastLock* aCsLock, RTz * aTzs)
+	void StorePtrs(RHeap* aHeap, RFs* aFs, RSocketServ* aSs, RCommServ* aCs, RFastLock* aSsLock, RFastLock* aCsLock)
 		{
 		iHeap = aHeap;
 		iFs = aFs;
@@ -122,7 +122,6 @@ public:
 		iCs = aCs;
 		iSsLock = aSsLock;
 		iCsLock = aCsLock;
-		iTzS = aTzs;
 		}
 
 	~TCLSICleanup()
@@ -133,7 +132,6 @@ public:
 		iCs->Close();
 		iCsLock->Close();
 		iHeap->Close();
-		iTzS->Close();
 		}
 private:
 	RHeap* iHeap;
@@ -142,7 +140,6 @@ private:
 	RCommServ* iCs;
 	RFastLock* iSsLock;
 	RFastLock* iCsLock;
-	RTz * iTzS;
 	};
 
 
@@ -164,7 +161,7 @@ private:
 };
 
 
-class CFileTable
+class CFileTable // codescanner::missingcclass
 /*
 @internalComponent
 */
@@ -518,6 +515,29 @@ public:
 	RArray<TASelectRequest>& ASelectRequest();
 	
 	RFastLock& ASelectLock();
+	
+	inline RFastLock& DefConnLock() { return iDefConnLock; }
+	
+	inline TInt AddSocket(CSocketDesc* aPtr)
+	    {
+        RHeap* oheap = User::SwitchHeap(iPrivateHeap);
+	    TInt ret = iSocketArray.InsertInAddressOrder(aPtr);
+	    User::SwitchHeap(oheap);	    
+	    return ret;
+	    }
+	
+	inline void RemoveSocket(CSocketDesc* aPtr)
+	    {
+	    TInt index = iSocketArray.FindInAddressOrder(aPtr);
+	    if (index != -1)
+	        {
+			RHeap* oheap = User::SwitchHeap(iPrivateHeap);
+            iSocketArray.Remove(index);            
+            iSocketArray.Compress();
+            User::SwitchHeap(oheap);
+	        }
+	    }
+	
 	int system (const wchar_t* aCmd, const wchar_t* aCmdArg, int& anErrno );
 	const wchar_t* GetDirName (int aFid);
 	IMPORT_C int Truncate (int aFid, off_t anOffset, int& anErrno);
@@ -658,6 +678,7 @@ private:
 	// Default connection settings, set/cleared using setdefaultif
 	TConnPref* iDefConnPref;
     RTz     iTzServer;	
+    RPointerArray<CSocketDesc> iSocketArray;
 #ifdef SYMBIAN_OE_POSIX_SIGNALS
 	// Signal handler thread
 	RThread 				iSignalHandlerThread;

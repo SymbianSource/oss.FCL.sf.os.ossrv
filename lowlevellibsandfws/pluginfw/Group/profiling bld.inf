@@ -1,0 +1,118 @@
+// Copyright (c) 1997-2009 Nokia Corporation and/or its subsidiary(-ies).
+// All rights reserved.
+// This component and the accompanying materials are made available
+// under the terms of "Eclipse Public License v1.0"
+// which accompanies this distribution, and is available
+// at the URL "http://www.eclipse.org/legal/epl-v10.html".
+//
+// Initial Contributors:
+// Nokia Corporation - initial contribution.
+//
+// Contributors:
+//
+// Description:
+// This file basically provides the information required for building the whole of a component
+// C & C++ style comments are allowed in this file because it's passed through the C++ preprocessor
+// Examples are provided below of the kind of things we're expecting
+// 
+//
+
+
+PRJ_PLATFORMS
+// specify the platforms your component needs to be built for here
+// defaults to WINS MARM so you can ignore this if you just build these
+
+
+PRJ_EXPORTS
+// specify the source file followed by its destination here
+// copy will be used to copy the source file to its destination
+// If there's no destination then the source file will be copied
+// to the same name in \epoc32\include
+..\Framework\Inc\ECom.h							\epoc32\include\Ecom\ECom.h
+..\Framework\Inc\EComErrorCodes.h				\epoc32\include\Ecom\EComErrorCodes.h
+..\Framework\Inc\EComResolverParams.h			\epoc32\include\Ecom\EComResolverParams.h
+..\Framework\Inc\EComResolverParams.inl			\epoc32\include\Ecom\EComResolverParams.inl
+..\Framework\Inc\ImplementationInformation.h	\epoc32\include\Ecom\ImplementationInformation.h
+..\Framework\Inc\ImplementationInformation.inl	\epoc32\include\Ecom\ImplementationInformation.inl
+..\Framework\Inc\ImplementationProxy.h			\epoc32\include\Ecom\ImplementationProxy.h
+..\Framework\RegistryInfo.rh					\epoc32\include\Ecom\RegistryInfo.rh
+
+// Specify the files to be exported to support test bed Dlls
+..\Test_Bed\Inc\ComponentInfo.h 		SYMBIAN_OS_LAYER_PLATFORM_EXPORT_PATH(ecom\test_bed\ComponentInfo.h
+..\Test_Bed\Inc\ComponentInfo.inl 		SYMBIAN_OS_LAYER_PLATFORM_EXPORT_PATH(ecom\test_bed\ComponentInfo.inl
+..\Test_Bed\Inc\ComponentTester.h 		SYMBIAN_OS_LAYER_PLATFORM_EXPORT_PATH(ecom\test_bed\ComponentTester.h
+..\Test_Bed\Inc\ComponentTestObserver.h SYMBIAN_OS_LAYER_PLATFORM_EXPORT_PATH(ecom\test_bed\ComponentTestObserver.h
+..\Test_Bed\Inc\DataFormat.h 			SYMBIAN_OS_LAYER_PLATFORM_EXPORT_PATH(ecom\test_bed\DataFormat.h
+..\Test_Bed\Inc\DataLogger.h 			SYMBIAN_OS_LAYER_PLATFORM_EXPORT_PATH(ecom\test_bed\DataLogger.h
+..\Test_Bed\Inc\DefaultLogOutput.h 		SYMBIAN_OS_LAYER_PLATFORM_EXPORT_PATH(ecom\test_bed\DefaultLogOutput.h
+..\Test_Bed\Inc\LeakTestTransition.h 	SYMBIAN_OS_LAYER_PLATFORM_EXPORT_PATH(ecom\test_bed\LeakTestTransition.h
+..\Test_Bed\Inc\StateAccessor.h 		SYMBIAN_OS_LAYER_PLATFORM_EXPORT_PATH(ecom\test_bed\StateAccessor.h
+..\Test_Bed\Inc\TestBedDefinitions.h 	SYMBIAN_OS_LAYER_PLATFORM_EXPORT_PATH(ecom\test_bed\TestBedDefinitions.h
+..\Test_Bed\Inc\TestController.h 		SYMBIAN_OS_LAYER_PLATFORM_EXPORT_PATH(ecom\test_bed\TestController.h
+..\Test_Bed\Inc\TestManager.h 			SYMBIAN_OS_LAYER_PLATFORM_EXPORT_PATH(ecom\test_bed\TestManager.h
+..\Test_Bed\Inc\TestManager.inl 		SYMBIAN_OS_LAYER_PLATFORM_EXPORT_PATH(ecom\test_bed\TestManager.inl
+..\Test_Bed\Inc\TestUtilities.h 		SYMBIAN_OS_LAYER_PLATFORM_EXPORT_PATH(ecom\test_bed\TestUtilities.h
+..\Test_Bed\Inc\Transition.h 			SYMBIAN_OS_LAYER_PLATFORM_EXPORT_PATH(ecom\test_bed\Transition.h
+..\Test_Bed\Inc\Transition.inl 			SYMBIAN_OS_LAYER_PLATFORM_EXPORT_PATH(ecom\test_bed\Transition.inl
+..\Test_Bed\Inc\TransitionObserver.h 	SYMBIAN_OS_LAYER_PLATFORM_EXPORT_PATH(ecom\test_bed\TransitionObserver.h
+..\Test_Bed\Inc\UnitTest.h 				SYMBIAN_OS_LAYER_PLATFORM_EXPORT_PATH(ecom\test_bed\UnitTest.h
+..\Test_Bed\Inc\UnitTest.inl 			SYMBIAN_OS_LAYER_PLATFORM_EXPORT_PATH(ecom\test_bed\UnitTest.inl
+..\Test_Bed\Inc\UnitTestInfo.h 			SYMBIAN_OS_LAYER_PLATFORM_EXPORT_PATH(ecom\test_bed\UnitTestInfo.h
+..\Test_Bed\Inc\UnitTestInfo.inl 		SYMBIAN_OS_LAYER_PLATFORM_EXPORT_PATH(ecom\test_bed\UnitTestInfo.inl
+..\Test_Bed\Inc\UnitTestObserver.h 		SYMBIAN_OS_LAYER_PLATFORM_EXPORT_PATH(ecom\test_bed\UnitTestObserver.h
+
+PRJ_MMPFILES
+// specify the .mmp files required for building the important component releasables
+// note that you should specify any .mmp files for test programs further down the file.
+//
+// It's best if the .MMP files are specified in the order in which the components are
+// built, but that eventually shouldn't matter
+//
+// Use C++ style #defines to denote that a component is only built for a particular platform
+//
+// specify "tidy" if the component you need to build doesn't need to be released to
+// the rest of the company
+// specify "ignore" if the MMP file exists but should be ignored - William wants this!
+
+// Firstly build the plug-in framework library for profiling
+..\Framework\MMPFiles\Magic.mmp
+
+// Now the test bed framework
+..\Test_Bed\MMPFiles\test_bed.mmp
+
+PRJ_TESTMMPFILES
+// specify the .mmp files required for building any test programs here
+//
+// you can specify "manual" to denote that a test should be listed in a generated
+// batch file for running a group of tests which require user input during testing.
+// you can specify "support" to denote that a file is a test support file and shouldn't
+// be listed in a batch file for running a group of tests
+// By default, each test will be listed in a batch file for running a group of tests
+// which can be left to run without requiring watching over by the person running the tests,
+// i.e. tests where no user input is required.  The default will apply if neither "manual"
+// or "support" is specified.
+
+// Self test library
+..\Test_Bed\MMPFiles\ComponentInfoTest.mmp
+..\Test_Bed\MMPFiles\DefaultLogOutputTest.mmp
+..\Test_Bed\MMPFiles\DataLoggerTest.mmp
+..\Test_Bed\MMPFiles\TransitionTest.mmp
+
+// Build the example Magic implementation test libs
+..\Framework\MMPFiles\Example.mmp
+..\Framework\MMPFiles\Suicidal.mmp
+
+// and the MAGIC test harness libraries
+..\Framework\MMPFiles\ExampleTests.mmp
+..\Framework\MMPFiles\DiscovererTest.mmp
+..\Framework\MMPFiles\RegistryDataTest.mmp
+..\Framework\MMPFiles\LoadManagerTest.mmp
+..\Framework\MMPFiles\MagicServerTest.mmp
+..\Framework\MMPFiles\RegistrarTest.mmp
+..\Framework\MMPFiles\ResolverTest.mmp
+
+// and the default commandline test harness
+..\Test_Bed\MMPFiles\test_harness.mmp
+
+PRJ_TESTEXPORTS
+// Specify the files to be exported to get test builds to work

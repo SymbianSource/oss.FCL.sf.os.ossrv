@@ -63,3 +63,4 @@ MACRO __wchar_t_defined
 #endif //GCCXML
 
 SMPSAFE
+PAGED

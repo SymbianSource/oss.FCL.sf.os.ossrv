@@ -55,6 +55,9 @@ TInt CSuicideInterfaceCreateAndDestroyUnitTest::RunError(TInt aError)
 	iStateAccessor = NULL;
 	delete iCtorValidator;
 	delete iDtorValidator;
+	
+	iCtorValidator = 0;
+	iDtorValidator = 0;
 
 	return error;
 	}
