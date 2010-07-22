@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET      t_rogueplugin.exe
+TARGET      t_rogueplugin.exe		//RTEST
 TARGETTYPE  exe
 
 SOURCEPATH  ../SimpleTests

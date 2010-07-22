@@ -22,7 +22,7 @@
 #include <errno.h>
 #include <netinet/in.h>
 #include <sys/un.h>
-#include <utf.H>
+#include <utf.h>
 #include "fdesc.h"
 #include "systemspecialfilercg.h"
 #include "lposix.h"

@@ -27,6 +27,7 @@ int main()
     int retval[10];
     wchar_t* mycharstring = L"hellohello";
     RBuf16 buf;
+    buf.CreateL(30);
     retval[0]= WcharToRbuf16(mycharstring,buf);
     printf("The first value in retval array is %d\n", retval[0]);
 

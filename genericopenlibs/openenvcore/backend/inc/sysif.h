@@ -114,7 +114,7 @@ class TCLSICleanup
 */
 	{
 public:
-	void StorePtrs(RHeap* aHeap, RFs* aFs, RSocketServ* aSs, RCommServ* aCs, RFastLock* aSsLock, RFastLock* aCsLock, RTz * aTzs)
+	void StorePtrs(RHeap* aHeap, RFs* aFs, RSocketServ* aSs, RCommServ* aCs, RFastLock* aSsLock, RFastLock* aCsLock)
 		{
 		iHeap = aHeap;
 		iFs = aFs;
@@ -122,7 +122,6 @@ public:
 		iCs = aCs;
 		iSsLock = aSsLock;
 		iCsLock = aCsLock;
-		iTzS = aTzs;
 		}
 
 	~TCLSICleanup()
@@ -133,7 +132,6 @@ public:
 		iCs->Close();
 		iCsLock->Close();
 		iHeap->Close();
-		iTzS->Close();
 		}
 private:
 	RHeap* iHeap;
@@ -142,7 +140,6 @@ private:
 	RCommServ* iCs;
 	RFastLock* iSsLock;
 	RFastLock* iCsLock;
-	RTz * iTzS;
 	};
 
 

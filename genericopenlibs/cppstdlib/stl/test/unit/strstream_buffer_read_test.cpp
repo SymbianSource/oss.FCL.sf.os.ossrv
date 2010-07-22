@@ -1,20 +1,4 @@
 /*
-* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
-* This component and the accompanying materials are made available
-* under the terms of "Eclipse Public License v1.0"
-* which accompanies this distribution, and is available
-* at the URL "http://www.eclipse.org/legal/epl-v10.html".
-*
-* Initial Contributors:
-* Nokia Corporation - initial contribution.
-*
-* Contributors:
-*
-* Description: 
-*
-*/
-/*
  * Note: Strstreams are really broken in STLport. But strstreams are 
  * obsolete, and even if ones was mentioned in D7.1--D7.4 of 
  * Standard, we have no wish to spent time with repair ones.

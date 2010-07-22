@@ -25,6 +25,7 @@ int main()
     wstring str(L"");
     __UHEAP_MARK;	
     RBuf8 buf;
+    buf.CreateL(10);
     int retval =ESuccess;
     retval = WstringToRbuf8(str, buf);
 

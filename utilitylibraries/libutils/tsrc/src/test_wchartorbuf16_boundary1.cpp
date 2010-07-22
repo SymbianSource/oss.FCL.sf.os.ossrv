@@ -28,6 +28,7 @@ int main()
     wchar_t* mywcharstring = L"Hello Widechar String";
     int wchar_length= wcslen(mywcharstring);
     RBuf16 myRBuf;
+    myRBuf.CreateL(30);
     myRBuf.CleanupClosePushL();
     retval = WcharToRbuf16 (mywcharstring, myRBuf);
 

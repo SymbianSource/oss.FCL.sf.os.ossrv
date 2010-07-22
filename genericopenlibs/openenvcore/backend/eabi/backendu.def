@@ -166,7 +166,7 @@ EXPORTS
 	_ZN21CLocalSystemInterface16RaiseTimerSignalEii @ 165 NONAME
 	_ZN21CLocalSystemInterface7OverrunERKi @ 166 NONAME
 	_ZN21CLocalSystemInterface8AddTimerERKi @ 167 NONAME
-	_ZN21CLocalSystemInterface9FindTimerERKi @ 168 NONAME ABSENT
+	_ZN21CLocalSystemInterface9FindTimerERKi @ 168 NONAME
 	_Z10_aselect_rPiiP6fd_setS1_S1_P7timevalP14TRequestStatus @ 169 NONAME
 	_Z10_eselect_rPiiP6fd_setS1_S1_P7timevaliP14TRequestStatus @ 170 NONAME
 	_Z16_cancelaselect_rPiP14TRequestStatus @ 171 NONAME

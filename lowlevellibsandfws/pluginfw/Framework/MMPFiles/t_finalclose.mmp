@@ -18,7 +18,7 @@
 //
 
 
-TARGET      t_finalclose.exe
+TARGET      t_finalclose.exe		//RTEST
 TARGETTYPE  exe
 
 SOURCEPATH  ../../Framework/SimpleTests

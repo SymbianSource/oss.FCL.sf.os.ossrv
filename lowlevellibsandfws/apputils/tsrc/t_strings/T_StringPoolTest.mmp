@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET	t_stringpooltest.exe
+TARGET	t_stringpooltest.exe		//RTEST
 TARGETTYPE	EXE
 
 // UIDs for loading

@@ -30,18 +30,17 @@ REM ezlibtest
 // Include the CP850 charconv plug-in in the ROM as it is needed  by ziptest
 #include <charconv_codepage.iby>
 
-// batch file that runs all automatic ezlib tests
 data=ZSYSTEM\test\ezlibtests.bat		                                test\ezlibtests.bat
 
-file=ABI_DIR\BUILD_DIR\ziptest.exe		                                test\ziptest.exe
-file=ABI_DIR\BUILD_DIR\ezlibtest.exe	                                test\ezlibtest.exe
+
+
 file=ABI_DIR\BUILD_DIR\gzip.exe		                                    test\gzip.exe
 file=ABI_DIR\BUILD_DIR\example.exe		                                test\example.exe
 file=ABI_DIR\BUILD_DIR\ezfile.exe		                                test\ezfile.exe
-file=ABI_DIR\BUILD_DIR\ezdefect.exe		                                test\ezdefect.exe
-file=ABI_DIR\BUILD_DIR\ezexample.exe	                                test\ezexample.exe
-file=ABI_DIR\BUILD_DIR\gziptest.exe		                                test\gziptest.exe
-file=ABI_DIR\BUILD_DIR\inflateprimetest.exe	                            test\inflateprimetest.exe
+
+
+
+
 
 data=EPOCROOT##epoc32\wins\c\test\zip\holymoley.jar	                    test\zip\holymoley.jar
 data=EPOCROOT##epoc32\wins\c\test\zip\rfc2459.zip	                    test\zip\rfc2459.zip

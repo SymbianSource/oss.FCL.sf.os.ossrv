@@ -34,6 +34,7 @@ int main()
 
     char *src2=des1;
     RBuf16 des2;
+    des2.CreateL(30);
     retval2=CharToRbuf16(src2,des2);
     printf("retval2 value is %d\n", retval2);
 
@@ -55,6 +56,7 @@ int main()
     
     char* src6=des5;
     RBuf8 des6;
+    des6.CreateL(30);
     retval6= CharToRbuf8(src6,des6);
     printf("retval6 value is %d\n", retval6);
     

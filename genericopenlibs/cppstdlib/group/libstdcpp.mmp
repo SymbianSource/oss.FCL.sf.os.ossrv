@@ -343,3 +343,4 @@ DOCUMENT  warning_disable.dosc
 /* End of file */
 
 SMPSAFE
+PAGED

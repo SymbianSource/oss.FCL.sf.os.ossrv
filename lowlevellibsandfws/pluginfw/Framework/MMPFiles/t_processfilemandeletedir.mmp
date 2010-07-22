@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET		t_processfilemandeletedir.exe
+TARGET		t_processfilemandeletedir.exe				//RTEST
 // needed to access file system
 CAPABILITY  	TCB AllFiles
 

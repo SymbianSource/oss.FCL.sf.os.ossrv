@@ -1,20 +1,10 @@
-/*
-* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
-* This component and the accompanying materials are made available
-* under the terms of "Eclipse Public License v1.0"
-* which accompanies this distribution, and is available
-* at the URL "http://www.eclipse.org/legal/epl-v10.html".
-*
-* Initial Contributors:
-* Nokia Corporation - initial contribution.
-*
-* Contributors:
-*
-* Description: 
-*
-*/
-
+ /*
+  * Machine-independent glue to integrate David Gay's gdtoa
+  * package into libc.
+  *
+  * $FreeBSD: src/lib/libc/gdtoa/glue.c,v 1.2 2003/06/21 08:20:14 das Exp $
+  * © Portions copyright (c) 2005-2006  Nokia Corporation.  All rights reserved.
+  */
  
 #include <pthread.h>
 #include "libc_wsd_defs.h"

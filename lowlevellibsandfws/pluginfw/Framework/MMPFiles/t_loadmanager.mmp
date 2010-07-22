@@ -18,7 +18,7 @@
 UID			0x101FB5A8 0x10009E05
 VENDORID 		0x70000001
 
-TARGET			t_loadmanager.exe
+TARGET			t_loadmanager.exe			//RTEST
 TARGETTYPE		EXE
 
 USERINCLUDE		../../Test_Bed/inc 

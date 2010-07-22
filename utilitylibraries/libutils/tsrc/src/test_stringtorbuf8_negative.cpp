@@ -26,6 +26,7 @@ int main()
     string str;
     __UHEAP_MARK;
     RBuf8 buf;
+    buf.CreateL(30);
     buf.CleanupClosePushL();
     int retval =ESuccess;
     retval = StringToRbuf8(str, buf);

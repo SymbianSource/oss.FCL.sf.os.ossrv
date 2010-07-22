@@ -23,7 +23,7 @@ VENDORID 		0x70000001
 
 MACRO __ECOMSERVER_TESTING__
 
-TARGET 			t_resolver.exe
+TARGET 			t_resolver.exe			//RTEST
 TARGETTYPE		EXE
 
 USERINCLUDE		../../Test_Bed/inc 

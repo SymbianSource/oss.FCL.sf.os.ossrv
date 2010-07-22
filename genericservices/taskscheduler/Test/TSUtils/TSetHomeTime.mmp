@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET        tsethometime.exe
+TARGET        tsethometime.exe		//RTEST
 
 TARGETTYPE    exe
 

@@ -48,7 +48,7 @@ PRJ_EXPORTS
 PRJ_MMPFILES
     ezlib.mmp
     ezip.mmp
-	#include "../test/oldezlib/group/BLD.INF"
+	#include "../test/oldezlib/group/bld.inf"
 	#include "../test/rtest/group/bld.inf"
 	#include "../test/tef/group/bld.inf"
 #endif //ifndef TOOLS endif

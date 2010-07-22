@@ -26,6 +26,7 @@ int main()
     __UHEAP_MARK;
     int retval =ESuccess;
     RBuf16 buf;
+    buf.CreateL(30);
     retval = StringToRbuf16(s, buf);
 
     if (retval == ESuccess)

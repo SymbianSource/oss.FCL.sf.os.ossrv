@@ -15,6 +15,9 @@
  *
  */
 
+#ifndef _STLP_NEW_H
+#define _STLP_NEW_H
+
 # if !defined (_STLP_OUTERMOST_HEADER_ID)
 #  define _STLP_OUTERMOST_HEADER_ID 0x848
 #  include <stl/_prolog.h>
@@ -22,11 +25,7 @@
 #  define _STLP_DONT_POP_0x848
 # endif
 
-#ifndef _STLP_NEW_H
-#define _STLP_NEW_H
-
-
-# if (!(defined( _STLP_WINCE ) || defined (__SYMBIAN32__)) 
+# if (!(defined( _STLP_WINCE ) || defined (__SYMBIAN32__)))
 # if defined (__BORLANDC__)
 #  include <new.>
 # elif (__INTEL_COMPILER >= 800)
@@ -40,8 +39,6 @@
 # endif
 # endif /* STL_WINCE */
 
-#endif //_STLP_NEW_H
-
 # if (_STLP_OUTERMOST_HEADER_ID == 0x848)
 #  if ! defined (_STLP_DONT_POP_0x848)
 #   include <stl/_epilog.h>
@@ -49,6 +46,8 @@
 #   endif
 #   undef  _STLP_DONT_POP_0x848
 # endif
+
+#endif //_STLP_NEW_H
 
 // Local Variables:
 // mode:C++

@@ -32,6 +32,7 @@ int main()
     
     char *src2= des1;
     RBuf8 des2;
+    des2.CreateL(30);
     retval2= CharToRbuf8(src2,des2);
     printf("retval2 value is %d\n", retval2);
 

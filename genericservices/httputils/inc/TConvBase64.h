@@ -56,7 +56,7 @@ const TInt8 Base64ToAscii[65]=
     };
     
 /**
-Base64 encoding and decoding class, complaint with RFC-3548.
+Base64 encoding and decoding class.
 @internalAll
 @released
 */    
@@ -102,7 +102,7 @@ public:
 	IMPORT_C TBase64();
 	IMPORT_C TInt Encode( const TDesC8& aSrcString, TDes8& rDestString);
 	IMPORT_C TBool Decode( const TDesC8& aSrcString, TDes8& rDestString);
-
+	IMPORT_C TInt PortableEncode(const TDesC8& aSrcString, TDes8& aDestString, TInt aLineLength=-1);
 private:
 
 	TInt iShiftStored;

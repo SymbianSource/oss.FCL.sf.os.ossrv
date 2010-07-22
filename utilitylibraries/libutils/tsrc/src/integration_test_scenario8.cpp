@@ -33,7 +33,7 @@ int main()
     char * src2= des1;
     TPtr16 des2 ((unsigned short*)" ",30);
     wchar_t *aPtr = new wchar_t[50];
-    retval2= CharpToTptr16(src2,aPtr,des2);
+    retval2= CharpToTptr16(src2,des2);
     printf("retval2 value is %d\n", retval2);
 
     TPtr16 src3= des2;
@@ -43,6 +43,7 @@ int main()
 
     string src4= des3;
     RBuf16 des4;
+    des4.CreateL(30);
     retval4= StringToRbuf16(src4,des4);
     printf("retval4 value is %d\n", retval4);
 

@@ -13,7 +13,7 @@
 // Description:
 //
 
-target		t_bafldefect.exe
+target		t_bafldefect.exe	//RTEST
 CAPABILITY	WriteDeviceData
 targettype	exe
 

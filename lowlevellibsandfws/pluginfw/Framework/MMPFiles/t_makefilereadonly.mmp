@@ -15,7 +15,7 @@
 // 
 //
 
-TARGET		t_makefilereadonly.exe
+TARGET		t_makefilereadonly.exe		//RTEST
 // miscellaneous file operations for test harnesses
 CAPABILITY  	TCB AllFiles
 

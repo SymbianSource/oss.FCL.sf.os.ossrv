@@ -230,14 +230,7 @@ EXPORT_C int WcharToRbuf8(const wchar_t* aSrc, RBuf8& aDes)
 
 	if(minusone != wcstombs(buf, (const wchar_t*)aSrc, wlen*2))
 	{
-	    if (KErrNone == aDes.Create(wlen*2))
-	    {
-	    	aDes.Copy((const unsigned char *)buf, wlen*2);	
-	    }
-		else 
-		{
-			retval = EInsufficientSystemMemory;
-		}			
+	  aDes.Copy((const unsigned char *)buf, wlen*2);		
 	}
 	else
 	{

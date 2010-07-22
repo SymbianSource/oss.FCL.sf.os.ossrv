@@ -15,7 +15,7 @@
 // 
 //
 
-target 		t_ecomentry.exe
+target 		t_ecomentry.exe			//RTEST
 targettype 		exe
 
 OS_LAYER_SYSTEMINCLUDE_SYMBIAN

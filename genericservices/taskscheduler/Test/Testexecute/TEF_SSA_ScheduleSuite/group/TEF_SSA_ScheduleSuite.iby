@@ -20,8 +20,6 @@
 
 #include <te_floating_schedulesuite.iby>
 
-data=EPOCROOT##Epoc32\release\winscw\udeb\z\TEF_SchSvr\TEF_SSA_ScheduleSuite.script 	TEF_SchSvr\TEF_SSA_ScheduleSuite.script
-data=EPOCROOT##Epoc32\release\winscw\udeb\z\TEF_SchSvr\TEF_SSA_ScheduleSuite.ini 	TEF_SchSvr\TEF_SSA_ScheduleSuite.ini
 
 file=ABI_DIR\BUILD_DIR\TEF_SSA_ScheduleSuite.exe		System\libs\TEF_SSA_ScheduleSuite.exe
 
