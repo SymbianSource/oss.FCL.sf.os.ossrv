@@ -74,9 +74,6 @@ MACRO       _STLP_DESIGNATED_DLL
 MACRO 		_WCHAR_T_DECLARED
 
 
-#ifdef GCCE
-DEFFILE		libstdcppu_gcce.def
-#endif
 
 // End of file
 
