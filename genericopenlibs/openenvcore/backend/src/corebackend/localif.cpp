@@ -3227,7 +3227,7 @@ unsigned int CLocalSystemInterface::alarm(unsigned int seconds)
 // CLocalSystemInterface::FindTimer
 // -----------------------------------------------------------------------------
 //
-EXPORT_C TInt CLocalSystemInterface::FindTimer(const TInt& aTimerId) 
+TInt CLocalSystemInterface::FindTimer(const TInt& aTimerId) 
 	{
 	iTimerOverrunsMutex.Wait();
 
