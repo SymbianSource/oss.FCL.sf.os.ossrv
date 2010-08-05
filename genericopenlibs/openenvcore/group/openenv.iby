@@ -19,8 +19,8 @@
 // libc.dll has a dependancy on Timezone Server
 #include "timezonelocalization.iby"
 
-file=ABI_DIR\BUILD_DIR\LibLogger.dll       	   sys\bin\LibLogger.dll 
-file=ABI_DIR\BUILD_DIR\LibCIpcServer.exe   	   sys\bin\LibCIpcServer.exe 
+file=ABI_DIR\BUILD_DIR\liblogger.dll       	   sys\bin\LibLogger.dll 
+file=ABI_DIR\BUILD_DIR\libcipcserver.exe   	   sys\bin\LibCIpcServer.exe 
 file=ABI_DIR\BUILD_DIR\backend.dll         	   sys\bin\backend.dll 
 file=ABI_DIR\BUILD_DIR\libm.dll            	   sys\bin\libm.dll 
 file=ABI_DIR\BUILD_DIR\libc.dll            	   sys\bin\libc.dll 

@@ -29,6 +29,7 @@ data=ZDRIVE\collate-1.unicode					\collate-1.unicode
 data=ZDRIVE\NormalizationTest.txt				\NormalizationTest.txt
 data=ZDRIVE\4096-random-bytes 					\4096-random-bytes
 data=ZDRIVE\valid-01.xbel						\valid-01.xbel
+data=ZDRIVE\valid-01.xbel						\Private\e00000e6\file.xbel
 
 //batch file
 data=\epoc32\winscw\c\testglib_hardware.bat		\testglib_hardware.bat
@@ -127,3 +128,59 @@ file=ABI_DIR\BUILD_DIR\utf8_pointer.exe		\sys\bin\utf8_pointer.exe
 file=ABI_DIR\BUILD_DIR\utf8_validate.exe		\sys\bin\utf8_validate.exe
 
 
+file=ABI_DIR\BUILD_DIR\array1_test.exe	\sys\bin\array1_test.exe 
+file=ABI_DIR\BUILD_DIR\array2_test.exe	\sys\bin\array2_test.exe 
+file=ABI_DIR\BUILD_DIR\app_name.exe	\sys\bin\app_name.exe 
+file=ABI_DIR\BUILD_DIR\at_exit.exe	\sys\bin\at_exit.exe 
+file=ABI_DIR\BUILD_DIR\base_name.exe	\sys\bin\base_name.exe 
+file=ABI_DIR\BUILD_DIR\bookmarkfile_test1.exe	\sys\bin\bookmarkfile_test1.exe
+file=ABI_DIR\BUILD_DIR\list_env.exe	\sys\bin\list_env.exe 
+file=ABI_DIR\BUILD_DIR\majorversion_test.exe	\sys\bin\majorversion_test.exe 
+file=ABI_DIR\BUILD_DIR\nullity_ptr.exe	\sys\bin\nullity_ptr.exe 
+file=ABI_DIR\BUILD_DIR\test_utils.exe	\sys\bin\test_utils.exe 
+file=ABI_DIR\BUILD_DIR\unichar_test.exe	\sys\bin\unichar_test.exe
+file=ABI_DIR\BUILD_DIR\uri_funcs.exe	\sys\bin\uri_funcs.exe
+file=ABI_DIR\BUILD_DIR\utf8_string.exe	\sys\bin\utf8_string.exe 
+
+
+//BC executables
+file=ABI_DIR\BUILD_DIR\tutf8.exe \sys\bin\tutf8.exe
+file=ABI_DIR\BUILD_DIR\tnode.exe \sys\bin\tnode.exe
+file=ABI_DIR\BUILD_DIR\tunichar.exe \sys\bin\tunichar.exe
+file=ABI_DIR\BUILD_DIR\tmisc.exe \sys\bin\tmisc.exe
+file=ABI_DIR\BUILD_DIR\tslist.exe \sys\bin\tslist.exe
+file=ABI_DIR\BUILD_DIR\ttrash.exe \sys\bin\ttrash.exe
+file=ABI_DIR\BUILD_DIR\ttree.exe \sys\bin\ttree.exe
+file=ABI_DIR\BUILD_DIR\tmanual.exe \sys\bin\tmanual.exe
+file=ABI_DIR\BUILD_DIR\tgstring.exe \sys\bin\tgstring.exe
+file=ABI_DIR\BUILD_DIR\tscanner.exe \sys\bin\tscanner.exe
+file=ABI_DIR\BUILD_DIR\toption.exe \sys\bin\toption.exe
+file=ABI_DIR\BUILD_DIR\tthread.exe \sys\bin\tthread.exe
+file=ABI_DIR\BUILD_DIR\tasyncqueue.exe \sys\bin\tasyncqueue.exe
+file=ABI_DIR\BUILD_DIR\closure-marshal.exe \sys\bin\marshal.exe
+file=ABI_DIR\BUILD_DIR\paramspec-test.exe \sys\bin\paramspec-test.exe
+file=ABI_DIR\BUILD_DIR\asyncqueue-test.exe \sys\bin\asyncqueue-test.exe
+file=ABI_DIR\BUILD_DIR\utf8-pointer.exe \sys\bin\utf8-pointer.exe 
+file=ABI_DIR\BUILD_DIR\extra_tests.exe \sys\bin\extra_tests.exe
+file=ABI_DIR\BUILD_DIR\unichar_test.exe \sys\bin\unichar_test.exe
+file=ABI_DIR\BUILD_DIR\child-test1.exe \sys\bin\child-test1.exe
+file=ABI_DIR\BUILD_DIR\child-test2.exe \sys\bin\child-test2.exe
+file=ABI_DIR\BUILD_DIR\option-test.exe \sys\bin\option-test.exe
+file=ABI_DIR\BUILD_DIR\printf-test.exe \sys\bin\printf-test.exe 
+file=ABI_DIR\BUILD_DIR\string-test.exe \sys\bin\string-test.exe 
+file=ABI_DIR\BUILD_DIR\strtod-test.exe \sys\bin\strtod-test.exe
+file=ABI_DIR\BUILD_DIR\gvalue-test.exe \sys\bin\gvalue-test.exe
+file=ABI_DIR\BUILD_DIR\byte_array_test.exe \sys\bin\byte_array_test.exe
+file=ABI_DIR\BUILD_DIR\dir_test.exe \sys\bin\dir_test.exe
+file=ABI_DIR\BUILD_DIR\misc_test.exe \sys\bin\misc_test.exe
+file=ABI_DIR\BUILD_DIR\cache_test.exe \sys\bin\cache_test.exe
+file=ABI_DIR\BUILD_DIR\dataset_test.exe \sys\bin\dataset_test.exe
+file=ABI_DIR\BUILD_DIR\keyfile_test.exe \sys\bin\keyfile_test.exe
+file=ABI_DIR\BUILD_DIR\mem_test.exe \sys\bin\mem_test.exe
+file=ABI_DIR\BUILD_DIR\datalist_test.exe \sys\bin\datalist_test.exe
+file=ABI_DIR\BUILD_DIR\hook_test.exe \sys\bin\hook_test.exe
+file=ABI_DIR\BUILD_DIR\log_test.exe \sys\bin\log_test.exe
+file=ABI_DIR\BUILD_DIR\main_loop_test.exe \sys\bin\main_loop_test.exe
+file=ABI_DIR\BUILD_DIR\mem_profile_test.exe \sys\bin\mem_profile_test.exe
+file=ABI_DIR\BUILD_DIR\g_test1.exe \sys\bin\g_test1.exe
+file=ABI_DIR\BUILD_DIR\g_test2.exe \sys\bin\g_test2.exe

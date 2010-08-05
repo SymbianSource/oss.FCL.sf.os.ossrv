@@ -21,9 +21,9 @@ file=ABI_DIR\BUILD_DIR\bafl.dll 		System\Libs\Bafl.dll
 file=ABI_DIR\BUILD_DIR\baksrv.dll		System\Libs\baksrv.dll
 file=ABI_DIR\BUILD_DIR\baksrvs.exe		System\Programs\baksrvs.exe
 
-data=ZPRIVATE\100048AA\backup_registration.xml private\100048aa\backup_registration.xml
+data=ZPRIVATE\100048aa\backup_registration.xml private\100048aa\backup_registration.xml
 
-#include "initialiseLocale.iby"
+#include "initialiselocale.iby"
 #include <bsul.iby>
 #include <centralrepository.iby>
 

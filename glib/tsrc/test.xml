@@ -4,7 +4,7 @@
     <owner>admin</owner>
     <priority>10</priority>
     <buildid></buildid>
-    <name>9.2_MCL_RELEASE_glib-2.20.4_vasco</name>
+    <name>glib_vasco</name>
     <target>
         <device rank="master" alias="default">
             <property name="HARNESS" value="ATSINTERFACE" />
@@ -13,7 +13,7 @@
         </device>
     </target>
     <plan id="238.230" name="Imported ATS test plan ATSINPUT_GLIB-2.20.4.zip" harness="ATSINTERFACE" enabled="true" passrate="100">
-        <session id="238.230.1" name="scarfe_ats_test_session" harness="ATSINTERFACE" enabled="true" passrate="100">
+        <session id="238.230.1" name="ats_test_session" harness="ATSINTERFACE" enabled="true" passrate="100">
             <set id="238.230.1.1" name="glib-2.20.4_utf8_validate_blr" harness="ATSINTERFACE" enabled="true" passrate="100">
                 <target>
                     <device rank="master" alias="default"/>
@@ -1284,7 +1284,7 @@
                     <step id="238.230.1.50.1.4" name="Test Step 4 (execute)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="true">
                         <command>execute</command>
                         <params>
-                            <param file="c:\sys\bin\module_test.exe"/>
+                            <param file="z:\sys\bin\module_test.exe"/>
                             <param result-file="c:\spd_logs\xml\module-test.xml"/>
                             <param timeout="10000"/>
                         </params>
@@ -1882,7 +1882,7 @@
                     <step id="238.230.1.74.1.2" name="Test Step 2 (execute)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="true">
                         <command>execute</command>
                         <params>
-                            <param file="c:\sys\bin\dirname_test.exe"/>
+                            <param file="z:\sys\bin\dirname_test.exe"/>
                             <param result-file="c:\spd_logs\xml\dirname-test.xml"/>
                             <param timeout="10000"/>
                         </params>
@@ -2023,12 +2023,21 @@
                             <param component-path="ATSINPUT/components/glib-2.20.4_child_test"/>
                         </params>
                     </step>
+                    <step id="238.230.1.80.1.1" name="Test Step 1 (install)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="false">
+                        <command>install</command>
+                        <params>
+                            <param type="binary"/>
+                            <param src="helloworld.exe"/>
+                            <param dst="c:\sys\bin\helloworld.exe"/>
+                            <param component-path="ATSINPUT/components/glib-2.20.4_child_test"/>
+                        </params>
+                    </step>
                     <step id="238.230.1.80.1.2" name="Test Step 2 (execute)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="true">
                         <command>execute</command>
                         <params>
-                            <param file="c:\sys\bin\child_test.exe"/>
+                            <param file="z:\sys\bin\child_test.exe"/>
                             <param result-file="c:\spd_logs\xml\child-test1.xml"/>
-                            <param timeout="10000"/>
+                            <param timeout="120000"/>
                         </params>
                     </step>
                 </case>
@@ -2211,7 +2220,8 @@
                     </step>
                 </case>
             </set>
-            <set id="238.230.1.88" name="glib-2.20.4_accumulator_blr" harness="ATSINTERFACE" enabled="true" passrate="100">
+			
+			<set id="238.230.1.88" name="glib-2.20.4_accumulator_blr" harness="ATSINTERFACE" enabled="true" passrate="100">
                 <target>
                     <device rank="master" alias="default"/>
                 </target>
@@ -2233,19 +2243,377 @@
                             <param timeout="10000"/>
                         </params>
                     </step>
-                    <step id="238.230.1.88.1.3" name="Fetch Test module Logs" harness="ATSINTERFACE" enabled="true" passrate="100" significant="false">
-                        <command>fetch-log</command>
+                    </case>
+           </set>
+      
+      <set id="238.230.1.89" name="glib-2.20.4_array1_test_blr" harness="ATSINTERFACE" enabled="true" passrate="100">
+                <target>
+                    <device rank="master" alias="default"/>
+                </target>
+                <case id="238.230.1.89.1" name="Test Case 1" harness="ATSINTERFACE" enabled="true" passrate="100">
+                    <step id="238.230.1.89.1.1" name="Test Step 1 (install)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="false">
+                        <command>install</command>
                         <params>
-                            <param type="text"/>
-                            <param delete="true"/>
-                            <param path="C:\logtests.txt"/>
+                            <param type="binary"/>
+                            <param src="array1_test.exe"/>
+                            <param dst="c:\sys\bin\array1_test.exe"/>
+                            <param component-path="ATSINPUT/components/glib-2.20.4_array1_test"/>
+                        </params>
+                    </step>
+                    <step id="238.230.1.89.1.2" name="Test Step 2 (execute)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="true">
+                        <command>execute</command>
+                        <params>
+                            <param file="c:\sys\bin\array1_test.exe"/>
+                            <param result-file="c:\spd_logs\xml\array1-test.xml"/>
+                            <param timeout="10000"/>
                         </params>
                     </step>
                 </case>
             </set>
+            
+      <set id="238.230.1.90" name="glib-2.20.4_array2_test_blr" harness="ATSINTERFACE" enabled="true" passrate="100">
+                <target>
+                    <device rank="master" alias="default"/>
+                </target>
+                <case id="238.230.1.90.1" name="Test Case 1" harness="ATSINTERFACE" enabled="true" passrate="100">
+                    <step id="238.230.1.90.1.1" name="Test Step 1 (install)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="false">
+                        <command>install</command>
+                        <params>
+                            <param type="binary"/>
+                            <param src="array2_test.exe"/>
+                            <param dst="c:\sys\bin\array2_test.exe"/>
+                            <param component-path="ATSINPUT/components/glib-2.20.4_array2_test"/>
+                        </params>
+                    </step>
+                    <step id="238.230.1.90.1.2" name="Test Step 2 (execute)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="true">
+                        <command>execute</command>
+                        <params>
+                            <param file="c:\sys\bin\array2_test.exe"/>
+                            <param result-file="c:\spd_logs\xml\array2-test.xml"/>
+                            <param timeout="10000"/>
+                        </params>
+                    </step>
+                </case>
+            </set>
+            
+            
+      <set id="238.230.1.91" name="glib-2.20.4_app_name_blr" harness="ATSINTERFACE" enabled="true" passrate="100">
+                <target>
+                    <device rank="master" alias="default"/>
+                </target>
+                <case id="238.230.1.91.1" name="Test Case 1" harness="ATSINTERFACE" enabled="true" passrate="100">
+                    <step id="238.230.1.91.1.1" name="Test Step 1 (install)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="false">
+                        <command>install</command>
+                        <params>
+                            <param type="binary"/>
+                            <param src="app_name.exe"/>
+                            <param dst="c:\sys\bin\app_name.exe"/>
+                            <param component-path="ATSINPUT/components/glib-2.20.4_app_name"/>
+                        </params>
+                    </step>
+                    <step id="238.230.1.91.1.2" name="Test Step 2 (execute)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="true">
+                        <command>execute</command>
+                        <params>
+                            <param file="c:\sys\bin\app_name.exe"/>
+                            <param result-file="c:\spd_logs\xml\app_name_log.xml"/>
+                            <param timeout="10000"/>
+                        </params>
+                    </step>
+                </case>
+            </set>
+            
+            
+      <set id="238.230.1.92" name="glib-2.20.4_at_exit_blr" harness="ATSINTERFACE" enabled="true" passrate="100">
+                <target>
+                    <device rank="master" alias="default"/>
+                </target>
+                <case id="238.230.1.92.1" name="Test Case 1" harness="ATSINTERFACE" enabled="true" passrate="100">
+                    <step id="238.230.1.92.1.1" name="Test Step 1 (install)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="false">
+                        <command>install</command>
+                        <params>
+                            <param type="binary"/>
+                            <param src="at_exit.exe"/>
+                            <param dst="c:\sys\bin\at_exit.exe"/>
+                            <param component-path="ATSINPUT/components/glib-2.20.4_at_exit"/>
+                        </params>
+                    </step>
+                    <step id="238.230.1.92.1.2" name="Test Step 2 (execute)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="true">
+                        <command>execute</command>
+                        <params>
+                            <param file="c:\sys\bin\at_exit.exe"/>
+                            <param result-file="c:\spd_logs\xml\at_exit_log.xml"/>
+                            <param timeout="10000"/>
+                        </params>
+                    </step>
+                </case>
+            </set>
+            
+            
+      <set id="238.230.1.93" name="glib-2.20.4_base_name_blr" harness="ATSINTERFACE" enabled="true" passrate="100">
+                <target>
+                    <device rank="master" alias="default"/>
+                </target>
+                <case id="238.230.1.93.1" name="Test Case 1" harness="ATSINTERFACE" enabled="true" passrate="100">
+                    <step id="238.230.1.93.1.1" name="Test Step 1 (install)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="false">
+                        <command>install</command>
+                        <params>
+                            <param type="binary"/>
+                            <param src="base_name.exe"/>
+                            <param dst="c:\sys\bin\base_name.exe"/>
+                            <param component-path="ATSINPUT/components/glib-2.20.4_base_name"/>
+                        </params>
+                    </step>
+                    <step id="238.230.1.93.1.2" name="Test Step 2 (execute)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="true">
+                        <command>execute</command>
+                        <params>
+                            <param file="c:\sys\bin\base_name.exe"/>
+                            <param result-file="c:\spd_logs\xml\base_name_log.xml"/>
+                            <param timeout="10000"/>
+                        </params>
+                    </step>
+                </case>
+            </set>
+                  
+      			<set id="238.230.1.94" name="glib-2.20.4_bookmarkfile_test1_blr" harness="ATSINTERFACE" enabled="true" passrate="100">
+                <target>
+                    <device rank="master" alias="default"/>
+                </target>
+                <case id="238.230.1.94.1" name="Test Case 1" harness="ATSINTERFACE" enabled="true" passrate="100">
+                    <step id="238.230.1.94.1.1" name="Test Step 1 (install)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="false">
+                        <command>install</command>
+                        <params>
+                            <param type="binary"/>
+                            <param src="bookmarkfile_test1.exe"/>
+                            <param dst="c:\sys\bin\bookmarkfile_test1.exe"/>
+                            <param component-path="ATSINPUT/components/glib-2.20.4_bookmarkfile_test1"/>
+                        </params>
+                    </step>
+		    						<step id="238.230.1.94.1.2" name="Test Step 2 (install)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="false">
+                        <command>install</command>
+                        <params>
+                            <param type="data"/>
+                            <param src="valid-01.xbel"/>
+                            <param dst="C:\valid-01.xbel"/>
+                            <param component-path="ATSINPUT/components/glib-2.20.4_iochannel_test"/>
+                        </params>
+                    </step>   
+                    <step id="238.230.1.94.1.3" name="Test Step 3 (execute)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="true">
+                        <command>execute</command>
+                        <params>
+                            <param file="c:\sys\bin\bookmarkfile_test1.exe"/>
+                            <param parameters="c:\valid-01.xbel"/>
+                            <param result-file="c:\spd_logs\xml\bookmarkfile-test1.xml"/>
+                            <param timeout="10000"/>
+                        </params> 
+                        </step> 
+                </case>
+            </set>                               
+            
+    	<set id="238.230.1.95" name="glib-2.20.4_list_env_blr" harness="ATSINTERFACE" enabled="true" passrate="100">
+                <target>
+                    <device rank="master" alias="default"/>
+                </target>
+                <case id="238.230.1.95.1" name="Test Case 1" harness="ATSINTERFACE" enabled="true" passrate="100">
+                    <step id="238.230.1.95.1.1" name="Test Step 1 (install)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="false">
+                        <command>install</command>
+                        <params>
+                            <param type="binary"/>
+                            <param src="list_env.exe"/>
+                            <param dst="c:\sys\bin\list_env.exe"/>
+                            <param component-path="ATSINPUT/components/glib-2.20.4_list_env"/>
+                        </params>
+                    </step>
+                    <step id="238.230.1.95.1.2" name="Test Step 2 (execute)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="true">
+                        <command>execute</command>
+                        <params>
+                            <param file="c:\sys\bin\list_env.exe"/>
+                            <param result-file="c:\spd_logs\xml\list_env_log.xml"/>
+                            <param timeout="10000"/>
+                        </params>
+                    </step>
+                </case>
+            </set>
+            
+		<set id="238.230.1.96" name="glib-2.20.4_majorversion_test_blr" harness="ATSINTERFACE" enabled="true" passrate="100">
+                <target>
+                    <device rank="master" alias="default"/>
+                </target>
+                <case id="238.230.1.96.1" name="Test Case 1" harness="ATSINTERFACE" enabled="true" passrate="100">
+                    <step id="238.230.1.96.1.1" name="Test Step 1 (install)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="false">
+                        <command>install</command>
+                        <params>
+                            <param type="binary"/>
+                            <param src="majorversion_test.exe"/>
+                            <param dst="c:\sys\bin\majorversion_test.exe"/>
+                            <param component-path="ATSINPUT/components/glib-2.20.4_majorversion_test"/>
+                        </params>
+                    </step>
+                    <step id="238.230.1.96.1.2" name="Test Step 2 (execute)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="true">
+                        <command>execute</command>
+                        <params>
+                            <param file="c:\sys\bin\majorversion_test.exe"/>
+                            <param result-file="c:\spd_logs\xml\version-test.xml"/>
+                            <param timeout="10000"/>
+                        </params>
+                    </step>
+                </case>
+            </set>
+      
+      <set id="238.230.1.97" name="glib-2.20.4_nullify_ptr_blr" harness="ATSINTERFACE" enabled="true" passrate="100">
+                <target>
+                    <device rank="master" alias="default"/>
+                </target>
+                <case id="238.230.1.97.1" name="Test Case 1" harness="ATSINTERFACE" enabled="true" passrate="100">
+                    <step id="238.230.1.97.1.1" name="Test Step 1 (install)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="false">
+                        <command>install</command>
+                        <params>
+                            <param type="binary"/>
+                            <param src="nullify_ptr.exe"/>
+                            <param dst="c:\sys\bin\nullify_ptr.exe"/>
+                            <param component-path="ATSINPUT/components/glib-2.20.4_nullify_ptr"/>
+                        </params>
+                    </step>
+                    <step id="238.230.1.97.1.2" name="Test Step 2 (execute)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="true">
+                        <command>execute</command>
+                        <params>
+                            <param file="c:\sys\bin\nullify_ptr.exe"/>
+                            <param result-file="c:\spd_logs\xml\nullify_ptr_log.xml"/>
+                            <param timeout="10000"/>
+                        </params>
+                    </step>
+                </case>
+            </set>
+            
+			<set id="238.230.1.98" name="glib-2.20.4_test_utils_blr" harness="ATSINTERFACE" enabled="true" passrate="100">
+                <target>
+                    <device rank="master" alias="default"/>
+                </target>
+                <case id="238.230.1.98.1" name="Test Case 1" harness="ATSINTERFACE" enabled="true" passrate="100">
+                    <step id="238.230.1.98.1.1" name="Test Step 1 (install)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="false">
+                        <command>install</command>
+                        <params>
+                            <param type="binary"/>
+                            <param src="test_utils.exe"/>
+                            <param dst="c:\sys\bin\test_utils.exe"/>
+                            <param component-path="ATSINPUT/components/glib-2.20.4_test_utils"/>
+                        </params>
+                    </step>
+                    <step id="238.230.1.98.1.2" name="Test Step 2 (execute)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="true">
+                        <command>execute</command>
+                        <params>
+                            <param file="c:\sys\bin\test_utils.exe"/>
+                            <param result-file="c:\spd_logs\xml\test_utils_log.xml"/>
+                            <param timeout="10000"/>
+                        </params>
+                    </step>
+                </case>
+            </set>
+			
+			<set id="238.230.1.99" name="glib-2.20.4_unichar_test_blr" harness="ATSINTERFACE" enabled="true" passrate="100">
+                <target>
+                    <device rank="master" alias="default"/>
+                </target>
+                <case id="238.230.1.99.1" name="Test Case 1" harness="ATSINTERFACE" enabled="true" passrate="100">
+                    <step id="238.230.1.99.1.1" name="Test Step 1 (install)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="false">
+                        <command>install</command>
+                        <params>
+                            <param type="binary"/>
+                            <param src="unichar_test.exe"/>
+                            <param dst="c:\sys\bin\unichar_test.exe"/>
+                            <param component-path="ATSINPUT/components/glib-2.20.4_unichar_test"/>
+                        </params>
+                    </step>
+                    <step id="238.230.1.99.1.2" name="Test Step 2 (execute)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="true">
+                        <command>execute</command>
+                        <params>
+                            <param file="c:\sys\bin\unichar_test.exe"/>
+                            <param result-file="c:\spd_logs\xml\unichar_testlog.xml"/>
+                            <param timeout="10000"/>
+                        </params>
+                    </step>
+                </case>
+            </set>
+			
+			<set id="238.230.1.100" name="glib-2.20.4_uri_funcs_blr" harness="ATSINTERFACE" enabled="true" passrate="100">
+                <target>
+                    <device rank="master" alias="default"/>
+                </target>
+                <case id="238.230.1.100.1" name="Test Case 1" harness="ATSINTERFACE" enabled="true" passrate="100">
+                    <step id="238.230.1.100.1.1" name="Test Step 1 (install)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="false">
+                        <command>install</command>
+                        <params>
+                            <param type="binary"/>
+                            <param src="uri_funcs.exe"/>
+                            <param dst="c:\sys\bin\uri_funcs.exe"/>
+                            <param component-path="ATSINPUT/components/glib-2.20.4_uri_funcs"/>
+                        </params>
+                    </step>
+                    <step id="238.230.1.100.1.2" name="Test Step 2 (execute)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="true">
+                        <command>execute</command>
+                        <params>
+                            <param file="c:\sys\bin\uri_funcs.exe"/>
+                            <param result-file="c:\spd_logs\xml\uri_funcs_log.xml"/>
+                            <param timeout="10000"/>
+                        </params>
+                    </step>
+                    </case>
+           </set>
+                    
+      <set id="238.230.1.101" name="glib-2.20.4_utf8_string_blr" harness="ATSINTERFACE" enabled="true" passrate="100">
+                <target>
+                    <device rank="master" alias="default"/>
+                </target>
+                <case id="238.230.1.101.1" name="Test Case 1" harness="ATSINTERFACE" enabled="true" passrate="100">
+                    <step id="238.230.1.101.1.1" name="Test Step 1 (install)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="false">
+                        <command>install</command>
+                        <params>
+                            <param type="binary"/>
+                            <param src="utf8_string.exe"/>
+                            <param dst="c:\sys\bin\utf8_string.exe"/>
+                            <param component-path="ATSINPUT/components/glib-2.20.4_utf8_string"/>
+                        </params>
+                    </step>
+                    <step id="238.230.1.101.1.2" name="Test Step 2 (execute)" harness="ATSINTERFACE" enabled="true" passrate="100" significant="true">
+                        <command>execute</command>
+                        <params>
+                            <param file="c:\sys\bin\utf8_string.exe"/>
+                            <param result-file="c:\spd_logs\xml\utf8_string_log.xml"/>
+                            <param timeout="10000"/>
+                        </params>
+                    </step>
+                </case>
+            </set>
+     <set id="238.230.1.102" name="glib-2.20.4_logtest" harness="ATSINTERFACE" enabled="true" passrate="100">
+                <target>
+                    <device rank="master" alias="default"/>
+                </target>
+                <case id="238.230.1.102.1" name="Test Case 1" harness="ATSINTERFACE" enabled="true" passrate="100">                  
+                    <step id="238.230.1.102.1.1" name="Fetch Test module Logs" harness="ATSINTERFACE" enabled="true" passrate="100" significant="false">
+                        <command>fetch-log</command>
+                        <params>
+                            <param type="text"/>
+                            <param delete="false"/>
+                            <param path="c:\logtests.txt"/>
+                        </params>
+                    </step>
+                </case>
+            </set>         
         </session>
     </plan>
-    <files>
+    <files>    
+    	  <file>ATSINPUT/components/glib-2.20.4_utf8_string/armv5_urel/utf8_string.exe</file>  
+        <file>ATSINPUT/components/glib-2.20.4_uri_funcs/armv5_urel/uri_funcs.exe</file>  
+        <file>ATSINPUT/components/glib-2.20.4_unichar_test/armv5_urel/unichar_test.exe</file>
+        <file>ATSINPUT/components/glib-2.20.4_test_utils/armv5_urel/test_utils.exe</file>
+        <file>ATSINPUT/components/glib-2.20.4_nullify_ptr/armv5_urel/nullify_ptr.exe</file>
+        <file>ATSINPUT/components/glib-2.20.4_majorversion_test/armv5_urel/majorversion_test.exe</file>
+        <file>ATSINPUT/components/glib-2.20.4_list_env/armv5_urel/list_env.exe</file>
+        <file>ATSINPUT/components/glib-2.20.4_bookmarkfile_test1/armv5_urel/bookmarkfile_test1.exe</file>
+        <file>ATSINPUT/components/glib-2.20.4_base_name/armv5_urel/base_name.exe</file>
+        <file>ATSINPUT/components/glib-2.20.4_at_exit/armv5_urel/at_exit.exe</file>
+        <file>ATSINPUT/components/glib-2.20.4_app_name/armv5_urel/app_name.exe</file>
+        <file>ATSINPUT/components/glib-2.20.4_array2_test/armv5_urel/array2_test.exe</file>
+        <file>ATSINPUT/components/glib-2.20.4_array1_test/armv5_urel/array1_test.exe</file>
         <file>ATSINPUT/components/glib-2.20.4_accumulator/armv5_urel/accumulator.exe</file>
         <file>ATSINPUT/components/glib-2.20.4_array_test/armv5_urel/array_test.exe</file>
         <file>ATSINPUT/components/glib-2.20.4_asyncqueue_test/armv5_urel/asyncqueue_test.exe</file>
@@ -2256,6 +2624,7 @@
         <file>ATSINPUT/components/glib-2.20.4_bookmarkfile_test/General/valid-01.xbel</file>
         <file>ATSINPUT/components/glib-2.20.4_checksum_test/armv5_urel/checksum_test.exe</file>
         <file>ATSINPUT/components/glib-2.20.4_child_test/armv5_urel/child_test.exe</file>
+        <file>ATSINPUT/components/glib-2.20.4_child_test/armv5_urel/helloworld.exe</file>
         <file>ATSINPUT/components/glib-2.20.4_closures/armv5_urel/closures.exe</file>
         <file>ATSINPUT/components/glib-2.20.4_completion_test/armv5_urel/completion_test.exe</file>
         <file>ATSINPUT/components/glib-2.20.4_convert_test/armv5_urel/convert_test.exe</file>

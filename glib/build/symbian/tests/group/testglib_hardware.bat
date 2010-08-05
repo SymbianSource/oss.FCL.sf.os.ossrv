@@ -22,6 +22,7 @@ copy z:\utf8.txt c:\
 copy z:\collate-1.unicode c:\
 copy z:\NormalizationTest.txt c:\
 copy z:\4096-random-bytes c:\
+copy z:\valid-01.xbel c:\
 
 utf8_validate.exe
 utf8_pointer.exe
@@ -112,3 +113,61 @@ atomic_test.exe
 asyncqueue_test.exe
 array_test.exe
 accumulator.exe
+
+//newly added exes
+array1_test.exe
+array2_test.exe
+app_name.exe
+at_exit.exe
+base_name.exe
+bookmarkfile_test1.exe c:\valid-01.xbel
+list_env.exe
+majorversion_test.exe
+nullify_ptr.exe
+test_utils.exe
+utf8_string.exe
+uri_funcs.exe
+unichar_test.exe
+
+//from BC
+tutf8.exe 
+tnode.exe 
+tunichar.exe 
+tmisc.exe 
+tslist.exe 
+ttrash.exe 
+ttree.exe 
+tmanual.exe 
+tgstring.exe 
+tscanner.exe 
+toption.exe 
+tthread.exe 
+tasyncqueue.exe 
+closure-marshal.exe 
+paramspec-test.exe 
+asyncqueue-test.exe 
+utf8-pointer.exe 
+extra_tests.exe  
+child-test1.exe 
+child-test2.exe 
+option-test.exe 
+printf-test.exe 
+string-test.exe 
+strtod-test.exe 
+gvalue-test.exe 
+byte_array_test.exe 
+dir_test.exe 
+misc_test.exe 
+cache_test.exe 
+dataset_test.exe 
+keyfile_test.exe 
+mem_test.exe 
+datalist_test.exe 
+hook_test.exe 
+log_test.exe 
+main_loop_test.exe 
+mem_profile_test.exe 
+g_test1.exe 
+g_test2.exe 
+helloworld.exe 
+
