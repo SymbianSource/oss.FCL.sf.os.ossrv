@@ -14,9 +14,6 @@
 ;//
 
 "\epoc32\winscw\c\tstdapis\tstdio_auto.script"-"c:\tstdapis\tstdio_auto.script"
-"\epoc32\winscw\c\tstdapis\tstdio_filemode.script"-"c:\tstdapis\tstdio_filemode.script"
-"\epoc32\winscw\c\tstdapis\tstdio_manual.script"-"c:\tstdapis\tstdio_manual.script"
-"\epoc32\winscw\c\tstdapis\tstdio_fileop.script"-"c:\tstdapis\tstdio_fileop.script"
 "\epoc32\winscw\c\tstdapis\tstdio.ini"-"c:\tstdapis\tstdio.ini"
 
 

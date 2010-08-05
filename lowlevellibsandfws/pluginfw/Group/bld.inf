@@ -71,7 +71,10 @@ PRJ_EXPORTS
 ../Test_Bed/inc/UnitTestObserver.h 		SYMBIAN_OS_LAYER_PLATFORM_EXPORT_PATH(ecom/test_bed/unittestobserver.h)
 ../Test_Bed/inc/ManagerObserver.h 		SYMBIAN_OS_LAYER_PLATFORM_EXPORT_PATH(ecom/test_bed/managerobserver.h)
 
-
+//exporting .mk files manually for sirocco //to be removed after tools team make changes
+ecom3_buildsis.mk  /epoc32/tools/makefile_templates/syslibs/test/ecom3_buildsis.mk
+ecom3_postbuild.mk  /epoc32/tools/makefile_templates/syslibs/test/ecom3_postbuild.mk
+ecom3_relocatetarget.mk  /epoc32/tools/makefile_templates/syslibs/test/ecom3_relocatetarget.mk
 
 PRJ_MMPFILES
 // Firstly build the plug-in framework library

@@ -15,7 +15,8 @@
 
 "\sf\os\ossrv\genericopenlibs\openenvcore\libc\test\testifioctls\scripts\tifioctls.script"-"c:\tstdapis\tifioctls.script"
 "\sf\os\ossrv\genericopenlibs\openenvcore\libc\test\testifioctls\scripts\tifioctls_hw.script"-"c:\tstdapis\tifioctls_hw.script"
-"\sf\os\ossrv\genericopenlibs\openenvcore\libc\test\testifioctls\scripts\tifioctls_hw_manual.script"-"c:\tstdapis\tifioctls_hw_manual.script"
+; commented it as these are manual test
+;"\sf\os\ossrv\genericopenlibs\openenvcore\libc\test\testifioctls\scripts\tifioctls_hw_manual.script"-"c:\tstdapis\tifioctls_hw_manual.script"
 "\sf\os\ossrv\genericopenlibs\openenvcore\libc\test\testifioctls\data\tifioctls.ini"-"c:\tstdapis\tifioctls.ini"
 
 

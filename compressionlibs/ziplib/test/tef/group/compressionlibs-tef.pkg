@@ -49,14 +49,14 @@
 
 "/epoc32/data/z/tef_ezlib2/te_PerformanceTests.ini"-"C:/tef_ezlib2/te_PerformanceTests.ini"
 "/epoc32/data/z/tef_ezlib2/te_backwardscompatibilitytests.ini"-"C:/tef_ezlib2/te_backwardscompatibilitytests.ini"
-"/epoc32/data/z/tef_ezlib2/te_manual_backwardscompatibilitytests.ini"-"C:/tef_ezlib2/te_manual_backwardscompatibilitytests.ini"
-"/epoc32/data/z/tef_ezlib2/te_manual_performancetests.ini"-"C:/tef_ezlib2/te_manual_performancetests.ini"
+;"/epoc32/data/z/tef_ezlib2/te_manual_backwardscompatibilitytests.ini"-"C:/tef_ezlib2/te_manual_backwardscompatibilitytests.ini"
+;"/epoc32/data/z/tef_ezlib2/te_manual_performancetests.ini"-"C:/tef_ezlib2/te_manual_performancetests.ini"
 
-"/epoc32/data/z/tef_ezlib2/te_PerformanceTests.script"-"C:/tef_ezlib2/te_PerformanceTests.Script"
+"/epoc32/data/z/tef_ezlib2/te_PerformanceTests.script"-"C:/tef_ezlib2/te_PerformanceTests.script"
 "/epoc32/data/z/tef_ezlib2/te_backwardscompatibilitytests.script"-"C:/tef_ezlib2/te_backwardscompatibilitytests.script"
 "/epoc32/data/z/tef_ezlib2/te_ezlibeziptests_suite.script"-"C:/tef_ezlib2/te_ezlibeziptests_suite.script"
-"/epoc32/data/z/tef_ezlib2/te_manual_backwardscompatibilitytests.script"-"C:/tef_ezlib2/te_manual_backwardscompatibilitytests.script"
-"/epoc32/data/z/tef_ezlib2/te_manual_performancetests.script"-"C:/tef_ezlib2/te_manual_performancetests.script"
+;"/epoc32/data/z/tef_ezlib2/te_manual_backwardscompatibilitytests.script"-"C:/tef_ezlib2/te_manual_backwardscompatibilitytests.script"
+;"/epoc32/data/z/tef_ezlib2/te_manual_performancetests.script"-"C:/tef_ezlib2/te_manual_performancetests.script"
 
 "/epoc32/data/z/tef_ezlib2/te_zlib_suite.script"-"C:/tef_ezlib2/te_zlib_suite.script"
 "/epoc32/data/z/tef_ezlib2/te_zlib.script"-"C:/tef_ezlib2/te_zlib.script"

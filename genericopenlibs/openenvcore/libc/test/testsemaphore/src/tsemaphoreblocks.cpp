@@ -1293,17 +1293,14 @@ TInt CTestSemaphore::IntgTest14()
     int semid;
     union semun arg;
 	INFO_PRINTF1(_L("IntgTest14"));
-	char *path;
-	
-	#if defined (__EPOC32__)
-		path = "z:\\tstdapis\\tsemaphore.ini";
-	#else
-		path = "c:\\tstdapis\\tsemaphore.ini";
-	#endif
-	
-    if ((key = ftok(path, 'P')) == -1) 
+	char *path = NULL;
+	path = "c:\\tstdapis\\tsemaphore.ini";
+
+	if ((key = ftok(path, 'P')) == -1) 
     	{
         ERR_PRINTF1(_L("ftok error!"));
+        _LIT(KFunc, "ftok failed with errno %d\n");
+      	INFO_PRINTF2(KFunc, errno);
         return KErrGeneral;
     	}
 

@@ -19,11 +19,11 @@
 &EN
 
 ;rtest-install
-"/epoc32/release/armv5/urel/ZIPTEST.exe"-"C:/test/ZIPTEST.exe"
-"/epoc32/release/armv5/urel/ezlibtest.exe"-"C:/test/ezlibtest.exe"
-"/epoc32/release/armv5/urel/ezdefect.exe"-"C:/test/ezdefect.exe"
-"/epoc32/release/armv5/urel/ezexample.exe"-"C:/test/ezexample.exe"
-"/epoc32/release/armv5/urel/inflateprimetest.exe"-"C:/test/inflateprimetest.exe"
+"/epoc32/release/armv5/urel/ZIPTEST.exe"-"C:/sys/bin/ZIPTEST.exe"
+"/epoc32/release/armv5/urel/ezlibtest.exe"-"C:/sys/bin/ezlibtest.exe"
+"/epoc32/release/armv5/urel/ezdefect.exe"-"C:/sys/bin/ezdefect.exe"
+"/epoc32/release/armv5/urel/ezexample.exe"-"C:/sys/bin/ezexample.exe"
+"/epoc32/release/armv5/urel/inflateprimetest.exe"-"C:/sys/bin/inflateprimetest.exe"
  
 ; Embedded SIS 
 ; None

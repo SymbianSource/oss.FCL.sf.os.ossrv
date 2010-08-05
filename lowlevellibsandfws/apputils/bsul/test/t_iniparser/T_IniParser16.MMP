@@ -13,12 +13,13 @@
 // Description:
 //
 
-target          t_iniparser16.exe
+target          t_iniparser16.exe	//RTEST
 targettype      EXE
 UID		0x10000077
 VENDORID 0x70000001
 
 SOURCEPATH	../t_iniparser
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
 OS_LAYER_SYSTEMINCLUDE_SYMBIAN
 
 source  T_IniParser16.CPP

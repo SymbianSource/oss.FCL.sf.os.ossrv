@@ -20,7 +20,7 @@
 ; Install files:-RTEST
 "/epoc32/release/armv5/urel/t_initialisehal.exe"-"C:/sys/bin/t_initialisehal.exe"
 "/epoc32/release/armv5/urel/t_persisthal.exe"-"C:/sys/bin/t_persisthal.exe"
-"/epoc32/release/armv5/urel/t_haloomtests.exe"-"C:/sys/bin/t_haloomtests.exe"
+;"/epoc32/release/armv5/urel/t_haloomtests.exe"-"C:/sys/bin/t_haloomtests.exe"
 "/epoc32/release/armv5/urel/t_sysagt2.exe"-"C:/sys/bin/t_sysagt2.exe"
 
 ; Embedded SIS 

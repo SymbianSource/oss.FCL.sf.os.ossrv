@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET			t_fileuri.exe
+TARGET			t_fileuri.exe	//RTEST
 TARGETTYPE		exe
 CAPABILITY TrustedUI ProtServ
  

@@ -15,5 +15,5 @@
 
 PRINT Run all of the EZlib and EZip tef tests.
 
-RUN_SCRIPT  z:\tef_ezlib2\te_performancetests.script
-RUN_SCRIPT  z:\tef_ezlib2\te_backwardscompatibilitytests.script
+RUN_SCRIPT  c:\tef_ezlib2\te_performancetests.script
+RUN_SCRIPT  c:\tef_ezlib2\te_backwardscompatibilitytests.script
