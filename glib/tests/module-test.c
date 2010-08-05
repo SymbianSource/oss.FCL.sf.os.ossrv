@@ -94,14 +94,10 @@ main (int   arg,
 
 #ifndef __SYMBIAN32__
   dir = g_get_current_dir ()
-#else  
-  dir = "z:\\sys\\bin";
 #endif  
 
-  plugin_a = g_strconcat (dir, G_DIR_SEPARATOR_S, "libmoduletestplugin_a.dll", 
-			  NULL);
-  plugin_b = g_strconcat (dir, G_DIR_SEPARATOR_S, "libmoduletestplugin_b.dll", 
-			  NULL);
+  plugin_a = "libmoduletestplugin_a.dll";
+  plugin_b = "libmoduletestplugin_b.dll";
 
 #ifndef __SYMBIAN32__
   g_free (dir);

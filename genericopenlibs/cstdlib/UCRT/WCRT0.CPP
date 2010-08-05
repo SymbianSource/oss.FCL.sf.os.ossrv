@@ -25,8 +25,6 @@
 
 extern "C" int main (int argc, char *argv[], char *envp[]);
 
-extern "C" void exit (int ret);
-
 #ifndef EKA2
 IMPORT_C void RegisterWsExe(const TDesC &aName);
 #endif

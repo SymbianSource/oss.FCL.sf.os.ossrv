@@ -138,14 +138,34 @@ _STLP_END_NAMESPACE
 #    define _STLP_CHECK_NULL_ALLOC(__x) return __x
 #  endif
 
+#ifdef __SYMBIAN32__
+IMPORT_C void* backend_allocate(size_t);
+IMPORT_C void  backend_free(void*);
+#endif
+
+
 _STLP_BEGIN_NAMESPACE
 
 #  if ((defined (__IBMCPP__) || defined (__OS400__) || defined (__xlC__) || defined (qTidyHeap)) && defined (__DEBUG_ALLOC__))
 inline void* _STLP_CALL __stl_new(size_t __n)   { _STLP_CHECK_NULL_ALLOC(::operator _STLP_NEW(__n, __FILE__, __LINE__)); }
 inline void  _STLP_CALL __stl_delete(void* __p) { ::operator delete(__p, __FILE__, __LINE__); }
 #  else
-inline void* _STLP_CALL __stl_new(size_t __n)   { _STLP_CHECK_NULL_ALLOC(::operator _STLP_NEW(__n)); }
-inline void  _STLP_CALL __stl_delete(void* __p) { ::operator delete(__p); }
+inline void* _STLP_CALL __stl_new(size_t __n)
+    {
+#ifdef __SYMBIAN32__
+    return backend_allocate(__n);
+#else
+    _STLP_CHECK_NULL_ALLOC(::operator _STLP_NEW(__n));
+#endif
+    }
+inline void  _STLP_CALL __stl_delete(void* __p)
+    {
+#ifdef __SYMBIAN32__
+    backend_free(__p);
+#else
+    ::operator delete(__p);
+#endif
+    }
 #  endif
 _STLP_END_NAMESPACE
 

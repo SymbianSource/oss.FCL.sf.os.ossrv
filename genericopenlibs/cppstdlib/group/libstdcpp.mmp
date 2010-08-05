@@ -88,6 +88,8 @@ LIBRARY           libc.lib
 LIBRARY           libpthread.lib
 LIBRARY           libm.lib
 LIBRARY           euser.lib
+LIBRARY		  backend.lib
+
 
 #ifdef ARMCC_3_1
 DEFFILE			 ../eabi/libstdcppv5.def
@@ -343,3 +345,4 @@ DOCUMENT  warning_disable.dosc
 /* End of file */
 
 SMPSAFE
+PAGED

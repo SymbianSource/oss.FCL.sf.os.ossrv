@@ -33,8 +33,6 @@ extern "C" int main (int argc, char *argv[], char *envp[]);
 #define CALLMAIN(argc, argv, envp) main(argc, argv, envp)
 #endif
 
-extern "C" void exit (int ret);
-
 GLDEF_C TInt E32Main()
 	{     
 	CTrapCleanup::New();

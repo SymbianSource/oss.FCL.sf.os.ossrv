@@ -52,8 +52,47 @@
 #define _S_free_per_thread_states	get_S_free_per_thread_states()
 #define _S_key						get_S_key()
 #define _S_key_initialized			get_S_key_initialized()
+#endif
+
+#ifdef __SYMBIAN32__
+extern "C"
+{
+IMPORT_C void* BackendAlloc(size_t );
+IMPORT_C void BackendFree(void* );
+}
 
 
+EXPORT_C void* backend_allocate(size_t __n)
+    {
+    for (;;)
+        {
+        void* p = BackendAlloc(__n);
+
+        if (p)
+            {
+            return p; 
+            }
+        
+        // set_new_handler uses Dll::Tls. So only this threads new handler will be changed
+        // for the time it is set back. No problems for other threads.
+        std::new_handler nh_func  = std::set_new_handler(NULL);
+        std::set_new_handler(nh_func);
+
+        if (nh_func)
+            {
+            nh_func();
+            }
+        else
+            {
+            __THROW(std::bad_alloc());
+            }
+        }
+    }
+
+EXPORT_C void  backend_free(void* __p)
+    {
+    BackendFree(__p);
+    }
 #endif
 
 #if defined (__WATCOMC__)
@@ -84,8 +123,13 @@ inline void __stlp_chunck_free(void* __p) { _free_dbg(__p, _CRT_BLOCK); }
 inline void* __stlp_chunk_malloc(size_t __bytes) { _STLP_CHECK_NULL_ALLOC(_STLP_VENDOR_CSTD::malloc(__bytes)); }
 inline void __stlp_chunck_free(void* __p) { _STLP_VENDOR_CSTD::free(__p); }
 #  else
-inline void* __stlp_chunk_malloc(size_t __bytes) { return _STLP_STD::__stl_new(__bytes); }
-inline void __stlp_chunck_free(void* __p) { _STLP_STD::__stl_delete(__p); }
+inline void* __stlp_chunk_malloc(size_t __bytes) {
+    return _STLP_STD::__stl_new(__bytes);
+}
+inline void __stlp_chunck_free(void* __p) {
+    _STLP_STD::__stl_delete(__p);     
+}
+ 
 #  endif
 #endif  // !_DEBUG
 
@@ -173,7 +217,13 @@ __oom_handler_type _STLP_CALL __malloc_alloc::set_malloc_handler(__oom_handler_t
 
 #define _STLP_NFREELISTS 16
 
-#if defined (_STLP_LEAKS_PEDANTIC) && defined (_STLP_USE_DYNAMIC_LIB)
+/*
+ * On Symbian, the stlport is built as a dll and also dynamically linked against 
+ * by the applications. The _STLP_USE_DYNAMIC_LIB should always be defined.
+ * _STLP_LEAKS_PEDANTIC is defined to prevent the memory leaks in __node_alloc 
+ * when the library is dynamically loaded and unloaded.
+ */
+#if defined (_STLP_LEAKS_PEDANTIC) && ( defined (_STLP_USE_DYNAMIC_LIB) || defined (__SYMBIAN32__) )
 /*
  * We can only do cleanup of the node allocator memory pool if we are
  * sure that the STLport library is used as a shared one as it guaranties
@@ -498,7 +548,8 @@ void __node_alloc_impl::_S_chunk_dealloc() {
   _S_chunks = 0;
   _S_start_free = _S_end_free = 0;
   _S_heap_size = 0;
-  memset(__REINTERPRET_CAST(char*, &_S_free_list[0]), 0, _STLP_NFREELISTS * sizeof(_Obj*));
+  // Reinterprest cast cant remove volatileness. So using C style cast
+  memset((char*)(&_S_free_list[0]), 0, _STLP_NFREELISTS * sizeof(_Obj*));
 }
 #  endif /* _STLP_DO_CLEAN_NODE_ALLOC */
 
@@ -714,7 +765,9 @@ void __node_alloc_impl::_S_chunk_dealloc() {
 #if defined (_STLP_DO_CLEAN_NODE_ALLOC)
 struct __node_alloc_cleaner {
   ~__node_alloc_cleaner()
-  { __node_alloc_impl::_S_dealloc_call(); }
+      {
+      __node_alloc_impl::_S_dealloc_call(); 
+      }
 };
 
 #  if defined (_STLP_USE_LOCK_FREE_IMPLEMENTATION)

@@ -62,12 +62,9 @@ get_a_child (gint ttl)
 {
   GPid pid;
 #ifdef __SYMBIAN32__  
-  gint retval;
-#if 0  //for using g_spawn_async
   gboolean retval;
   char **argv = NULL;
   GError *error = NULL;
-#endif//if 0  
 #endif//__SYMBIAN32__  
 #ifdef G_OS_WIN32
   STARTUPINFO si;
@@ -89,18 +86,14 @@ get_a_child (gint ttl)
   pid = pi.hProcess;
 
   return pid;
-#endif
+#endif //G_OS_WIN32
 #ifndef __SYMBIAN32__
   pid = fork ();
 #else  
-  retval = posix_spawn(&pid, "helloworld.exe", NULL,NULL,NULL,NULL);
-  (void)waitpid(pid,NULL,0);
-#if 0  
   argv = (char **)malloc(3*sizeof(char *));    
   argv[0] = "Helloworld.exe"; // wrong exe name. Should cause g_spawn_async to fail
   argv[1] = NULL;
   retval = g_spawn_async(NULL, argv, NULL, G_SPAWN_DO_NOT_REAP_CHILD | G_SPAWN_SEARCH_PATH, NULL, "1234", &pid, &error);
-#endif//if 0
   if (pid < 0)
     exit (1);
 
@@ -109,7 +102,7 @@ get_a_child (gint ttl)
 
   sleep (ttl);
   _exit (0);
-#endif /* G_OS_WIN32 */
+#endif /*__SYMBIAN32__*/
 }
 
 gboolean

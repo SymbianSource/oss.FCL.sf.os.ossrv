@@ -1,20 +1,4 @@
 /*
-* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
-* This component and the accompanying materials are made available
-* under the terms of "Eclipse Public License v1.0"
-* which accompanies this distribution, and is available
-* at the URL "http://www.eclipse.org/legal/epl-v10.html".
-*
-* Initial Contributors:
-* Nokia Corporation - initial contribution.
-*
-* Contributors:
-*
-* Description: 
-*
-*/
-/*
  * This file defines site configuration.
  */
 
@@ -125,9 +109,9 @@
  * its internal memory pool but only if STLport is used as a dynamic library
  * under Win32 (using MSVC like compilers).
  */
-/*
+
 #define _STLP_LEAKS_PEDANTIC 1
-*/
+
 
 /*
  * Uncomment _STLP_USE_NEWALLOC to force allocator<T> to use plain "new"
