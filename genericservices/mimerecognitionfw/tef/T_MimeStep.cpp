@@ -486,6 +486,7 @@ INFO_PRINTF1(_L("Testing the text file recognizer"));
 	CleanupStack::PopAndDestroy(buf); // buf
 
 	delete iRecognizer;
+	iRecongnizer = 0;
 	}
 
 CT_MimeStep::~CT_MimeStep()

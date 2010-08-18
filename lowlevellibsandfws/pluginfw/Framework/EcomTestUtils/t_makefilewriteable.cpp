@@ -25,9 +25,13 @@ TInt DoMakeFileWriteableL(const TDesC& aFile)
 	{
 	// Make sure the file is not read-only
 	RDebug::Print(_L("Open for writing file %S\n"), &aFile);				
-	
+	TInt r = KErrNone;
 	RFs fs;
-	fs.Connect();
+	r = fs.Connect();
+	if (r != KErrNone)
+		{
+			User::Leave(r);
+		}
 	CFileMan* fileMan = CFileMan::NewL(fs);
 	CleanupStack::PushL(fileMan);
 	TInt err = fileMan->Attribs(aFile, 0, KEntryAttReadOnly, TTime(0), 0);

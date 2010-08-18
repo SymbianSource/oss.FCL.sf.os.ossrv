@@ -17,8 +17,8 @@ target		t_clientmessage.exe	//RTEST
 targettype	exe
 CAPABILITY ReadUserData WriteUserData
 SECUREID	0x10285B57
-
-systeminclude	/epoc32/include
+MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+OS_LAYER_SYSTEMINCLUDE_SYMBIAN
 
 SOURCEPATH	.
 source		t_clientmessage.cpp

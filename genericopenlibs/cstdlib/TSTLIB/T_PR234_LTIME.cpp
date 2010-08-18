@@ -109,8 +109,13 @@ void Testgettimeofday()
 void Testtime()
 	{
 	test.Next(_L(" @SYMTestCaseID:SYSLIB-STDLIB-CT-0144 \ntesting time()...\n "));
-	RTz tz;
-	tz.Connect();
+	TInt r = KErrNone;
+    RTz tz;
+    r = tz.Connect();
+    if (r != KErrNone)
+        {
+            User::Leave(r);
+        }
 	CTzId* tzId = CTzId::NewL(2592); //set the timezone to Europe/London
 	CleanupStack::PushL(tzId);
 	tz.SetTimeZoneL(*tzId);
@@ -162,11 +167,19 @@ void TesttoLocal()
 	
 	//test when dst is on...
 	test.Printf(_L("tests during summertime (dst on)...\t"));
+	
+	TInt rt = KErrNone;
+	TInt rz = KErrNone;
+	
 	//set the utc time to 8.55am, 15 May 2005 -Daylight savings apply on this date
 	TInt err=User::SetUTCTime(TTime(TDateTime(2005, EMay, 15, 8, 55, 0, 0)));
 	test(err==0);
 	RTz tz;
-	tz.Connect();
+    rt = tz.Connect();
+    if (rt != KErrNone)
+        {
+            User::Leave(rt);
+        }
 	CTzId* tzId = CTzId::NewL(2592); //set the timezone to Europe/London
 	CleanupStack::PushL(tzId);
 	tz.SetTimeZoneL(*tzId);
@@ -202,7 +215,12 @@ void TesttoLocal()
 	err=User::SetUTCTime(TTime(TDateTime(2005, EJanuary, 15, 8, 55, 0, 0)));
 	test(err==0);
 	
-	tz.Connect();
+    rz = tz.Connect();
+    if (rz != KErrNone)
+        {
+            User::Leave(rz);
+        }
+    
 	CTzId* tzId2 = CTzId::NewL(2592); //set the timezone to Europe/London
 	CleanupStack::PushL(tzId2);
 	tz.SetTimeZoneL(*tzId2);

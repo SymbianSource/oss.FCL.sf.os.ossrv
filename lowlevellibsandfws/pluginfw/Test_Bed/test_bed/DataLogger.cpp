@@ -417,7 +417,9 @@ EXPORT_C void CDataLogger::ReportInformationWithParameters(TRefByValue<const TDe
 
 void CDataLogger::SetupRDebugL(TBool aRequest) 
 	{
-	delete iDebug; 
+	delete iDebug;
+	iDebug = 0;
+	
 	if(aRequest) 
 		iDebug = new(ELeave) TDebugPrint;		// Print to RDebug
 	else 

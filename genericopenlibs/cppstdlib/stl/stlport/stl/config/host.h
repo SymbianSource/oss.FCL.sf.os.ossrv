@@ -109,9 +109,9 @@
  * its internal memory pool but only if STLport is used as a dynamic library
  * under Win32 (using MSVC like compilers).
  */
-/*
+
 #define _STLP_LEAKS_PEDANTIC 1
-*/
+
 
 /*
  * Uncomment _STLP_USE_NEWALLOC to force allocator<T> to use plain "new"

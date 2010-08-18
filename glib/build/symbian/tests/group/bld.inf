@@ -20,6 +20,7 @@
 PRJ_TESTEXPORTS
 glibtests.iby  									/epoc32/rom/include/glibtests.iby
 locale.iby  									/epoc32/rom/include/locale.iby
+locale_new.iby  								/epoc32/rom/include/locale_new.iby
 ../../../../tests/markups/valid-1.gmarkup 	/epoc32/winscw/c/valid-1.gmarkup
 ../../../../tests/iochannel-test-infile		/epoc32/winscw/c/iochannel-test-infile
 ../../../../tests/casemap.txt			/epoc32/winscw/c/casemap.txt

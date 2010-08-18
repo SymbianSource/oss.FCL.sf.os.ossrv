@@ -1027,16 +1027,19 @@ EXPORT_C void CBaServBackupSession::ServiceL(const RMessage2& aMessage)
 	
 	TCompletionType completionType = ECompleteSync;
 	
-	iClientMessage = BSUL::CClientMessage::NewL(aMessage);
+	BSUL::CClientMessage* clientMessage = 0;
+	clientMessage = BSUL::CClientMessage::NewL(aMessage);
 	
 	//Push iClientMessage onto the cleanupstack. Although an instance variable, 
 	//the lifetime of the object is contained to this function so it needs to
 	//be pushed and popped here as it is not deleted in the destructor
-	CleanupStack::PushL(iClientMessage);
+	CleanupStack::PushL(clientMessage);
 	
 	//Validate the message
-	TRAPD(error, iClientMessage->ValidateL());
-		
+	TRAPD(error, clientMessage->ValidateL());
+	
+	iClientMessage = clientMessage;
+	
 	if(error == KErrNone)	
 		{
 		TRAP(error, DoServiceL(completionType));
@@ -1055,7 +1058,8 @@ EXPORT_C void CBaServBackupSession::ServiceL(const RMessage2& aMessage)
 		}
 	
 	//Pop and destroy message
-	CleanupStack::PopAndDestroy(iClientMessage);
+	CleanupStack::PopAndDestroy(clientMessage);
+	clientMessage = NULL;
 	iClientMessage = NULL;
 	}
 

@@ -16,7 +16,7 @@
 CAPABILITY	WriteDeviceData
 VENDORID 0x70000001
 
-TARGET	t_pr234_ltime.exe
+TARGET	t_pr234_ltime.exe //RTEST
 TARGETTYPE	exe
 
 

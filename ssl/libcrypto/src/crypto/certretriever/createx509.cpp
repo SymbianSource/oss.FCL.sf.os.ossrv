@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
+Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
 
 Redistribution and use in source and binary forms, with or without 
 modification, are permitted provided that the following conditions are met:
@@ -31,7 +31,7 @@ Description:
 #include "createx509.h"
 
 
-X509* CX509_Initializer::CreateX509(CX509Certificate* X509Cert)
+X509* CX509_Initializer::CreateX509L(CX509Certificate* X509Cert)
 {
 	X509* ret = X509_new();
 	TBool serail = ETrue;
@@ -46,18 +46,18 @@ X509* CX509_Initializer::CreateX509(CX509Certificate* X509Cert)
 //issuer
 		const CX500DistinguishedName& IssName = X509Cert->IssuerName();	
 		X509_NAME_free(ret->cert_info->issuer);
-		ret->cert_info->issuer = CreateX509_NAME(IssName);
+		ret->cert_info->issuer = CreateX509_NAMEL(IssName);
 
 //subject
 		const CX500DistinguishedName& SubName = X509Cert->SubjectName();	
 		X509_NAME_free(ret->cert_info->subject);
-		ret->cert_info->subject = CreateX509_NAME(SubName);
+		ret->cert_info->subject = CreateX509_NAMEL(SubName);
 	//	const HBufC * name = SubName.DisplayNameL();
 
 //signature
 		const TPtrC8* sig_alg_ptr = X509Cert->DataElementEncoding(CX509Certificate::EAlgorithmId);
 		X509_ALGOR_free(ret->cert_info->signature);
-		ret->cert_info->signature = CreateX509_ALGOR(sig_alg_ptr);
+		ret->cert_info->signature = CreateX509_ALGORL(sig_alg_ptr);
 
 //serialnumber
 		const TPtrC8 sernum = X509Cert->SerialNumber();
@@ -88,13 +88,13 @@ X509* CX509_Initializer::CreateX509(CX509Certificate* X509Cert)
 
 //key
 		X509_PUBKEY_free(ret->cert_info->key);
-		ret->cert_info->key = CreateX509_PUBKEY(X509Cert);
+		ret->cert_info->key = CreateX509_PUBKEYL(X509Cert);
 
 	
 //extension
 
 
-		ret->cert_info->extensions = CreateSTACKOF_X509_EXTENSION(X509Cert);
+		ret->cert_info->extensions = CreateSTACKOF_X509_EXTENSIONL(X509Cert);
 
 		
 //name
@@ -102,7 +102,7 @@ X509* CX509_Initializer::CreateX509(CX509Certificate* X509Cert)
 
 //sig_alg
 		X509_ALGOR_free(ret->sig_alg);
-		ret->sig_alg = CreateX509_ALGOR(sig_alg_ptr);
+		ret->sig_alg = CreateX509_ALGORL(sig_alg_ptr);
 		
 //signature
 		const TPtrC8 sig = X509Cert->Signature();
@@ -114,7 +114,7 @@ X509* CX509_Initializer::CreateX509(CX509Certificate* X509Cert)
 }
 
 
-X509_ALGOR* CX509_Initializer::CreateX509_ALGOR(const TPtrC8* ptr)
+X509_ALGOR* CX509_Initializer::CreateX509_ALGORL(const TPtrC8* ptr)
 {
 	X509_ALGOR* ret = X509_ALGOR_new();
 	
@@ -168,7 +168,7 @@ X509_ALGOR* CX509_Initializer::CreateX509_ALGOR(const TPtrC8* ptr)
 
 
 
-X509_NAME* CX509_Initializer::CreateX509_NAME(const CX500DistinguishedName& DistName)
+X509_NAME* CX509_Initializer::CreateX509_NAMEL(const CX500DistinguishedName& DistName)
 {
 	X509_NAME* ret = X509_NAME_new();
 	
@@ -181,7 +181,7 @@ X509_NAME* CX509_Initializer::CreateX509_NAME(const CX500DistinguishedName& Dist
 	TUint writePos = 0;
 	Asn1Seq->WriteDERL(oct, writePos);			
 
-  	TInt len = Fill_X509_NAME_ENTRY(ret, octetData->Des());
+  	TInt len = Fill_X509_NAME_ENTRYL(ret, octetData->Des());
 	
 	char *p = (char *)oct.PtrZ();
 
@@ -202,7 +202,7 @@ X509_NAME* CX509_Initializer::CreateX509_NAME(const CX500DistinguishedName& Dist
 
 
 // return the length of the encoded sequence
-TInt CX509_Initializer::Fill_X509_NAME_ENTRY(X509_NAME * name, const TDesC8& aBinaryData)
+TInt CX509_Initializer::Fill_X509_NAME_ENTRYL(X509_NAME * name, const TDesC8& aBinaryData)
 {
 	TInt aPos = 0;
 	TASN1DecGeneric dec(aBinaryData.Right(aBinaryData.Length() - aPos));
@@ -364,7 +364,7 @@ ASN1_STRING* CX509_Initializer::CreateASN1_STRING(int len, int type, unsigned ch
 
 
 
-X509_PUBKEY* CX509_Initializer::CreateX509_PUBKEY(CX509Certificate* X509Cert)
+X509_PUBKEY* CX509_Initializer::CreateX509_PUBKEYL(CX509Certificate* X509Cert)
 {
 	X509_PUBKEY* ret = X509_PUBKEY_new();
 
@@ -388,7 +388,7 @@ X509_PUBKEY* CX509_Initializer::CreateX509_PUBKEY(CX509Certificate* X509Cert)
 			TPtrC8 newPtr = rdn.Encoding();
 			
 			X509_ALGOR_free(ret->algor);	// free the one allocated by X509_PUBKEY_new
-			ret->algor = CreateX509_ALGOR(&newPtr);
+			ret->algor = CreateX509_ALGORL(&newPtr);
 		}
 	
 //public_key
@@ -407,7 +407,7 @@ X509_PUBKEY* CX509_Initializer::CreateX509_PUBKEY(CX509Certificate* X509Cert)
 
 
 
-STACK_OF(X509_EXTENSION)* CX509_Initializer::CreateSTACKOF_X509_EXTENSION(CX509Certificate* X509Cert)
+STACK_OF(X509_EXTENSION)* CX509_Initializer::CreateSTACKOF_X509_EXTENSIONL(CX509Certificate* X509Cert)
 {
 	//STACK_OF(X509_EXTENSION) * ret = sk_X509_EXTENSION_new_null();
 	STACK_OF(X509_EXTENSION) * ret = NULL;

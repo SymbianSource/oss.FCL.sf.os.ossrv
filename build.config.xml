@@ -124,10 +124,11 @@
 			<unit name="ziplib" unitID="sos.ziplib_test" bldFile="&layer_real_source_path;/compressionlibs/ziplib/group" mrp="&layer_real_source_path;/compressionlibs/ziplib/group/syslibs_ezlib2.mrp"/>
 			<unit name="genericusabilitylib" unitID="sos.genericusabilitylib_test" bldFile="&layer_real_source_path;/lowlevellibsandfws/genericusabilitylib/group" mrp="&layer_real_source_path;/lowlevellibsandfws/genericusabilitylib/group/syslibs_euserhl.mrp"/>
 			<unit name="httputils" unitID="sos.httputils_test" bldFile="&layer_real_source_path;/genericservices/httputils/group" mrp="&layer_real_source_path;/genericservices/httputils/group/application-protocols_inetprotutil.mrp"/>
+			<unit name="httputils" unitID="sos.httputils_test1" bldFile="&layer_real_source_path;/genericservices/httputils/Test/Integration/TestFileUriSuite" mrp=""/>
+			<unit name="httputils" unitID="sos.httputils_test2" bldFile="&layer_real_source_path;/genericservices/httputils/Test/Integration/TestInetProtUtilsSuite/group" mrp=""/>
 			<unit name="mimerecognitionfw" unitID="sos.mimerecognitionfw_test" bldFile="&layer_real_source_path;/genericservices/mimerecognitionfw/group" mrp="&layer_real_source_path;/genericservices/mimerecognitionfw/group/app-framework_emime.mrp"/>
 			<unit name="systemagent" unitID="sos.systemagent_test" bldFile="&layer_real_source_path;/genericservices/systemagent/group" mrp="&layer_real_source_path;/genericservices/systemagent/group/syslibs_sysagent2.mrp"/>
 			<unit name="taskscheduler" unitID="sos.taskscheduler_test" bldFile="&layer_real_source_path;/genericservices/taskscheduler/group" mrp="&layer_real_source_path;/genericservices/taskscheduler/group/syslibs_schsvr.mrp"/>
-			
 		</module>
 	</layer>
 

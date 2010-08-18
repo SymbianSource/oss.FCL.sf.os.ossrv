@@ -276,15 +276,9 @@ data=ABI_DIR\BUILD_DIR\tcapclock.exe	 	sys\bin\tcapclock.exe
 file=ABI_DIR\BUILD_DIR\ttimer.exe	  	sys\bin\ttimer.exe
 
 //scripts for librt test cases
-data = EPOCROOT##epoc32\WINSCW\c\tstdapis\tsharedmemory.script	\tstdapis\tsharedmemory.script
-data = EPOCROOT##epoc32\WINSCW\c\tstdapis\tclock.script		\tstdapis\tclock.script
-data = EPOCROOT##epoc32\WINSCW\c\tstdapis\tclock_captest.script	\tstdapis\tclock_captest.script
-data = EPOCROOT##epoc32\WINSCW\c\tstdapis\ttimer_hw.script		\tstdapis\ttimer_hw.script
+
 
 //data file for librt test cases
-data = EPOCROOT##epoc32\WINSCW\c\tstdapis\tsharedmemory.ini	\tstdapis\tsharedmemory.ini
-data = EPOCROOT##epoc32\WINSCW\c\tstdapis\tclock.ini		\tstdapis\tclock.ini
-data = EPOCROOT##epoc32\WINSCW\c\tstdapis\ttimer.ini		\tstdapis\ttimer.ini
 data = EPOCROOT##epoc32\WINSCW\c\tstdapis\oetests_librt_hw.bat		\oetests_librt_hw.bat
 #endif /* SYMBIAN_OE_LIBRT */
 

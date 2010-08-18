@@ -222,10 +222,12 @@ CFileDesTransferServer* CFileDesTransferServer::NewLC(RSemaphore& sem)
 // -------------------------------------------------------------------------------
 void CFileDesTransferServer::ConstructL()
     {
-    iShutdown = new(ELeave) CShutdown;
-    CleanupStack::PushL(iShutdown);
-    iShutdown->ConstructL();
+    CShutdown* shutdown = new(ELeave) CShutdown;
+    CleanupStack::PushL(shutdown);
+    shutdown->ConstructL();
 	CleanupStack::Pop();
+	iShutdown = shutdown;
+	shutdown = 0;
     }
 
 // -------------------------------------------------------------------------------

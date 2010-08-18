@@ -60,6 +60,8 @@ TInt CExampleInterfaceCreateAndDestroyUnitTest::RunError(TInt aError)
 	iStateAccessor = NULL;
 	delete iCtorValidator;
 	delete iDtorValidator;
+	iCtorValidator = 0;
+	iDtorValidator = 0;
 
 	return error;
 	}
@@ -273,10 +275,16 @@ inline TInt CExampleInterface_DefectHAN4WZHSY_UnitTest::RunError(TInt aError)
 	TInt error = CUnitTest::RunError(aError);	// Chain to base
 	delete iUTContext;
 	delete iStateAccessor;
+	
+	iUTContext = 0;
+	iStateAccessor = 0;
 
 	delete iCtorValidator;
 	delete iDtorValidator;
 
+	iCtorValidator = 0;
+	iDtorValidator = 0;
+	
 	return error;
 	}
 
@@ -335,11 +343,17 @@ inline TInt CExampleInterface_DefectCUO4YCEUE_UnitTest::RunError(TInt aError)
 	{
 	// The RunL left so chain to the base first and then cleanup
 	TInt error = CUnitTest::RunError(aError);	// Chain to base
-	delete iUTContext;
-	delete iStateAccessor;
+    delete iUTContext;
+    delete iStateAccessor;
 
-	delete iCtorValidator;
-	delete iDtorValidator;
+    delete iCtorValidator;
+    delete iDtorValidator;
+
+    iUTContext = 0;
+    iStateAccessor = 0;
+
+    iCtorValidator = 0;
+    iDtorValidator = 0;
 
 	return error;
 	}
@@ -399,12 +413,19 @@ inline TInt CExampleInterface_DefectEVS4Z9BPG_UnitTest::RunError(TInt aError)
 	{
 	// The RunL left so chain to the base first and then cleanup
 	TInt error = CUnitTest::RunError(aError);	// Chain to base
-	delete iUTContext;
-	delete iStateAccessor;
+    delete iUTContext;
+    delete iStateAccessor;
 
-	delete iCtorValidator;
-	delete iDefaultValidator;
-	delete iDtorValidator;
+    delete iCtorValidator;
+    delete iDefaultValidator;
+    delete iDtorValidator;
+
+    iUTContext = 0;
+    iStateAccessor = 0;
+
+    iCtorValidator = 0;
+    iDefaultValidator = 0;
+    iDtorValidator = 0;
 
 	return error;
 	}
@@ -467,12 +488,19 @@ inline TInt CExampleInterface_DefectKRN53SL4Q_UnitTest::RunError(TInt aError)
 	{
 	// The RunL left so chain to the base first and then cleanup
 	TInt error = CUnitTest::RunError(aError);	// Chain to base
-	delete iUTContext;
-	delete iStateAccessor;
+    delete iUTContext;
+    delete iStateAccessor;
 
-	delete iCtorValidator;
-	delete iDefaultValidator;
-	delete iDtorValidator;
+    delete iCtorValidator;
+    delete iDefaultValidator;
+    delete iDtorValidator;
+
+    iUTContext = 0;
+    iStateAccessor = 0;
+
+    iCtorValidator = 0;
+    iDefaultValidator = 0;
+    iDtorValidator = 0;
 
 	return error;
 	}

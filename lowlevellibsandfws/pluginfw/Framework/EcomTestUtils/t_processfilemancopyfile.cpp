@@ -26,8 +26,13 @@ _LIT(KSeparator, "|"); // Invalid filepath char used to separate filenames
 // Copy the files specified.
 void CopyFileL(const TDesC& anOld, const TDesC& aNew)
 	{	
+	TInt r = KErrNone;
 	RFs fs;
-	fs.Connect();	
+	r = fs.Connect();
+	if (r != KErrNone)
+		{
+			User::Leave(r);
+		}	
 	CleanupClosePushL(fs);
 
 	CFileMan* fileMan = CFileMan::NewL(fs);
