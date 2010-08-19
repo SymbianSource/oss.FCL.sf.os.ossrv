@@ -461,4 +461,6 @@ EXPORTS
 	?what@__Named_exception@std@@UBEPBDXZ @ 460 NONAME ; char const * std::__Named_exception::what(void) const
 	?xalloc@ios_base@std@@SAHXZ @ 461 NONAME ; int std::ios_base::xalloc(void)
 	?nothrow@std@@3Unothrow_t@1@B @ 462 NONAME ; struct std::nothrow_t const std::nothrow
-	
+	?backend_allocate@@YAPAXI@Z @ 463 NONAME ; void * backend_allocate(unsigned int)
+	?backend_free@@YAXPAX@Z @ 464 NONAME ; void backend_free(void *)
+

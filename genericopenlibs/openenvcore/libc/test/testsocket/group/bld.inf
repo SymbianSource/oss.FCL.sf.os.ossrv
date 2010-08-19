@@ -21,6 +21,7 @@ PRJ_TESTEXPORTS
 ../data/tsocket.ini /epoc32/winscw/c/tstdapis/tsocket.ini
 ../data/socketmorethan16k.txt /epoc32/winscw/c/socketmorethan16k.txt
 ../utils/tsockettest.bat /epoc32/winscw/c/tstdapis/tsockettest.bat
+../utils/tsockettest_hw.bat /epoc32/winscw/c/tstdapis/tsockettest_hw.bat
 
 
 PRJ_TESTMMPFILES

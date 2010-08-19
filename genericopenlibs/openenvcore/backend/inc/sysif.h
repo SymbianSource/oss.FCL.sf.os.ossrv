@@ -114,7 +114,7 @@ class TCLSICleanup
 */
 	{
 public:
-	void StorePtrs(RHeap* aHeap, RFs* aFs, RSocketServ* aSs, RCommServ* aCs, RFastLock* aSsLock, RFastLock* aCsLock)
+	void StorePtrs(RHeap* aHeap, RFs* aFs, RSocketServ* aSs, RCommServ* aCs, RFastLock* aSsLock, RFastLock* aCsLock,RFastLock* aDefConnLock,RFastLock* aAESelectLock)
 		{
 		iHeap = aHeap;
 		iFs = aFs;
@@ -122,6 +122,8 @@ public:
 		iCs = aCs;
 		iSsLock = aSsLock;
 		iCsLock = aCsLock;
+		iDefConnLock = aDefConnLock;
+		iAESelectLock = aAESelectLock;
 		}
 
 	~TCLSICleanup()
@@ -132,6 +134,8 @@ public:
 		iCs->Close();
 		iCsLock->Close();
 		iHeap->Close();
+		iDefConnLock->Close();
+		iAESelectLock->Close();
 		}
 private:
 	RHeap* iHeap;
@@ -140,6 +144,8 @@ private:
 	RCommServ* iCs;
 	RFastLock* iSsLock;
 	RFastLock* iCsLock;
+	RFastLock* iDefConnLock;
+	RFastLock* iAESelectLock;	
 	};
 
 
@@ -506,7 +512,7 @@ public:
 
 	int aselect(int maxfd, fd_set *readfds, fd_set *writefds,fd_set *exceptfds, struct timeval *tvptr, TRequestStatus* requeststatus,int& anErrno);
 
-	int cancelaselect(TRequestStatus* requeststatus,int& anErrno,int performcleanup = 0);
+	int cancelaselect(TRequestStatus* requeststatus, int& anErrno, TBool perform_cleanup = EFalse);		
 		
 	int eselect(int maxfd, fd_set *readfds, fd_set *writefds,fd_set *exceptfds, struct timeval *tvptr, int arraycount,TRequestStatus* waitarray,int& anErrno);
 	
@@ -552,6 +558,7 @@ public:
 	
 	//Set the default interface for network operations
 	int setdefaultif(const struct ifreq* aIfReq);
+	int unsetdefaultif(TBool allow_bringup = ETrue);
 	
 	IMPORT_C CFileDescBase* GetDesc(int aFid);
 
@@ -669,6 +676,10 @@ private:
 	RConnection iDefConnection;
 	//Protect the iDefConnection from concurrent GetDefaultConnection calls
 	RFastLock   iDefConnLock;
+	//Calling unsetdefaultif(), instead of setdefaultif(NULL) ensures that the torn down
+	//connection is not brought back up again, by subsequent socket/network calls.
+	//This variable enables this facility. It is reset to default (ETrue) by setdefaultif(<pref>)
+	TBool iDefConnResurrect;
 	//Lock for protecting iASelectRequest across threads
 	RFastLock iASelectLock;
 		

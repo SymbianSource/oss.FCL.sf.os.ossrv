@@ -404,7 +404,8 @@ struct thread;
  * Symbian specific APIs
  */
 #ifdef __SYMBIAN32__
-IMPORT_C int setdefaultif( const struct ifreq* );
+IMPORT_C int setdefaultif(const struct ifreq*);
+IMPORT_C int unsetdefaultif();
 #endif
 
 #ifdef __SYMBIAN32__

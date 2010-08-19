@@ -22,7 +22,7 @@
 #include "testexecute.iby"
 #include "ced.iby"
 
-data=EPOCROOT##epoc32\WINSCW\c\ethernetced.xml  \ethernetced.xml
+data = EPOCROOT##epoc32\WINSCW\c\tstdapis\gosethernetced.xml	\tstdapis\gosethernetced.xml
 
 file=ABI_DIR\BUILD_DIR\testharness.dll	sys\bin\testharness.dll
 

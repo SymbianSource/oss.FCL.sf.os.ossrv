@@ -776,5 +776,6 @@ EXPORTS
 	_ZNK9stlp_priv9_Messages6do_getEiiiRKSs @ 775 NONAME
 	_ZNK9stlp_priv9_Messages7do_openERKSsRKSt6locale @ 776 NONAME
 	_ZNK9stlp_priv9_Messages8do_closeEi @ 777 NONAME
-	
+	_Z12backend_freePv @ 778 NONAME
+	_Z16backend_allocatej @ 779 NONAME
 

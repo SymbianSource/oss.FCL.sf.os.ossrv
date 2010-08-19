@@ -15,3 +15,4 @@
 @rem
 
 copy \epoc32\release\WINSCW\udeb\tsample.exe \epoc32\release\WINSCW\udeb\Z\sys\bin\tsample.exe
+CED -i C:\tstdapis\gosethernetced.xml
