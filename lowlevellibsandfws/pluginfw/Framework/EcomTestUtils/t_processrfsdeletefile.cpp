@@ -22,8 +22,13 @@
 	
 TInt DoDeleteFileL(const TDesC& aFile)
 	{
+	TInt r = KErrNone;
 	RFs fs;
-	fs.Connect();
+	r = fs.Connect();
+	if (r != KErrNone)
+		{
+			User::Leave(r);
+		}
 	
     // Make the file writeable 
     fs.SetAtt(aFile, 0, KEntryAttReadOnly);

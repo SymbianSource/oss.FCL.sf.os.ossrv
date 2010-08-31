@@ -56,7 +56,7 @@
  * [including the GNU Public Licence.]
  */
  /*
- © Portions copyright (c) 2006 Nokia Corporation.  All rights reserved.
+ © Portions copyright (c) 2006,2010 Nokia Corporation.  All rights reserved.
  */
 
 
@@ -133,7 +133,7 @@ static int by_file_ctrl(X509_LOOKUP *ctx, int cmd, const char *argp, long argl,
 			{
 			
 			#ifdef SYMBIAN
-				ok = X509_add_symbian_certs(ctx->store_ctx);
+				ok = X509_add_symbian_certsL(ctx->store_ctx);
 			#else
 				file = (char *)Getenv(X509_get_default_cert_file_env());
 				if (file)

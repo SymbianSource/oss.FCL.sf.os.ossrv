@@ -113,6 +113,9 @@ Cstlport_bvec* Cstlport_bvec::NewL(
 #ifdef LIBC_OLD_BACKEND
     MrtInit();
 #endif
+ #ifdef __ARMCC__
+    #pragma diag_suppress 830
+ #endif    
     Cstlport_bvec* self = new (ELeave) Cstlport_bvec( aTestModuleIf );
 
     CleanupStack::PushL( self );

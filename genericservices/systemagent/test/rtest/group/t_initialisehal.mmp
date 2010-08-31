@@ -11,9 +11,9 @@
 // Contributors:
 //
 // Description:
-//
 
-TARGET			t_initialisehal.exe
+
+TARGET			t_initialisehal.exe 	//RTEST
 TARGETTYPE		exe
 CAPABILITY		AllFiles WriteDeviceData
 

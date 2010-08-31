@@ -15,7 +15,7 @@
 // 
 //
 
-TARGET        ziptest.exe
+TARGET        ziptest.exe	//RTEST
 TARGETTYPE    exe
 UID           0
 VENDORID 0x70000001

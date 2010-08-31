@@ -123,12 +123,12 @@ public:
   // construct/copy/destroy:
   _STLP_DECLSPEC locale();
   _STLP_DECLSPEC locale(const locale&) _STLP_NOTHROW;
-  explicit locale(const char *);
+  _STLP_DECLSPEC explicit locale(const char *);
   locale(const locale&, const char*, category);
 
   // those are for internal use
-  locale(_Locale_impl*);
-  locale(_Locale_impl*, bool);
+  _STLP_DECLSPEC locale(_Locale_impl*);
+  _STLP_DECLSPEC locale(_Locale_impl*, bool);
 
 public:
 

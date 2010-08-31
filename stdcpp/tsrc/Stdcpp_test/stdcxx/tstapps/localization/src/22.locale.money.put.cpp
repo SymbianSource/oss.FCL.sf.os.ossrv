@@ -318,7 +318,11 @@ int type_test (int         lineno,
     Ios<charT> ios;
 
     // money_put-derived object
+    #ifdef __ARMCC__
+    #pragma diag_suppress 811
+    #endif
     const MoneyPut<charT> mp;
+    
 
     // install the moneypunct facet in a locale and imbue the latter
     // in the ios-derived object used by money_put

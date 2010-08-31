@@ -24,17 +24,6 @@ file = ABI_DIR\BUILD_DIR\oldezip.dll													TEST\oldezip.dll
 file = ABI_DIR\BUILD_DIR\Te_EZlibEZip.exe												TEST\Te_EZlibEZip.exe
 
 
-data = EPOCROOT##epoc32\data\z\tef_ezlib2\te_PerformanceTests.ini						\tef_ezlib2\te_PerformanceTests.ini
-data = EPOCROOT##epoc32\data\z\tef_ezlib2\te_backwardscompatibilitytests.ini			\tef_ezlib2\te_backwardscompatibilitytests.ini
-data = EPOCROOT##epoc32\data\z\tef_ezlib2\te_manual_backwardscompatibilitytests.ini		\tef_ezlib2\te_manual_backwardscompatibilitytests.ini
-data = EPOCROOT##epoc32\data\z\tef_ezlib2\te_manual_performancetests.ini				\tef_ezlib2\te_manual_performancetests.ini
-
-data = EPOCROOT##epoc32\data\z\tef_ezlib2\te_PerformanceTests.script					\tef_ezlib2\te_PerformanceTests.Script
-data = EPOCROOT##epoc32\data\z\tef_ezlib2\te_backwardscompatibilitytests.script			\tef_ezlib2\te_backwardscompatibilitytests.script
-data = EPOCROOT##epoc32\data\z\tef_ezlib2\te_ezlibeziptests_suite.script				\tef_ezlib2\te_ezlibeziptests_suite.script
-data = EPOCROOT##epoc32\data\z\tef_ezlib2\te_manual_backwardscompatibilitytests.script	\tef_ezlib2\te_manual_backwardscompatibilitytests.script
-data = EPOCROOT##epoc32\data\z\tef_ezlib2\te_manual_performancetests.script				\tef_ezlib2\te_manual_performancetests.script
-
 
 data = EPOCROOT##epoc32\data\z\test\ezlibeziptest_data\JpegImage.jpg					\test\ezlibeziptest_data\JpegImage.jpg
 data = EPOCROOT##epoc32\data\z\test\ezlibeziptest_data\GifImage.gif						\test\ezlibeziptest_data\GifImage.gif

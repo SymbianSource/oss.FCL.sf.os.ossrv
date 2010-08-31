@@ -113,8 +113,8 @@ TInt Ctlocale::hasfacet( CStifItemParser& aItem )
  #if  STDCPP_OOM
 User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
   #endif 
- char* p = "c";
-  const char* _Loc_ctype_default(p) ;
+// char* p = "c";
+//  const char* _Loc_ctype_default(p) ;
  
   locale loc("en_GB.UTF-8") ;
  result = has_facet <ctype<char> > ( loc );
@@ -481,8 +481,8 @@ TInt Ctlocale::moneyget( CStifItemParser& aItem )
  locale loc;
  string buffer("$100.02");
  string dest;
- long double ldest;
- ios_base::iostate state;
+// long double ldest;
+// ios_base::iostate state;
  iter_type end;
  cout<<"";
 #if  STDCPP_OOM
@@ -533,7 +533,7 @@ TInt Ctlocale::moneyput( CStifItemParser& aItem )
 
  locale loc;
  string buffer("10002");
- long double ldval = 10002;
+// long double ldval = 10002;
 
   iter_type begin(cout);
   cout<<"";
@@ -818,8 +818,8 @@ TInt Ctlocale::timeget( CStifItemParser& aItem )
     
   typedef std::istreambuf_iterator<char,
   std::char_traits<char> > Iter;
-  static struct tm timeb;  
-  std::ios_base::iostate state;
+//  static struct tm timeb;  
+//  std::ios_base::iostate state;
 cout<<"";
     #if  STDCPP_OOM
 User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
@@ -863,7 +863,7 @@ TInt Ctlocale::timeput( CStifItemParser& aItem )
     {
     	
    
-    std::tm t = std::tm ();
+/*    std::tm t = std::tm ();
    
     t.tm_sec   = 56;    
     t.tm_min   = 34;    
@@ -884,7 +884,7 @@ TInt Ctlocale::timeput( CStifItemParser& aItem )
       "%X", "%y", "%Y", "%z", "%Z", "%%", "%Ec", "%EC", "%Ex",
       "%EX", "%Ey", "%EY", "%Od", "%Oe", "%OH", "%OI", "%Om",
       "%OM", "%OS", "%Ou", "%OU", "%OV", "%Ow", "%OW", "%Oy"         
-    };
+    };*/
     cout<<"";
 #if  STDCPP_OOM
 User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
@@ -1482,23 +1482,23 @@ TInt Ctlocale::catalog(CStifItemParser& aItem )
  #if  STDCPP_OOM
 User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
   #endif 
- char* p = "c";
-  const char* _Loc_ctype_default(p);
+// char* p = "c";
+/*  const char* _Loc_ctype_default(p);
    const char* _Loc_numeric_default(p) ;
 	const char* _Loc_time_default(p) ;
    const char* _Loc_collate_default(p) ;
    const char* _Loc_monetary_default(p) ;
-   const char* _Loc_messages_default(p) ;
+   const char* _Loc_messages_default(p) ;*/
    
-    locale::category c;
+/*    locale::category c;
    //_Locale* L = "k";
    const char* name1 = "catalog";
-    const char* name2="test";
+    const char* name2="test";*/
     
             
    const locale& L1= 0;
    const locale& L2= 0;
-   const char* name = "testing";
+//   const char* name = "testing";
   // void _Stl_loc_combine_names(L,name1,name2,c);
    //locale::locale(const locale& L1, const locale& L2, category c)
    //locale::category c;
@@ -1564,7 +1564,7 @@ User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
   locale loc1 ( "C" );
    
    char *string = "Hello, my name is John!";
-    wchar_t *wstring = L"Hello, my name is John!";
+//    wchar_t *wstring = L"Hello, my name is John!";
 
    const char* i = use_facet<ctype<char> > ( loc1 ).scan_is ( ctype_base::punct, &string[0], &string[strlen(&string[0])-1] );
     // const wchar_t* wi = use_facet<ctype<wchar_t> > ( loc1 ).scan_is ( ctype_base::punct, &wstring[0], &wstring[strlen(&wstring[0])-1] );
@@ -1602,7 +1602,7 @@ wchar_t wto_upper = L'A';
 
 char str2[16];
 
-char test;
+//char test;
    use_facet<ctype<char> > ( loc1 ).toupper( &string3[0], &string3[strlen(&string3[0])] );
      use_facet<ctype<wchar_t> > ( loc1 ).toupper( &wstring3[0], &wstring3[27] );
 

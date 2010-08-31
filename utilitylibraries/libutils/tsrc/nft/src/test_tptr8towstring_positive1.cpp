@@ -27,7 +27,6 @@ void main()
     wstring des((const wchar_t*)"hellohello") ;
     TPtr8  src((unsigned char *)"Hello World", 11, 35);
     int retval=ESuccess;
-    int size=30;
     int i=0;
     while (i<=1000)
     {
@@ -48,4 +47,5 @@ void main()
     }	
     __UHEAP_MARKEND;
     testResultXml("test_tptr8towstring_positive1");
+	return;
 }

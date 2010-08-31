@@ -88,7 +88,7 @@ LOCAL_D RFs					TheFs;
 
 LOCAL_D RTest				test(_L("t_resolver.exe"));
 
-LOCAL_D TCapabilitySet		dummycaps;
+//LOCAL_D TCapabilitySet		dummycaps;
 // Utility clean up function
 LOCAL_C void CleanupEComPtrArray(TAny* aArray);
 
@@ -148,7 +148,7 @@ used for recieving notifications of registry changes.
 Stub class(for CEComServer) used for the creation of CRegistrar class object.
 CEComServer class acts as observer for CRegistrar.
 */
-class CTestRegistrarObserver : public MRegistrarObserver
+class CTestRegistrarObserver : public MRegistrarObserver // codescanner::missingcclass
 	{
 public:
 	// This function is used by RegistrarObserver (i.e.CEComServer) to notify its

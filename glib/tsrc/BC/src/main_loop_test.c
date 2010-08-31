@@ -29,6 +29,7 @@
 #include <string.h>
 #include "glib.h"
 #include <pthread.h>
+#include <unistd.h>
 
 #ifdef SYMBIAN
 #include "mrt2_glib2_test.h"

@@ -21,13 +21,14 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-void main()
+int main()
 {
     __UHEAP_MARK;
     int retval =ESuccess;
     char* mycharstring = "Hello Char String";
     int char_length= strlen(mycharstring);
     RBuf16 myRBuf;
+    myRBuf.CreateL(30);
     myRBuf.CleanupClosePushL();
     retval = CharToRbuf16(mycharstring, myRBuf);
 
@@ -44,4 +45,5 @@ void main()
     CleanupStack::PopAndDestroy(1);
     __UHEAP_MARKEND;
     testResultXml("test_chartorbuf16_boundary2");
+	return 0;
 }

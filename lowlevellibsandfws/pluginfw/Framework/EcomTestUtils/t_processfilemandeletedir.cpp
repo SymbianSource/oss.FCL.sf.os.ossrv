@@ -24,8 +24,13 @@
 
 TInt DoDeleteDirL(const TDesC& aPath)
 	{
+	TInt r = KErrNone;
 	RFs fs;
-	fs.Connect();
+	r = fs.Connect();
+	if (r != KErrNone)
+		{
+			User::Leave(r);
+		}
 	CFileMan* fileMan = CFileMan::NewL(fs);
 	CleanupStack::PushL(fileMan);
 

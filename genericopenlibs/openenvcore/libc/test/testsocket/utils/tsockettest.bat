@@ -16,4 +16,3 @@
 
 copy \epoc32\release\WINSCW\udeb\greaterthan16kreadwriteserver.exe  \epoc32\release\WINSCW\udeb\Z\sys\bin\greaterthan16kreadwriteserver.exe
 copy \epoc32\release\WINSCW\urel\greaterthan16kreadwriteserver.exe  \epoc32\release\WINSCW\urel\Z\sys\bin\greaterthan16kreadwriteserver.exe
-CED -i C:\tstdapis\gosethernetced.xml

@@ -85,10 +85,10 @@ public:                         // Extension: locking, for thread safety.
   _STLP_mutex _M_lock;
 
 public:                         // Destructor.
-  _STLP_DECLSPEC virtual ~basic_streambuf();
+  _STLP_DUMMY_IMP_DECLSPEC virtual ~basic_streambuf();
 
 protected:                      // The default constructor.
-  _STLP_DECLSPEC basic_streambuf();
+  _STLP_DUMMY_IMP_DECLSPEC basic_streambuf();
 
 protected:                      // Protected interface to the get area.
   char_type* eback() const { return _M_gbegin; } // Beginning
@@ -129,21 +129,21 @@ protected:                      // Protected interface to the put area
 
 protected:                      // Virtual buffer management functions.
 
-  _STLP_DECLSPEC virtual basic_streambuf<_CharT, _Traits>* setbuf(char_type*, streamsize);
+  _STLP_DUMMY_IMP_DECLSPEC virtual basic_streambuf<_CharT, _Traits>* setbuf(char_type*, streamsize);
 
   // Alters the stream position, using an integer offset.  In this
   // class seekoff does nothing; subclasses are expected to override it.
-  _STLP_DECLSPEC virtual pos_type seekoff(off_type, ios_base::seekdir,
+  _STLP_DUMMY_IMP_DECLSPEC virtual pos_type seekoff(off_type, ios_base::seekdir,
                            ios_base::openmode = ios_base::in | ios_base::out);
 
   // Alters the stream position, using a previously obtained streampos.  In
   // this class seekpos does nothing; subclasses are expected to override it.
-  _STLP_DECLSPEC virtual pos_type
+  _STLP_DUMMY_IMP_DECLSPEC virtual pos_type
   seekpos(pos_type, ios_base::openmode = ios_base::in | ios_base::out);
 
   // Synchronizes (i.e. flushes) the buffer.  All subclasses are expected to 
   // override this virtual member function.
-  _STLP_DECLSPEC virtual int sync();
+  _STLP_DUMMY_IMP_DECLSPEC virtual int sync();
 
 
 public:                         // Buffer management.
@@ -166,40 +166,40 @@ protected:                      // Virtual get area functions, as defined in
   // with underflow, before reaching end of file.  (-1 is a special value:
   // it means that underflow will fail.)  Most subclasses should probably
   // override this virtual member function.
-  _STLP_DECLSPEC virtual streamsize showmanyc();
+  _STLP_DUMMY_IMP_DECLSPEC virtual streamsize showmanyc();
 
   // Reads up to __n characters.  Return value is the number of 
   // characters read.
-  _STLP_DECLSPEC virtual streamsize xsgetn(char_type* __s, streamsize __n);
+  _STLP_DUMMY_IMP_DECLSPEC virtual streamsize xsgetn(char_type* __s, streamsize __n);
 
   // Called when there is no read position, i.e. when gptr() is null
   // or when gptr() >= egptr().  Subclasses are expected to override
   // this virtual member function.
-  _STLP_DECLSPEC virtual int_type underflow();
+  _STLP_DUMMY_IMP_DECLSPEC virtual int_type underflow();
 
   // Similar to underflow(), but used for unbuffered input.  Most 
   // subclasses should probably override this virtual member function.
-  _STLP_DECLSPEC virtual int_type uflow();
+  _STLP_DUMMY_IMP_DECLSPEC virtual int_type uflow();
 
   // Called when there is no putback position, i.e. when gptr() is null
   // or when gptr() == eback().  All subclasses are expected to override
   // this virtual member function.
-  _STLP_DECLSPEC virtual int_type pbackfail(int_type = traits_type::eof());
+  _STLP_DUMMY_IMP_DECLSPEC virtual int_type pbackfail(int_type = traits_type::eof());
 
 protected:                      // Virtual put area functions, as defined in
                                 // 27.5.2.4.5 of the standard.
 
   // Writes up to __n characters.  Return value is the number of characters
   // written.
-  _STLP_DECLSPEC virtual streamsize xsputn(const char_type* __s, streamsize __n);
+  _STLP_DUMMY_IMP_DECLSPEC virtual streamsize xsputn(const char_type* __s, streamsize __n);
 
   // Extension: writes up to __n copies of __c.  Return value is the number
   // of characters written.
-  _STLP_DECLSPEC virtual streamsize _M_xsputnc(char_type __c, streamsize __n);
+  _STLP_DUMMY_IMP_DECLSPEC virtual streamsize _M_xsputnc(char_type __c, streamsize __n);
 
   // Called when there is no write position.  All subclasses are expected to
   // override this virtual member function.
-  _STLP_DECLSPEC virtual int_type overflow(int_type = traits_type::eof());
+  _STLP_DUMMY_IMP_DECLSPEC virtual int_type overflow(int_type = traits_type::eof());
 
 public:                         // Public members for writing characters.
   // Write a single character.
@@ -217,7 +217,7 @@ public:                         // Public members for writing characters.
     { return this->_M_xsputnc(__c, __n); }
 
 private:                        // Helper functions.
-  _STLP_DECLSPEC int_type _M_snextc_aux();
+  _STLP_DUMMY_IMP_DECLSPEC int_type _M_snextc_aux();
 
 
 public:                         // Public members for reading characters.
@@ -265,10 +265,10 @@ protected:                      // Virtual locale functions.
   // sets the streambuf's locale to __loc.  Note that imbue should
   // not (and cannot, since it has no access to streambuf's private
   // members) set the streambuf's locale itself.
-  _STLP_DECLSPEC virtual void imbue(const locale&);
+  _STLP_DUMMY_IMP_DECLSPEC virtual void imbue(const locale&);
 
 public:                         // Locale-related functions.
-  _STLP_DECLSPEC locale pubimbue(const locale&);
+  _STLP_DUMMY_IMP_DECLSPEC locale pubimbue(const locale&);
   locale getloc() const { return _M_locale; }
 
 # ifndef _STLP_NO_ANACHRONISMS

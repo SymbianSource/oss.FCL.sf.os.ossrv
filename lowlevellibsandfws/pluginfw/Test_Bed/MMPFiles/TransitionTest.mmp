@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET transitiontest.exe
+TARGET transitiontest.exe		//RTEST
 TARGETTYPE EXE
 
 // UIDs for loading

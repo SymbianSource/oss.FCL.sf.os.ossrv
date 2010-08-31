@@ -113,8 +113,12 @@ Cstlport_tstdeq* Cstlport_tstdeq::NewL(
 #ifdef LIBC_OLD_BACKEND
     MrtInit();
 #endif
+ #ifdef __ARMCC__
+    #pragma diag_suppress 830
+ #endif    
     Cstlport_tstdeq* self = new (ELeave) Cstlport_tstdeq( aTestModuleIf );
 
+ 
     CleanupStack::PushL( self );
     self->ConstructL();
     CleanupStack::Pop();

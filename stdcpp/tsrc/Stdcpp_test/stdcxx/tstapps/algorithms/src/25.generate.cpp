@@ -76,11 +76,11 @@ struct Size
 
     // Size must be convertible to an integral type
     operator int () const { return val_; }
-    operator++()
+    int operator++()
     {
     return ++val_;
     }
-    operator--()
+    int operator--()
     {
     return --val_;
     }

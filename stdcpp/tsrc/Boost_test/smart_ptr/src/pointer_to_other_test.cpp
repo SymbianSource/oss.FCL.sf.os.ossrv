@@ -39,6 +39,9 @@ int main()
 	std_log(LOG_FILENAME_LINE,"[Test Case for pointer_to_other_test]");
     // shared_ptr
 
+	#ifdef __ARMCC__
+  #pragma diag_suppress 550
+  #endif  
     assert_same_type< boost::pointer_to_other< boost::shared_ptr<X>, Y >::type, boost::shared_ptr<Y> >();
     assert_same_type< boost::pointer_to_other< boost::shared_ptr<X>, void >::type, boost::shared_ptr<void> >();
     assert_same_type< boost::pointer_to_other< boost::shared_ptr<void>, Y >::type, boost::shared_ptr<Y> >();
@@ -78,6 +81,7 @@ int main()
     assert_same_type< boost::pointer_to_other< X *, Y >::type, Y * >();
     assert_same_type< boost::pointer_to_other< X *, void >::type, void * >();
     assert_same_type< boost::pointer_to_other< void *, Y >::type, Y * >();
+
 
 #ifdef __SYMBIAN32__
 

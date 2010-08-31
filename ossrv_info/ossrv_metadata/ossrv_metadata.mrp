@@ -2,6 +2,5 @@ component           ossrv_metadata
 source   \sf\os\ossrv\ossrv_info\ossrv_metadata 
 source   \sf\os\ossrv\package_definition.xml
 source   \sf\os\ossrv\distribution.policy.s60
-source   \sf\os\ossrv\package_definition_v2.xml
 notes_source      \component_defs\release.src
 ipr T 

@@ -28,7 +28,8 @@
    * reference to the descriptor where the result of conversion 
    * is stored 
    * @return Status code (0 is ESuccess,-1 is EInsufficientMemory,
-   * -3 is EStringNoData, -4 is EInvalidPointer )
+   * -3 is EStringNoData, -4 is EInvalidPointer, -8 is EInvalidWCSSequence
+   * -9 is EInsufficientSystemMemory)
    */
 
 EXPORT_C int WstringToTbuf8(wstring& aSrc, TDes8& aDes)
@@ -243,15 +244,7 @@ EXPORT_C int WstringToRbuf8(const wstring& aSrc, RBuf8& aDes)
          
 	if(minusone != wcstombs(buf, (const wchar_t*)wcharString, wlen*2))
 	{
-	    int ret = aDes.Create(wlen*2);
-        if (KErrNone == ret)
-        {
-            aDes.Copy((const unsigned char *)buf, wlen*2);	
-        }
-        else 
-        {
-            retval = EInsufficientSystemMemory;	
-        }
+    aDes.Copy((const unsigned char *)buf, wlen*2);	
 	}
 	else
 	{

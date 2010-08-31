@@ -20,7 +20,8 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-void main()
+#pragma diag_suppress 550
+int main()
 {
     bool assert_failed = false;
     __UHEAP_MARK;
@@ -72,6 +73,7 @@ void main()
 
     string src11=des10;
     RBuf16 des11;
+    des11.CreateL(30);
     retval[10]= StringToRbuf16(src11,des11);
 
     RBuf16 src12;
@@ -84,6 +86,7 @@ void main()
 
     char *src13=des12;
     RBuf16 des13;
+    des13.CreateL(30);
     retval[12]=CharToRbuf16(src13,des13);
 
     string des14;
@@ -91,6 +94,7 @@ void main()
 
     string src15=des14;
     RBuf8 des15;
+    des15.CreateL(30);
     retval[14]= StringToRbuf8(src15,des15);
 
     RBuf8 src16;
@@ -100,6 +104,7 @@ void main()
 
     char *src17=des16;
     RBuf16 des17;
+    des17.CreateL(30);
     retval[16]=CharToRbuf16(src17,des17);
 
     RBuf16 src18;
@@ -109,6 +114,7 @@ void main()
 
     wchar_t *src19=des18;
     RBuf8 des19;
+    des19.CreateL(50);
     retval[18]=WcharToRbuf8(src19,des19);
 
     wstring src20;
@@ -122,6 +128,7 @@ void main()
     retval[21] = Tbuf16ToWchar(des20,src21,size_new);
 
     RBuf16 des21;
+    des21.CreateL(30);
     retval[22]= WcharToRbuf16(src21,des21);
 
     wstring src22;
@@ -135,6 +142,7 @@ void main()
     retval[25]= Tbuf16ToWchar(des22,src23,size);
 
     RBuf8 des23;
+    des23.CreateL(50);
     retval[26]= WcharToRbuf8(src23,des23);
 
     wstring src24;
@@ -147,6 +155,12 @@ void main()
     wchar_t* des25 = new wchar_t[150];                
     int size8=150;
     retval[29]= Tbuf8ToWchar(des24,des25,size8);
+    
+    for(int i=1; i<=29; i++)
+        {
+        if (retval[i]!= 0)
+                printf("Conversion failed for retval\n",retval[i]);
+        }
 
     ret= strncmp((char *)src1.c_str(),(char *)des24.Ptr(),7);
     if(ret == ESuccess)
@@ -181,5 +195,6 @@ void main()
     }
     __UHEAP_MARKEND;
     testResultXml("integration_test_scenario29");
+    return 0;
    
 }

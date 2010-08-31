@@ -236,7 +236,7 @@ EXPORT_C int Rbuf8ToWstring(TDes8& aSrc, wstring& aDes)
    * reference to the wstring array where the result of conversion 
    * is stored  
    * @return Status code (0 is ESuccess, -1 is EInsufficientMemory, 
-   * -4 is EInvalidPointer , -5 is EDescriptorNoData)
+   * -4 is EInvalidPointer , -5 is EDescriptorNoData, -7 is EInvalidMBSSequence)
    */
 
 EXPORT_C int Hbufc8ToWstring(HBufC8* aSrc, wstring& aDes)
@@ -285,7 +285,7 @@ EXPORT_C int Hbufc8ToWstring(HBufC8* aSrc, wstring& aDes)
     * reference to the wstring array where the result of conversion 
     * is stored  
     * @return Status code (0 is ESuccess, -1 is EInsufficientMemory, 
-    * -5 is EDescriptorNoData)
+    * -5 is EDescriptorNoData, -7 is EInvalidMBSSequence)
     */
 
 EXPORT_C int Tlitc8ToWstring(TDes8& aSrc, wstring& aDes)

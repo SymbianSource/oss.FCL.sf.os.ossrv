@@ -467,7 +467,7 @@ User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
      int result_int1;
      int result_int2;
      char result_char;
-     float result_float;
+//     float result_float;
      #if  STDCPP_OOM
 User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
   
@@ -614,7 +614,7 @@ User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
   #endif 
    test_variable1  = *max_element(test_array1,test_array1 + 8);
    test_variable2 = *max_element(test_array2,test_array2+5);
-   int test_variable3 =*max_element(test_array1,test_array1 + 10);
+   int test_variable3 =*max_element(test_array1,test_array1 + 7);
    
     #if  STDCPP_OOM 	
   User::__DbgSetAllocFail(FALSE,RHeap::ENone,1);
@@ -1042,7 +1042,7 @@ User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
 int array1[10];
 int array2[10];
    list <int> L1;
-   list <int>::iterator LIter1, LIterend, LIterend2;
+//   list <int>::iterator LIter1, LIterend, LIterend2;
 
    int t;
    for ( t = 1 ; t <= 10 ; t++ )
@@ -1201,7 +1201,7 @@ int array2[10];
    	10,20,30,40,50,60,70
    };
   vector<int> myvector (myints,myints+8) ,myvector1(myints1,myints1+7);
-  vector<int>::iterator it,it2; // cout<<"";
+  vector<int>::iterator it; // cout<<"";
 #if  STDCPP_OOM
 User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
   
@@ -2252,20 +2252,21 @@ User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
   
   vector <int> v1(array1,array1+12), v2(array2,array2+3),v3(array3,array3+4);
     vector<int> v4(array4,array4+4);
-    vector <int>::iterator Iter1, Iter2,Iter3 ,Iter4;
+//    vector <int>::iterator Iter1, Iter2,Iter3 ,Iter4;
  
   
     
 
-   
-   vector <int>::iterator result1,result2; // cout<<"";
+   vector <int>::iterator result1;
+
+
    #if  STDCPP_OOM
 	User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
   
  	 #endif
    result1 = find_end( v1.begin( ), v1.end( ), v3.begin( ), v3.end( ) );
    
-   result2 = find_end ( v1.begin( ), v1.end( ), v4.begin( ), v4.end( ) );
+//   result2 = find_end ( v1.begin( ), v1.end( ), v4.begin( ), v4.end( ) );
   #if  STDCPP_OOM 	
   User::__DbgSetAllocFail(FALSE,RHeap::ENone,1);
   
@@ -2321,7 +2322,7 @@ User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
   
   vector <int> v1(array1,array1+12), v2(array2,array2+3),v3(array3,array3+4);
     vector<int> v4(array4,array4+4);
-    vector <int>::iterator Iter1, Iter2,Iter3 ,Iter4;
+//    vector <int>::iterator Iter1, Iter2,Iter3 ,Iter4;
  
   
     
@@ -3018,8 +3019,12 @@ User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
 
    //vector containing numbers
    IntVector Numbers(MAX_ELEMENTS), Result(MAX_ELEMENTS) ;
-
+   
+#ifdef __ARMCC__
+#pragma diag_suppress 550
+#endif
    IntVectorIt start, end, it, last, resultIt ;
+
 
    //Initialize vector Numbers
    Numbers[0] = 10 ;
@@ -3281,7 +3286,7 @@ failures++;
    //vector containing numbers
    IntVector Numbers(MAX_ELEMENTS)  ;
 
-   IntVectorIt start, end, it, last, resultIt ;
+   IntVectorIt start, end, it ;
 
    //Initialize vector Numbers
    Numbers[0] = 10 ;
@@ -4319,10 +4324,10 @@ User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
 
    try
    {   // __UHEAP_MARK;
-  int failures =0,k,l;
+  int failures =0;
   vector <int> v1;
-   vector <int>::iterator Iter1;
-   pair < vector <int> :: iterator , vector <int> :: iterator > Result1, Result2, Result3;
+//   vector <int>::iterator Iter1;
+   pair < vector <int> :: iterator , vector <int> :: iterator > Result1, Result2;
 
    // Constructing vectors v1a & v1b with default less than ordering
    int i;
@@ -4342,7 +4347,7 @@ User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
 
    // Constructing vectors v2 with range sorted by greater
    vector <int> v2 ( v1 );
-   vector <int>::iterator Iter2;
+//   vector <int>::iterator Iter2;
    sort ( v2.begin ( ) , v2.end ( ) , greater<int> ( ) );
 
     // cout<<"";
@@ -4475,7 +4480,7 @@ int PrintCube(int n)
 
    IntVector Numbers(VECTOR_SIZE) ;   //vector containing numbers
 
-    IntVectorIt start, end, it ;
+//    IntVectorIt start, end, it ;
 
     int i ;
 
@@ -4535,7 +4540,7 @@ int i,failures=0;
    try
    { 
    
-     size_t startVAR,strideVAR,sizeVAR;
+     size_t startVAR;
 
    valarray<int> va ( 20 ), vaResult;
   
@@ -4722,7 +4727,7 @@ int failures=0;
 try
    {
 vector<int> v1;
-vector<int>::iterator Iter;
+//vector<int>::iterator Iter;
 int i ;
 for (i = 0; i <= 5; i++)
 {
@@ -4965,7 +4970,7 @@ User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
   	 int Array[] = { 10, 20, 30, 40 };
    	const int N = sizeof( Array ) / sizeof( int );
 
-   	int i;
+//   	int i;
     Integer2* ArrayPtr = ( Integer2* ) malloc( N * sizeof( int ) );
      
 
@@ -5164,7 +5169,7 @@ failures++;
    try
    { 
    vector <int> v1;
-   vector <int>::iterator Iter1, Iter2;
+   vector <int>::iterator Iter1;
    int i,failures = 0 ;
    static int j ,k;
    for ( i = 1 ; i <= 3 ; i++ )
@@ -5558,7 +5563,7 @@ if(k!= 0xa)
 failures++;
 
   
- float l = 31.31234F;
+// float l = 31.31234F;
    
   cout.precision( 3 );
  

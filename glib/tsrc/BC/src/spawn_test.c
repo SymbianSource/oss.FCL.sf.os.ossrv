@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <glib.h>
 #include <gspawn.h>
+#include <stdlib.h>
 
 #ifdef SYMBIAN
 #include "mrt2_glib2_test.h"

@@ -19,7 +19,7 @@ UID				0x101FB5A8 0x10009D8F
 VENDORID 		0x70000001
 
 
-TARGET			t_disabledrives.exe
+TARGET			t_disabledrives.exe		//RTEST
 TARGETTYPE		exe
 
 USERINCLUDE		../../Framework/frame

@@ -15,7 +15,7 @@
 // 
 //
 
-target          t_cell.exe
+target          t_cell.exe	//RTEST
 targettype      EXE
 UID		0x1000007a
 VENDORID 0x70000001

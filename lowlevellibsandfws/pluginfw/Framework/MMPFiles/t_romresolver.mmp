@@ -17,7 +17,7 @@
 // 
 //
 
-TARGET 		t_romresolver.exe
+TARGET 		t_romresolver.exe		//RTEST
 TARGETTYPE 	exe
 
 SOURCEPATH	../../Framework/RomResolverTest

@@ -86,7 +86,7 @@ void construct_iterators(Array&) {
   // const iterators constructed from iterators.
   {
     typename Array::iterator i1;
-    typename Array::const_iterator ci1;
+//    typename Array::const_iterator ci1;
     typename Array::reverse_iterator r1;
     typename Array::const_reverse_iterator cr1;
 

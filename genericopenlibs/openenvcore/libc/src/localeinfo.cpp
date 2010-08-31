@@ -1676,7 +1676,7 @@ TInt CLocale::SyncLocale(TLocaleAspect aspect)
     locale.GetLocaleDllName(aspect,Kdname);
 #ifdef SYMBIAN_DISTINCT_LOCALE_MODEL
     // check if the new  dlls is present then load it or go for old dll
-    if( Kdname.Find(_L("elocl.")) == KErrNotFound ) 
+    if( Kdname.FindC(_L("elocl.")) == KErrNotFound ) 
         {
         iOldDllPresent = 0;
         locale.GetLocaleDllName(ELocaleTimeDateSettings,reg_dllname);

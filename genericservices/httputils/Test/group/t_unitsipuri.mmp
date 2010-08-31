@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET			t_unitsipuri.exe
+TARGET			t_unitsipuri.exe		//RTEST
 TARGETTYPE		EXE
 CAPABILITY 		None
 

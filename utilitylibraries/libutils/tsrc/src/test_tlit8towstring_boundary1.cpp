@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-void main()
+int main()
 {
     __UHEAP_MARK;
     {
@@ -28,7 +28,7 @@ void main()
     TBuf8 <25>src;
     src.Copy(Kname);
     wstring str;
-    int size=10;
+    //int size=10;
     int retval =ESuccess;
     retval= Tlitc8ToWstring(src,str);
 
@@ -44,4 +44,5 @@ void main()
     }
     __UHEAP_MARKEND;
     testResultXml("Test_tlit8towstring_boundary1");
+	return 0;
 }

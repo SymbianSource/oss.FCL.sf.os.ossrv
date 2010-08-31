@@ -167,6 +167,7 @@ int build_index(FILE *in, off_t span, struct access **built)
     z_stream strm;
     unsigned char input[CHUNK];
     unsigned char window[WINSIZE];
+	struct point *next = NULL;
 
     /* initialize inflate */
     strm.zalloc = Z_NULL;
@@ -244,7 +245,7 @@ int build_index(FILE *in, off_t span, struct access **built)
     /* clean up and return index (release unused entries in list) */
     (void)inflateEnd(&strm);
     
-    struct point *next = (struct point *)realloc(index->list, sizeof(struct point) * index->have);
+    next = (struct point *)realloc(index->list, sizeof(struct point) * index->have);
     if (next == NULL) {
         free_index(index);
         return Z_MEM_ERROR;

@@ -23,6 +23,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <errno.h>
+#include <sys/stat.h>
 
 #define LOG_FILE "c:\\logs\\req_name_log1.txt"
 #include "std_log_result.h"

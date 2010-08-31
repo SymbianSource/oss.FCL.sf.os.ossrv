@@ -13,7 +13,7 @@
 // Description:
 //
 
-target 		t_downgrade.exe
+target 		t_downgrade.exe		//RTEST
 targettype 		exe
 
 // Uses sid of EComserver process to allow access to private dir.

@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-void main()
+int main()
 {
     __UHEAP_MARK;
     int retval =ESuccess;
@@ -43,4 +43,6 @@ void main()
     }      
     __UHEAP_MARKEND;
     testResultXml("test_wchartotbuf16_content_check");
+	
+	return 0;
 }

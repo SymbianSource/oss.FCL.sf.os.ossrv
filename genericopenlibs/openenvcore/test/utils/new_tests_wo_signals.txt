@@ -3,7 +3,6 @@
 # UDEB TESTS #
 
 # Configuration 1
-testexecute, \logs\testexecute\tsocket.htm,, c:\tstdapis\tsocket.script, 300, UDEB,\epoc32\winscw\c\tstdapis\tsockettest.bat,
 testexecute, \logs\testexecute\tloc_blr.htm,, c:\tstdapis\tloc_blr.script, 300, UDEB,,
 testexecute, \logs\testexecute\tprogname.htm,, c:\tstdapis\tprogname.script, 300, UDEB,,
 testexecute, \logs\testexecute\tlibcwchar.htm,, c:\tstdapis\tlibcwchar.script, 300, UDEB,,
@@ -27,7 +26,7 @@ testexecute, \logs\testexecute\tnetdb.htm,, c:\tstdapis\tnetdb.script, 300, UDEB
 testexecute, \logs\testexecute\tregex.htm,, c:\tstdapis\tregex.script, 300, UDEB,,
 testexecute, \logs\testexecute\tsemaphore.htm,, c:\tstdapis\tsemaphore.script, 300, UDEB,,
 testexecute, \logs\testexecute\tshm.htm,, c:\tstdapis\tshm.script, 300, UDEB,,
-
+testexecute, \logs\testexecute\tsocket.htm,, c:\tstdapis\tsocket.script, 300, UDEB,\epoc32\winscw\c\tstdapis\tsockettest.bat,
 testexecute, \logs\testexecute\tsyssim.htm,, c:\tstdapis\tsyssim.script, 300, UDEB,,
 testexecute, \logs\testexecute\tsysunistd.htm,, c:\tstdapis\tsysunistd.script, 300, UDEB,,
 testexecute, \logs\testexecute\ttime_blr.htm,, c:\tstdapis\ttime_blr.script, 300, UDEB,,
@@ -91,7 +90,6 @@ testexecute, \logs\testexecute\tredirectionserver.htm,, c:\tstdapis\tredirection
 
 
 #UREL TEsts
-testexecute, \logs\testexecute\tsocket.htm,, c:\tstdapis\tsocket.script, 300, UREL,\epoc32\winscw\c\tstdapis\tsockettest.bat,
 testexecute, \logs\testexecute\tloc_blr.htm,, c:\tstdapis\tloc_blr.script, 300, UREL,,
 testexecute, \logs\testexecute\tprogname.htm,, c:\tstdapis\tprogname.script, 300, UREL,,
 testexecute, \logs\testexecute\tlibcwchar.htm,, c:\tstdapis\tlibcwchar.script, 300, UREL,,
@@ -115,7 +113,7 @@ testexecute, \logs\testexecute\tnetdb.htm,, c:\tstdapis\tnetdb.script, 300, UREL
 testexecute, \logs\testexecute\tregex.htm,, c:\tstdapis\tregex.script, 300, UREL,,
 testexecute, \logs\testexecute\tsemaphore.htm,, c:\tstdapis\tsemaphore.script, 300, UREL,,
 testexecute, \logs\testexecute\tshm.htm,, c:\tstdapis\tshm.script, 300, UREL,,
-
+testexecute, \logs\testexecute\tsocket.htm,, c:\tstdapis\tsocket.script, 300, UREL,\epoc32\winscw\c\tstdapis\tsockettest.bat,
 testexecute, \logs\testexecute\tsyssim.htm,, c:\tstdapis\tsyssim.script, 300, UREL,,
 testexecute, \logs\testexecute\tsysunistd.htm,, c:\tstdapis\tsysunistd.script, 300, UREL,,
 testexecute, \logs\testexecute\ttime_blr.htm,, c:\tstdapis\ttime_blr.script, 300, UREL,,

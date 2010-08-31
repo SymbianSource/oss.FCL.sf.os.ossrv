@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET 		t_ecomcancel.exe
+TARGET 		t_ecomcancel.exe			//RTEST
 TARGETTYPE 	exe
 VENDORID    0x70000001
 

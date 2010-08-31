@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-void main()
+int main()
 {
     __UHEAP_MARK;
     _LIT8(Kname,"tlit8aaaaaaaaaaaaaaaaa");
@@ -48,4 +48,5 @@ void main()
     des2 = NULL;
     __UHEAP_MARKEND;
     testResultXml("Test_tlit8tochar_recalling");
+	return 0;
 }

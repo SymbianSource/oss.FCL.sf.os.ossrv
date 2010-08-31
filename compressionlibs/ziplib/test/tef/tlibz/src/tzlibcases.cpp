@@ -14,9 +14,9 @@
 // Name        : tzlibcases.cpp
 // 
 //
-
+#include <errno.h>
 #include "tzlib.h"
-extern int errno;
+
 #define CHECK_ERR(err, msg) { \
     if (err != Z_OK) { \
        INFO_PRINTF2(_L("Error: %d"), err); \

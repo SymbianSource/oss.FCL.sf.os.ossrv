@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET        tc_tsch_startup_perf.exe
+TARGET        tc_tsch_startup_perf.exe	//RTEST
 TARGETTYPE    exe
 
 //SID of SysStart (for starting schexe.exe directly) 

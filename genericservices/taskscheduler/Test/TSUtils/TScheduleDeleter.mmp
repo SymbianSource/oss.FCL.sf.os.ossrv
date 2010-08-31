@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET        tscheduledeleter.exe
+TARGET        tscheduledeleter.exe		//RTEST
 // needed to delete schedule files in private data cage
 CAPABILITY  	AllFiles
 

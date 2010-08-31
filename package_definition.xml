@@ -38,19 +38,19 @@
     </collection>
     <collection id="glib" name="GLib" level="utilities">
       <component id="glibbackend" filter="s60" name="GLib Backend">
-        <unit bldFile="glib/glibbackend/group"/>
+        <unit bldFile="glib/build/symbian/glibbackend/group"/>
       </component>
       <component id="libglib" filter="s60" name="GLib Library">
-        <unit bldFile="glib/libglib/group"/>
+        <unit bldFile="glib/build/symbian/glib/group"/>
       </component>
       <component id="libgthread" filter="s60" name="Libg Thread">
-        <unit bldFile="glib/libgthread/group"/>
+        <unit bldFile="glib/build/symbian/gthread/group"/>
       </component>
       <component id="libgmodule" filter="s60" name="Libg Module">
-        <unit bldFile="glib/libgmodule/group"/>
+        <unit bldFile="glib/build/symbian/gmodule/group"/>
       </component>
       <component id="libgobject" filter="s60" name="Libg Object">
-        <unit bldFile="glib/libgobject/group"/>
+        <unit bldFile="glib/build/symbian/gobject/group"/>
       </component>
       <component id="glib_test" filter="s60" purpose="development" name="GLib Test">
         <unit bldFile="glib/tsrc/group"/>
@@ -86,9 +86,6 @@
       </component>
     </collection>
     <collection id="stdlibs" name="Standard Libraries" level="translation">
-      <component id="libz" filter="s60" name="Z Compression Library">
-        <unit bldFile="stdlibs/libz/group"/>
-      </component>
       <component id="libcrypt" filter="s60" name="Crypt Library">
         <unit bldFile="stdlibs/libcrypt/group"/>
       </component>
@@ -138,6 +135,9 @@
       </component>
       <component id="posixrealtimeextensions" name="POSIX Realtime Extensions" introduced="^3" purpose="optional">
         <unit bldFile="genericopenlibs/posixrealtimeextensions/group" mrp="genericopenlibs/posixrealtimeextensions/group/oeaddons_librt.mrp"/>
+      </component>
+	  <component id="liboil" name="Liboil" introduced="^4" purpose="optional">
+        <unit bldFile="genericopenlibs/liboil/group" mrp="genericopenlibs/liboil/group/oeaddons_liboil.mrp"/>
       </component>
     </collection>
     <collection id="lowlevellibsandfws" name="Low Level Libraries and Frameworks" level="app-libs">

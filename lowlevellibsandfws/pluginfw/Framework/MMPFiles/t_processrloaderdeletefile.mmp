@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET		t_processrloaderdeletefile.exe
+TARGET		t_processrloaderdeletefile.exe			//RTEST
 // needed to access all areas of file system
 CAPABILITY  	TCB AllFiles
 

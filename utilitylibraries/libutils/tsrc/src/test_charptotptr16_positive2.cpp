@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-void main()
+int main()
 {
     __UHEAP_MARK;
     int retval =ESuccess;
@@ -28,7 +28,7 @@ void main()
     TBufC16<1> buf;
     TPtr16 myTptr= buf.Des();
     wchar_t* temp = new wchar_t[30];
-    retval = CharpToTptr16(mycharstring,temp,myTptr);
+    retval = CharpToTptr16(mycharstring, myTptr);
 
     if (retval ==ESuccess)
     {
@@ -42,4 +42,5 @@ void main()
     delete[] temp;
     __UHEAP_MARKEND;
     testResultXml("test_charptotptr16_positive2");
+    return 0;
 }

@@ -15,7 +15,7 @@
 // 
 //
 
-target          t_baflutils.exe
+target          t_baflutils.exe	//RTEST
 targettype      EXE
 UID		0x1000007a
 

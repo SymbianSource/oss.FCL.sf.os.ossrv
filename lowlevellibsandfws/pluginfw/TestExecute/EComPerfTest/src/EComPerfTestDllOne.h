@@ -20,7 +20,7 @@
 
 // ____________________________________________________________________________
 // 
-class CImplementationClassExampleOne
+class CImplementationClassExampleOne // codescanner::missingcclass
 {
 public:
 	static CImplementationClassExampleOne* NewL(TAny* aInitParams);

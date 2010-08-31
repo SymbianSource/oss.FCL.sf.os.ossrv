@@ -33,7 +33,7 @@ extern "C" {
 
 #ifndef _RWSTD_NO_PUTENV_CONST_CHAR
 
-_RWSTD_DLLIMPORT int putenv (const char*) _LIBC_THROWS ();
+IMPORT_C int putenv (const char*) _LIBC_THROWS ();
 
 #else   // if defined (_RWSTD_NO_PUTENV_CONST_CHAR)
 

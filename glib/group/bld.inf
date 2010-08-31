@@ -11,14 +11,9 @@
 *
 * Contributors:
 *
-* Description:   This is a top level bld file to generate all libraries.
- *
+* Description: 
+*
 */
+//This is an auto-generated top level bld.inf file
+#include "../build/symbian/group/bld.inf"
 
-
-
-#include "../glibbackend/group/bld.inf"
-#include "../libglib/group/bld.inf"
-#include "../libgthread/group/bld.inf"
-#include "../libgmodule/group/bld.inf"
-#include "../libgobject/group/bld.inf"

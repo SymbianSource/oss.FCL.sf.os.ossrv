@@ -21,6 +21,7 @@
 #define DBUS_COMPILATION /* Cheat and use private stuff */
 #include <dbus/dbus.h>
 #include <stdlib.h>
+#include <unistd.h>
 #undef DBUS_COMPILATION
 
 #endif

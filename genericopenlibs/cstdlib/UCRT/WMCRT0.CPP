@@ -22,8 +22,6 @@
 
 extern "C" int wmain (int argc, wchar_t *argv[], wchar_t *envp[]);
 
-extern "C" void exit (int ret);
-
 GLDEF_C TInt E32Main()
 	{     
 	CTrapCleanup::New();

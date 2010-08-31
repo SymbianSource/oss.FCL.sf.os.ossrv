@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-void main()
+int main()
 {
     int retval =ESuccess;
     wchar_t* mywcharstring = NULL; 
@@ -37,4 +37,6 @@ void main()
     printf("wcharptotptrc16 negative2 Failed\n");
     }      
     testResultXml("test_wcharptotptrc16_negative2");
+	
+	return 0;
 }

@@ -595,4 +595,4 @@ EXPORTS
 	set_fmode @ 594 NONAME
 	get_fmode @ 595 NONAME
 	sigenable @ 596 NONAME
- 	unsetdefaultif @ 597 NONAME
+

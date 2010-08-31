@@ -140,8 +140,13 @@ int strcoll(const char *s1, const char *s2)
 static int DoConvertionToUnicode( const char* s1, TUint16* aUnicodeText)
 {
 
+    TInt r = KErrNone;
     RFs fileSession;
-    fileSession.Connect();
+    r = fileSession.Connect();
+    if (r != KErrNone)
+        {
+            return r;
+        }
     CleanupClosePushL(fileSession);
         
     CCnvCharacterSetConverter* conv = CCnvCharacterSetConverter::NewL() ;

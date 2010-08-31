@@ -38,7 +38,6 @@ tstl_3.cfg   /epoc32/WINSCW/C/TestFramework/tstl_3.cfg
 /agnmodel/inc/AGMCOMON.H
 */
 
-PRJ_TESTMMPFILES
 // NOTE: If using ARS requirements .mmp file operation should be done under this.
 // 'abld test build'
 

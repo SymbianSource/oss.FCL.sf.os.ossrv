@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET			ezlibtest.exe
+TARGET			ezlibtest.exe	//RTEST
 
 TARGETTYPE		exe
 

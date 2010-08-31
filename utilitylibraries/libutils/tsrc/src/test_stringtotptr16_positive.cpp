@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-void main()
+int main()
 {
     int retval =ESuccess;
     string s("Hello World");
@@ -42,4 +42,5 @@ void main()
     wptr = NULL;
     __UHEAP_MARKEND;
     testResultXml("test_stringtotptr16_positive");
+	return 0;
 }

@@ -13,7 +13,7 @@
 // Description:
 //
 
-target 		t_language.exe
+target 		t_language.exe		//RTEST
 targettype 	exe
 capability		WriteDeviceData
 

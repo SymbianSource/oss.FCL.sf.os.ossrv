@@ -57,6 +57,9 @@ public:
     // Lifetime management (use automatic destructor and copy constructor)
     my_wrapped_integer( int_type const &v = int_type() )  : v_( v )  {}
 
+#ifdef __ARMCC__
+#pragma diag_suppress 177
+#endif
     // Accessors
     int_type  value() const  { return this->v_; }
 
@@ -84,6 +87,7 @@ public:
     self_type &operator &=(self_type const &r) {this->v_ &= r.v_; return *this;}
     self_type &operator |=(self_type const &r) {this->v_ |= r.v_; return *this;}
     self_type &operator ^=(self_type const &r) {this->v_ ^= r.v_; return *this;}
+
 
     // Input & output
     friend std::istream & operator >>( std::istream &i, self_type &x )

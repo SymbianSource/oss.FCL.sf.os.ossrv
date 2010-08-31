@@ -20,14 +20,17 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-void main()
+int main()
 {
     int retval =ESuccess;
     string s;
     __UHEAP_MARK;
     TBuf8 <12>  buf((const unsigned char *)"Hello");
     retval = Tbuf8ToString(buf, s);
-
+    if (retval == ESuccess)
+        {
+        printf("TBuf8 to string conversion successful\n");
+        }
     if (!strcmp(s.c_str(), "Hello"))
     {
     printf("tbuf8tostring Passed");
@@ -39,4 +42,5 @@ void main()
     }  	
     __UHEAP_MARKEND;
     testResultXml("test_tbuf8tostring_positive1");
+	return 0;
 }

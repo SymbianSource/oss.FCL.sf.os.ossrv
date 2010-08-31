@@ -1401,6 +1401,8 @@ TInt CTestSysunistd::fcntl_largefileTest( )
 	int fd = open(filedir, O_CREAT|O_RDWR, 0666);
 	int val = ftruncate(fd, length);
 	int thirdarg = 7;
+	
+	int ret;
 	int fd2 = fcntl(fd, F_DUPFD, thirdarg);
 	INFO_PRINTF2(_L("first fcntl call returns = %d"), fd2);
 	if(fd2 >= thirdarg)
@@ -1411,7 +1413,10 @@ TInt CTestSysunistd::fcntl_largefileTest( )
 		{
 		ERR_PRINTF2(_L("Failed, the file descriptor is < third argument i.e %d"), thirdarg);
 		retVal = -1;
-		goto cleanup;
+		close(fd);
+        close(fd2);
+        unlink(filedir);
+        return retVal;
 		}
 	thirdarg = 10;
 	int fd3 = fcntl(fd, F_DUPFD, thirdarg);
@@ -1427,7 +1432,7 @@ TInt CTestSysunistd::fcntl_largefileTest( )
 		goto cleanup;
 		}
 	//making use of the duplicate fd3 obtained by the fcntl call
-	int ret = write(fd3, "merlyn", 6);
+	ret = write(fd3, "merlyn", 6);
 	if (6 == ret)
 		{
 		INFO_PRINTF2(_L("write returns = %d"), ret);

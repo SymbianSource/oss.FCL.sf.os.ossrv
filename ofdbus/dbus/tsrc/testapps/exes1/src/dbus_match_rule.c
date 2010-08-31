@@ -22,6 +22,8 @@
 #include <string.h>
 #include <pthread.h>
 #include <fcntl.h>
+#include <unistd.h>
+#include <sys/stat.h>
 
 #define LOG_FILE "c:\\logs\\dbus_match_rule_log1.txt"
 #include "std_log_result.h"

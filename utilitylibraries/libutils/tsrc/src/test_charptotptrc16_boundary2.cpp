@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-void main()
+int main()
 {
     __UHEAP_MARK;
     int retval =ESuccess;
@@ -28,7 +28,7 @@ void main()
     int char_length= strlen(mycharstring);
     TPtrC myTptrc;
     wchar_t* myptr= new wchar_t[strlen(mycharstring)+1];
-    retval = CharpToTptrc16(mycharstring,myptr, myTptrc);
+    retval = CharpToTptrc16(mycharstring, myptr , myTptrc);
 
     int buf_len = myTptrc.Length();
     if (retval ==ESuccess &&\
@@ -45,4 +45,5 @@ void main()
     free(myptr);
     __UHEAP_MARKEND;
     testResultXml("test_charptotptrc16_boundary2");
+	return 0;
 }

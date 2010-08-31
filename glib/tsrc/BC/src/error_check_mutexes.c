@@ -38,6 +38,7 @@
 void test_error_check_mutexes()
 {
   
+  GThread *thread =NULL;
   GMutex* test_g_mutex_mutex = NULL;
   
   g_thread_init(NULL);	
@@ -45,7 +46,7 @@ void test_error_check_mutexes()
   test_g_mutex_mutex = g_mutex_new ();
 
   g_assert (g_mutex_trylock (test_g_mutex_mutex));
-//  g_assert (g_mutex_trylock (test_g_mutex_mutex) == FALSE);
+  g_assert (g_mutex_trylock (test_g_mutex_mutex) == FALSE);
   g_mutex_unlock (test_g_mutex_mutex);
   g_mutex_free (test_g_mutex_mutex);
 }

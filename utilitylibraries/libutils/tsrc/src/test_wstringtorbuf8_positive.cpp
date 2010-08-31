@@ -20,11 +20,12 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-void main()
+int main()
 {
     wstring str(L"Hello World");
     __UHEAP_MARK;	
     RBuf8 buf;
+    buf.CreateL(30);
     int retval =ESuccess;
     retval = WstringToRbuf8(str, buf);
 
@@ -40,4 +41,5 @@ void main()
     buf.Close();
     __UHEAP_MARKEND;
     testResultXml("test_wstringtorbuf8_positive");
+	return 0;
 }

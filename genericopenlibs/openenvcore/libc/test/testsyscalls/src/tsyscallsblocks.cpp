@@ -6927,6 +6927,7 @@ void* handler(void *)
 	{
 	int ret;
 	ret = fsync(fd);
+	ret = ret;
 	return 0;
 	}
 
@@ -6936,6 +6937,7 @@ void* handler1(void *)
 	int ret;
 	lseek(fd, 2, SEEK_SET);
 	ret = fsync(fd);   //only one fsync should be able to sync the data.
+	ret = ret;
 	return 0;
 	}
 

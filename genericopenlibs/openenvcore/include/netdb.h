@@ -211,9 +211,6 @@ struct addrinfo {
 #define	AI_V4MAPPED_CFG	0x00000200 /* accept IPv4-mapped if kernel supports */
 #define	AI_ADDRCONFIG	0x00000400 /* only if any address is assigned */
 #define	AI_V4MAPPED	0x00000800 /* accept IPv4-mapped IPv6 address */
-#ifdef __SYMBIAN32__
-#define AI_V4CONVERTED 0x00001000
-#endif
 /* special recommended flags for getipnodebyname */
 #define	AI_DEFAULT	(AI_V4MAPPED_CFG | AI_ADDRCONFIG)
 

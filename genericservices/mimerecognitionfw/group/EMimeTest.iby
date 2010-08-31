@@ -33,8 +33,4 @@ ECOM_PLUGIN(ttestecomdatarec.dll,1d1f75ed.rsc)
 
 
 
-data=DATAZ_\emimetest\emimetest_run.bat	       \emimetest_run.bat
-data=DATAZ_\emimetest\emimetest_t_mime.script  \emimetest\emimetest_t_mime.script
-data=DATAZ_\emimetest\emimetest_t_mstr.script  \emimetest\emimetest_t_mstr.script
-data=DATAZ_\emimetest\emimetest_t_maps.script  \emimetest\emimetest_t_maps.script
 #endif

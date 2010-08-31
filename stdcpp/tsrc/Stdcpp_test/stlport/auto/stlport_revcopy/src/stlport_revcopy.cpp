@@ -113,8 +113,12 @@ Cstlport_revcopy* Cstlport_revcopy::NewL(
 #ifdef LIBC_OLD_BACKEND
     MrtInit();
 #endif
+ #ifdef __ARMCC__
+    #pragma diag_suppress 830
+ #endif    
     Cstlport_revcopy* self = new (ELeave) Cstlport_revcopy( aTestModuleIf );
 
+ 
     CleanupStack::PushL( self );
     self->ConstructL();
     CleanupStack::Pop();

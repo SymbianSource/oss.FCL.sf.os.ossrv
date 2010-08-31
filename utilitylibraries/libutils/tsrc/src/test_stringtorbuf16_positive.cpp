@@ -20,12 +20,13 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-void main()
+int main()
 {
     string s("testing");
     __UHEAP_MARK;
     int retval =ESuccess;
     RBuf16 buf;
+    buf.CreateL(30);
     retval = StringToRbuf16(s, buf);
 
     if (retval == ESuccess)
@@ -40,4 +41,5 @@ void main()
     buf.Close();
     __UHEAP_MARKEND;
     testResultXml("test_stringtorbuf16_positive");
+	return 0;
 }

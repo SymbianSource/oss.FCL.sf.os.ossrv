@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET          tc_tsch_schsvr_oom_hometime.exe
+TARGET          tc_tsch_schsvr_oom_hometime.exe		//RTEST
 TARGETTYPE      exe
 
 //WriteDeviceData needed to create persistent schedules 

@@ -113,8 +113,12 @@ Cstlport_nthelem* Cstlport_nthelem::NewL(
 #ifdef LIBC_OLD_BACKEND
     MrtInit();
 #endif
+ #ifdef __ARMCC__
+    #pragma diag_suppress 830
+ #endif    
     Cstlport_nthelem* self = new (ELeave) Cstlport_nthelem( aTestModuleIf );
 
+ 
     CleanupStack::PushL( self );
     self->ConstructL();
     CleanupStack::Pop();

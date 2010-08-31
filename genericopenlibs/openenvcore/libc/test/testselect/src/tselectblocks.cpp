@@ -498,7 +498,7 @@ void* SocketWrite1(void* aSock)
 
 void* SocketWrite2(void* aSock)
 	{	
-	int *sock_fd = (int*)aSock;
+//	int *sock_fd = (int*)aSock;
 	((int*)aSock)[Write2Err] = KErrNone;
 	
 	char buf[] = "Write from second thread";
@@ -515,7 +515,7 @@ void* SocketWrite2(void* aSock)
 
 void* PipeWrite(void* aPipe)
 	{
-	int *pipe_fd = (int*)aPipe;
+	//int *pipe_fd = (int*)aPipe;
 	char buf[] = "Pipe Write";
 	sleep(1);
 	int ret = write(((int*)aPipe)[PipeWriteDesc],buf,sizeof(buf));
@@ -630,7 +630,7 @@ TInt CTestSelect::TestSocketDesc3()
 	
 /*************************** Pipe Creation and Writing **************************/
     int fd[2];
-    char buf1[50]= "Write from main thread";
+    //char buf1[50]= "Write from main thread";
     INFO_PRINTF1(_L("Before Pipe "));   
     if ( pipe(fd) < 0 )
         {
@@ -1004,11 +1004,11 @@ TInt CTestSelect::TestSelectRedirDescWrite()
     fd_set writefds;
     fd_set exceptfds;
     int maxfd = STDIN_FILENO;
-    int select_ret = 0;
+   // int select_ret = 0;
     maxfd = STDIN_FILENO;
     FD_ZERO(&writefds);
     FD_SET(STDIN_FILENO,&writefds);
-    select_ret = select(maxfd+1,&readfds,&writefds,&exceptfds,NULL);
+    /*select_ret =*/ select(maxfd+1,&readfds,&writefds,&exceptfds,NULL);
     if( FD_ISSET(STDIN_FILENO,&writefds) )
         {        
         stdinpass = ETrue;
@@ -1022,7 +1022,7 @@ TInt CTestSelect::TestSelectRedirDescWrite()
     maxfd = STDOUT_FILENO;
     FD_ZERO(&writefds);
     FD_SET(STDOUT_FILENO,&writefds);
-    select_ret = select(maxfd+1,NULL,&writefds,NULL,NULL);
+    /*select_ret = */ select(maxfd+1,NULL,&writefds,NULL,NULL);
     if( FD_ISSET(STDOUT_FILENO,&writefds) )
         {
         if( stdinpass )
@@ -1057,7 +1057,7 @@ TInt CTestSelect::TestSelectConnectFailure()
     fd_set exceptfds;
     int max;
     int select_ret = 0;
-    int ret = KErrGeneral;    
+   // int ret = KErrGeneral;    
     struct sockaddr_in serv_addr; 
     serv_addr.sin_family = AF_INET;     
     serv_addr.sin_addr.s_addr = inet_addr(addr); 

@@ -56,7 +56,7 @@
  * [including the GNU Public Licence.]
  */
  /*
- © Portions copyright (c) 2006 Nokia Corporation.  All rights reserved.
+ © Portions copyright (c) 2006, 2010 Nokia Corporation.  All rights reserved.
  */
  
 #ifndef HEADER_BIO_H
@@ -524,8 +524,8 @@ int BIO_read_filename(BIO *b,const char *name);
 #define BIO_pending(b)		(int)BIO_ctrl(b,BIO_CTRL_PENDING,0,NULL)
 #define BIO_wpending(b)		(int)BIO_ctrl(b,BIO_CTRL_WPENDING,0,NULL)
 /* ...pending macros have inappropriate return type */
-size_t BIO_ctrl_pending(BIO *b);
-size_t BIO_ctrl_wpending(BIO *b);
+IMPORT_C size_t BIO_ctrl_pending(BIO *b);
+IMPORT_C size_t BIO_ctrl_wpending(BIO *b);
 #define BIO_flush(b)		(int)BIO_ctrl(b,BIO_CTRL_FLUSH,0,NULL)
 #define BIO_get_info_callback(b,cbp) (int)BIO_ctrl(b,BIO_CTRL_GET_CALLBACK,0, \
 						   cbp)
@@ -543,9 +543,9 @@ size_t BIO_ctrl_wpending(BIO *b);
 /* macros with inappropriate type -- but ...pending macros use int too: */
 #define BIO_get_write_guarantee(b) (int)BIO_ctrl(b,BIO_C_GET_WRITE_GUARANTEE,0,NULL)
 #define BIO_get_read_request(b)    (int)BIO_ctrl(b,BIO_C_GET_READ_REQUEST,0,NULL)
-size_t BIO_ctrl_get_write_guarantee(BIO *b);
-size_t BIO_ctrl_get_read_request(BIO *b);
-int BIO_ctrl_reset_read_request(BIO *b);
+IMPORT_C size_t BIO_ctrl_get_write_guarantee(BIO *b);
+IMPORT_C size_t BIO_ctrl_get_read_request(BIO *b);
+IMPORT_C int BIO_ctrl_reset_read_request(BIO *b);
 
 /* ctrl macros for dgram */
 #define BIO_ctrl_dgram_connect(b,peer)  \
@@ -623,7 +623,7 @@ IMPORT_C int BIO_nwrite0(BIO *bio, char **buf);
 IMPORT_C int BIO_nwrite(BIO *bio, char **buf, int num);
 
 #ifndef OPENSSL_SYS_WIN16
-long BIO_debug_callback(BIO *bio,int cmd,const char *argp,int argi,
+IMPORT_C long BIO_debug_callback(BIO *bio,int cmd,const char *argp,int argi,
 	long argl,long ret);
 #else
 IMPORT_C long _far _loadds BIO_debug_callback(BIO *bio,int cmd,const char *argp,int argi,
@@ -705,13 +705,13 @@ IMPORT_C void BIO_copy_next_retry(BIO *b);
 #else
 #  define __bio_h__attr__(x)
 #endif
-int BIO_printf(BIO *bio, const char *format, ...)
+IMPORT_C int BIO_printf(BIO *bio, const char *format, ...)
 	__bio_h__attr__((__format__(__printf__,2,3)));
-int BIO_vprintf(BIO *bio, const char *format, va_list args)
+IMPORT_C int BIO_vprintf(BIO *bio, const char *format, va_list args)
 	__bio_h__attr__((__format__(__printf__,2,0)));
-int BIO_snprintf(char *buf, size_t n, const char *format, ...)
+IMPORT_C int BIO_snprintf(char *buf, size_t n, const char *format, ...)
 	__bio_h__attr__((__format__(__printf__,3,4)));
-int BIO_vsnprintf(char *buf, size_t n, const char *format, va_list args)
+IMPORT_C int BIO_vsnprintf(char *buf, size_t n, const char *format, va_list args)
 	__bio_h__attr__((__format__(__printf__,3,0)));
 #undef __bio_h__attr__
 

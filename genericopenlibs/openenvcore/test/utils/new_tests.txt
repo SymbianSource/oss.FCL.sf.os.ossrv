@@ -3,9 +3,6 @@
 # UDEB TESTS #
 
 # Configuration 1
-
-testexecute, \logs\testexecute\tsocket.htm,, c:\tstdapis\tsocket.script, 6000, UDEB,\epoc32\winscw\c\tstdapis\tsockettest.bat,
-
 # testexecute, \logs\testexecute\twaitsignal.htm,, c:\tstdapis\twaitsignal.script, 3100, UDEB,\epoc32\winscw\c\tstdapis\waitsignalsettings.bat,
 # testexecute, \logs\testexecute\twaitsignal1.htm,, c:\tstdapis\twaitsignal1.script, 4630, UDEB,\epoc32\winscw\c\tstdapis\waitsignalsettings.bat,
 # testexecute, \logs\testexecute\twaitsignal2.htm,, c:\tstdapis\twaitsignal2.script, 3860, UDEB,\epoc32\winscw\c\tstdapis\waitsignalsettings.bat,
@@ -22,7 +19,7 @@ testexecute, \logs\testexecute\tsyscalls.htm,, c:\tstdapis\tsyscalls.script, 900
 testexecute, \logs\testexecute\tsyscallsfcntl.htm,, c:\tstdapis\tsyscallsfcntl.script, 200, UDEB,,
 testexecute, \logs\testexecute\tsyscalls1.htm,, c:\tstdapis\tsyscalls1.script, 400, UDEB,,
 testexecute, \logs\testexecute\tsyscalls2.htm,, c:\tstdapis\tsyscalls2.script, 400, UDEB,,
-testexecute, \logs\testexecute\tifioctls.htm,, c:\tstdapis\tifioctls.script, 1200, UDEB,\epoc32\winscw\c\tstdapis\tifioctlstest.bat,
+testexecute, \logs\testexecute\tifioctls.htm,, c:\tstdapis\tifioctls.script, 1200, UDEB,,
 testexecute, \logs\testexecute\tstdlib.htm,, c:\tstdapis\tstdlib.script, 1200, UDEB,\epoc32\winscw\c\tstdapis\stdlibsettings.bat,
 testexecute, \logs\testexecute\tstdio_auto.htm,, c:\tstdapis\tstdio_auto.script, 5400, UDEB,,
 testexecute, \logs\testexecute\tstdio_filemode.htm,, c:\tstdapis\tstdio_filemode.script, 50, UDEB,,
@@ -38,7 +35,7 @@ testexecute, \logs\testexecute\tnetdb.htm,, c:\tstdapis\tnetdb.script, 350, UDEB
 testexecute, \logs\testexecute\tregex.htm,, c:\tstdapis\tregex.script, 130, UDEB,,
 testexecute, \logs\testexecute\tsemaphore.htm,, c:\tstdapis\tsemaphore.script, 500, UDEB,,
 testexecute, \logs\testexecute\tshm.htm,, c:\tstdapis\tshm.script, 300, UDEB,,
-
+testexecute, \logs\testexecute\tsocket.htm,, c:\tstdapis\tsocket.script, 800, UDEB,\epoc32\winscw\c\tstdapis\tsockettest.bat,
 testexecute, \logs\testexecute\tsyssim.htm,, c:\tstdapis\tsyssim.script, 140, UDEB,,
 testexecute, \logs\testexecute\tsysunistd.htm,, c:\tstdapis\tsysunistd.script, 200, UDEB,,
 testexecute, \logs\testexecute\ttime_blr.htm,, c:\tstdapis\ttime_blr.script, 200, UDEB,,
@@ -103,8 +100,6 @@ testexecute, \logs\testexecute\tsetjmp.htm,, c:\tstdapis\tsetjmp.script, 10, UDE
 
 
 # UREL TEsts
-testexecute, \logs\testexecute\tsocket.htm,, c:\tstdapis\tsocket.script, 6000, UREL,\epoc32\winscw\c\tstdapis\tsockettest.bat,
-
 # testexecute, \logs\testexecute\twaitsignal.htm,, c:\tstdapis\twaitsignal.script, 3100, UREL,\epoc32\winscw\c\tstdapis\waitsignalsettings.bat,
 # testexecute, \logs\testexecute\twaitsignal1.htm,, c:\tstdapis\twaitsignal1.script, 4630, UREL,\epoc32\winscw\c\tstdapis\waitsignalsettings.bat,
 # testexecute, \logs\testexecute\twaitsignal2.htm,, c:\tstdapis\twaitsignal2.script, 3860, UREL,\epoc32\winscw\c\tstdapis\waitsignalsettings.bat,
@@ -122,7 +117,7 @@ testexecute, \logs\testexecute\tsyscalls.htm,, c:\tstdapis\tsyscalls.script, 900
 testexecute, \logs\testexecute\tsyscallsfcntl.htm,, c:\tstdapis\tsyscallsfcntl.script, 200, UREL,,
 testexecute, \logs\testexecute\tsyscalls1.htm,, c:\tstdapis\tsyscalls1.script, 400, UREL,,
 testexecute, \logs\testexecute\tsyscalls2.htm,, c:\tstdapis\tsyscalls2.script, 400, UREL,,
-testexecute, \logs\testexecute\tifioctls.htm,, c:\tstdapis\tifioctls.script, 1200, UREL,\epoc32\winscw\c\tstdapis\tifioctlstest.bat,
+testexecute, \logs\testexecute\tifioctls.htm,, c:\tstdapis\tifioctls.script, 1200, UREL,,
 testexecute, \logs\testexecute\tstdlib.htm,, c:\tstdapis\tstdlib.script, 1200, UREL,,
 testexecute, \logs\testexecute\tstdio_auto.htm,, c:\tstdapis\tstdio_auto.script, 5400, UREL,,
 testexecute, \logs\testexecute\tstdio_filemode.htm,, c:\tstdapis\tstdio_filemode.script, 50, UREL,,
@@ -138,7 +133,7 @@ testexecute, \logs\testexecute\tnetdb.htm,, c:\tstdapis\tnetdb.script, 350, UREL
 testexecute, \logs\testexecute\tregex.htm,, c:\tstdapis\tregex.script, 130, UREL,,
 testexecute, \logs\testexecute\tsemaphore.htm,, c:\tstdapis\tsemaphore.script, 500, UREL,,
 testexecute, \logs\testexecute\tshm.htm,, c:\tstdapis\tshm.script, 300, UREL,,
-
+testexecute, \logs\testexecute\tsocket.htm,, c:\tstdapis\tsocket.script, 800, UREL,\epoc32\winscw\c\tstdapis\tsockettest.bat,
 testexecute, \logs\testexecute\tsyssim.htm,, c:\tstdapis\tsyssim.script, 140, UREL,,
 testexecute, \logs\testexecute\tsysunistd.htm,, c:\tstdapis\tsysunistd.script, 200, UREL,,
 testexecute, \logs\testexecute\ttime_blr.htm,, c:\tstdapis\ttime_blr.script, 200, UREL,,

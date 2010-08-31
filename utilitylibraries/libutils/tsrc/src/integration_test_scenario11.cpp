@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-void main()
+int main()
 {
     __UHEAP_MARK;			
     {
@@ -28,27 +28,33 @@ void main()
     char *des1=new char[10];
     int ret,retval1,retval2,retval3,retval4,retval5,retval6,size1=20,size2=40;
     retval1=Tptrc8ToCharp(src1,des1,size1);
-
+    printf("retval1 value is %d\n", retval1);
+    
     char *src2=des1;
     TBuf16<20> des2;
     retval2=CharToTbuf16(src2,des2);
-
+    printf("retval2 value is %d\n", retval2);
+    
     TBuf16<20>src3=des2;
     string des3;
     retval3=Tbuf16ToString(src3,des3);
-
+    printf("retval3 value is %d\n", retval3);
+    
     string src4=des3;
     TBuf16<20>des4;
     retval4= StringToTbuf16(src4,des4);
-
+    printf("retval4 value is %d\n", retval4);
+    
     TBuf16<40>src5=des4;
     char *des5= new char[40];
     retval5=Tbuf16ToChar(des4,des5,size2);
-
+    printf("retval5 value is %d\n", retval5);
+    
     char *src6=des5;
     TPtrC8 des6;
     retval6=CharpToTptrc8(src6,des6);
-
+    printf("retval6 value is %d\n", retval6);
+    
     ret= strncmp((char*)src1.Ptr(),(char*) des6.Ptr(),5);
     if(ret == ESuccess)
     {
@@ -64,4 +70,5 @@ void main()
     }
     __UHEAP_MARKEND;
     testResultXml("integration_test_scenario11");
+    return 0;
 }

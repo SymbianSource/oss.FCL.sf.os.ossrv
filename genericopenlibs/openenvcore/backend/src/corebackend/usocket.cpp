@@ -76,7 +76,7 @@ void TUSockAddr::Set (const TAny* aBuf, TUint aLen)
 // We have to deal with the network byte ordering of AF_INET addresses
 //
 	{
-	if (!aBuf)
+	if (aBuf==0)
 		{
 		iError = EFAULT;
 		SetLength(0);
@@ -194,10 +194,10 @@ void TUSockAddr::Set (const TAny* aBuf, TUint aLen)
 		}
 	}
 
-/*
- * Extract a struct sockaddr from a TSockAddr
- */
 EXPORT_C void TUSockAddr::Get(TAny* addr, unsigned long* len)
+//
+// Extract a struct sockaddr from a TSockAddr
+//
 	{
 	if (addr==0)
 		{
@@ -393,15 +393,18 @@ void CSocketDesc::ReadCancel()
 
 void CSocketDesc::Write (TDes8& aBuf, TRequestStatus& aStatus)
 	{
-
-    TInt err = maybe_reopen_socket();
-    if (err != KErrNone)
-        {
-        Complete(aStatus, err);
-        return;
-        }
-	
-	iWriteLock.Wait();
+	//Acquire the Lock before write and release it later
+	iWriteLock.Wait();	
+	if (iSocketPtr == NULL)
+		{
+		TInt ret = OpenUsingPreference();
+		if (ret != KErrNone)	// Error in open
+			{
+			Complete(aStatus,ret);
+			iWriteLock.Signal();
+			return;
+			}
+		}
 	CSockDescBase::Write(aBuf, aStatus);
 	iWriteLock.Signal();	
 	}
@@ -424,43 +427,52 @@ TInt CSocketDesc::Bind(const struct sockaddr* aAddr, unsigned long aSize)
 		{
 		return addr.iError;
 		}
-	
-	ret = maybe_reopen_socket();
-	if (ret != KErrNone)
-	    return ret;
-	ATOMICSOCKETOP(ret = iSocket.Bind(addr),return KErrBadHandle)
-	return ret;
+
+	if (iSocketPtr == NULL)
+		{
+		ret = OpenUsingPreference();
+		if (ret != KErrNone)	// Error in open
+			{
+			return ret;
+			}
+		}
+	return iSocket.Bind(addr);
 	}
 
 TInt CSocketDesc::Listen(TUint qSize)
 	{
-
-    TInt ret;
 	if (iStyle == SOCK_DGRAM) // Listen on UDP socket, crashing at RSocket::Listen().
 		{
 		return EOPNOTSUPP;
 		}
-	
-	ret = maybe_reopen_socket();
-	if (ret != KErrNone)
-	    return ret;
-
+	if (iSocketPtr == NULL)
+		{
+		TInt ret = OpenUsingPreference();
+		if (ret != KErrNone)	// Error in open
+			{
+			return ret;
+			}
+		}
 	return CSockDescBase::Listen(qSize);
 	}
 
 TInt CSocketDesc::SockName(int anEnd, struct sockaddr* anAddr,unsigned long* aSize)
 	{
-
-
-	if (!anAddr)
+	TInt ret;
+	if (iSocketPtr == NULL)
         {
-        return EFAULT;
+            ret = OpenUsingPreference();
+            if (ret != KErrNone)    // Error in open
+                {
+                return ret;
+                }
+        }
+	
+	if ( anAddr == 0 ) // if the sockaddr passed is NULL return EFAULT.
+        {
+            return EFAULT;
         }
 
-	TInt ret = maybe_reopen_socket();
-	if (ret != KErrNone)
-	    return ret;
-	
    
     struct sockaddr temp;
     unsigned long len = sizeof( temp );
@@ -491,19 +503,24 @@ TInt CSocketDesc::GetSockOpt(TInt anOptionName, TInt anOptionLevel, TDes8& anOpt
 		{
 		return EINVAL;
 		}
-	
-	ret = maybe_reopen_socket();
-	if (ret != KErrNone)
-	    return ret;
+	if (iSocketPtr == NULL)
+		{
+		ret = OpenUsingPreference();
+		if (ret != KErrNone)	// Error in open
+			{
+			return ret;
+			}
+		}
 
 	if (SO_TYPE == anOptionName && SOL_SOCKET == anOptionLevel)
 		{
 		TProtocolDesc protocolInfo;
-		ATOMICSOCKETOP(ret = iSocket.Info(protocolInfo), ret = KErrBadHandle)
+		ret = iSocket.Info(protocolInfo);
 		if (KErrNone == ret )
 			{
-			// Copy the Socket Type to the buffer
-			TInt size = (anOption.Length() < sizeof(protocolInfo.iSockType))? anOption.Length(): sizeof(protocolInfo.iSockType);
+			//Copy the Socket Type to the buffer
+			TInt size;
+			size = (anOption.Length() < sizeof(protocolInfo.iSockType))? anOption.Length(): sizeof(protocolInfo.iSockType);
 			Mem::Copy((unsigned char*)anOption.Ptr(), &protocolInfo.iSockType, size);
 			anOption.SetLength(size);
 			}
@@ -515,15 +532,19 @@ TInt CSocketDesc::GetSockOpt(TInt anOptionName, TInt anOptionLevel, TDes8& anOpt
 		TUSockAddr addr;
 		struct sockaddr_in sockAddress;
 		sockAddress.sin_family = AF_INET;
-		ATOMICSOCKETOP(sockAddress.sin_port = iSocket.LocalPort(),return KErrBadHandle)			
-		ATOMICSOCKETOP(iSocket.LocalName(addr);,return KErrBadHandle)		
+		sockAddress.sin_port = iSocket.LocalPort();	
+		iSocket.LocalName(addr);
+
 		TInt a = sizeof(sockAddress);
 		addr.Get(&sockAddress,(unsigned long*)&a);  
-		TInt size = (anOption.Length() < sizeof(sockAddress.sin_addr))? anOption.Length(): sizeof(sockAddress.sin_addr);
+		TInt size;
+		size = (anOption.Length() < sizeof(sockAddress.sin_addr))? anOption.Length(): sizeof(sockAddress.sin_addr);
 		Mem::Copy((unsigned char*)anOption.Ptr(), &(sockAddress.sin_addr), size); 
 		anOption.SetLength(size);
 		return KErrNone;
 		}
+
+
 
 	switch(anOptionLevel)
 		{
@@ -562,8 +583,8 @@ TInt CSocketDesc::GetSockOpt(TInt anOptionName, TInt anOptionLevel, TDes8& anOpt
 			anOptionName=KSoIp6MulticastLoop;
 			break;
 		}
-	ATOMICSOCKETOP(ret = iSocket.GetOpt(anOptionName,anOptionLevel,anOption), return KErrBadHandle)
-	return ret;
+
+	return iSocket.GetOpt(anOptionName,anOptionLevel,anOption);
 	}
 
 TInt CSocketDesc::GetInterfaceIndex(TUint32 anAddr)
@@ -577,14 +598,12 @@ TInt CSocketDesc::GetInterfaceIndex(TUint32 anAddr)
 		}
 	else 
 		{
-		TInt ret = KErrNone;
-		ATOMICSOCKETOP(ret = iSocket.SetOpt(KSoInetEnumInterfaces, KSolInetIfCtrl), ret = KErrBadHandle)
+		TInt ret = iSocket.SetOpt(KSoInetEnumInterfaces, KSolInetIfCtrl);
 		if (ret != KErrNone)
 			return KErrGeneral;
 
 		TPckgBuf<TSoInetInterfaceInfo>iface;
-		ATOMICSOCKETOP( ret = iSocket.GetOpt(KSoInetNextInterface, KSolInetIfCtrl, iface), ret = KErrBadHandle )
-		while(ret == KErrNone)
+		while(iSocket.GetOpt(KSoInetNextInterface, KSolInetIfCtrl, iface) == KErrNone)
 			{
 			TSoInetInterfaceInfo &info = iface();
 			TInt result;
@@ -593,13 +612,13 @@ TInt CSocketDesc::GetInterfaceIndex(TUint32 anAddr)
 				if (anAddr == info.iAddress.Address()) 
 					{      	
 					ifq().iName = info.iName;
-					ATOMICSOCKETOP( result = iSocket.GetOpt(KSoInetIfQueryByName, KSolInetIfQuery, ifq), result = KErrBadHandle )
+					result = iSocket.GetOpt(KSoInetIfQueryByName, KSolInetIfQuery, ifq);
 					if (result == KErrNone)
 						aIndex = ifq().iIndex;
 
 					}
 				}
-			ATOMICSOCKETOP( ret = iSocket.GetOpt(KSoInetNextInterface, KSolInetIfCtrl, iface), ret = KErrBadHandle )
+
 			}   	
 		}
 	return aIndex;
@@ -616,10 +635,14 @@ TInt CSocketDesc::SetSockOpt(TInt anOptionName, TInt anOptionLevel, TDesC8& anOp
 		{
 		return EINVAL;
 		}
-	
-	ret = maybe_reopen_socket();
-	if (ret != KErrNone)
-	    return ret;
+	if (iSocketPtr == NULL)
+		{
+		ret = OpenUsingPreference();
+		if (ret != KErrNone)	// Error in open
+			{
+			return ret;
+			}
+		}
 
 	switch(anOptionLevel)
 		{
@@ -671,26 +694,30 @@ TInt CSocketDesc::SetSockOpt(TInt anOptionName, TInt anOptionLevel, TDesC8& anOp
 			maddr=(from[0]<<24)+(from[1]<<16)+(from[2]<<8)+from[3];
 			multiAddr.SetAddress( maddr);
 			multiAddr.ConvertToV4Mapped();
-			if (multiAddr.IsMulticast())
-			    {
-                req().iAddr = multiAddr.Ip6Address();
-                req().iInterface = aIndex;  
-			    }
-			ATOMICSOCKETOP( ret = iSocket.SetOpt(anOptionName, anOptionLevel, req), return KErrBadHandle )
-			return ret;
+			if(multiAddr.IsMulticast()){
+			req().iAddr = multiAddr.Ip6Address();
+			req().iInterface = aIndex;  
+			}
+			return iSocket.SetOpt(anOptionName, anOptionLevel, req);
 
 		case IP_MULTICAST_TTL:
 			anOptionLevel=KSolInetIp;
 			anOptionName=KSoIp6MulticastHops;
 			Option = (TInt*)anOption.Ptr();
 			ttlValue = *Option;
-			ATOMICSOCKETOP( ret = iSocket.SetOpt(anOptionName,anOptionLevel,ttlValue), return KErrBadHandle )
-			return ret;
-			
+			return iSocket.SetOpt(anOptionName,anOptionLevel,ttlValue);
+
 		case SO_BROADCAST: 
 			//check if user is trying to disable broadcast
 			Option = (TInt*)anOption.Ptr();
-			return (*Option == 0 ? KErrNotSupported : KErrNone);
+			if (*Option == 0)  
+				{
+				return KErrNotSupported;
+				}	
+			else 
+				{
+				return KErrNone;	
+				}
 
 		case IP_MULTICAST_IF:
 			{
@@ -699,11 +726,10 @@ TInt CSocketDesc::SetSockOpt(TInt anOptionName, TInt anOptionLevel, TDesC8& anOp
 			struct in_addr *inAddress = (struct in_addr*)anOption.Ptr();	    
 			struct sockaddr_in sockAddress; 	 		    
 			sockAddress.sin_family = AF_INET;
-			ATOMICSOCKETOP(sockAddress.sin_port = iSocket.LocalPort();,return KErrBadHandle)         
+			sockAddress.sin_port = iSocket.LocalPort();
 			sockAddress.sin_addr.s_addr = inAddress->s_addr;
-			TUSockAddr ifAddress(&sockAddress, sizeof(sockAddress));
-			ATOMICSOCKETOP( ret = iSocket.Bind(ifAddress), return KErrBadHandle )
-			return ret;
+			TUSockAddr ifAddress(&sockAddress, sizeof(sockAddress));    	
+			return iSocket.Bind(ifAddress);		
 			}
 
 		case IP_MULTICAST_LOOP:
@@ -711,11 +737,11 @@ TInt CSocketDesc::SetSockOpt(TInt anOptionName, TInt anOptionLevel, TDesC8& anOp
 			anOptionName=KSoIp6MulticastLoop;
 			break;	    	
 
-
+		default:
+			break;
 
 		}
-	ATOMICSOCKETOP( ret = iSocket.SetOpt(anOptionName,anOptionLevel,anOption), return KErrBadHandle )
-	return ret;
+	return iSocket.SetOpt(anOptionName,anOptionLevel,anOption);
 	}
 
 void CSocketDesc::Sync (TRequestStatus& aStatus)
@@ -726,14 +752,19 @@ void CSocketDesc::Sync (TRequestStatus& aStatus)
 
 void CSocketDesc::RecvFrom(TDes8& aDesc, TSockAddr& from, int flags, TRequestStatus& aStatus)
 	{
-    TInt err = maybe_reopen_socket();
-    if (err != KErrNone)
-        {
-        Complete(aStatus, err);
-        return;
-        }
-
 	iReadLock.Wait();
+	// RSocket::Open() is postponed from socket()
+	if (iSocketPtr == NULL)
+		{
+		TInt ret = OpenUsingPreference();
+		if (ret != KErrNone)
+			{
+			Complete(aStatus,ret);	// Error in open
+			iReadLock.Signal();
+			return;
+			}
+		}
+
 	CSockDescBase::RecvFrom(aDesc, from, flags, aStatus);
 	iReadLock.Signal();
 	}
@@ -749,23 +780,25 @@ void CSocketDesc::RecvFromCancel()
 
 void CSocketDesc::SendTo(TDes8& aDesc, const struct sockaddr* anAddr, unsigned long aAddrLen, int flags, TRequestStatus& aStatus)
 	{
-    TInt err = maybe_reopen_socket();
-    if (err != KErrNone)
-        {
-        Complete(aStatus, err);
-        return;
-        }
-    
-	TUSockAddr toAddr(anAddr, aAddrLen);
-	
-	iWriteLock.Wait();  
+	iWriteLock.Wait();	
+
+	if (iSocketPtr == NULL)
+		{
+		TInt ret = OpenUsingPreference();
+		if (ret != KErrNone)
+			{
+			Complete(aStatus,ret);   // Error in open
+			iWriteLock.Signal();
+			return;
+			}
+		}
+	TUSockAddr toAddr(anAddr,aAddrLen);
 	CSockDescBase::SendTo(aDesc, toAddr, flags, aStatus);
 	iWriteLock.Signal();
 	}
 
 void CSocketDesc::SendToCancel()
 	{
-// Should we use atomic loads here?
 	if (iSocketPtr != NULL)
 		{
 		CSockDescBase::SendToCancel();
@@ -774,8 +807,7 @@ void CSocketDesc::SendToCancel()
 
 void CSocketDesc::Shutdown(TUint aHow,TRequestStatus& aStatus)
 	{
-
-    if (__e32_atomic_load_acq32(&iSocketPtr) == NULL) // Not opened at all. Nothing to do.
+	if (iSocketPtr == NULL) // Not opened at all. Nothing to do.
 		{
 		Complete(aStatus,KErrNone);
 		return;
@@ -787,61 +819,52 @@ void CSocketDesc::Shutdown(TUint aHow,TRequestStatus& aStatus)
 
 void CSocketDesc::Accept(CFileDescBase*& aNewSocket, TRequestStatus& aStatus, RSocketServ& aSs, TSockAddr * /*aAddr*/)
 	{
-    aNewSocket = NULL;
-	TInt err = maybe_reopen_socket();
-	if (err != KErrNone)
-	    {
-        Complete(aStatus, err);
-        return;
-	    }
-	
+	//Acquire the Lock before accept and release it later
 	iReadLock.Wait();
-	// what are the below coverity thingummichs?
+
+	TInt err = KErrNone;
+	if (iSocketPtr == NULL)
+		{
+		err = OpenUsingPreference();
+		if (err != KErrNone)	// Error in open
+			{			
+			Complete(aStatus,err);
+			iReadLock.Signal();
+			return;
+			}
+		}
+
 	//coverity[alloc_fn]
 	//coverity[assign]
 	CSocketDesc *newSocket = new CSocketDesc;
-	if (!newSocket)
-	    {
-        Complete(aStatus, KErrNoMemory);
-        iReadLock.Signal();
-        return;
-	    }
-	
-	err = newSocket->CreateLock();
-	if (err)
+	if (newSocket!=0)
 		{
-        Complete(aStatus, KErrNoMemory);
-        delete newSocket;
-        iReadLock.Signal();
-        //coverity[memory_leak]
-        return;
+		err = newSocket->CreateLock();
+		if (err)
+			{
+			Complete(aStatus, KErrNoMemory);
+			delete newSocket;
+			aNewSocket = NULL;
+			iReadLock.Signal();
+			//coverity[memory_leak]
+			return;
+			}
+
+		err=newSocket->iSocket.Open(aSs);
 		}
-
-	err = newSocket->iSocket.Open(aSs);
-	if (err)
+	if (newSocket ==0 || err!=KErrNone)
 		{
-		Complete(aStatus, err);
-		newSocket->FinalClose();  // this will Close locks
+		Complete(aStatus,KErrNoMemory);
 		delete newSocket;
-
+		aNewSocket = NULL;
 		iReadLock.Signal();
 		//coverity[memory_leak]
 		return;
 		}
 	newSocket->iSocketPtr = &newSocket->iSocket;
 	newSocket->iStyle = iStyle;
-	err = KErrNone;
-	ATOMICSOCKETOP( iSocket.Accept(newSocket->iSocket,aStatus), err = KErrBadHandle )
-	if( err )
-	    {
-	    Complete(aStatus, err);
-	    newSocket->FinalClose();  // this will Close locks
-	    delete newSocket;
-	    }
-	else
-	    {
-	    aNewSocket = newSocket;
-	    }
+	iSocket.Accept(newSocket->iSocket,aStatus);
+	aNewSocket = newSocket;
 	iReadLock.Signal();
 	}
 
@@ -849,7 +872,7 @@ void CSocketDesc::AcceptCancel()
 	{
 	if (iSocketPtr != NULL)
 		{
-		ATOMICSOCKETOP( iSocket.CancelAccept(), NOP )
+		iSocket.CancelAccept();
 		}
 	}
 
@@ -862,63 +885,56 @@ void CSocketDesc::Connect(const struct sockaddr* aAddr,unsigned long size,TReque
 		aStatus = addr.iError;
 		return;
 		}
-	
-	TInt err = maybe_reopen_socket();
-	if (err != KErrNone)
-	    {
-        aStatus = err;
-        return;
-	    }
-	
-	iWriteLock.Wait();
-	if( GetConnectionProgress() == EFalse )
-	    {
-		ATOMICSOCKETOP(iSocket.Connect(addr, aStatus), Complete(aStatus,KErrBadHandle))
-	    User::WaitForRequest(aStatus);
-	    if( aStatus.Int() == KErrWouldBlock )
-	        SetConnectionProgress(ETrue);
-	    }
-	else
-	    {
-	    aStatus = EALREADY;
-	    }
-	iWriteLock.Signal();
+	if (iSocketPtr == NULL)
+		{
+		// RSocket::Open() is postponed from socket()	
+		TInt ret = OpenUsingPreference();
+		if (ret != KErrNone)	// error in open
+			{
+			aStatus = ret;
+			return;
+			}
+		}
+
+	iSocket.Connect(addr,aStatus);
+	User::WaitForRequest(aStatus);
 	}
 
 void CSocketDesc::ConnectCancel()
 	{
 	if (iSocketPtr != NULL)
 		{
-		ATOMICSOCKETOP(iSocket.CancelConnect(),NOP)
+		iSocket.CancelConnect();
 		}
 	}
 
 void CSocketDesc::Ioctl(int aCmd, void* aParam, TRequestStatus& aStatus)
 	{
-	TInt ret = KErrNone;
+	TInt ret=KErrNone;
 	int* param = reinterpret_cast<int*>(aParam);
 
-	ret = maybe_reopen_socket();
-	if (ret != KErrNone)
-	    {
-        Complete(aStatus, ret);
-        return;
-	    }
+	if (iSocketPtr == NULL)
+		{
+		ret = OpenUsingPreference();
+		if (ret != KErrNone)	// Error in open
+			{
+			Complete(aStatus,ret);
+			return;
+			}
+		}
 
 	switch ((unsigned)aCmd)
 		{
 		case FIONREAD:
 		case E32IONREAD:
-		    {
-			ATOMICSOCKETOP( ret=iSocket.GetOpt(KSOReadBytesPending,KSOLSocket,*param), ret = KErrBadHandle )
-		    }
+			ret=iSocket.GetOpt(KSOReadBytesPending,KSOLSocket,*param);
 			break;
 		case E32IOSELECT:
 			{
 			iIoctlBuf.Set((TText8*)aParam,4,4);
 			iIoctlLock.Wait();
 			iIoctlFlag = ETrue;		
-			ATOMICSOCKETOP(iSocket.Ioctl(KIOctlSelect,aStatus,&iIoctlBuf,KSOLSocket), Complete(aStatus,KErrBadHandle))
+			iSocket.Ioctl(KIOctlSelect,aStatus,&iIoctlBuf,KSOLSocket);
 			}
 			return;
 		case SIOCGIFCONF:
@@ -953,7 +969,7 @@ void CSocketDesc::Ioctl(int aCmd, void* aParam, TRequestStatus& aStatus)
 			ret = StopInterface(aParam);
 			break;	
 		case SIOCATMARK:
-			ATOMICSOCKETOP(ret=iSocket.GetOpt(KSoTcpRcvAtMark,KSolInetTcp,*param), ret = KErrBadHandle)
+			ret=iSocket.GetOpt(KSoTcpRcvAtMark,KSolInetTcp,*param);
 			break;	
 		case SIOCGIFADDR:
 			ret = GetIpAddress(aParam);
@@ -995,7 +1011,7 @@ void CSocketDesc::IoctlCancel()
 	{
 	if (iSocketPtr && iIoctlFlag)
 		{
-		ATOMICSOCKETOP(iSocket.CancelIoctl(), NOP)
+		iSocket.CancelIoctl();
 		iIoctlLock.Signal();
 		iIoctlFlag = EFalse;
 		}
@@ -1010,25 +1026,27 @@ void CSocketDesc::IoctlCancel()
 //
 TInt CSocketDesc::Fcntl(TUint anArg, TUint aCmd)
 	{
-
-    TInt err = maybe_reopen_socket();
-    if (err != KErrNone)
-        return err;
-
-    return CSockDescBase::Fcntl(anArg, aCmd);
+	if (iSocketPtr == NULL)
+		{
+		TInt ret = OpenUsingPreference();
+		if (ret != KErrNone)	// Error in open
+			{
+			return ret;
+			}
+		}
+	return CSockDescBase::Fcntl(anArg, aCmd);
 	}
 
 TInt CSocketDesc :: GetIpAddress( void *aParam )
 	{
 	TInetAddr myAddr;
-	ATOMICSOCKETOP( iSocket.LocalName(myAddr), return KErrBadHandle )
+	iSocket.LocalName(myAddr);
 	TUint32 myIP = myAddr.Address();			
-	if (myIP == 0)
+	ifreq *ifr = (ifreq *)aParam;
+	if(myIP == 0)
 		{
 		return KErrGeneral;
 		}
-
-	ifreq *ifr = (ifreq *)aParam;
 	((struct sockaddr_in *)&ifr->ifr_addr)->sin_addr.s_addr = myIP;
 	return KErrNone;
 	}
@@ -1036,14 +1054,13 @@ TInt CSocketDesc :: GetIpAddress( void *aParam )
 TInt CSocketDesc :: GetRemoteIpAddress( void *aParam )
 	{
 	TInetAddr remoteAddr;
-	ATOMICSOCKETOP( iSocket.RemoteName(remoteAddr), return KErrBadHandle )
+	iSocket.RemoteName(remoteAddr);
 	TUint32 remoteIP = remoteAddr.Address();			
-
-	if (remoteIP == 0)
+	ifreq *ifr = (ifreq *)aParam;
+	if(remoteIP == 0)
 		{
 		return KErrGeneral;
 		}
-	ifreq *ifr = (ifreq *)aParam;
 	((struct sockaddr_in *)&ifr->ifr_dstaddr)->sin_addr.s_addr = remoteIP;
 	return KErrNone;
 	}
@@ -1191,16 +1208,16 @@ TInt CSocketDesc :: SetInterfaceDetails( void *aParam ,TInt aFlag, TInt aType )
 	TPckgBuf<TSoInetIfQuery> ifq;
 	TBuf8 <25> ipBuf8;
 	TName aBuf;			
-	TInt ret = KErrNone;
-	ATOMICSOCKETOP( ret = iSocket.SetOpt(KSoInetEnumInterfaces, KSolInetIfCtrl), ret = KErrBadHandle )
+
+	TInt ret = iSocket.SetOpt(KSoInetEnumInterfaces, KSolInetIfCtrl);
 	if (ret != KErrNone)
 		{
 		return KErrGeneral;
 		}    	
 	TPckgBuf<TSoInet6InterfaceInfo> info;
 	TSoInet6InterfaceInfo &in = info();	
-	ATOMICSOCKETOP( ret = iSocket.GetOpt(KSoInetNextInterface, KSolInetIfCtrl, info), ret = KErrBadHandle )
-	while(ret == KErrNone)
+
+	while(iSocket.GetOpt(KSoInetNextInterface, KSolInetIfCtrl, info) == KErrNone)
 		{			
 		if(info().iName != _L("") && info().iName != _L("loop6") && info().iName != _L("loop4"))
 			{   			
@@ -1307,33 +1324,28 @@ TInt CSocketDesc :: SetInterfaceDetails( void *aParam ,TInt aFlag, TInt aType )
 					}
 				}
 
-			}
-		ATOMICSOCKETOP( ret = iSocket.GetOpt(KSoInetNextInterface, KSolInetIfCtrl, info), ret = KErrBadHandle )
+			}					 	 
 		}
 	setout:	
 	TPckgBuf<TSoInet6InterfaceInfo> changeToNew(info());
-	ATOMICSOCKETOP(ret = iSocket.SetOpt(KSoInetConfigInterface, KSolInetIfCtrl,changeToNew), return KErrBadHandle )
-	return ret;
+	return iSocket.SetOpt(KSoInetConfigInterface, KSolInetIfCtrl,changeToNew); 		
 	}
 #endif // __SYMBIAN_COMPILE_UNUSED__
 
 TInt CSocketDesc::GetInterfaceDetails( void *aParam ,TInt aFlag, TInt aType )
 	{
+	ifreq *ifr = (ifreq *)aParam;
 	TPckgBuf<TSoInetIfQuery> ifq;
 
-	TInt ret = KErrNone; 
-	ATOMICSOCKETOP( ret = iSocket.SetOpt(KSoInetEnumInterfaces, KSolInetIfCtrl), ret = KErrBadHandle )
+	TInt ret = iSocket.SetOpt(KSoInetEnumInterfaces, KSolInetIfCtrl);
 	if (ret != KErrNone)
 		{
 		return KErrGeneral;
 		}
-	
-	ifreq *ifr = (ifreq *)aParam;
     *(ifr->ifr_addr.sa_data) = '\0';
 
 	TPckgBuf<TSoInetInterfaceInfo> info;
-	ATOMICSOCKETOP( ret = iSocket.GetOpt(KSoInetNextInterface, KSolInetIfCtrl, info), ret = KErrBadHandle )
-	while( ret == KErrNone)
+	while(iSocket.GetOpt(KSoInetNextInterface, KSolInetIfCtrl, info) == KErrNone)
 		{
 
 		if(info().iName != _L("") && info().iName != _L("loop6") && info().iName != _L("loop4"))
@@ -1448,12 +1460,12 @@ TInt CSocketDesc::GetInterfaceDetails( void *aParam ,TInt aFlag, TInt aType )
 							               if(info().iFeatures&KIfCanSetHardwareAddr) */
 
 						break;																 				 
-				 
+					default:
+						break;					 
 					}
 				}
 
-			}
-		ATOMICSOCKETOP( ret = iSocket.GetOpt(KSoInetNextInterface, KSolInetIfCtrl, info), ret = KErrBadHandle )
+			}				 	 
 		}
 
 	return KErrNone;	
@@ -1461,14 +1473,19 @@ TInt CSocketDesc::GetInterfaceDetails( void *aParam ,TInt aFlag, TInt aType )
 
 TInt CSocketDesc::Poll(TPollMode aMode,TBool& aReadyStatus,TInt& aErrno)
 	{
-	TInt ret = maybe_reopen_socket();
-    if (ret != KErrNone)
-        {
-        return ret;
-        }
+	TInt ret;
+
+	if (iSocketPtr == NULL)
+		{
+		ret = OpenUsingPreference();
+		if (ret != KErrNone)	// Error in open
+			{
+			return ret;
+			}
+		}
 
     TInt status;
-    ATOMICSOCKETOP(ret = iSocket.GetOpt(KSOSelectPoll, KSOLSocket, status), ret = KErrBadHandle)
+    ret = iSocket.GetOpt(KSOSelectPoll, KSOLSocket, status);
     if (ret == KErrNone)
 		{
     	aReadyStatus = status & aMode;	
@@ -1480,11 +1497,16 @@ TInt CSocketDesc::Poll(TPollMode aMode,TBool& aReadyStatus,TInt& aErrno)
 /* The synchronous - non-blocking Poll */
 TInt CSocketDesc::Poll(TUint aEvents)
 	{
+	TInt err = 0;
 
-    TInt err = maybe_reopen_socket();
-	if (err != KErrNone)
-	    return err;
-		
+	if (iSocketPtr == NULL)
+		{
+		err = OpenUsingPreference();
+		if (err != KErrNone)	// Error in open
+			{
+			return err;
+			}
+		}
 	return CSockDescBase::Poll(aEvents);
 	}
 
@@ -1545,8 +1567,6 @@ TInt CSocketDesc::GetInterfaceIndexByName(void *aParam)
 	TInt ifCount = ifc.ifc_len / sizeof(ifreq);
 	TInt i = 0;
 
-	// We wouldn't need this if we were using a StrNcmp below
-	ifrQuery->ifr_name[IFNAMSIZ-1] = 0; // don't assume NULL terminated input
 	// Search for the interface name
 	for (; i < ifCount; i++, ifr++)
 		{
@@ -1592,10 +1612,11 @@ TInt CSocketDesc::GetInterface(void *aParam, TInt aType)
 			ret = KErrArgument;
 			}
 
-		if (ret == KErrNone)
-		    {
-            ifc->ifc_len = sizeof(ifreq) * count;
-		    }
+		if (ret != KErrNone)
+			{
+			return ret;
+			}
+		ifc->ifc_len = sizeof(ifreq) * count;
 		return ret;
 		}
 
@@ -1635,7 +1656,7 @@ TInt CSocketDesc::GetInterface(void *aParam, TInt aType)
 	for (apIndex = 0; apIndex < length; apIndex++,ifr++)
 		{
 		TAccessPointRecord& ref = (*apArray)[apIndex];
-		ifr->ifr_name[IFNAMSIZ-1] = 0; // don't assume NULL terminated input
+		// Catch the character pointer
 		TPtr8 ptr((TText8*)ifr->ifr_name, IFNAMSIZ);
 
 		ret = CnvUtfConverter::ConvertFromUnicodeToUtf8(ptr, ref.iName);
@@ -1684,12 +1705,12 @@ TInt CSocketDesc::GetInterface(void *aParam, TInt aType)
 TInt CSocketDesc::SetInterfaceByName(void *aParam)
 	{
 	ifreq *ifr = (ifreq *)aParam;
-	if (!ifr)
+	if (ifr == NULL)
 		{
 		return KErrArgument;
 		}
 
-	ifr->ifr_name[IFNAMSIZ-1] = 0; // don't assume NULL terminated input
+	// Copy the null terminated interface name
 	TPtrC8 ptr((TText8*)ifr->ifr_name);
 	TInt ret = CnvUtfConverter::ConvertToUnicodeFromUtf8(iConnPref.iName,ptr);
 	if(ret > KErrNone )
@@ -1752,34 +1773,20 @@ TInt CSocketDesc::OpenUsingPreference()
 	         }
 	     else // No connection preference is set
 	         {
-	         ret = ECONNABORTED;
-            }
-        }
-    
-    if (ret == KErrNone)
-        {
-        __e32_atomic_store_rel32(&iSocketPtr, (unsigned long)&iSocket);
-        }
-    
-    iConnectInProgress = EFalse;
-
-    return ret;
-    }
+             ret = iSocket.Open(*iSockServPtr,addrfamily,iStyle,iProtocol);	         
+	         }
+	    }
+	
+	if(KErrNone == ret)
+		{
+		iSocketPtr = &iSocket;
+		}
+	iConnectInProgress = EFalse;
+	return ret;
+	}
 
 void CSocketDesc::TempClose()
     {
-    TUint32 ret = __e32_atomic_ior_ord32((void *)&iCount,0x8000);
-    if( ret >= 0x8000 )
-        {
-        // This indicates a TempClose has already been done from one of the threads
-        return;
-        }
-    // loop and yeild till no more references are held to the iSocket
-    while( iCount != 0x8000 )
-        {
-        // Yeild for 1 ms
-        User::After(1000);
-        }
     if (iSocket.SubSessionHandle() != 0)
         {
 	    iSocketPtr = NULL;
@@ -2118,8 +2125,7 @@ TInt CSocketDesc::RouteRequest(TInt aReq, void *aParam)
 		ConvertRtEntry(iroute(), rt);
 
 		//add the entry
-		ATOMICSOCKETOP( ret = iSocket.SetOpt(aReq, KSolInetRtCtrl, iroute),return KErrBadHandle )
-		return ret;
+		return iSocket.SetOpt(aReq, KSolInetRtCtrl, iroute);
 		}
 
 	return KErrUnknown;				
@@ -2169,23 +2175,22 @@ TInt CSocketDesc::ConvertRtEntry(TSoInetRouteInfo& aRouteInfo, struct rtentry *a
 
 TInt CSocketDesc::GetInterfaceByName(const TDesC& aIfName, TPckgBuf<TSoInetInterfaceInfo>& aIface)
 	{
-	TInt ret = KErrNone;
-	ATOMICSOCKETOP(ret = iSocket.SetOpt(KSoInetEnumInterfaces, KSolInetIfCtrl), ret = KErrBadHandle)
+	TInt ret = iSocket.SetOpt(KSoInetEnumInterfaces, KSolInetIfCtrl);
 	if (ret != KErrNone)
 		{
 		return ret;
 		}
 	TPckgBuf<TSoInetInterfaceInfo> iface;
-	ATOMICSOCKETOP(ret = iSocket.GetOpt(KSoInetNextInterface, KSolInetIfCtrl, iface), ret = KErrBadHandle)
-	while(ret == KErrNone)
+	while((ret = iSocket.GetOpt(KSoInetNextInterface, KSolInetIfCtrl, iface)) == KErrNone)
 		{
-		if (!iface().iAddress.IsUnspecified() && iface().iName.CompareF(aIfName) == 0)
+		if(!iface().iAddress.IsUnspecified()
+				&& iface().iName.CompareF(aIfName) == 0)
 			{
 			aIface = iface;
 			return ret;    	        
 			}
-		ATOMICSOCKETOP( ret = iSocket.GetOpt(KSoInetNextInterface, KSolInetIfCtrl, iface), ret = KErrBadHandle )
 		}   	
+
 	return KErrUnknown;	
 	}
 
@@ -2198,25 +2203,27 @@ TInt CSocketDesc::GetInterfaceHWAddress(void *aParam)
 		return KErrArgument;	
 		}
 
-	if (ifr->ifr_name[0] != '\0')
+	if (ifr->ifr_name[0]!='\0')
 		{
-        TPckgBuf<TSoInetInterfaceInfo> iface;
-        TFileName name;
-        ifr->ifr_name[IFNAMSIZ-1] = 0; // don't assume NULL terminated input
-        name.Copy(TPtrC8((TText8*)ifr->ifr_name));
-    
-        TInt ret = GetInterfaceByName(name, iface); 		
-        if (ret != KErrNone)
-            return ret;
-    
-        if (iface().iHwAddr.Length() > sizeof(SSockAddr))		
-            {
-            Mem::Copy(&(ifr->ifr_hwaddr.sa_data[0]),&(iface().iHwAddr[sizeof(SSockAddr)]), 6);
-            ifr->ifr_hwaddr.sa_family = (TUint16)iface().iHwAddr.Family();
-            ifr->ifr_hwaddr.sa_port = ByteOrder::Swap16(iface().iHwAddr.Port());				
-            return ret;
-            }
+	TPckgBuf<TSoInetInterfaceInfo> iface;
+	TFileName name;
+	name.Copy(TPtrC8((TText8*)ifr->ifr_name));
+
+		TInt ret = GetInterfaceByName(name, iface); 		
+		
+		if (ret != KErrNone)
+			{
+		return ret;		
+			}
+
+	if(iface().iHwAddr.Length() > sizeof(SSockAddr))		
+		{
+		Mem::Copy(&(ifr->ifr_hwaddr.sa_data[0]),&(iface().iHwAddr[sizeof(SSockAddr)]), 6);
+		ifr->ifr_hwaddr.sa_family = (TUint16)iface().iHwAddr.Family();
+		ifr->ifr_hwaddr.sa_port = ByteOrder::Swap16(iface().iHwAddr.Port());				
+		return ret;				
 		}
+		}	
 
 	return KErrUnknown;
 	}
@@ -2229,15 +2236,14 @@ TInt CSocketDesc::GetInterfaceHWAddress(void *aParam)
 TInt CSocketDesc::GetActiveInterface( void *aParam)
     {
     TInt ifindex = -1;
-    TInt ret = KErrNone;
-    ATOMICSOCKETOP(ret = iSocket.GetOpt(KSoInterfaceIndex, KSolInetIp , ifindex), ret = KErrBadHandle)
+    TInt ret = iSocket.GetOpt(KSoInterfaceIndex, KSolInetIp , ifindex);
     if(ret!=KErrNone)
         {
         return ret;
         }   
     TPckgBuf<TSoInetIfQuery> opt;
     opt().iIndex = ifindex;
-    ATOMICSOCKETOP(ret = iSocket.GetOpt(KSoInetIfQueryByIndex, KSolInetIfQuery, opt), ret = KErrBadHandle)
+    ret = iSocket.GetOpt(KSoInetIfQueryByIndex, KSolInetIfQuery, opt);
     if(ret!=KErrNone)
         {
         return ret;

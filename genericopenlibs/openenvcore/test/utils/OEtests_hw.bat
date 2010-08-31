@@ -26,8 +26,6 @@ copy z:\input.txt c:\tstdapis\input.txt
 copy z:\tstdapis\data.txt c:\data.txt
 copy z:\tstdapis\10202be9\*.* c:\private\10202be9\
 copy z:\input c:\data\input
- 
-CED -i z:\tstdapis\gosethernetced.xml
 
 testexecute z:\tstdapis\tprogname.script
 testexecute z:\tstdapis\tlibcwchar.script

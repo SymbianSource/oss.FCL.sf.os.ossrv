@@ -32,7 +32,7 @@
 
 _STLP_BEGIN_NAMESPACE
 
-template <class _CharT, class _Traits, class _Number> 
+template <class _CharT, class _Traits, class _Number>
 basic_ostream<_CharT, _Traits>& _STLP_CALL
 _M_put_num(basic_ostream<_CharT, _Traits>& __os, _Number __x);
 
@@ -62,8 +62,8 @@ public:                         // Types
   typedef basic_ios<_CharT, _Traits> _Basic_ios;
 
 public:                         // Constructor and destructor.
-  _STLP_DECLSPEC explicit basic_ostream(basic_streambuf<_CharT, _Traits>* __buf);
-  _STLP_DECLSPEC ~basic_ostream();
+  _STLP_DUMMY_IMP_DECLSPEC explicit basic_ostream(basic_streambuf<_CharT, _Traits>* __buf);
+  _STLP_DUMMY_IMP_DECLSPEC ~basic_ostream();
 
 public:                         // Hooks for manipulators.
   typedef basic_ios<_CharT, _Traits>& (_STLP_CALL *__ios_fn)(basic_ios<_CharT, _Traits>&);

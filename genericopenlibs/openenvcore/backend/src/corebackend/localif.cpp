@@ -82,7 +82,7 @@ EXPORT_C CLocalSystemInterface* Backend()
 
 // Construction of Backend Object which is going to be singleton object for the process
 EXPORT_C CLocalSystemInterface::CLocalSystemInterface() : iOpenDirList(CLocalSystemInterface::KDirGran),
-iTLDInfoList(CLocalSystemInterface::KTLDInfoListGran), iDefConnResurrect(ETrue), iDefConnPref(NULL)
+iTLDInfoList(CLocalSystemInterface::KTLDInfoListGran), iDefConnPref(NULL)
 		{
 #ifdef SYMBIAN_OE_POSIX_SIGNALS
 		iSignalsInitialized = EFalse;
@@ -183,7 +183,7 @@ iTLDInfoList(CLocalSystemInterface::KTLDInfoListGran), iDefConnResurrect(ETrue),
 			User::Panic(KEstlibInit, err);
 			}
 
-		iCleanup.StorePtrs(iPrivateHeap, &iFs, &iSs, &iCs, &iSSLock, &iCSLock,&iDefConnLock,&iASelectLock);
+		iCleanup.StorePtrs(iPrivateHeap, &iFs, &iSs, &iCs, &iSSLock, &iCSLock);
 
 		}
 
@@ -194,6 +194,10 @@ EXPORT_C CLocalSystemInterface::~CLocalSystemInterface()
 	{
 	iTLDListLock.Close();
 	iSessionPathLock.Close();
+	// Close the aselect lock
+	iASelectLock.Close();
+	// Close the default connection lock
+	iDefConnLock.Close();
 	
 	//close the default RConnection
 	if(iDefConnection.SubSessionHandle() != 0)
@@ -1584,50 +1588,37 @@ int CLocalSystemInterface::connect (int fid, const struct sockaddr* addr, unsign
 
 	if(!err)
 		{
-		// Check if a connection request is already in progress for a non-blocking socket.
-		if (f->GetConnectionProgress())
+		// Check if a connection request is already in progress
+		// for a non-blocking socket.
+		if(f->GetConnectionProgress())
 			{
-			mapErr = f->iPollErr;
-			
-			if (f->iPollErr < 0)
-			    {
-                mapErr = f->iPollErr;
-                f->iPollErr = 0;
-                f->SetConnectionProgress(EFalse);
-                }
-			else
-			    {
-                // Poll to see if the connect() is completed
-                err = f->Poll(EReadyForWriting);
-                // The above Poll is common for all descriptors. 
-                // In case of socket-descriptors, Poll will either return "KErrNone"
-                // or any of the requested events. To check for Poll error in case of 
-                // socket-descriptors, "iPollErr" should be checked.
-                if (f->iPollErr < 0)
-                    {
-                    mapErr = f->iPollErr;
-                    f->iPollErr = 0;
-                    }
-                else if (err == 0) //Connect still in progress
-                    mapErr = EALREADY;
-                else if (err & EReadyForWriting)
-                    {
-                    mapErr = EISCONN; 
-                    }
-			    }
+			// Poll to see if the connect() is completed
+			err = f->Poll( EReadyForWriting );
+
+			// The above Poll is common for all descriptors. 
+			// In case of socket-descriptors, Poll will either return "KErrNone"
+			// or any of the requested events. To check for Poll error in case of 
+			// socket-descriptors, "iPollErr" should be checked.			
+			if( (err < 0) || (f->iPollErr < 0) ) //Error in poll
+				(err < 0) ? (mapErr = err):(mapErr = f->iPollErr);
+			else if( err == 0 ) //Connect still in progress
+				mapErr = EALREADY;
+			else if( err & EReadyForWriting ) //Connect has completed
+				f->SetConnectionProgress(EFalse);
 			}
 
 		if(!mapErr)
 			{
 			TRequestStatus status;
 			f->Connect(addr,size,status);
-			err = status.Int();
+			err=status.Int();
 
 			if (err == KErrWouldBlock)
 				{
+				f->SetConnectionProgress(ETrue);
 				mapErr = EINPROGRESS;
 				}
-			else if (err == KErrAlreadyExists)
+			else if(err == KErrAlreadyExists)
 				{
 				mapErr = EISCONN;
 				}
@@ -1795,25 +1786,26 @@ int CLocalSystemInterface::aselect(int maxfd, fd_set *readfds, fd_set *writefds,
 // CLocalSystemInterface::aselect
 // -----------------------------------------------------------------------------
 //
-int CLocalSystemInterface::cancelaselect(TRequestStatus* requeststatus, int& anErrno, TBool perform_cleanup)
+int CLocalSystemInterface::cancelaselect(TRequestStatus* requeststatus,int& anErrno,int performcleanup)
 	{
 	iASelectLock.Wait();
 	// Search for the aselect request entry in the aselect request array
-	for (TInt i = 0; i < iASelectRequest.Count(); ++i)
+	for ( TInt i=0; i<iASelectRequest.Count(); i++ )
 		{
-		if (iASelectRequest[i].iRequestStatus == requeststatus || perform_cleanup)
+		if( (iASelectRequest[i].iRequestStatus == requeststatus) || performcleanup )
 			{
 			// The specified request exists
-			RThread thread;
+			RThread threadHandle;
 			// Open a handle to the service thread
-			TInt res = thread.Open(iASelectRequest[i].iThreadId,EOwnerThread);
-			if (res == KErrNone)
+			TInt res = threadHandle.Open(iASelectRequest[i].iThreadId,EOwnerThread);
+			if( res == KErrNone )
 				{
 				// Kill the service thread
-				thread.Kill(KErrCancel);
-				thread.Close();
-				if (!perform_cleanup)
+				threadHandle.Kill(KErrCancel);
+				threadHandle.Close();
+				if( !performcleanup )
 					{
+					// Complete the request with KErrcancel
 					User::RequestComplete(iASelectRequest[i].iRequestStatus,KErrCancel);
 					}
 				// Switch to backend heap
@@ -1822,15 +1814,15 @@ int CLocalSystemInterface::cancelaselect(TRequestStatus* requeststatus, int& anE
 				iASelectRequest.Remove(i);
 				// Switch back to old heap
 				User::SwitchHeap(oldHeap);
-				if (!perform_cleanup)
+				if( !performcleanup )
 					{
 					iASelectLock.Signal();
-					return KErrNone;
+					return MapError(KErrNone, anErrno);
 					}
 				}
 			else
 				{
-				if (!perform_cleanup)
+				if( !performcleanup )
 					{
 					iASelectLock.Signal();
 					// unable to open a handle to the service thread
@@ -1841,7 +1833,14 @@ int CLocalSystemInterface::cancelaselect(TRequestStatus* requeststatus, int& anE
 		}
 	iASelectLock.Signal();
 	// No request found with the specified TRequestStatus object
-	return MapError((!perform_cleanup ? KErrNotFound : KErrNone), anErrno);
+	if( !performcleanup )
+		{
+		return MapError(KErrNotFound, anErrno);
+		}
+	else
+		{
+		return MapError(KErrNone, anErrno);
+		}
 	}
 // -----------------------------------------------------------------------------
 // CLocalSystemInterface::ASelectRequest
@@ -2196,28 +2195,20 @@ int CLocalSystemInterface::eselect(int maxfd, fd_set *readfds, fd_set *writefds,
         if ( (*reqarray[i]).Int() != KRequestPending ) 
             {
             TInt readyevents = fdesc->TweakReadyEvents((*reqarray[i]).Int());
-            TInt event_marked = EFalse;
-            if (readfds && FD_ISSET(reqfds[i], readfds) && (readyevents & EReadyForReading)) 
+            if (readfds && FD_ISSET(reqfds[i], readfds) && (readyevents & EReadyForReading) ) 
                 { 
                 FD_SET(reqfds[i], &retreadfds); 
-                ++nDescriptorsSet;
-                event_marked = ETrue;
-
+                ++nDescriptorsSet; 
                 }
             if(writefds && FD_ISSET(reqfds[i], writefds) && (readyevents & EReadyForWriting) ) 
                 { 
                 FD_SET(reqfds[i], &retwritefds); 
-
-                event_marked = ETrue;
                 ++nDescriptorsSet; 
                 }
             if(exceptfds && FD_ISSET(reqfds[i], exceptfds) && (readyevents & EAnyException))
                 {
-                if (!fdesc->GetConnectionProgress() || !event_marked)
-                    {
                 FD_SET(reqfds[i], &retexceptfds); 
                 ++nDescriptorsSet;
-                    }
                 }
             }
         else
@@ -3743,11 +3734,11 @@ TInt CLocalSystemInterface::GetConnectionPreferencesL(TBuf<KCommsDbSvrMaxColumnN
 	TInt err = KErrNone;
 
 	//Open the database and create the IAP view.
-	CCommsDatabase *iApDb = CCommsDatabase::NewL(EDatabaseTypeIAP);
-	CleanupStack::PushL(iApDb);
-	iApDb->ShowHiddenRecords();
+	CCommsDatabase *apDb = CCommsDatabase::NewL(EDatabaseTypeIAP);
+	CleanupStack::PushL(apDb);
+	apDb->ShowHiddenRecords();
 	//The following pushes the view onto the cleanup stack
-	CCommsDbTableView *view = iApDb->OpenTableLC(TPtrC(IAP));
+	CCommsDbTableView *view = apDb->OpenTableLC(TPtrC(IAP));
 
 	//Iterate through the records to find the matching entry
 	TAccessPointRecord apRecord;
@@ -3763,7 +3754,7 @@ TInt CLocalSystemInterface::GetConnectionPreferencesL(TBuf<KCommsDbSvrMaxColumnN
 		}
 
 	CleanupStack::PopAndDestroy(); //Free the view
-	CleanupStack::PopAndDestroy(iApDb); //Free the db itself
+	CleanupStack::PopAndDestroy(apDb); //Free the db itself
 
 	if(err != KErrNone) //Record not found
 		return KErrNotFound;
@@ -3780,8 +3771,8 @@ TInt CLocalSystemInterface::GetConnectionPreferencesL(TBuf<KCommsDbSvrMaxColumnN
 // -----------------------------------------------------------------------------
 // CLocalSystemInterface::StartDefConnection
 //
-// Helper function for the setdefaultif() API to start the 
-// default RConnection with/without preferences
+// Helper function for the setdefaultif() API to restart the 
+// default RConnection with the new settings.
 // -----------------------------------------------------------------------------
 //
 TInt CLocalSystemInterface::StartDefConnection()
@@ -3803,42 +3794,6 @@ TInt CLocalSystemInterface::StartDefConnection()
 	return err;
 	}
 
-TInt CLocalSystemInterface::unsetdefaultif(TBool allow_bringup)
-    {
-    iDefConnLock.Wait();
-    if (iDefConnection.SubSessionHandle() != 0)
-        {
-        TUint count = iSocketArray.Count();            
-        for (TInt i = 0; i < count; ++i)
-            {                
-            iSocketArray[i]->TempClose();
-            }
-        iDefConnection.Close();
-        }
-    
-    RHeap* oheap = User::SwitchHeap(iPrivateHeap);
-    iSocketArray.Reset();
-    
-    if (iDefConnPref)
-        {
-        if (iDefConnPref->ExtensionId() == TConnPref::EConnPrefSnap)
-            {
-            delete (TCommSnapPref*)iDefConnPref;
-            }
-        else
-            {
-            delete (TCommDbConnPref*)iDefConnPref;
-            }
-        }
-    User::SwitchHeap(oheap);
-    
-    iDefConnPref = NULL;
-    iDefConnResurrect = allow_bringup;
-    iDefConnLock.Signal();
-    return KErrNone;
-    }
-
-
 // -----------------------------------------------------------------------------
 // CLocalSystemInterface::setdefaultif
 //
@@ -3847,77 +3802,146 @@ TInt CLocalSystemInterface::unsetdefaultif(TBool allow_bringup)
 //
 int CLocalSystemInterface::setdefaultif(const struct ifreq* aIfReq)
     {
-    // Do this in any case - whether the argument be a valid pref or NULL
-    iDefConnResurrect = ETrue;
-    
-    // If the argument is NULL, tear down existing connection
-    if (aIfReq == NULL)
+    //If the argument is NULL, close the existing connection
+    if(aIfReq == NULL )
         {
-        return unsetdefaultif();
+        // Obtain lock on the iDefConnection
+        iDefConnLock.Wait();
+
+    if (iDefConnection.SubSessionHandle() != 0)
+        {
+        TUint count = iSocketArray.Count();
+        for (TInt i = 0; i < count; ++i)
+            {                
+            iSocketArray[i]->TempClose();
+            }
+        iDefConnection.Close();        
+        RHeap* oheap = User::SwitchHeap(iPrivateHeap);
+        iSocketArray.Reset();
+        User::SwitchHeap(oheap);
+        }
+
+        if( iDefConnPref )
+            {
+            switch( iDefConnPref->ExtensionId() )
+                {
+                case TConnPref::EConnPrefSnap:
+                    {                    
+                    RHeap* oldHeap = User::SwitchHeap(iPrivateHeap);
+                    delete (TCommSnapPref*)iDefConnPref;
+                    // Switch back to old heap
+                    User::SwitchHeap(oldHeap);
+                    iDefConnPref = NULL;		        
+                    }
+                    break;
+
+                case TConnPref::EConnPrefCommDb:
+                    {
+                    RHeap* oldHeap = User::SwitchHeap(iPrivateHeap);
+                    delete (TCommDbConnPref*)iDefConnPref;
+                    // Switch back to old heap
+                    User::SwitchHeap(oldHeap);
+                    iDefConnPref = NULL;
+                    }
+                    break;		        
+
+                default:
+                    {
+                    iDefConnLock.Signal();
+                    // Unknown type of Connection Pref
+                    return KErrUnknown;
+                    }
+                }
+            }
+        // Release lock on the iDefConnection
+        iDefConnLock.Signal();
+        return KErrNone;
         }
 
     TPtrC8 namePtr((TText8*)aIfReq->ifr_name);
     TBuf<KCommsDbSvrMaxColumnNameLength> name;
-    
-    TInt err = CnvUtfConverter::ConvertToUnicodeFromUtf8(name, namePtr);
-    if (err != KErrNone)
+    TInt err  = CnvUtfConverter::ConvertToUnicodeFromUtf8(name,namePtr);
+    if( err != KErrNone )
         return err;
-    
-    if (name.Length() == 0)
-        {
-        // interface name is an empty string, SNAP id is specified in ifr_ifru.snap_id
-        if (iDefConnPref && iDefConnPref->ExtensionId() == TConnPref::EConnPrefSnap)
-            {
-            ((TCommSnapPref*)iDefConnPref)->SetSnap(aIfReq->ifr_ifru.snap_id);
-            return KErrNone;
-            }
-        
-        RHeap* oldHeap = User::SwitchHeap(iPrivateHeap);
-        delete (TCommDbConnPref*)iDefConnPref; // may be a delete(NULL)
-        iDefConnPref = new TCommSnapPref;
-        User::SwitchHeap(oldHeap);
 
-        if (!iDefConnPref)
+    if( iDefConnPref )
+        {
+        switch( iDefConnPref->ExtensionId() )
+            {
+            case TConnPref::EConnPrefSnap:
+                {
+                RHeap* oldHeap = User::SwitchHeap(iPrivateHeap);
+                delete (TCommSnapPref*)iDefConnPref;
+                // Switch back to old heap
+                User::SwitchHeap(oldHeap);
+                iDefConnPref = NULL;              
+                }
+                break;
+
+            case TConnPref::EConnPrefCommDb:
+                {
+                RHeap* oldHeap = User::SwitchHeap(iPrivateHeap);
+                delete (TCommDbConnPref*)iDefConnPref;
+                // Switch back to old heap
+                User::SwitchHeap(oldHeap);
+                iDefConnPref = NULL;
+                }
+                break;              
+
+            default:
+                {
+                // Unknown type of Connection Pref
+                return KErrUnknown;
+                }
+            }
+        }
+
+    // If the interface name is an empty string, the SNAP id is to be set 
+    if(name.Length() == 0)
+        {
+        // Switch to backend heap
+        RHeap* oldHeap = User::SwitchHeap(iPrivateHeap);
+        iDefConnPref = new TCommSnapPref;
+        // Switch back to old heap
+        User::SwitchHeap(oldHeap);
+        if( iDefConnPref == NULL )
             {
             return KErrNoMemory;
             }
-        
-        ((TCommSnapPref*)iDefConnPref)->SetSnap(aIfReq->ifr_ifru.snap_id);
+        TCommSnapPref* snapprefptr = (TCommSnapPref*)iDefConnPref;
+        snapprefptr->SetSnap(aIfReq->ifr_ifru.snap_id);
         return KErrNone;
         }
-    
-    CTrapCleanup *cleanupStack = NULL;
-    
-    // Create a cleanup stack if one doesn't exist
-    if (User::TrapHandler() == NULL)
+    else //Set the IAP name
         {
-        cleanupStack = CTrapCleanup::New();
-        if (cleanupStack == NULL)
-            return KErrNoMemory;
-        }
-    
-    if (iDefConnPref && iDefConnPref->ExtensionId() == TConnPref::EConnPrefCommDb)
-        {
-        TRAP(err, (err = GetConnectionPreferencesL(name, *(TCommDbConnPref*)iDefConnPref)));
-        }
-    else
-        {
-        RHeap *oldHeap = User::SwitchHeap(iPrivateHeap);
-        delete (TCommSnapPref*)iDefConnPref;
-        iDefConnPref = new TCommDbConnPref;
-        User::SwitchHeap(oldHeap);
-        
-        if (iDefConnPref)
+        CTrapCleanup *cleanupStack = NULL;
+        //Create a clean up stack if it is not existing.
+        if(User::TrapHandler() == NULL)
             {
-            TRAP(err, (err = GetConnectionPreferencesL(name, *(TCommDbConnPref*)iDefConnPref)));
+            cleanupStack = CTrapCleanup::New(); //This will be deleted after use
+            if(cleanupStack == NULL)
+                return KErrNoMemory;
             }
-        }
-    
-    delete cleanupStack;
-    
-    return (iDefConnPref ? KErrNone : KErrNoMemory);
-    }
 
+        // Switch to backend heap
+        RHeap* oldHeap = User::SwitchHeap(iPrivateHeap);
+        iDefConnPref = new TCommDbConnPref;
+        // Switch back to old heap
+        User::SwitchHeap(oldHeap);
+        if( iDefConnPref == NULL )
+            {
+            if( cleanupStack != NULL )
+                delete cleanupStack;
+            return KErrNoMemory;
+            }
+        TRAP(err, (err = GetConnectionPreferencesL(name,*(TCommDbConnPref*)iDefConnPref)))
+
+        if( cleanupStack != NULL )
+            delete cleanupStack;
+
+        return err;
+        }
+    }
 
 // -----------------------------------------------------------------------------
 // CLocalSystemInterface::GetDefaultConnection
@@ -3929,16 +3953,16 @@ int CLocalSystemInterface::setdefaultif(const struct ifreq* aIfReq)
 RConnection& CLocalSystemInterface::GetDefaultConnection()
     {
     // If GetDefaultConnection is called without calling
-    // setdefaultif then the connection is started without any preferences
+    // setdefaultif then the connection started without any preferences
     // Obtain lock on the iDefConnection
     iDefConnLock.Wait();
-    if(iDefConnection.SubSessionHandle() == 0 && iDefConnResurrect)
+    if(iDefConnection.SubSessionHandle() == 0)
         {
         StartDefConnection();
         }
     // Release lock on the iDefConnection
     iDefConnLock.Signal();
-   return iDefConnection;
+    return iDefConnection;
     }
 
 // -----------------------------------------------------------------------------

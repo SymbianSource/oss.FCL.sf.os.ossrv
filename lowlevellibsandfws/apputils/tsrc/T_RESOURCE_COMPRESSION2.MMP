@@ -13,7 +13,7 @@
 // Description:
 //
 
-target			t_resource_compression2.exe
+target			t_resource_compression2.exe	//RTEST
 targettype		exe
 sourcepath		.
 source			T_RESOURCE_COMPRESSION2.CPP

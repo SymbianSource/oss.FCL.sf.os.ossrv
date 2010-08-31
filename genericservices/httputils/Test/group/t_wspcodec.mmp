@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET			t_wspcodec.exe
+TARGET			t_wspcodec.exe		//RTEST
 TARGETTYPE		EXE
 CAPABILITY TrustedUI ProtServ
  

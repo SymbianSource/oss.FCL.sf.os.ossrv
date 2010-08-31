@@ -170,4 +170,4 @@ EXPORTS
 	_memcpy_r @ 169 NONAME
 	_memmove_r @ 170 NONAME
 	_lstat_r @ 171 NONAME
-	_unsetdefaultif_r @ 172 NONAME
+
