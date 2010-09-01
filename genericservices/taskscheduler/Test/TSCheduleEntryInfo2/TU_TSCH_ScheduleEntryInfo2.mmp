@@ -15,7 +15,7 @@
 // 
 //
 
-TARGET          	tu_tsch_scheduleentryinfo2.exe		//RTEST
+TARGET          	tu_tsch_scheduleentryinfo2.exe
 CAPABILITY			NONE 
 TARGETTYPE			EXE
 

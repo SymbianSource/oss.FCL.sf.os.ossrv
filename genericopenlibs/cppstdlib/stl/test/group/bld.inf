@@ -21,7 +21,7 @@
 prj_testmmpfiles
 stlport_test
 stlport_unit_test
-//stlport_extraExports
+stlport_extraExports
 PRJ_TESTEXPORTS
 libstdcpp_tests.iby  /epoc32/rom/include/libstdcpp_tests.iby
 oe_autotest.iby  /epoc32/rom/include/oe_autotest.iby

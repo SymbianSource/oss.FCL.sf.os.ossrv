@@ -35,7 +35,7 @@
 #include <sys/wait.h>
 #include <errno.h>
 #include <stdlib.h>
-#include <spawn.h>
+
 #include <pthread.h> 
 /**
  * @addtogroup DBusInternalsUtils

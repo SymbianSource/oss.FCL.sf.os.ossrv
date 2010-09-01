@@ -155,10 +155,6 @@ _rw_enable_line (int argc, char *argv[], int flags)
         else if ('-' == *end) {
             first = line;
             while (' ' == *++end);
-            
-            #ifdef __ARMCC__
-    				#pragma diag_suppress 61
-    				#endif 
             if ('\0' == *end) {
                 line = _RWSTD_INT_MAX;
             }
@@ -168,7 +164,6 @@ _rw_enable_line (int argc, char *argv[], int flags)
             }
             else
                 line = -1;
-               
         }
         else if ('\0' == *end) {
             first = line++;

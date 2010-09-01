@@ -113,12 +113,8 @@ Cstlport_sort* Cstlport_sort::NewL(
 #ifdef LIBC_OLD_BACKEND
     MrtInit();
 #endif
- #ifdef __ARMCC__
-    #pragma diag_suppress 830
- #endif    
     Cstlport_sort* self = new (ELeave) Cstlport_sort( aTestModuleIf );
 
- 
     CleanupStack::PushL( self );
     self->ConstructL();
     CleanupStack::Pop();

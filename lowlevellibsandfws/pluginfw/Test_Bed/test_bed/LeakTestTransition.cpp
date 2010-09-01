@@ -29,11 +29,22 @@ EXPORT_C CLeakTestTransition::CLeakTestTransition(const TDesC&			aTransitionId,
 	// Do nothing here
 	}
 
+class TestRHeap : public RHeap
+	{
+public:
+	inline void Set(TAny* aPtr)
+		{
+		iTestData = aPtr;
+		};
+	};
+RHeap::SHeapCellInfo s;
+
 // Define the overloaded RunL behaviour here
 EXPORT_C void CLeakTestTransition::RunL()
 	{
 	// Setup leak check and call the base RunL
 	iThread.HandleCount(iStartProcessHandleCount, iStartThreadHandleCount);
+	(static_cast<TestRHeap&>(User::Heap())).Set(&s);
 	__UHEAP_SETFAIL(RHeap::EDeterministic,iFailStep);
 	__UHEAP_MARK;
 	if(iBreakStep == iFailStep)
@@ -130,10 +141,13 @@ EXPORT_C TInt CLeakTestTransition::RunError(TInt aErrorCode)
 		}
 	__UHEAP_MARKEND;
 	__UHEAP_SETFAIL(RHeap::ENone, KMemoryLeakTestFailInit);	// No more fails
+	(static_cast<TestRHeap&>(User::Heap())).Set(0);
 	return KErrNone;
 	}
 
 EXPORT_C void CLeakTestTransition::PostTransitionCleanup()
 	{
+	__UHEAP_MARKEND;
 	__UHEAP_SETFAIL(RHeap::ENone, KMemoryLeakTestFailInit);	// No more fails
+	(static_cast<TestRHeap&>(User::Heap())).Set(0);
 	}

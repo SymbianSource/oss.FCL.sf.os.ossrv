@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET        ttaskfilecreator.exe		//RTEST
+TARGET        ttaskfilecreator.exe
 // needed to check task files in private data cage
 CAPABILITY  	AllFiles
 

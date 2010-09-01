@@ -29,11 +29,6 @@
 #include <stdlib.h>   // for atexit, free, malloc
 #include <string.h>   // for memcpy, strcpy, strcmp, ...
 
-#ifdef __ARMCC__
-#pragma diag_suppress 61
-#pragma diag_suppress 63
-#endif
-
 #ifndef EINVAL
 #  define EINVAL   22   /* e.g., HP-UX, Linux, Solaris */
 #endif   // EINVAL

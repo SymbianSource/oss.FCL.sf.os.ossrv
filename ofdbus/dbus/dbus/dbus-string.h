@@ -310,14 +310,6 @@ dbus_bool_t   _dbus_string_find                  (const DBusString  *str,
 #ifdef __SYMBIAN32__
 IMPORT_C
 #endif
-dbus_bool_t   _dbus_string_find_eol               (const DBusString *str,
-                                                  int               start,
-                                                  int               *found,
-                                                  int               *found_len);
-
-#ifdef __SYMBIAN32__
-IMPORT_C
-#endif
 dbus_bool_t   _dbus_string_find_to               (const DBusString  *str,
                                                   int                start,
                                                   int                end,

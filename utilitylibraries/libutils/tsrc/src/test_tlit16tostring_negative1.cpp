@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-int main()
+void main()
 {
     __UHEAP_MARK;
     {
@@ -28,7 +28,7 @@ int main()
     TBuf <20>src;
     src.Copy(Kname);
     string str;
-    //int size=10;
+    int size=10;
     int retval =ESuccess;
     retval= Tlit16ToString(src,str);
 
@@ -44,5 +44,4 @@ int main()
     }
     __UHEAP_MARKEND;
     testResultXml("test_tlit16tostring_negative1");
-	return 0;
 }

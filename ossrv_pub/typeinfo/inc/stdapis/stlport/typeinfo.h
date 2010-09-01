@@ -46,10 +46,10 @@ class type_info
 {
   public:
     virtual ~type_info();
-    IMPORT_C bool operator==(const type_info&) const;
-    IMPORT_C bool operator!=(const type_info&) const;
-    IMPORT_C bool before(const type_info&) const;
-    IMPORT_C const char* name() const;
+    bool operator==(const type_info&) const;
+    bool operator!=(const type_info&) const;
+    bool before(const type_info&) const;
+    const char* name() const;
   private:
     static void operator delete(void*) { /* nothing */ }
     type_info& operator=(const type_info&);  // Not actually defined

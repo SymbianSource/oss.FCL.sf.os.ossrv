@@ -16,7 +16,6 @@
 */
 
 #include <fcntl.h>
-#include <string.h>
 #include "test-utils.h"
   
 void handle_error(char* str)

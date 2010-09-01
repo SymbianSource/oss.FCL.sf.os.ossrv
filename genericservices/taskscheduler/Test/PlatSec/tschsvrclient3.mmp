@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET          tschsvrclient3.exe		//RTEST
+TARGET          tschsvrclient3.exe
 TARGETTYPE      exe
 
 // No UID specified - deliberately, for test purposes

@@ -763,16 +763,16 @@ EXPORTS
 	_ZTVSt9strstream @ 762 NONAME
 	_ZThn8_NSt9strstreamD0Ev @ 763 NONAME
 	_ZThn8_NSt9strstreamD1Ev @ 764 NONAME
-	_ZThn8_NSt9strstreamD9Ev @ 765 NONAME ABSENT
+	_ZThn8_NSt9strstreamD9Ev @ 765 NONAME  ABSENT
 	_ZTv0_n12_NSt10istrstreamD0Ev @ 766 NONAME
 	_ZTv0_n12_NSt10istrstreamD1Ev @ 767 NONAME
-	_ZTv0_n12_NSt10istrstreamD9Ev @ 768 NONAME ABSENT
+	_ZTv0_n12_NSt10istrstreamD9Ev @ 768 NONAME  ABSENT
 	_ZTv0_n12_NSt10ostrstreamD0Ev @ 769 NONAME
 	_ZTv0_n12_NSt10ostrstreamD1Ev @ 770 NONAME
-	_ZTv0_n12_NSt10ostrstreamD9Ev @ 771 NONAME ABSENT
+	_ZTv0_n12_NSt10ostrstreamD9Ev @ 771 NONAME  ABSENT
 	_ZTv0_n12_NSt9strstreamD0Ev @ 772 NONAME
 	_ZTv0_n12_NSt9strstreamD1Ev @ 773 NONAME
-	_ZTv0_n12_NSt9strstreamD9Ev @ 774 NONAME ABSENT
+	_ZTv0_n12_NSt9strstreamD9Ev @ 774 NONAME  ABSENT
 	_ZNK9stlp_priv9_Messages6do_getEiiiRKSs @ 775 NONAME
 	_ZNK9stlp_priv9_Messages7do_openERKSsRKSt6locale @ 776 NONAME
 	_ZNK9stlp_priv9_Messages8do_closeEi @ 777 NONAME

@@ -13,10 +13,6 @@
 #include "associative_test_data.hpp"
 #include <boost/ptr_container/ptr_set.hpp>
 
-#ifdef __ARMCC__
-#pragma diag_suppress 3017
-#endif
-
 template< class SetDerived, class SetBase, class T >
 void test_transfer()
 {

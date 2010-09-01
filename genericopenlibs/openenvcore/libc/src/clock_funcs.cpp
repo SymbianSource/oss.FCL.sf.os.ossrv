@@ -81,7 +81,7 @@ EXPORT_C int clock_gettime (clockid_t clock_id, struct timespec *tp)
 	{
 		case CLOCK_REALTIME:
 			//We use TTime::UniversalTime() call to get the Universal time
-			t.UniversalTime();
+			t.UniversalTime();			
 			err = t.SecondsFrom(UNIX_BASE, iSeconds);
 			t-=iSeconds;//extracting seconds info into iSeconds
 			if (!err)

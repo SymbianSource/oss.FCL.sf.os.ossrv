@@ -25,10 +25,6 @@ boost::detail::lightweight_mutex m1;
 int main()
 {
 	std_log(LOG_FILENAME_LINE,"[Test Case for lw_mutex_test]");
-	
-	#ifdef __ARMCC__
-  #pragma diag_suppress 177
-  #endif  
     boost::detail::lightweight_mutex::scoped_lock lock1( m1 );
 
     boost::detail::lightweight_mutex m2;
@@ -36,8 +32,6 @@ int main()
 
     boost::detail::lightweight_mutex::scoped_lock lock2( m2 );
     boost::detail::lightweight_mutex::scoped_lock lock3( m3 );
- 
-
 
 #ifdef __SYMBIAN32__
 	std_log(LOG_FILENAME_LINE,"Result : Passed");

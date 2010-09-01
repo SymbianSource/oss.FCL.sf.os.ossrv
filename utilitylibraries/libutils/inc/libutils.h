@@ -49,7 +49,7 @@ IMPORT_C int CharToHbufc8(const char* aSrc, HBufC8* aDes);
 
 IMPORT_C int CharpToTptr8(const char* aSrc, TPtr8& aDes);
 
-IMPORT_C int CharpToTptr16(const char* aSrc, TPtr16& aDes);
+IMPORT_C int CharpToTptr16(const char* aSrc, wchar_t* wPtr, TPtr16& aDes);
 
 IMPORT_C int CharpToTptrc16(char* aSrc, wchar_t* cPtr, TPtrC16& aDes);
 

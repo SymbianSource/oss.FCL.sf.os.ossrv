@@ -21,7 +21,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
-#include <unistd.h>
 
 #define LOG_FILE "c:\\logs\\dbus_N_messages_log1.txt"
 #include "std_log_result.h"

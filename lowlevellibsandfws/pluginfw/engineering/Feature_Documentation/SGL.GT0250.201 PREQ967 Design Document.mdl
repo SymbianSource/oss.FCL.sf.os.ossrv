@@ -1,0 +1,1884 @@
+
+(object Petal
+    version    	43
+    _written   	"Rose 6.1.9113.5"
+    charSet    	0)
+
+(object Design "Logical View"
+    is_unit    	TRUE
+    is_loaded  	TRUE
+    quid       	"420770670241"
+    defaults   	(object defaults
+	rightMargin 	0.250000
+	leftMargin 	0.250000
+	topMargin  	0.250000
+	bottomMargin 	0.500000
+	pageOverlap 	0.250000
+	clipIconLabels 	TRUE
+	autoResize 	TRUE
+	snapToGrid 	TRUE
+	gridX      	16
+	gridY      	16
+	defaultFont 	(object Font
+	    size       	10
+	    face       	"Arial"
+	    bold       	FALSE
+	    italics    	FALSE
+	    underline  	FALSE
+	    strike     	FALSE
+	    color      	0
+	    default_color 	TRUE)
+	showMessageNum 	1
+	showClassOfObject 	TRUE
+	notation   	"Unified")
+    root_usecase_package 	(object Class_Category "Use Case View"
+	quid       	"420770670243"
+	exportControl 	"Public"
+	global     	TRUE
+	logical_models 	(list unit_reference_list)
+	logical_presentations 	(list unit_reference_list
+	    (object UseCaseDiagram "Main"
+		quid       	"42077069006D"
+		title      	"Main"
+		zoom       	100
+		max_height 	28350
+		max_width  	21600
+		origin_x   	5335
+		origin_y   	19783
+		items      	(list diagram_item_list))))
+    root_category 	(object Class_Category "Logical View"
+	quid       	"420770670242"
+	exportControl 	"Public"
+	global     	TRUE
+	subsystem  	"Component View"
+	quidu      	"420770670244"
+	logical_models 	(list unit_reference_list
+	    (object Class "CServerStartupMgr"
+		quid       	"420770750186"
+		superclasses 	(list inheritance_relationship_list
+		    (object Inheritance_Relationship
+			quid       	"420771E401C4"
+			supplier   	"Logical View::CDmDomain"
+			quidu      	"420771590118")
+		    (object Inheritance_Relationship
+			quid       	"4208D31F03AF"
+			supplier   	"Logical View::CDmDomainTestHarness"
+			quidu      	"4208D2F002A5"))
+		operations 	(list Operations
+		    (object Operation "CServerStartupMgr"
+			quid       	"420770C40157"
+			concurrency 	"Sequential"
+			opExportControl 	"Public"
+			uid        	0)
+		    (object Operation "RunL"
+			quid       	"4207712B0176"
+			result     	"void"
+			concurrency 	"Sequential"
+			opExportControl 	"Public"
+			uid        	0)
+		    (object Operation "RegisterObserver"
+			quid       	"422EC4C702A6"
+			parameters 	(list Parameters
+			    (object Parameter "obs"
+				type       	"MStartupStateObserver"))
+			result     	"void"
+			concurrency 	"Sequential"
+			opExportControl 	"Public"
+			uid        	0)
+		    (object Operation "Initialise"
+			quid       	"422F17010313"
+			result     	"void"
+			concurrency 	"Sequential"
+			opExportControl 	"Public"
+			uid        	0)
+		    (object Operation "UpdateStateAwareObjects"
+			quid       	"42077B4401E3"
+			result     	"void"
+			concurrency 	"Sequential"
+			opExportControl 	"Private"
+			uid        	0)
+		    (object Operation "GetKnownState"
+			quid       	"42548929032C"
+			parameters 	(list Parameters
+			    (object Parameter "aState"
+				type       	"TDmDomainState"))
+			result     	"TStartupStateIdentifier"
+			concurrency 	"Sequential"
+			opExportControl 	"Private"
+			uid        	0))
+		class_attributes 	(list class_attribute_list
+		    (object ClassAttribute "EKFinalStartupState"
+			quid       	"42077EB3001E"
+			type       	"TStartupStateIdentifier"
+			initv      	"EStartupStateNonCritical"
+			Containment 	"By Value")
+		    (object ClassAttribute "iObserverList"
+			quid       	"422EC56F0258"
+			type       	"RPointerArray<MStartupStateObserver>")))
+	    (object Class "CDmDomain"
+		quid       	"420771590118"
+		superclasses 	(list inheritance_relationship_list
+		    (object Inheritance_Relationship
+			quid       	"4208D87A03B1"
+			supplier   	"Logical View::CActive"
+			quidu      	"4208D86B0084"))
+		operations 	(list Operations
+		    (object Operation "CDmDomain"
+			quid       	"4207720603B8"
+			parameters 	(list Parameters
+			    (object Parameter "aHierarchyId"
+				type       	"TDmHierarchyId ")
+			    (object Parameter "aDomainId"
+				type       	"TDmDomainId "))
+			concurrency 	"Sequential"
+			opExportControl 	"Public"
+			uid        	0)
+		    (object Operation "RequestTransitionNotificationL"
+			quid       	"42077700033B"
+			result     	"void"
+			concurrency 	"Sequential"
+			opExportControl 	"Public"
+			uid        	0)
+		    (object Operation "AcknowledgeLastStateL"
+			quid       	"4207770E01B4"
+			parameters 	(list Parameters
+			    (object Parameter "aError"
+				type       	"TInt"))
+			result     	"void"
+			concurrency 	"Sequential"
+			opExportControl 	"Public"
+			uid        	0)
+		    (object Operation "GetState"
+			quid       	"420777C300E9"
+			result     	"TDmDomainState "
+			concurrency 	"Sequential"
+			opExportControl 	"Public"
+			uid        	0)
+		    (object Operation "RunL"
+			quid       	"42077843000F"
+			result     	"void"
+			concurrency 	"Sequential"
+			opExportControl 	"Public"
+			uid        	0)
+		    (object Operation "ConstructL"
+			quid       	"420B5D8B02D4"
+			result     	"void"
+			concurrency 	"Sequential"
+			opExportControl 	"Protected"
+			uid        	0)
+		    (object Operation "DoCancel"
+			quid       	"420B5DBA03DD"
+			result     	"void"
+			concurrency 	"Sequential"
+			opExportControl 	"Protected"
+			uid        	0))
+		statemachine 	(object State_Machine "State/Activity Model"
+		    quid       	"420A31D0002B"
+		    states     	(list States
+			(object State "$UNNAMED$0"
+			    quid       	"420A323901D0"
+			    transitions 	(list transition_list
+				(object State_Transition
+				    quid       	"420A334501A2"
+				    supplier   	"Critical-Static"
+				    quidu      	"420A323D000B"
+				    sendEvent  	(object sendEvent
+					quid       	"420A334501A5")))
+			    type       	"StartState")
+			(object State "Critical-Static"
+			    quid       	"420A323D000B"
+			    transitions 	(list transition_list
+				(object State_Transition
+				    quid       	"420A333600F6"
+				    supplier   	"Critical-Dynamic"
+				    quidu      	"420A325702EA"
+				    sendEvent  	(object sendEvent
+					quid       	"420A333600F9"))
+				(object State_Transition
+				    quid       	"420A33CB01E0"
+				    supplier   	"Critical-Static"
+				    quidu      	"420A323D000B"
+				    sendEvent  	(object sendEvent
+					quid       	"420A33CB01E3")))
+			    type       	"Normal")
+			(object State "Critical-Dynamic"
+			    quid       	"420A325702EA"
+			    transitions 	(list transition_list
+				(object State_Transition
+				    quid       	"420A33400069"
+				    supplier   	"Non-Critical"
+				    quidu      	"420A32A1024D"
+				    sendEvent  	(object sendEvent
+					quid       	"420A3340006C")))
+			    type       	"Normal")
+			(object State "Non-Critical"
+			    quid       	"420A32A1024D"
+			    transitions 	(list transition_list
+				(object State_Transition
+				    quid       	"420A339B01D0"
+				    supplier   	"Critical-Static"
+				    quidu      	"420A323D000B"
+				    sendEvent  	(object sendEvent
+					quid       	"420A339B01E0"))
+				(object State_Transition
+				    quid       	"420A340C020F"
+				    supplier   	"$UNNAMED$1"
+				    quidu      	"420A340500B7"
+				    sendEvent  	(object sendEvent
+					quid       	"420A340C0212")))
+			    type       	"Normal")
+			(object State "$UNNAMED$1"
+			    quid       	"420A340500B7"
+			    type       	"EndState"))
+		    partitions 	(list Partitions)
+		    statediagrams 	(list StateDiagrams
+			(object State_Diagram "Staged Startup"
+			    quid       	"420A31D0003A"
+			    title      	"Staged Startup"
+			    zoom       	100
+			    max_height 	28350
+			    max_width  	21600
+			    origin_x   	0
+			    origin_y   	0
+			    items      	(list diagram_item_list
+				(object StateView "StartState" "$UNNAMED$0" @1
+				    location   	(897, 144)
+				    label      	(object ItemLabel
+					Parent_View 	@1
+					location   	(939, 114)
+					nlines     	2
+					max_width  	600
+					label      	"")
+				    icon_style 	"Icon"
+				    line_color 	3342489
+				    fill_color 	13434879
+				    quidu      	"420A323901D0"
+				    autoResize 	TRUE)
+				(object StateView "Normal" "Critical-Dynamic" @2
+				    location   	(896, 736)
+				    label      	(object ItemLabel
+					Parent_View 	@2
+					location   	(896, 726)
+					fill_color 	13434879
+					anchor_loc 	1
+					nlines     	2
+					max_width  	342
+					justify    	0
+					label      	"Critical-Dynamic")
+				    icon_style 	"Icon"
+				    line_color 	3342489
+				    fill_color 	13434879
+				    quidu      	"420A325702EA"
+				    width      	438
+				    height     	132
+				    autoResize 	TRUE)
+				(object StateView "Normal" "Non-Critical" @3
+				    location   	(896, 1072)
+				    label      	(object ItemLabel
+					Parent_View 	@3
+					location   	(896, 1059)
+					fill_color 	13434879
+					anchor_loc 	1
+					nlines     	2
+					max_width  	340
+					justify    	0
+					label      	"Non-Critical")
+				    icon_style 	"Icon"
+				    line_color 	3342489
+				    fill_color 	13434879
+				    quidu      	"420A32A1024D"
+				    width      	437
+				    height     	138
+				    autoResize 	TRUE)
+				(object StateView "Normal" "Critical-Static" @4
+				    location   	(896, 448)
+				    label      	(object ItemLabel
+					Parent_View 	@4
+					location   	(896, 442)
+					fill_color 	13434879
+					anchor_loc 	1
+					nlines     	2
+					max_width  	342
+					justify    	0
+					label      	"Critical-Static")
+				    icon_style 	"Icon"
+				    line_color 	3342489
+				    fill_color 	13434879
+				    quidu      	"420A323D000B"
+				    width      	438
+				    height     	125
+				    autoResize 	TRUE)
+				(object TransView "" @5
+				    stereotype 	TRUE
+				    line_color 	3342489
+				    quidu      	"420A333600F6"
+				    client     	@4
+				    supplier   	@2
+				    line_style 	0
+				    x_offset   	FALSE)
+				(object TransView "" @6
+				    stereotype 	TRUE
+				    line_color 	3342489
+				    quidu      	"420A334501A2"
+				    client     	@1
+				    supplier   	@4
+				    line_style 	0
+				    x_offset   	FALSE)
+				(object StateView "EndState" "$UNNAMED$1" @7
+				    location   	(896, 1360)
+				    label      	(object ItemLabel
+					Parent_View 	@7
+					location   	(950, 1318)
+					nlines     	2
+					max_width  	600
+					label      	"")
+				    icon_style 	"Icon"
+				    line_color 	3342489
+				    fill_color 	13434879
+				    quidu      	"420A340500B7"
+				    autoResize 	TRUE)
+				(object TransView "" @8
+				    stereotype 	TRUE
+				    line_color 	3342489
+				    quidu      	"420A340C020F"
+				    client     	@3
+				    supplier   	@7
+				    line_style 	0
+				    x_offset   	FALSE)
+				(object TransView "" @9
+				    stereotype 	TRUE
+				    line_color 	3342489
+				    quidu      	"420A33400069"
+				    client     	@2
+				    supplier   	@3
+				    line_style 	0
+				    x_offset   	FALSE)
+				(object NoteView @10
+				    location   	(1568, 448)
+				    label      	(object ItemLabel
+					Parent_View 	@10
+					location   	(1349, 379)
+					fill_color 	13434879
+					nlines     	2
+					max_width  	402
+					label      	"Discover plugins on RO Internal Drive units")
+				    line_color 	3342489
+				    fill_color 	13434879
+				    width      	462
+				    height     	150)
+				(object NoteView @11
+				    location   	(1552, 737)
+				    label      	(object ItemLabel
+					Parent_View 	@11
+					location   	(1352, 643)
+					fill_color 	13434879
+					nlines     	3
+					max_width  	365
+					label      	"Catch up to last 'interested' state i.e. Critical-Static")
+				    line_color 	3342489
+				    fill_color 	13434879
+				    width      	425
+				    height     	200)
+				(object NoteView @12
+				    location   	(1648, 1072)
+				    label      	(object ItemLabel
+					Parent_View 	@12
+					location   	(1357, 941)
+					fill_color 	13434879
+					nlines     	5
+					max_width  	546
+					label      	
+|Discover plugins on all other Drive Units
+|
+|Catch up to last 'interested' state i.e. Non Critical
+					)
+				    line_color 	3342489
+				    fill_color 	13434879
+				    width      	606
+				    height     	274)
+				(object AttachView "" @13
+				    stereotype 	TRUE
+				    line_color 	3342489
+				    client     	@10
+				    supplier   	@4
+				    line_style 	0)
+				(object AttachView "" @14
+				    stereotype 	TRUE
+				    line_color 	3342489
+				    client     	@11
+				    supplier   	@2
+				    line_style 	0)
+				(object AttachView "" @15
+				    stereotype 	TRUE
+				    line_color 	3342489
+				    client     	@12
+				    supplier   	@3
+				    line_style 	0)
+				(object NoteView @16
+				    location   	(304, 784)
+				    label      	(object ItemLabel
+					Parent_View 	@16
+					location   	(138, 703)
+					fill_color 	13434879
+					nlines     	3
+					max_width  	296
+					label      	"Restart/Reboot returns System to Start")
+				    line_color 	3342489
+				    fill_color 	13434879
+				    width      	356
+				    height     	175)
+				(object AttachView "" @17
+				    stereotype 	TRUE
+				    line_color 	3342489
+				    client     	@16
+				    supplier   	@1
+				    vertices   	(list Points
+					(303, 696)
+					(303, 144)
+					(867, 144))
+				    line_style 	0)
+				(object AttachView "" @18
+				    stereotype 	TRUE
+				    line_color 	3342489
+				    client     	@16
+				    supplier   	@7
+				    vertices   	(list Points
+					(303, 871)
+					(303, 1359)
+					(854, 1359))
+				    line_style 	0))))))
+	    (object Class "CDmDomainTestHarness"
+		quid       	"4208D2F002A5"
+		superclasses 	(list inheritance_relationship_list
+		    (object Inheritance_Relationship
+			quid       	"429B9A3702F3"
+			supplier   	"Logical View::CDmDomain"
+			quidu      	"420771590118"))
+		used_nodes 	(list uses_relationship_list
+		    (object Uses_Relationship
+			quid       	"429B99EB012D"
+			supplier   	"Logical View::CDmDomain"
+			quidu      	"420771590118"))
+		operations 	(list Operations
+		    (object Operation "CDmDomainTestHarness"
+			quid       	"4208D3680297"
+			concurrency 	"Sequential"
+			opExportControl 	"Public"
+			uid        	0)
+		    (object Operation "RequestTransitionNotificationL"
+			quid       	"4208D3AB0372"
+			result     	"void"
+			concurrency 	"Sequential"
+			opExportControl 	"Public"
+			uid        	0)
+		    (object Operation "AcknowledgeLastStateL"
+			quid       	"4208D42700A5"
+			parameters 	(list Parameters
+			    (object Parameter "aError"
+				type       	"TInt"))
+			result     	"void"
+			concurrency 	"Sequential"
+			opExportControl 	"Public"
+			uid        	0)
+		    (object Operation "GetState"
+			quid       	"4208D48002C9"
+			result     	"TDmDomainState"
+			concurrency 	"Sequential"
+			opExportControl 	"Public"
+			uid        	0)
+		    (object Operation "RunL"
+			quid       	"4208D4BA002A"
+			result     	"void"
+			concurrency 	"Sequential"
+			opExportControl 	"Public"
+			uid        	0)
+		    (object Operation "SetState"
+			quid       	"4208D512005A"
+			parameters 	(list Parameters
+			    (object Parameter "aDomainState"
+				type       	"TDmDomainState"))
+			result     	"void"
+			concurrency 	"Sequential"
+			opExportControl 	"Public"
+			uid        	0)
+		    (object Operation "ResetRequestTransitionNotificationL"
+			quid       	"429B9864005A"
+			result     	"void"
+			concurrency 	"Sequential"
+			opExportControl 	"Public"
+			uid        	0)
+		    (object Operation "IsTransitionNotificationRequested"
+			quid       	"429B98760200"
+			result     	"TBool"
+			concurrency 	"Sequential"
+			opExportControl 	"Public"
+			uid        	0)
+		    (object Operation "IsRequestNotificationCancelledL : TBool"
+			quid       	"43BC29B10026"
+			concurrency 	"Sequential"
+			opExportControl 	"Public"
+			uid        	0)
+		    (object Operation "ResetLastStateAcknowledged"
+			quid       	"429B98900193"
+			result     	"void"
+			concurrency 	"Sequential"
+			opExportControl 	"Public"
+			uid        	0)
+		    (object Operation "IsLastStateAcknowledged"
+			quid       	"429B98A402EC"
+			result     	"TBool"
+			concurrency 	"Sequential"
+			opExportControl 	"Public"
+			uid        	0)
+		    (object Operation "ConstructL"
+			quid       	"420B5FE703AE"
+			result     	"void"
+			concurrency 	"Sequential"
+			opExportControl 	"Protected"
+			uid        	0)
+		    (object Operation "DoCancel"
+			quid       	"420B5FFD03AE"
+			result     	"void"
+			concurrency 	"Sequential"
+			opExportControl 	"Protected"
+			uid        	0)
+		    (object Operation "IsTestBehaviour"
+			quid       	"429B98FB01F3"
+			result     	"TBool"
+			concurrency 	"Sequential"
+			opExportControl 	"Private"
+			uid        	0)
+		    (object Operation "Cancel"
+			quid       	"43B5CAEE0263"
+			concurrency 	"Sequential"
+			opExportControl 	"Public"
+			uid        	0)))
+	    (object Class "CActive"
+		quid       	"4208D86B0084")
+	    (object Class "TServerStartupMgr_StateAccessor"
+		quid       	"4208DDF90048"
+		operations 	(list Operations
+		    (object Operation "UpdateStateAwareObjects"
+			quid       	"4208DF2E03B7"
+			result     	"void"
+			concurrency 	"Sequential"
+			opExportControl 	"Public"
+			uid        	0)
+		    (object Operation "GetKnownStartupState"
+			quid       	"4208DF3B001D"
+			parameters 	(list Parameters
+			    (object Parameter "aState"
+				type       	"TDmDomainState"))
+			result     	"TStartupStateIdentifier"
+			concurrency 	"Sequential"
+			opExportControl 	"Public"
+			uid        	0)))
+	    (object Class "CRegistryData"
+		quid       	"420A31F100D6"
+		superclasses 	(list inheritance_relationship_list
+		    (object Inheritance_Relationship
+			quid       	"422ED0140219"
+			supplier   	"Logical View::MStartupStateObserver"
+			quidu      	"422ECFFA00E1"))
+		statemachine 	(object State_Machine "State/Activity Model"
+		    quid       	"420A321002F9"
+		    states     	(list States
+			(object State "$UNNAMED$2"
+			    quid       	"420A366D01E0"
+			    transitions 	(list transition_list
+				(object State_Transition
+				    quid       	"420A366D01E1"
+				    label      	""
+				    supplier   	"RegData_NoPluginsInt"
+				    quidu      	"420A366D01E5"
+				    Event      	(object Event "InitialiseEvent"
+					quid       	"42354E2D03A7")
+				    action     	(object action "Initialise"
+					quid       	"42354E2D03A8")
+				    sendEvent  	(object sendEvent
+					quid       	"420A366D01E4")))
+			    type       	"StartState")
+			(object State "RegData_CriticalPluginsInt"
+			    quid       	"420A366D01EE"
+			    transitions 	(list transition_list
+				(object State_Transition
+				    quid       	"420A366D01EF"
+				    label      	""
+				    supplier   	"RegData_AllPluginsInt"
+				    quidu      	"420A366D01F3"
+				    Event      	(object Event "ProcessSSAEvent"
+					quid       	"42354E2D03AD"
+					parameters 	"EStartupStateNonCritical : TDmDomainState")
+				    action     	(object action "Internalise Plugins on non RO Internal Drive units"
+					quid       	"42354E2D03AE")
+				    sendEvent  	(object sendEvent
+					quid       	"420A366D01F2")))
+			    type       	"Normal")
+			(object State "RegData_AllPluginsInt"
+			    quid       	"420A366D01F3"
+			    transitions 	(list transition_list
+				(object State_Transition
+				    quid       	"420A366D01F4"
+				    supplier   	"Critical-Static"
+				    sendEvent  	(object sendEvent
+					quid       	"420A366D01F7")))
+			    type       	"Normal")
+			(object State "RegData_NoPluginsInt"
+			    quid       	"420A366D01E5"
+			    transitions 	(list transition_list
+				(object State_Transition
+				    quid       	"420A366D01E6"
+				    label      	""
+				    supplier   	"RegData_CriticalPluginsInt"
+				    quidu      	"420A366D01EE"
+				    Event      	(object Event "ProcessSSAEvent"
+					quid       	"42354E2D03BD"
+					parameters 	"EStartupStateCriticalStatic : TDmDomainState")
+				    action     	(object action "Internalise Plugins on RO Internal Drive Units"
+					quid       	"42354E2D03BE")
+				    sendEvent  	(object sendEvent
+					quid       	"420A366D01E9"))
+				(object State_Transition
+				    quid       	"420A366D01EA"
+				    supplier   	"Critical-Static"
+				    sendEvent  	(object sendEvent
+					quid       	"420A366D01ED"))
+				(object State_Transition
+				    quid       	"42547EB500FA"
+				    supplier   	"RegData_AllPluginsInt"
+				    quidu      	"420A366D01F3"
+				    sendEvent  	(object sendEvent
+					quid       	"42547EB500FD")))
+			    type       	"Normal"))
+		    partitions 	(list Partitions)
+		    statediagrams 	(list StateDiagrams
+			(object State_Diagram "Transitions"
+			    quid       	"420A32100309"
+			    title      	"Transitions"
+			    zoom       	100
+			    max_height 	28350
+			    max_width  	21600
+			    origin_x   	0
+			    origin_y   	0
+			    items      	(list diagram_item_list
+				(object StateView "StartState" "$UNNAMED$2" @19
+				    location   	(897, 144)
+				    label      	(object ItemLabel
+					Parent_View 	@19
+					location   	(939, 114)
+					anchor_loc 	1
+					nlines     	2
+					max_width  	-36
+					justify    	0
+					label      	"")
+				    icon_style 	"Icon"
+				    line_color 	3342489
+				    fill_color 	13434879
+				    quidu      	"420A366D01E0"
+				    autoResize 	TRUE)
+				(object StateView "Normal" "RegData_CriticalPluginsInt" @20
+				    location   	(896, 816)
+				    label      	(object ItemLabel
+					Parent_View 	@20
+					location   	(896, 801)
+					fill_color 	13434879
+					anchor_loc 	1
+					nlines     	2
+					max_width  	504
+					justify    	0
+					label      	"RegData_CriticalPluginsInt")
+				    icon_style 	"Icon"
+				    line_color 	3342489
+				    fill_color 	13434879
+				    quidu      	"420A366D01EE"
+				    width      	600
+				    height     	143
+				    autoResize 	TRUE)
+				(object StateView "Normal" "RegData_AllPluginsInt" @21
+				    location   	(896, 1184)
+				    label      	(object ItemLabel
+					Parent_View 	@21
+					location   	(896, 1172)
+					fill_color 	13434879
+					anchor_loc 	1
+					nlines     	2
+					max_width  	454
+					justify    	0
+					label      	"RegData_AllPluginsInt")
+				    icon_style 	"Icon"
+				    line_color 	3342489
+				    fill_color 	13434879
+				    quidu      	"420A366D01F3"
+				    width      	550
+				    height     	137
+				    autoResize 	TRUE)
+				(object StateView "Normal" "RegData_NoPluginsInt" @22
+				    location   	(896, 432)
+				    label      	(object ItemLabel
+					Parent_View 	@22
+					location   	(896, 413)
+					fill_color 	13434879
+					anchor_loc 	1
+					nlines     	2
+					max_width  	422
+					justify    	0
+					label      	"RegData_NoPluginsInt")
+				    icon_style 	"Icon"
+				    line_color 	3342489
+				    fill_color 	13434879
+				    quidu      	"420A366D01E5"
+				    width      	518
+				    height     	150
+				    autoResize 	TRUE)
+				(object TransView "" @23
+				    label      	(object SegLabel @24
+					Parent_View 	@23
+					location   	(1564, 1009)
+					anchor_loc 	1
+					nlines     	3
+					max_width  	1057
+					justify    	0
+					label      	"ProcessSSAEvent( EStartupStateNonCritical : TDmDomainState ) / Internalise Plugins on non RO Internal Drive units"
+					pctDist    	0.532751
+					height     	668
+					orientation 	0)
+				    stereotype 	TRUE
+				    line_color 	3342489
+				    quidu      	"420A366D01EF"
+				    client     	@20
+				    supplier   	@21
+				    line_style 	0
+				    x_offset   	FALSE)
+				(object TransView "" @25
+				    label      	(object SegLabel @26
+					Parent_View 	@25
+					location   	(1152, 250)
+					anchor_loc 	1
+					nlines     	1
+					max_width  	548
+					justify    	0
+					label      	"InitialiseEvent / Initialise"
+					pctDist    	0.417582
+					height     	256
+					orientation 	0)
+				    stereotype 	TRUE
+				    line_color 	3342489
+				    quidu      	"420A366D01E1"
+				    client     	@19
+				    supplier   	@22
+				    line_style 	0
+				    x_offset   	FALSE)
+				(object Label @27
+				    location   	(16, 703)
+				    nlines     	4
+				    max_width  	575
+				    label      	"ProcessSSAEvent(EStartupStateNonCritical : TDmDomainState)/Internalise Plugins on all Drive Units")
+				(object TransView "" @28
+				    label      	(object SegLabel @29
+					Parent_View 	@28
+					location   	(1589, 590)
+					anchor_loc 	1
+					nlines     	2
+					max_width  	1037
+					justify    	0
+					label      	"ProcessSSAEvent( EStartupStateCriticalStatic : TDmDomainState ) / Internalise Plugins on RO Internal Drive Units"
+					pctDist    	0.348740
+					height     	693
+					orientation 	0)
+				    stereotype 	TRUE
+				    line_color 	3342489
+				    quidu      	"420A366D01E6"
+				    client     	@22
+				    supplier   	@20
+				    line_style 	0
+				    x_offset   	FALSE)
+				(object TransView "" @30
+				    stereotype 	TRUE
+				    line_color 	3342489
+				    quidu      	"42547EB500FA"
+				    client     	@22
+				    supplier   	@21
+				    vertices   	(list Points
+					(637, 431)
+					(175, 431)
+					(175, 1359)
+					(894, 1359)
+					(895, 1252))
+				    line_style 	0
+				    x_offset   	FALSE))))))
+	    (object Class "CDiscoverer"
+		quid       	"420A435403B5"
+		superclasses 	(list inheritance_relationship_list
+		    (object Inheritance_Relationship
+			quid       	"422ED01A01DB"
+			supplier   	"Logical View::MStartupStateObserver"
+			quidu      	"422ECFFA00E1"))
+		statemachine 	(object State_Machine "State/Activity Model"
+		    quid       	"420A436903B5"
+		    states     	(list States
+			(object State "$UNNAMED$3"
+			    quid       	"420A438A026D"
+			    transitions 	(list transition_list
+				(object State_Transition
+				    quid       	"420A438A026E"
+				    label      	""
+				    supplier   	"Disc_NoPluginsDisc"
+				    quidu      	"420A438A0272"
+				    Event      	(object Event "InitialiseEvent"
+					quid       	"42354E2D03D4")
+				    action     	(object action "Initialise"
+					quid       	"42354E2D03D5")
+				    sendEvent  	(object sendEvent
+					quid       	"420A438A0271")))
+			    type       	"StartState")
+			(object State "Disc_CriticalPluginsDisc"
+			    quid       	"420A438A027B"
+			    transitions 	(list transition_list
+				(object State_Transition
+				    quid       	"420A438A027C"
+				    label      	""
+				    supplier   	"Disc_AllPluginsDisc"
+				    quidu      	"420A438A0280"
+				    Event      	(object Event "ProcessSSAEvent"
+					quid       	"42354E2D03DA"
+					parameters 	"EStartupStateNonCritical: TDmDomainState")
+				    action     	(object action "Discover Plugins on non RO Internal Drive Units"
+					quid       	"42354E2D03DB")
+				    sendEvent  	(object sendEvent
+					quid       	"420A438A027F"))
+				(object State_Transition
+				    quid       	"420A46610396"
+				    supplier   	"Disc_CriticalPluginsDisc"
+				    quidu      	"420A438A027B"
+				    sendEvent  	(object sendEvent
+					quid       	"420A46610399")))
+			    type       	"Normal")
+			(object State "Disc_AllPluginsDisc"
+			    quid       	"420A438A0280"
+			    transitions 	(list transition_list
+				(object State_Transition
+				    quid       	"420A438A0281"
+				    supplier   	"Critical-Static"
+				    sendEvent  	(object sendEvent
+					quid       	"420A438A0284"))
+				(object State_Transition
+				    quid       	"420A43C60173"
+				    supplier   	"Disc_NoPluginsDisc"
+				    quidu      	"420A438A0272"
+				    sendEvent  	(object sendEvent
+					quid       	"420A43C60176"))
+				(object State_Transition
+				    quid       	"420A45BD02BB"
+				    supplier   	"Disc_AllPluginsDisc"
+				    quidu      	"420A438A0280"
+				    sendEvent  	(object sendEvent
+					quid       	"420A45BD02BE"))
+				(object State_Transition
+				    quid       	"420A463003E4"
+				    supplier   	"Disc_AllPluginsDisc"
+				    quidu      	"420A438A0280"
+				    sendEvent  	(object sendEvent
+					quid       	"420A463003E7"))
+				(object State_Transition
+				    quid       	"423556BE01C4"
+				    label      	""
+				    supplier   	"Disc_PluginsDirty"
+				    quidu      	"4235563800BA"
+				    Event      	(object Event "ProcessDNEvent"
+					quid       	"423556BE01C5")
+				    action     	(object action "Plugins Added or Removed"
+					quid       	"423556BE01C6")
+				    sendEvent  	(object sendEvent
+					quid       	"423556BE01C7")))
+			    type       	"Normal")
+			(object State "Disc_NoPluginsDisc"
+			    quid       	"420A438A0272"
+			    transitions 	(list transition_list
+				(object State_Transition
+				    quid       	"420A438A0273"
+				    label      	""
+				    supplier   	"Disc_CriticalPluginsDisc"
+				    quidu      	"420A438A027B"
+				    Event      	(object Event "ProcessSSAEvent"
+					quid       	"42354E2D03FE"
+					parameters 	"EStartupStateCriticalStatic: TDmDomainState")
+				    action     	(object action "Discover Plugins on RO Internal Drive Units"
+					quid       	"42354E2D03FF")
+				    sendEvent  	(object sendEvent
+					quid       	"420A438A0276"))
+				(object State_Transition
+				    quid       	"420A438A0277"
+				    supplier   	"Critical-Static"
+				    sendEvent  	(object sendEvent
+					quid       	"420A438A027A"))
+				(object State_Transition
+				    quid       	"42547CEF036B"
+				    supplier   	"Disc_AllPluginsDisc"
+				    quidu      	"420A438A0280"
+				    sendEvent  	(object sendEvent
+					quid       	"42547CEF036E")))
+			    type       	"Normal")
+			(object State "Disc_PluginsDirty"
+			    quid       	"4235563800BA"
+			    transitions 	(list transition_list
+				(object State_Transition
+				    quid       	"423556C201A5"
+				    label      	""
+				    supplier   	"Disc_AllPluginsDisc"
+				    quidu      	"420A438A0280"
+				    Event      	(object Event "ProcessDNEvent"
+					quid       	"423556C201A6")
+				    action     	(object action "Re-Discover All Plugins"
+					quid       	"423556C201A7")
+				    sendEvent  	(object sendEvent
+					quid       	"423556C201A8")))
+			    type       	"Normal"))
+		    partitions 	(list Partitions)
+		    statediagrams 	(list StateDiagrams
+			(object State_Diagram "Transitions"
+			    quid       	"420A436903B6"
+			    title      	"Transitions"
+			    zoom       	100
+			    max_height 	28350
+			    max_width  	21600
+			    origin_x   	0
+			    origin_y   	10
+			    items      	(list diagram_item_list
+				(object StateView "StartState" "$UNNAMED$3" @31
+				    location   	(1123, 198)
+				    label      	(object ItemLabel
+					Parent_View 	@31
+					location   	(1172, 164)
+					anchor_loc 	1
+					nlines     	2
+					max_width  	155
+					justify    	0
+					label      	"")
+				    icon_style 	"Icon"
+				    line_color 	3342489
+				    fill_color 	13434879
+				    quidu      	"420A438A026D"
+				    width      	75
+				    height     	68
+				    autoResize 	TRUE)
+				(object StateView "Normal" "Disc_CriticalPluginsDisc" @32
+				    location   	(1123, 821)
+				    label      	(object ItemLabel
+					Parent_View 	@32
+					location   	(1123, 815)
+					fill_color 	13434879
+					anchor_loc 	1
+					nlines     	2
+					max_width  	442
+					justify    	0
+					label      	"Disc_CriticalPluginsDisc")
+				    icon_style 	"Icon"
+				    line_color 	3342489
+				    fill_color 	13434879
+				    quidu      	"420A438A027B"
+				    width      	538
+				    height     	125
+				    autoResize 	TRUE)
+				(object StateView "Normal" "Disc_AllPluginsDisc" @33
+				    location   	(1121, 1254)
+				    label      	(object ItemLabel
+					Parent_View 	@33
+					location   	(1121, 1239)
+					fill_color 	13434879
+					anchor_loc 	1
+					nlines     	2
+					max_width  	366
+					justify    	0
+					label      	"Disc_AllPluginsDisc")
+				    icon_style 	"Icon"
+				    line_color 	3342489
+				    fill_color 	13434879
+				    quidu      	"420A438A0280"
+				    width      	462
+				    height     	143
+				    autoResize 	TRUE)
+				(object StateView "Normal" "Disc_NoPluginsDisc" @34
+				    location   	(1122, 448)
+				    label      	(object ItemLabel
+					Parent_View 	@34
+					location   	(1122, 445)
+					fill_color 	13434879
+					anchor_loc 	1
+					nlines     	2
+					max_width  	392
+					justify    	0
+					label      	"Disc_NoPluginsDisc")
+				    icon_style 	"Icon"
+				    line_color 	3342489
+				    fill_color 	13434879
+				    quidu      	"420A438A0272"
+				    width      	488
+				    height     	119
+				    autoResize 	TRUE)
+				(object TransView "" @35
+				    label      	(object SegLabel @36
+					Parent_View 	@35
+					location   	(1400, 282)
+					anchor_loc 	1
+					nlines     	1
+					max_width  	450
+					justify    	0
+					label      	"InitialiseEvent / Initialise"
+					pctDist    	0.322785
+					height     	278
+					orientation 	0)
+				    stereotype 	TRUE
+				    line_color 	3342489
+				    quidu      	"420A438A026E"
+				    client     	@31
+				    supplier   	@34
+				    line_style 	0
+				    x_offset   	FALSE)
+				(object TransView "" @37
+				    label      	(object SegLabel @38
+					Parent_View 	@37
+					location   	(1606, 1026)
+					anchor_loc 	1
+					nlines     	4
+					max_width  	844
+					justify    	0
+					label      	"ProcessSSAEvent( EStartupStateNonCritical: TDmDomainState ) / Discover Plugins on non RO Internal Drive Units"
+					pctDist    	0.472842
+					height     	484
+					orientation 	0)
+				    stereotype 	TRUE
+				    line_color 	3342489
+				    quidu      	"420A438A027C"
+				    client     	@32
+				    supplier   	@33
+				    line_style 	0
+				    x_offset   	FALSE)
+				(object StateView "Normal" "Disc_PluginsDirty" @39
+				    location   	(1104, 1888)
+				    label      	(object ItemLabel
+					Parent_View 	@39
+					location   	(1104, 1876)
+					fill_color 	13434879
+					anchor_loc 	1
+					nlines     	2
+					max_width  	404
+					justify    	0
+					label      	"Disc_PluginsDirty")
+				    icon_style 	"Icon"
+				    line_color 	3342489
+				    fill_color 	13434879
+				    quidu      	"4235563800BA"
+				    width      	500
+				    height     	137
+				    autoResize 	TRUE)
+				(object TransView "" @40
+				    label      	(object SegLabel @41
+					Parent_View 	@40
+					location   	(613, 1529)
+					anchor_loc 	1
+					nlines     	2
+					max_width  	525
+					justify    	0
+					label      	"ProcessDNEvent / Re-Discover All Plugins"
+					pctDist    	1.382632
+					height     	250
+					orientation 	0)
+				    stereotype 	TRUE
+				    line_color 	3342489
+				    quidu      	"423556C201A5"
+				    client     	@39
+				    supplier   	@33
+				    vertices   	(list Points
+					(1065, 1819)
+					(896, 1520)
+					(1060, 1324))
+				    line_style 	0
+				    x_offset   	FALSE)
+				(object TransView "" @42
+				    label      	(object SegLabel @43
+					Parent_View 	@42
+					location   	(1503, 1529)
+					anchor_loc 	1
+					nlines     	2
+					max_width  	506
+					justify    	0
+					label      	"ProcessDNEvent / Plugins Added or Removed"
+					pctDist    	1.430213
+					height     	294
+					orientation 	0)
+				    stereotype 	TRUE
+				    line_color 	3342489
+				    quidu      	"423556BE01C4"
+				    client     	@33
+				    supplier   	@39
+				    vertices   	(list Points
+					(1140, 1324)
+					(1196, 1523)
+					(1121, 1819))
+				    line_style 	0
+				    x_offset   	FALSE)
+				(object TransView "" @44
+				    label      	(object SegLabel @45
+					Parent_View 	@44
+					location   	(1572, 607)
+					anchor_loc 	1
+					nlines     	3
+					max_width  	875
+					justify    	0
+					label      	"ProcessSSAEvent( EStartupStateCriticalStatic: TDmDomainState ) / Discover Plugins on RO Internal Drive Units"
+					pctDist    	0.398406
+					height     	450
+					orientation 	0)
+				    stereotype 	TRUE
+				    line_color 	3342489
+				    quidu      	"420A438A0273"
+				    client     	@34
+				    supplier   	@32
+				    line_style 	0
+				    x_offset   	FALSE)
+				(object TransView "" @46
+				    stereotype 	TRUE
+				    line_color 	3342489
+				    quidu      	"42547CEF036B"
+				    client     	@34
+				    supplier   	@33
+				    vertices   	(list Points
+					(878, 447)
+					(447, 447)
+					(447, 1262)
+					(890, 1256))
+				    line_style 	0
+				    x_offset   	FALSE)
+				(object Label @47
+				    location   	(16, 557)
+				    nlines     	5
+				    max_width  	675
+				    label      	"ProcessSSAEvent(EStartupStateNonCritical: TDmDomainState/Discover Plugins on all Drive Units"))))))
+	    (object Class "CRegistrar"
+		quid       	"420B3092011E"
+		superclasses 	(list inheritance_relationship_list
+		    (object Inheritance_Relationship
+			quid       	"422ED01E0025"
+			supplier   	"Logical View::MStartupStateObserver"
+			quidu      	"422ECFFA00E1"))
+		statemachine 	(object State_Machine "State/Activity Model"
+		    quid       	"420B30A70303"
+		    states     	(list States
+			(object State "$UNNAMED$4"
+			    quid       	"420B30BA0276"
+			    transitions 	(list transition_list
+				(object State_Transition
+				    quid       	"420B30BA0277"
+				    label      	""
+				    supplier   	"Reg_StartupInProgress"
+				    quidu      	"420B30BA027B"
+				    Event      	(object Event "InitialiseEvent"
+					quid       	"42354E2D0416")
+				    action     	(object action "Initialise"
+					quid       	"42354E2D0417")
+				    sendEvent  	(object sendEvent
+					quid       	"420B30BA027A")))
+			    type       	"StartState")
+			(object State "Reg_StartupComplete"
+			    quid       	"420B30BA0284"
+			    transitions 	(list transition_list
+				(object State_Transition
+				    quid       	"420B30BA0285"
+				    supplier   	"D_APD"
+				    quidu      	"420B30BA028D"
+				    sendEvent  	(object sendEvent
+					quid       	"420B30BA0288"))
+				(object State_Transition
+				    quid       	"420B30BA0289"
+				    supplier   	"D_CPD"
+				    sendEvent  	(object sendEvent
+					quid       	"420B30BA028C")))
+			    type       	"Normal")
+			(object State "D_APD"
+			    quid       	"420B30BA028D"
+			    transitions 	(list transition_list
+				(object State_Transition
+				    quid       	"420B30BA028E"
+				    supplier   	"Critical-Static"
+				    sendEvent  	(object sendEvent
+					quid       	"420B30BA0291"))
+				(object State_Transition
+				    quid       	"420B30BA0296"
+				    supplier   	"D_NPD"
+				    sendEvent  	(object sendEvent
+					quid       	"420B30BA0299"))
+				(object State_Transition
+				    quid       	"420B30BA029A"
+				    supplier   	"D_APD"
+				    quidu      	"420B30BA028D"
+				    sendEvent  	(object sendEvent
+					quid       	"420B30BA029D"))
+				(object State_Transition
+				    quid       	"420B30BA029E"
+				    supplier   	"D_APD"
+				    quidu      	"420B30BA028D"
+				    sendEvent  	(object sendEvent
+					quid       	"420B30BA02A1")))
+			    type       	"Normal")
+			(object State "Reg_StartupInProgress"
+			    quid       	"420B30BA027B"
+			    transitions 	(list transition_list
+				(object State_Transition
+				    quid       	"420B30BA027C"
+				    label      	""
+				    supplier   	"Reg_StartupComplete"
+				    quidu      	"420B30BA0284"
+				    Event      	(object Event "ProcessSSAEvent"
+					quid       	"42354E2D0443"
+					parameters 	"state : TDmDomainState")
+				    action     	(object action "Start-up Discovery Complete"
+					quid       	"42354E2D0444")
+				    sendEvent  	(object sendEvent
+					quid       	"420B30BA027F"))
+				(object State_Transition
+				    quid       	"420B30BA0280"
+				    supplier   	"Critical-Static"
+				    sendEvent  	(object sendEvent
+					quid       	"420B30BA0283")))
+			    type       	"Normal"))
+		    partitions 	(list Partitions)
+		    statediagrams 	(list StateDiagrams
+			(object State_Diagram "Transitions"
+			    quid       	"420B30A70304"
+			    title      	"Transitions"
+			    zoom       	100
+			    max_height 	28350
+			    max_width  	21600
+			    origin_x   	0
+			    origin_y   	0
+			    items      	(list diagram_item_list
+				(object StateView "StartState" "$UNNAMED$4" @48
+				    location   	(1120, 144)
+				    label      	(object ItemLabel
+					Parent_View 	@48
+					location   	(1162, 114)
+					anchor_loc 	1
+					nlines     	2
+					max_width  	-36
+					justify    	0
+					label      	"")
+				    icon_style 	"Icon"
+				    line_color 	3342489
+				    fill_color 	13434879
+				    quidu      	"420B30BA0276"
+				    autoResize 	TRUE)
+				(object StateView "Normal" "Reg_StartupComplete" @49
+				    location   	(1118, 874)
+				    label      	(object ItemLabel
+					Parent_View 	@49
+					location   	(1118, 865)
+					fill_color 	13434879
+					anchor_loc 	1
+					nlines     	2
+					max_width  	398
+					justify    	0
+					label      	"Reg_StartupComplete")
+				    icon_style 	"Icon"
+				    line_color 	3342489
+				    fill_color 	13434879
+				    quidu      	"420B30BA0284"
+				    width      	494
+				    height     	131
+				    autoResize 	TRUE)
+				(object StateView "Normal" "Reg_StartupInProgress" @50
+				    location   	(1119, 464)
+				    label      	(object ItemLabel
+					Parent_View 	@50
+					location   	(1119, 452)
+					fill_color 	13434879
+					anchor_loc 	1
+					nlines     	2
+					max_width  	434
+					justify    	0
+					label      	"Reg_StartupInProgress")
+				    icon_style 	"Icon"
+				    line_color 	3342489
+				    fill_color 	13434879
+				    quidu      	"420B30BA027B"
+				    width      	531
+				    height     	137
+				    autoResize 	TRUE)
+				(object NoteView @51
+				    location   	(1794, 448)
+				    label      	(object ItemLabel
+					Parent_View 	@51
+					location   	(1506, 339)
+					fill_color 	13434879
+					nlines     	4
+					max_width  	540
+					label      	"i.e. Internalisation/Externalisation and Discovery In Progress")
+				    line_color 	3342489
+				    fill_color 	13434879
+				    width      	600
+				    height     	231)
+				(object NoteView @52
+				    location   	(1794, 874)
+				    label      	(object ItemLabel
+					Parent_View 	@52
+					location   	(1506, 765)
+					fill_color 	13434879
+					nlines     	4
+					max_width  	540
+					label      	"i.e. Internalisation/Externalisation and Discovery Complete")
+				    line_color 	3342489
+				    fill_color 	13434879
+				    width      	600
+				    height     	231)
+				(object TransView "" @53
+				    label      	(object SegLabel @54
+					Parent_View 	@53
+					location   	(1068, 670)
+					anchor_loc 	1
+					nlines     	1
+					max_width  	1416
+					justify    	0
+					label      	"ProcessSSAEvent( state : TDmDomainState ) / Start-up Discovery Complete"
+					pctDist    	0.500000
+					height     	50
+					orientation 	1)
+				    stereotype 	TRUE
+				    line_color 	3342489
+				    quidu      	"420B30BA027C"
+				    client     	@50
+				    supplier   	@49
+				    line_style 	0
+				    x_offset   	FALSE)
+				(object TransView "" @55
+				    label      	(object SegLabel @56
+					Parent_View 	@55
+					location   	(1374, 285)
+					anchor_loc 	1
+					nlines     	1
+					max_width  	450
+					justify    	0
+					label      	"InitialiseEvent / Initialise"
+					pctDist    	0.502262
+					height     	255
+					orientation 	0)
+				    stereotype 	TRUE
+				    line_color 	3342489
+				    quidu      	"420B30BA0277"
+				    client     	@48
+				    supplier   	@50
+				    line_style 	0
+				    x_offset   	FALSE)
+				(object AttachView "" @57
+				    stereotype 	TRUE
+				    line_color 	3342489
+				    client     	@51
+				    supplier   	@50
+				    line_style 	0)
+				(object AttachView "" @58
+				    stereotype 	TRUE
+				    line_color 	3342489
+				    client     	@52
+				    supplier   	@49
+				    line_style 	0))))))
+	    (object Class "MStartupStateObserver"
+		quid       	"422ECFFA00E1"
+		operations 	(list Operations
+		    (object Operation "ProcessSSAEvent"
+			quid       	"422ED0570100"
+			parameters 	(list Parameters
+			    (object Parameter "state"
+				type       	"TDmDomainState"))
+			result     	"void"
+			concurrency 	"Sequential"
+			opExportControl 	"Public"
+			uid        	0)))
+	    (object Association "$UNNAMED$5"
+		quid       	"429B99C4018A"
+		stereotype 	"extend"
+		roles      	(list role_list
+		    (object Role "$UNNAMED$6"
+			quid       	"429B99C6009F"
+			supplier   	"Logical View::CDmDomain"
+			quidu      	"420771590118"
+			is_navigable 	TRUE)
+		    (object Role "$UNNAMED$7"
+			quid       	"429B99C600A0"
+			supplier   	"Logical View::CDmDomainTestHarness"
+			quidu      	"4208D2F002A5"))))
+	logical_presentations 	(list unit_reference_list
+	    (object ClassDiagram "Main"
+		quid       	"42077069006E"
+		title      	"Main"
+		zoom       	100
+		max_height 	28350
+		max_width  	21600
+		origin_x   	0
+		origin_y   	4350
+		items      	(list diagram_item_list
+		    (object ClassView "Class" "Logical View::CServerStartupMgr" @59
+			ShowCompartmentStereotypes 	TRUE
+			IncludeAttribute 	TRUE
+			IncludeOperation 	TRUE
+			ShowOperationSignature 	TRUE
+			location   	(1088, 1344)
+			label      	(object ItemLabel
+			    Parent_View 	@59
+			    location   	(406, 1088)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	1364
+			    justify    	0
+			    label      	"CServerStartupMgr")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"420770750186"
+			compartment 	(object Compartment
+			    Parent_View 	@59
+			    location   	(406, 1149)
+			    icon_style 	"Icon"
+			    fill_color 	13434879
+			    anchor     	2
+			    nlines     	9
+			    max_width  	1362)
+			width      	1382
+			height     	536
+			annotation 	8
+			autoResize 	TRUE)
+		    (object ClassView "Class" "Logical View::CDmDomain" @60
+			ShowCompartmentStereotypes 	TRUE
+			IncludeAttribute 	TRUE
+			IncludeOperation 	TRUE
+			ShowOperationSignature 	TRUE
+			location   	(1088, 672)
+			label      	(object ItemLabel
+			    Parent_View 	@60
+			    location   	(394, 441)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	1388
+			    justify    	0
+			    label      	"CDmDomain")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	16777088
+			quidu      	"420771590118"
+			compartment 	(object Compartment
+			    Parent_View 	@60
+			    location   	(394, 502)
+			    icon_style 	"Icon"
+			    fill_color 	13434879
+			    anchor     	2
+			    nlines     	8
+			    max_width  	1393)
+			width      	1406
+			height     	486
+			annotation 	8
+			autoResize 	TRUE)
+		    (object InheritView "" @61
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"420771E401C4"
+			client     	@59
+			supplier   	@60
+			line_style 	0)
+		    (object ClassView "Class" "Logical View::CActive" @62
+			ShowCompartmentStereotypes 	TRUE
+			IncludeAttribute 	TRUE
+			IncludeOperation 	TRUE
+			location   	(1088, 224)
+			label      	(object ItemLabel
+			    Parent_View 	@62
+			    location   	(999, 173)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	178
+			    justify    	0
+			    label      	"CActive")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	16777088
+			quidu      	"4208D86B0084"
+			width      	196
+			height     	126
+			annotation 	8
+			autoResize 	TRUE)
+		    (object InheritView "" @63
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"4208D87A03B1"
+			client     	@60
+			supplier   	@62
+			line_style 	0)))
+	    (object ClassDiagram "Test"
+		quid       	"4208D28E01F7"
+		title      	"Test"
+		zoom       	100
+		max_height 	28350
+		max_width  	21600
+		origin_x   	108
+		origin_y   	1886
+		items      	(list diagram_item_list
+		    (object ClassView "Class" "Logical View::CServerStartupMgr" @64
+			ShowCompartmentStereotypes 	TRUE
+			IncludeAttribute 	TRUE
+			IncludeOperation 	TRUE
+			location   	(1008, 2016)
+			label      	(object ItemLabel
+			    Parent_View 	@64
+			    location   	(325, 1760)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	1366
+			    justify    	0
+			    label      	"CServerStartupMgr")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"420770750186"
+			compartment 	(object Compartment
+			    Parent_View 	@64
+			    location   	(325, 1821)
+			    icon_style 	"Icon"
+			    fill_color 	13434879
+			    anchor     	2
+			    nlines     	9
+			    max_width  	1371)
+			width      	1384
+			height     	536
+			annotation 	8
+			autoResize 	TRUE)
+		    (object ClassView "Class" "Logical View::TServerStartupMgr_StateAccessor" @65
+			ShowCompartmentStereotypes 	TRUE
+			IncludeAttribute 	TRUE
+			IncludeOperation 	TRUE
+			ShowOperationSignature 	TRUE
+			location   	(1056, 2592)
+			label      	(object ItemLabel
+			    Parent_View 	@65
+			    location   	(353, 2486)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	1406
+			    justify    	0
+			    label      	"TServerStartupMgr_StateAccessor")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"4208DDF90048"
+			compartment 	(object Compartment
+			    Parent_View 	@65
+			    location   	(353, 2547)
+			    icon_style 	"Icon"
+			    fill_color 	16777215
+			    anchor     	2
+			    nlines     	3
+			    max_width  	1412)
+			width      	1424
+			height     	236
+			annotation 	8
+			autoResize 	TRUE)
+		    (object ClassView "Class" "Logical View::CDmDomainTestHarness" @66
+			ShowCompartmentStereotypes 	TRUE
+			IncludeAttribute 	TRUE
+			IncludeOperation 	TRUE
+			ShowOperationSignature 	TRUE
+			location   	(992, 1200)
+			label      	(object ItemLabel
+			    Parent_View 	@66
+			    location   	(514, 769)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	956
+			    justify    	0
+			    label      	"CDmDomainTestHarness")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"4208D2F002A5"
+			compartment 	(object Compartment
+			    Parent_View 	@66
+			    location   	(514, 830)
+			    icon_style 	"Icon"
+			    fill_color 	16777215
+			    anchor     	2
+			    nlines     	16
+			    max_width  	962)
+			width      	974
+			height     	886
+			annotation 	8
+			autoResize 	TRUE)
+		    (object ClassView "Class" "Logical View::CDmDomain" @67
+			ShowCompartmentStereotypes 	TRUE
+			IncludeAttribute 	TRUE
+			IncludeOperation 	TRUE
+			location   	(1008, 368)
+			label      	(object ItemLabel
+			    Parent_View 	@67
+			    location   	(707, 137)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	602
+			    justify    	0
+			    label      	"CDmDomain")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"420771590118"
+			compartment 	(object Compartment
+			    Parent_View 	@67
+			    location   	(707, 198)
+			    icon_style 	"Icon"
+			    fill_color 	13434879
+			    anchor     	2
+			    nlines     	8
+			    max_width  	609)
+			width      	620
+			height     	486
+			annotation 	8
+			autoResize 	TRUE)
+		    (object InheritView "" @68
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"4208D31F03AF"
+			client     	@64
+			supplier   	@66
+			line_style 	0)
+		    (object InheritView "" @69
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"429B9A3702F3"
+			client     	@66
+			supplier   	@67
+			line_style 	0)))
+	    (object ClassDiagram "Observers"
+		quid       	"422ECFC20342"
+		title      	"Observers"
+		zoom       	100
+		max_height 	28350
+		max_width  	21600
+		origin_x   	0
+		origin_y   	0
+		items      	(list diagram_item_list
+		    (object ClassView "Class" "Logical View::CRegistryData" @70
+			ShowCompartmentStereotypes 	TRUE
+			IncludeAttribute 	TRUE
+			IncludeOperation 	TRUE
+			ShowOperationSignature 	TRUE
+			location   	(803, 928)
+			label      	(object ItemLabel
+			    Parent_View 	@70
+			    location   	(649, 877)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	308
+			    justify    	0
+			    label      	"CRegistryData")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"420A31F100D6"
+			width      	326
+			height     	126
+			annotation 	8
+			autoResize 	TRUE)
+		    (object ClassView "Class" "Logical View::CRegistrar" @71
+			ShowCompartmentStereotypes 	TRUE
+			IncludeAttribute 	TRUE
+			IncludeOperation 	TRUE
+			location   	(1347, 928)
+			label      	(object ItemLabel
+			    Parent_View 	@71
+			    location   	(1237, 877)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	220
+			    justify    	0
+			    label      	"CRegistrar")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"420B3092011E"
+			width      	238
+			height     	126
+			annotation 	8
+			autoResize 	TRUE)
+		    (object ClassView "Class" "Logical View::MStartupStateObserver" @72
+			ShowCompartmentStereotypes 	TRUE
+			IncludeAttribute 	TRUE
+			IncludeOperation 	TRUE
+			ShowOperationSignature 	TRUE
+			location   	(1056, 432)
+			label      	(object ItemLabel
+			    Parent_View 	@72
+			    location   	(573, 351)
+			    fill_color 	13434879
+			    nlines     	1
+			    max_width  	966
+			    justify    	0
+			    label      	"MStartupStateObserver")
+			icon_style 	"Icon"
+			line_color 	3342489
+			fill_color 	13434879
+			quidu      	"422ECFFA00E1"
+			width      	984
+			height     	186
+			annotation 	8
+			autoResize 	TRUE)
+		    (object InheritView "" @73
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"422ED0140219"
+			client     	@70
+			supplier   	@72
+			line_style 	0)
+		    (object InheritView "" @74
+			stereotype 	TRUE
+			line_color 	3342489
+			quidu      	"422ED01E0025"
+			client     	@71
+			supplier   	@72
+			line_style 	0)))))
+    root_subsystem 	(object SubSystem "Component View"
+	quid       	"420770670244"
+	physical_models 	(list unit_reference_list)
+	physical_presentations 	(list unit_reference_list
+	    (object Module_Diagram "Main"
+		quid       	"42077069006C"
+		title      	"Main"
+		zoom       	100
+		max_height 	28350
+		max_width  	21600
+		origin_x   	0
+		origin_y   	26366
+		items      	(list diagram_item_list))))
+    process_structure 	(object Processes
+	quid       	"420770670245"
+	ProcsNDevs 	(list
+	    (object Process_Diagram "Deployment View"
+		quid       	"420770670251"
+		title      	"Deployment View"
+		zoom       	100
+		max_height 	28350
+		max_width  	21600
+		origin_x   	0
+		origin_y   	0
+		items      	(list diagram_item_list))))
+    properties 	(object Properties
+	attributes 	(list Attribute_Set
+	    (object Attribute
+		tool       	"DDL"
+		name       	"propertyId"
+		value      	"809135966")
+	    (object Attribute
+		tool       	"DDL"
+		name       	"default__Project"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"DDL"
+			name       	"Directory"
+			value      	"AUTO GENERATE")
+		    (object Attribute
+			tool       	"DDL"
+			name       	"DataBase"
+			value      	("DataBaseSet" 800))
+		    (object Attribute
+			tool       	"DDL"
+			name       	"DataBaseSet"
+			value      	(list Attribute_Set
+			    (object Attribute
+				tool       	"DDL"
+				name       	"ANSI"
+				value      	800)
+			    (object Attribute
+				tool       	"DDL"
+				name       	"Oracle"
+				value      	801)
+			    (object Attribute
+				tool       	"DDL"
+				name       	"SQLServer"
+				value      	802)
+			    (object Attribute
+				tool       	"DDL"
+				name       	"Sybase"
+				value      	803)
+			    (object Attribute
+				tool       	"DDL"
+				name       	"Watcom"
+				value      	804)))
+		    (object Attribute
+			tool       	"DDL"
+			name       	"PrimaryKeyColumnName"
+			value      	"Id")
+		    (object Attribute
+			tool       	"DDL"
+			name       	"PrimaryKeyColumnType"
+			value      	"NUMBER(5)")
+		    (object Attribute
+			tool       	"DDL"
+			name       	"ViewName"
+			value      	"V_")
+		    (object Attribute
+			tool       	"DDL"
+			name       	"TableName"
+			value      	"T_")
+		    (object Attribute
+			tool       	"DDL"
+			name       	"InheritSuffix"
+			value      	"_V")
+		    (object Attribute
+			tool       	"DDL"
+			name       	"DropClause"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"DDL"
+			name       	"BaseViews"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"DDL"
+			name       	"DDLScriptFilename"
+			value      	"DDL1.SQL")))
+	    (object Attribute
+		tool       	"DDL"
+		name       	"default__Attribute"
+		value      	(list Attribute_Set
+		    (object Attribute
+			tool       	"DDL"
+			name       	"ColumnType"
+			value      	"VARCHAR")
+		    (object Attribute
+			tool       	"DDL"
+			name       	"Length"
+			value      	"")
+		    (object Attribute
+			tool       	"DDL"
+			name       	"NullsOK"
+			value      	TRUE)
+		    (object Attribute
+			tool       	"DDL"
+			name       	"PrimaryKey"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"DDL"
+			name       	"Unique"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"DDL"
+			name       	"CompositeUnique"
+			value      	FALSE)
+		    (object Attribute
+			tool       	"DDL"
+			name       	"CheckConstraint"
+			value      	"")))
+	    (object Attribute
+		tool       	"DDL"
+		name       	"HiddenTool"
+		value      	FALSE)
+	    (object Attribute
+		tool       	"Rose Model Integrator"
+		name       	"HiddenTool"
+		value      	FALSE)
+	    (object Attribute
+		tool       	"Version Control"
+		name       	"HiddenTool"
+		value      	FALSE))
+	quid       	"420770670246"))

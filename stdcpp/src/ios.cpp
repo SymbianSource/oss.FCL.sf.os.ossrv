@@ -28,8 +28,8 @@
 
 _STLP_BEGIN_NAMESPACE
 
-/*char* _STLP_CALL
-__write_integer(char* buf, ios_base::fmtflags flags, long x);*/
+char* _STLP_CALL
+__write_integer(char* buf, ios_base::fmtflags flags, long x);
 
 //----------------------------------------------------------------------
 // ios_base members

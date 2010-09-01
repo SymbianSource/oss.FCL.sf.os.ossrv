@@ -19,7 +19,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-int main()
+void main()
 {
     __UHEAP_MARK;
     {
@@ -27,7 +27,7 @@ int main()
     TBufC16<30> buf _L("My wide string");
     TPtrC16 src(buf);
     int retval=ESuccess;
-    //int size=30;
+    int size=30;
 //    int i=0;
 //    while (i<=1000)
 //    {
@@ -48,6 +48,4 @@ int main()
     }
     __UHEAP_MARKEND;
     testResultXml("test_tptrc16towstring_positive1");
-	
-	return 0;
 }

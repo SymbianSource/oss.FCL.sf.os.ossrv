@@ -21,13 +21,13 @@
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
 
-int main()
+void main()
 {
-	//int count = 2;
+	int count = 2;
 	bool err = false;
 	wstring myWstring(L"Hello");
 	__UHEAP_MARK;
-	__UHEAP_FAILNEXT(2);
+	__UHEAP_FAILNEXT(count);
 	while(!err)
 	{
 	int retval =ESuccess;
@@ -59,5 +59,4 @@ int main()
 	__UHEAP_MARKEND;
 	__UHEAP_RESET;
     testResultXml("test_wstringtohbufc8_reliability");
-	return 0;
 }

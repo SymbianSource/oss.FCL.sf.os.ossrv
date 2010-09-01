@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-int main()
+void main()
 {
     int retval =ESuccess;
     wchar_t* mywcharstring = L"Hello Widechar String";
@@ -39,6 +39,4 @@ int main()
     printf("wcharptotptr8 positive Failed\n");
     }      
     testResultXml("test_wcharptotptr8_positive");
-	
-	return 0;
 }

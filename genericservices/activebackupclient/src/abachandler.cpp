@@ -62,7 +62,6 @@ namespace conn
 		// Cancel any outstanding Async requests (i.e. close down the callback interface)
 		Cancel();
 		delete iTransferBuffer;
-		iTransferBuffer = 0;
 		}
 		
 	void CActiveBackupCallbackHandler::RunL()

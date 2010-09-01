@@ -20,13 +20,13 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-int main()
+void main()
 {
     wstring des((const wchar_t*)"hellohello") ; 
     __UHEAP_MARK;
     TPtr8  src((unsigned char *)"My wide string",14, 30);
     int retval=ESuccess;
-    //int size=30;
+    int size=30;
     retval= Tptr8ToWstring(src,des);
 
     int tptrc_len = src.Length();
@@ -42,6 +42,4 @@ int main()
     }
     __UHEAP_MARKEND;
     testResultXml("test_tptr8towstring_boundary1");
-	
-	return 0;
 }

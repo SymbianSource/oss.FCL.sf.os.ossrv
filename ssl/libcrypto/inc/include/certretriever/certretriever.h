@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
+Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
 
 Redistribution and use in source and binary forms, with or without 
 modification, are permitted provided that the following conditions are met:
@@ -53,7 +53,7 @@ const TInt KMaxCertLength = 5120;
 extern "C" 
 {
 #endif
-int X509_add_symbian_certsL(X509_STORE * store);
+int X509_add_symbian_certs(X509_STORE * store);
 #ifdef __cplusplus
 }
 #endif
@@ -88,8 +88,8 @@ private:
 	
 	void OpenUnifiedCertStoreL();
     void ListCertsL();
-    void AppendCertsL();
-    void ProcessCertsL();
+    void AppendCerts();
+    void ProcessCerts();
     
 private:
 	X509_STORE* iStore;

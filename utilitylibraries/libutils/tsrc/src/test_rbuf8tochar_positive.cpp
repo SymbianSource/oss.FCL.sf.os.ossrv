@@ -21,7 +21,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-int main()
+void main()
 {
     __UHEAP_MARK;
     RBuf8 myrbuf;
@@ -47,5 +47,4 @@ int main()
     CleanupStack::PopAndDestroy(1);
     __UHEAP_MARKEND;
     testResultXml("Test_rbuf8tochar_positive");
-	return 0;
 }

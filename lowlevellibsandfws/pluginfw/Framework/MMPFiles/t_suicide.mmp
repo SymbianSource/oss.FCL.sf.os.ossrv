@@ -18,7 +18,7 @@
 UID			0x101FB5A8 0x10009E0B
 VENDORID 		0x70000001
 
-TARGET			t_suicide.exe				//RTEST
+TARGET			t_suicide.exe
 TARGETTYPE		exe
 
 USERINCLUDE		../../Test_Bed/inc 

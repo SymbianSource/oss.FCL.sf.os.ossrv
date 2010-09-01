@@ -19,7 +19,7 @@ OPTION GCC  -w
 
 CAPABILITY	ALL -TCB
 
-TARGET	tmisc_cstdlib.exe
+TARGET	tmisc.exe
 TARGETTYPE		exe
 
 USERINCLUDE	../INC

@@ -16,7 +16,7 @@
 // 
 //
 
-TARGET          	tu_tsch_tstime.exe		//RTEST
+TARGET          	tu_tsch_tstime.exe
 TARGETTYPE			EXE
 
 // WDD capability required for RTz::SetTimeZoneL()

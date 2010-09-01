@@ -19,7 +19,7 @@ MACRO __ECOM_SERVER_TESTABILITY__
 
 UID 0x101FB5A8 0x10009E2A
 
-TARGET      t_serverstartupmgr.exe		//RTEST
+TARGET      t_serverstartupmgr.exe
 TARGETTYPE  exe
 
 SOURCEPATH  ../../Framework/ServerStartupMgrTest

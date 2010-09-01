@@ -24,4 +24,8 @@
 // use data= because this exe is subject to setcap manipulation 
 data=ABI_DIR\BUILD_DIR\tef_ssnd.exe		System\bin\tef_ssnd.exe
 
+data=DATAZ_\tef_bafl\baflteftests.script 	tef_bafl\baflteftests.script
+data=DATAZ_\tef_bafl\tef_ssnd.script 	tef_bafl\tef_ssnd.script
+data=DATAZ_\tef_bafl\tef_ssnd.ini 		tef_bafl\tef_ssnd.ini
+
 #endif

@@ -13,7 +13,7 @@
 // Description:
 //
 
-target		tc_tsch_ipc.exe		//RTEST
+target		tc_tsch_ipc.exe
 CAPABILITY 	ALL -TCB
 targettype	exe
 

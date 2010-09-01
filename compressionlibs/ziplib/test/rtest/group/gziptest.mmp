@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET			gziptest.exe	//RTEST
+TARGET			gziptest.exe
 
 TARGETTYPE		exe
 

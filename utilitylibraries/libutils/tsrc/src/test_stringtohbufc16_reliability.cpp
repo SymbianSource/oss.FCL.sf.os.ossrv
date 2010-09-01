@@ -20,14 +20,13 @@
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
 
-int main()
+void main()
 {
-	//int count = 1;
+	int count = 1;
 	bool err = false;
 	string myString("Hello");
 	__UHEAP_MARK;
-	__UHEAP_FAILNEXT(1);
-	
+	__UHEAP_FAILNEXT(count);
 	while(!err)
 	{
 	int retval =ESuccess;
@@ -54,5 +53,4 @@ int main()
 	__UHEAP_MARKEND;
 	__UHEAP_RESET;
     testResultXml("test_stringtohbufc16_reliability");
-	return 0;
 }

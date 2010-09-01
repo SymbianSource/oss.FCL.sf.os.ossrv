@@ -18,7 +18,7 @@
 // T_BACKUPSRV.MMP for test component BACKUPSRV
 //
 
-target			t_backupsrv.exe	//RTEST
+target			t_backupsrv.exe
 targettype		EXE
 
 UID				0x1000007a

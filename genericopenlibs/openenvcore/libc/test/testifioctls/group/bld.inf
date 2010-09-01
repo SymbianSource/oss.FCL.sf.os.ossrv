@@ -20,6 +20,8 @@ PRJ_TESTEXPORTS
 ../scripts/tifioctls_hw.script  /epoc32/winscw/c/tstdapis/tifioctls_hw.script
 ../scripts/tifioctls_hw_manual.script  /epoc32/winscw/c/tstdapis/tifioctls_hw_manual.script
 ../data/tifioctls.ini  /epoc32/winscw/c/tstdapis/tifioctls.ini
+../utils/tifioctlstest.bat /epoc32/winscw/c/tstdapis/tifioctlstest.bat
+../utils/tifioctlstest_hw.bat /epoc32/winscw/c/tstdapis/tifioctlstest_hw.bat
 //ethernetced_dynamicIP.xml 	/epoc32/winscw/c/CommDb/ethernetced_dynamicip.xml
 //eth_dyn.bat 				/epoc32/winscw/c/CommDb/eth_dyn.bat
 //autoexec.bat				/epoc32/winscw/c/CommDb/autoexec.bat

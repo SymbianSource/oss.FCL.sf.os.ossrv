@@ -19,6 +19,8 @@
 
 #include "TestBed.iby"
 
+// batch file that runs all automatic bafl tests
+data=ZSYSTEM\test\initialiseLocaleTests.bat	TEST\initialiselocaletests.bat
 
 
 #ifndef SYMBIAN_DISTINCT_LOCALE_MODEL

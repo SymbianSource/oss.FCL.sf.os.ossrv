@@ -15,7 +15,7 @@
 // 
 //
 
-TARGET		t_findfilebytype.exe	//RTEST
+TARGET		t_findfilebytype.exe
 
 TARGETTYPE	exe
 

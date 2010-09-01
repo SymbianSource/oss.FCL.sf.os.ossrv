@@ -137,12 +137,6 @@ void CT_MimeStep::ChkConfAndMimeL(RFs &aIfs,const TUid &aUid)
 	TEST(dataType.Uid().iUid==0);
 	TEST(confidenceVal==0);
 	INFO_PRINTF2(_L("Val of confidence  %d"), confidenceVal);
-	//New tests
-	TInt bufSize = iData->PreferredBufSize();
-	TEST(bufSize==0);
-	INFO_PRINTF2(_L("Val of Preferred buffer size  %d"), bufSize);
-	INFO_PRINTF1(_L("Testing default constructor of TDataTypeWithPriority"));
-	TDataTypeWithPriority dataTypeWithPriority = TDataTypeWithPriority();
 	CleanupStack::PopAndDestroy(confAndMimeDataRec);	
 }
 
@@ -312,13 +306,7 @@ INFO_PRINTF1(_L("Testing the getter and setter functions"));
 		}
 
 	CleanupStack::PopAndDestroy(1); // tmpListOfRecogniszers
-	
-	//New test
-	INFO_PRINTF1(_L("Testing index([]) operator"));
-	const CApaScanningDataRecognizer::TRecognizer& testDataRecognizer=(*iRecognizer)[0];
-	TUid uid1 =  testDataRecognizer.iUid;
-	TUid uid2 = ((*iRecognizer)[0]).iUid;
-	TEST(uid1==uid2);
+
 //for testing ecom style plugin
 INFO_PRINTF1(_L("Testing the ecom style TTESTECOMDATAREC recognizer is loaded or not"));
 	CApaScanningDataRecognizer::TRecognizer testEcomDataRecognizer;

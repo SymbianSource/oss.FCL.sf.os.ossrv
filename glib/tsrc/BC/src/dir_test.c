@@ -58,7 +58,7 @@ int main (int   argc,char *argv[])
 	g_dir_close(dir);
 	
 	#if SYMBIAN
-  	testResultXml("dirname_test");
+  	testResultXml("dir_test");
   	#endif /* EMULATOR */
 
 	rmdir("c:\\temp\\tmp");

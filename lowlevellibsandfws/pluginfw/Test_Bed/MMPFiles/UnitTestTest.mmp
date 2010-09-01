@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET unittesttest.exe		//RTEST
+TARGET unittesttest.exe
 TARGETTYPE EXE
 
 // UIDs for loading

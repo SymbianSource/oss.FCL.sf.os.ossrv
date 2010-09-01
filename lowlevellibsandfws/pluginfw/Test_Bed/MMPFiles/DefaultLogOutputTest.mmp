@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET defaultlogoutputtest.exe		//RTEST
+TARGET defaultlogoutputtest.exe
 TARGETTYPE EXE
 
 // UIDs for loading

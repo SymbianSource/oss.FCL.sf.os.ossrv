@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET          tc_tsch_robustness.exe 		//RTEST
+TARGET          tc_tsch_robustness.exe 
 TARGETTYPE      exe
 
 

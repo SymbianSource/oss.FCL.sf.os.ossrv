@@ -14,9 +14,9 @@
 @rem Description:
 @rem
 
-testexecute.exe C:\emimetest\emimetest_t_maps.script
-testexecute.exe C:\emimetest\emimetest_t_mime.script
-testexecute.exe C:\emimetest\emimetest_t_mstr.script
+testexecute.exe z:\emimetest\emimetest_t_maps.script
+testexecute.exe z:\emimetest\emimetest_t_mime.script
+testexecute.exe z:\emimetest\emimetest_t_mstr.script
 
 
 

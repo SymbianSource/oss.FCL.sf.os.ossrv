@@ -113,12 +113,8 @@ Cstlport_rndshuf* Cstlport_rndshuf::NewL(
 #ifdef LIBC_OLD_BACKEND
     MrtInit();
 #endif
- #ifdef __ARMCC__
-    #pragma diag_suppress 830
- #endif    
     Cstlport_rndshuf* self = new (ELeave) Cstlport_rndshuf( aTestModuleIf );
 
- 
     CleanupStack::PushL( self );
     self->ConstructL();
     CleanupStack::Pop();

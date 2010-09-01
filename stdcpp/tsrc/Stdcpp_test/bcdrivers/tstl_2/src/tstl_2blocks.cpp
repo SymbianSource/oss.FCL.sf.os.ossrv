@@ -46,14 +46,6 @@
 #undef test
  using namespace std;
  #define STDCPP_OOM FALSE// TRUE for OOM testing
-
-#ifdef __ARMCC__
-#pragma diag_suppress 550
-#pragma diag_suppress 177
-#pragma diag_suppress 1134
-#pragma diag_suppress 1250
-#endif
-
 // ============================ MEMBER FUNCTIONS ===============================
 
 // -----------------------------------------------------------------------------
@@ -499,7 +491,7 @@ int i;
   // vector <int>::iterator vIter;
     
 
-//   vector <int>::reverse_iterator rvIter;
+   vector <int>::reverse_iterator rvIter;
     
    vector <int>::iterator pos;
    
@@ -559,7 +551,7 @@ int i;
    }
    
    
-   list <int>::iterator LPOS = L.begin ( );
+   list <int>::iterator L_Iter, LPOS = L.begin ( );
 
   
  
@@ -740,7 +732,8 @@ failures++;
           
 
    string s1;
-   s1 =  str.template to_string<char, char_traits<char>, allocator<char> >( );
+   s1 =  str.template to_string<char, 
+   char_traits<char>, allocator<char> >( );
     
  
     if(s1.compare("00111"))
@@ -2683,7 +2676,7 @@ User::__DbgSetAllocFail(FALSE,RHeap::ENone,1);
 int sum =1;
  int i=2 ;
    list <int> L1;
-//   list <int>::iterator LIter1, LIterend;
+   list <int>::iterator LIter1, LIterend;
 
    int t;
    for ( t = 1 ; t <= 10 ; t++ )
@@ -3054,8 +3047,8 @@ catch(bad_alloc&)
  	
  vector <int> v1, v2;
    list <int> L1;
-//   vector <int>::iterator Iter1, Iter2;
-//   list <int>::iterator L1_Iter, L1_inIter;
+   vector <int>::iterator Iter1, Iter2;
+   list <int>::iterator L1_Iter, L1_inIter;
 
    int i;
    for ( i = 0 ; i <= 5 ; i++ )
@@ -3548,7 +3541,7 @@ TInt Ctstl_2::allocatoradd(CStifItemParser& aItem)
   //  __UHEAP_MARK;
 try{
      vector <int> v1;
-//   vector <int>::iterator v1Iter;
+   vector <int>::iterator v1Iter;
    vector <int>:: allocator_type v1Alloc;
     
    int i;
@@ -3828,7 +3821,7 @@ catch(bad_alloc&)
     	
     	try{
     vector <int> v1;
-//   vector <int>::iterator v1Iter;
+   vector <int>::iterator v1Iter;
    vector <int>:: allocator_type v1Alloc;
 
     
@@ -3886,7 +3879,7 @@ User::__DbgSetAllocFail(FALSE,RHeap::ENone,1);
     		
     	
 
-//    double pi = 3.14159265359;
+    double pi = 3.14159265359;
      // cout<<"";
   #if  STDCPP_OOM
 User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);

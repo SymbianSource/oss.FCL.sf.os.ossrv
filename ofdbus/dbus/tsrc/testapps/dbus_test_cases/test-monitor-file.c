@@ -18,7 +18,7 @@
 
 
 #include "test-utils.h"
-#include <unistd.h>
+
 int write_to_configfile()
 {
 	FILE *fp;

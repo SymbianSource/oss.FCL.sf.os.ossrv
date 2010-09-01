@@ -21,7 +21,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-int main()
+void main()
 {
     __UHEAP_MARK;
     RBuf16 myrbuf;
@@ -46,5 +46,4 @@ int main()
     myrbuf.Close();
     __UHEAP_MARKEND;
     testResultXml("Test_rbuf16towchar_maxsize");
-	return 0;
 }

@@ -113,12 +113,8 @@ Cstlport_ostmit* Cstlport_ostmit::NewL(
 #ifdef LIBC_OLD_BACKEND
     MrtInit();
 #endif
- #ifdef __ARMCC__
-    #pragma diag_suppress 830
- #endif    
     Cstlport_ostmit* self = new (ELeave) Cstlport_ostmit( aTestModuleIf );
 
- 
     CleanupStack::PushL( self );
     self->ConstructL();
     CleanupStack::Pop();

@@ -40,7 +40,7 @@
 int main (int argc,char *argv[])
 {
 	#ifdef SYMBIAN
-    g_log_set_handler (NULL,  G_LOG_FLAG_FATAL| G_LOG_FLAG_RECURSION | G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_MESSAGE | G_LOG_LEVEL_INFO | G_LOG_LEVEL_DEBUG, &mrtLogHandler, NULL);
+
 	g_set_print_handler(mrtPrintHandler);
 	#endif /*SYMBIAN*/
 	

@@ -34,6 +34,7 @@ OEtests.iby  /epoc32/rom/include/oetests.iby
 oe_autotest.iby  /epoc32/rom/include/oe_autotest.iby
 ../utils/OEtests.bat /epoc32/winscw/c/tstdapis/oetests.bat
 ../utils/OEtests_hw.bat /epoc32/winscw/c/tstdapis/oetests_hw.bat
+../utils/gosethernetced.xml /epoc32/winscw/c/tstdapis/gosethernetced.xml
 ../utils/autoexec.bat /epoc32/winscw/c/tstdapis/autoexec.bat
 ../utils/cleanup_cdrive.bat /epoc32/winscw/c/tstdapis/cleanup_cdrive.bat
 

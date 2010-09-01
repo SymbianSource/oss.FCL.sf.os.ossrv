@@ -113,12 +113,8 @@ Cstlport_remcpif* Cstlport_remcpif::NewL(
 #ifdef LIBC_OLD_BACKEND
     MrtInit();
 #endif
- #ifdef __ARMCC__
-    #pragma diag_suppress 830
- #endif    
     Cstlport_remcpif* self = new (ELeave) Cstlport_remcpif( aTestModuleIf );
 
- 
     CleanupStack::PushL( self );
     self->ConstructL();
     CleanupStack::Pop();

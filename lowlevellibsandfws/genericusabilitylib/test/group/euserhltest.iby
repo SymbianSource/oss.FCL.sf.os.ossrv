@@ -25,4 +25,10 @@ REM EUserHl Library Tests
 data=ZSYSTEM\test\euserhltests.bat	test\euserhltests.bat
 
 
+// euserhl test exes
+file=ABI_DIR\BUILD_DIR\t_lstring.exe		test\t_lstring.exe
+file=ABI_DIR\BUILD_DIR\t_lsformat.exe		test\t_lsformat.exe
+file=ABI_DIR\BUILD_DIR\t_emanaged.exe		test\t_emanaged.exe
+
+
 #endif

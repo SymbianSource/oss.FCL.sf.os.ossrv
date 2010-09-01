@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET testmanagertest.exe		//RTEST
+TARGET testmanagertest.exe
 TARGETTYPE EXE
 
 // UIDs for loading

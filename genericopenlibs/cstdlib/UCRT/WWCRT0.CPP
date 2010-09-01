@@ -26,6 +26,8 @@
 
 extern "C" int wmain (int argc, wchar_t *argv[], wchar_t *envp[]);
 
+extern "C" void exit (int ret);
+
 #ifndef EKA2
 IMPORT_C void RegisterWsExe(const TDesC &aName);
 #endif

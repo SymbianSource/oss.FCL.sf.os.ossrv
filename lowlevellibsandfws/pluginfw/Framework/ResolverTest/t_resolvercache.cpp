@@ -1324,57 +1324,57 @@ void CCustomResolverCacheTest::RunAllTestsL()
 	CopyPluginsL();
 
 	test.Next(_L("Basic TestCounterWrapAroundL"));
-	DoBasicTestL(&CCustomResolverCacheTest::TestCounterWrapAroundL);
+	DoBasicTestL(TestCounterWrapAroundL);
 
 	test.Next(_L("Basic TestUpgradingCachedResolverL"));
-	DoBasicTestL(&CCustomResolverCacheTest::TestUpgradingCachedResolverL);
+	DoBasicTestL(TestUpgradingCachedResolverL);
 
 	test.Next(_L("Basic TestCacheQueueFullPattern1L"));
-	DoBasicTestL(&CCustomResolverCacheTest::TestCacheQueueFullPattern1L);
+	DoBasicTestL(TestCacheQueueFullPattern1L);
 
 	test.Next(_L("Basic TestCacheQueueFullPattern2L"));
-	DoBasicTestL(&CCustomResolverCacheTest::TestCacheQueueFullPattern2L);
+	DoBasicTestL(TestCacheQueueFullPattern2L);
 
 	test.Next(_L("Basic TestCacheQueueFullPattern3L"));
-	DoBasicTestL(&CCustomResolverCacheTest::TestCacheQueueFullPattern3L);
+	DoBasicTestL(TestCacheQueueFullPattern3L);
 
 	test.Next(_L("Basic TestCacheTimerAccuracyL"));
-	DoBasicTestL(&CCustomResolverCacheTest::TestCacheTimerAccuracyL);
+	DoBasicTestL(TestCacheTimerAccuracyL);
 
 	test.Next(_L("Basic TestTimestampUpdateOnCacheHitL"));
-	DoBasicTestL(&CCustomResolverCacheTest::TestTimestampUpdateOnCacheHitL);
+	DoBasicTestL(TestTimestampUpdateOnCacheHitL);
 
 	test.Next(_L("Basic TestSWIDisableRwResolverCachingL"));
-	DoBasicTestL(&CCustomResolverCacheTest::TestSWIDisableRwResolverCachingL);
+	DoBasicTestL(TestSWIDisableRwResolverCachingL);
 
 	test.Next(_L("Basic TestBurDisableRwResolverCachingL"));
-	DoBasicTestL(&CCustomResolverCacheTest::TestBurDisableRwResolverCachingL);
+	DoBasicTestL(TestBurDisableRwResolverCachingL);
 
 	test.Next(_L("Basic TestClockChangeHasNoEffectOnCacheTimeoutL"));
-	DoBasicTestL(&CCustomResolverCacheTest::TestClockChangeHasNoEffectOnCacheTimeoutL);
+	DoBasicTestL(TestClockChangeHasNoEffectOnCacheTimeoutL);
 
 	test.Next(_L("Basic TestCacheSizeZeroL"));
-	DoBasicTestL(&CCustomResolverCacheTest::TestCacheSizeZeroL);
+	DoBasicTestL(TestCacheSizeZeroL);
 
 	test.Next(_L("Basic TestCacheTimeoutZeroL"));
-	DoBasicTestL(&CCustomResolverCacheTest::TestCacheTimeoutZeroL);
+	DoBasicTestL(TestCacheTimeoutZeroL);
 
 	test.Next(_L("Basic TestResolverWithBadProxyTable"));
-	DoBasicTestL(&CCustomResolverCacheTest::TestResolverWithBadProxyTable);
+	DoBasicTestL(TestResolverWithBadProxyTable);
 
 	// Only run OOM on tests which do not involve rescan dir.
 	test.Next(_L("OOM TestCacheQueueFullPattern3L"));
-	DoOOMTestL(&CCustomResolverCacheTest::TestCacheQueueFullPattern3L);
+	DoOOMTestL(TestCacheQueueFullPattern3L);
 
 	test.Next(_L("OOM TestCacheTimerAccuracyL"));
-	DoOOMTestL(&CCustomResolverCacheTest::TestCacheTimerAccuracyL);
+	DoOOMTestL(TestCacheTimerAccuracyL);
 
 	test.Next(_L("OOM TestTimestampUpdateOnCacheHitL"));
-	DoOOMTestL(&CCustomResolverCacheTest::TestTimestampUpdateOnCacheHitL);
+	DoOOMTestL(TestTimestampUpdateOnCacheHitL);
 
 	// Do all tests affected by Lazy DLL unload last.
 	test.Next(_L("Basic TestDeletingCachedResolverL"));
-	DoBasicTestL(&CCustomResolverCacheTest::TestDeletingCachedResolverL);
+	DoBasicTestL(TestDeletingCachedResolverL);
 	}
 
 static TInt KillEComServer()

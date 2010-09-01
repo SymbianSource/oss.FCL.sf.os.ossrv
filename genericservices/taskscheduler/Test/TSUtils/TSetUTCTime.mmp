@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET        tsetutctime.exe		//RTEST
+TARGET        tsetutctime.exe
 
 TARGETTYPE    exe
 

@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET           tc_tsch_scheduling1.exe		//RTEST
+TARGET           tc_tsch_scheduling1.exe
 TARGETTYPE       exe
 
 //WriteDeviceData needed to create persistent schedules 

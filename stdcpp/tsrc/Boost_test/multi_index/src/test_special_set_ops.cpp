@@ -22,7 +22,7 @@ using namespace boost::multi_index;
 static int string_to_int(const std::string& str)
 {
   std::istringstream iss(str);
-  int res = 0;
+  int                res;
   iss>>res;
   return res;
 }

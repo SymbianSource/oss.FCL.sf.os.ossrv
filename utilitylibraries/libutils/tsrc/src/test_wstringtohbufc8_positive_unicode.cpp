@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-int main()
+void main()
 {
     int retval =ESuccess;
     wstring W(L"\xAE");
@@ -40,5 +40,4 @@ int main()
     delete buf;
     __UHEAP_MARKEND;
     testResultXml("test_wstringtohbufc8_positive_unicode");
-	return 0;
 }

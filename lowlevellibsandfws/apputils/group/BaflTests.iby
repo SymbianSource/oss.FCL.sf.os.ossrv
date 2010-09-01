@@ -25,22 +25,55 @@ REM BaflTests
 
 // Include tests for new locale initialisation mechanism
 #include "initialiseLocaleTests.iby"
+
 // batch file that runs all automatic bafl tests
 data=ZSYSTEM\test\bafltests.bat                             Test\bafltests.bat
 
+file=ABI_DIR\BUILD_DIR\T_StringPoolTest.exe                 Test\T_StringPoolTest.exe
+file=ABI_DIR\BUILD_DIR\t_String.exe                         Test\t_String.exe 
 
-
+file=ABI_DIR\BUILD_DIR\t_cell.exe                           Test\t_cell.exe 
 file=ABI_DIR\BUILD_DIR\t_cline.exe                          Test\t_cline.exe 
- 
+file=ABI_DIR\BUILD_DIR\t_clipb.exe                          Test\t_clipb.exe 
+file=ABI_DIR\BUILD_DIR\t_cntf.exe                           Test\t_cntf.exe 
+file=ABI_DIR\BUILD_DIR\t_desca.exe                          Test\t_desca.exe 
+file=ABI_DIR\BUILD_DIR\t_liba.exe                           Test\t_liba.exe 
+file=ABI_DIR\BUILD_DIR\t_match.exe                          Test\t_match.exe 
+file=ABI_DIR\BUILD_DIR\t_ptrca.exe                          Test\t_ptrca.exe
+file=ABI_DIR\BUILD_DIR\t_ptrcb.exe                          Test\t_ptrcb.exe 
+file=ABI_DIR\BUILD_DIR\T_FindFileByType.exe                 Test\T_FindFileByType.exe
+file=ABI_DIR\BUILD_DIR\T_NamedPlugins.exe                   Test\T_NamedPlugins.exe 
+file=ABI_DIR\BUILD_DIR\t_rsc.exe                            Test\t_rsc.exe 
+file=ABI_DIR\BUILD_DIR\t_rsread.exe                         Test\t_rsread.exe 
+file=ABI_DIR\BUILD_DIR\t_sched.exe                          Test\t_sched.exe 
+file=ABI_DIR\BUILD_DIR\t_ssnd.exe                           Test\t_ssnd.exe
+file=ABI_DIR\BUILD_DIR\t_ssnd1.exe                          Test\t_ssnd1.exe
+file=ABI_DIR\BUILD_DIR\t_baflutilsimp.exe                   Test\t_baflutilsimp.exe
+file=ABI_DIR\BUILD_DIR\t_resource_compression.exe           Test\t_resource_compression.exe
+file=ABI_DIR\BUILD_DIR\T_RTextBuf.exe                       Test\T_RTextBuf.exe
+file=ABI_DIR\BUILD_DIR\T_BITFLAGS.EXE                       Test\T_BITFLAGS.EXE
+file=ABI_DIR\BUILD_DIR\t_rsread2.exe                        Test\t_rsread2.exe 
+file=ABI_DIR\BUILD_DIR\t_resource_compression2.exe          Test\t_resource_compression2.exe
+file=ABI_DIR\BUILD_DIR\t_rscpanic.exe                       Test\t_rscpanic.exe
+file=ABI_DIR\BUILD_DIR\t_rscmem.exe                         Test\t_rscmem.exe
+file=ABI_DIR\BUILD_DIR\T_BACKUPSRV.EXE                      Test\T_BACKUPSRV.EXE
+file=ABI_DIR\BUILD_DIR\T_BACKUPSRVCAP.EXE                   Test\T_BACKUPSRVCAP.EXE
+file=ABI_DIR\BUILD_DIR\T_COMMAND.EXE                        Test\T_COMMAND.EXE
+file=ABI_DIR\BUILD_DIR\T_FILEUTILS.EXE                      Test\T_FILEUTILS.EXE
+file=ABI_DIR\BUILD_DIR\T_StringpoolDefect.EXE               Test\T_StringpoolDefect.EXE
+file=ABI_DIR\BUILD_DIR\T_BaflLang.EXE                       Test\T_BaflLang.EXE
+file=ABI_DIR\BUILD_DIR\t_baflutils.exe                      Test\t_baflutils.exe
+file=ABI_DIR\BUILD_DIR\T_BaflDefect.EXE                     Test\T_BaflDefect.EXE
+file=ABI_DIR\BUILD_DIR\T_BackupServerIPC.EXE                Test\T_BackupServerIPC.EXE
 file=ABI_DIR\BUILD_DIR\T_BackupServerLauncher.EXE           Test\T_BackupServerLauncher.EXE
-
+file=ABI_DIR\BUILD_DIR\t_baassert.exe                       Test\t_baassert.exe
 file=ABI_DIR\BUILD_DIR\t_processkiller.exe                  Test\t_processkiller.exe
 // THE FOLLOWING LOCALE ENTRY IS NOW MOVED TO SYSUTILS.IBY AS THERE IS SIMILAR ENTRY
 // IN ECOMTESTIBY TO PREVENT DUPLICATE ENTRY FOR THE OVERNIGHT BUILD SYSTEM
 // file=ABI_DIR\BUILD_DIR\ELOCL.10                          System\Libs\ELOCL.10
-
-
-
+file=ABI_DIR\BUILD_DIR\T_SPI.EXE                            Test\T_SPI.EXE
+file=ABI_DIR\BUILD_DIR\T_RSCARCHIVE.EXE                     Test\T_RSCARCHIVE.EXE
+file=ABI_DIR\BUILD_DIR\t_backupsrvdefects.exe               Test\t_backupsrvdefects.exe
 
 file=ABI_DIR\BUILD_DIR\libtst.tpr                           system\libs\libtst.tpr
 

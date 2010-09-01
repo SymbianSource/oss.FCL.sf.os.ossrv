@@ -20,6 +20,9 @@
 #ifndef BSULTESTS_IBY
 #define BSULTESTS_IBY
 
+// batch file that runs all automatic bsul tests
+data=ZSYSTEM\test\bsultests.bat			TEST\bsultests.bat
+
 //test datas
 //ini files for testing
 data=ZRESOURCE\testconfig8.ini		\resource\testconfig8.ini

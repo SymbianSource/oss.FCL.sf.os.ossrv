@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET          	tu_tsch_scheduledtasktest.exe		//RTEST
+TARGET          	tu_tsch_scheduledtasktest.exe
 
 // WDD capability required for RTz::SetTimeZoneL()
 CAPABILITY			WriteDeviceData

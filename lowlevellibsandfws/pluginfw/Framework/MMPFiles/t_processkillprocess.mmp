@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET		t_processkillprocess.exe			//RTEST
+TARGET		t_processkillprocess.exe
 // needed to access all areas of file system
 CAPABILITY  	PowerMgmt
 

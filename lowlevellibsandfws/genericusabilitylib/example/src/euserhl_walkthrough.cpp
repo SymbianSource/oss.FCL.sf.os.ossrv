@@ -1217,13 +1217,8 @@ void WalkthroughManagedL()
 		}
 		
 		{
-		TInt r =KErrNone;	
 		LCleanedupHandle<RFs> managedFs;
-		r = managedFs->Connect();
-		if (r != KErrNone)
-		 {
-			User::Leave(r);
-		 }
+		managedFs->Connect();
 		//default cleanup strategy is to call RFs::Close() on scope exit
 		}
 		

@@ -140,5 +140,5 @@ int test_main(int,char**) {
 	close_log_file();
 #endif
      return 0;
-//  return boost::exit_success;
+  return boost::exit_success;
 }

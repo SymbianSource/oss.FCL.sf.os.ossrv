@@ -21,11 +21,10 @@
 #include <ecomtestcommon.iby>
 #include <syslibs_locale.iby>
 
+
 // batch file that runs all automatic ECOM tests
 // Note run these after the test harness tests, as they do not shut down the EComServer.
 data=ZSYSTEM\test\EComTests.bat           TEST\EComTests.bat
-
-
 
 // Example plug-in that must be in ROM
 //
@@ -198,6 +197,58 @@ data=EPOCROOT##epoc32\data\z\RAMOnly\dummycustomresolver1.dll       	RAMOnly\dum
 // One that is not in \epoc32\data\z\ramonly.
 data=ABI_DIR\BUILD_DIR\z\ramonly\cachedcustomresolver2.dll	RAMONLY\cachedcustomresolver2.dll
 
+// ECom test EXEs
+file=ABI_DIR\BUILD_DIR\ComponentInfoTest.exe    Test\ComponentInfoTest.exe
+file=ABI_DIR\BUILD_DIR\EComTests.exe            Test\EComTests.exe
+file=ABI_DIR\BUILD_DIR\EComServerTest.exe       Test\EComServerTest.exe
+file=ABI_DIR\BUILD_DIR\T_PlatSecTest.exe   	Test\T_PlatSecTest.exe
+
+// Testbed test EXEs
+file=ABI_DIR\BUILD_DIR\DefaultLogOutputTest.exe Test\DefaultLogOutputTest.exe
+file=ABI_DIR\BUILD_DIR\DataLoggerTest.exe       Test\DataLoggerTest.exe
+file=ABI_DIR\BUILD_DIR\TransitionTest.exe       Test\TransitionTest.exe
+file=ABI_DIR\BUILD_DIR\TestControllerTest.exe   Test\TestControllerTest.exe
+file=ABI_DIR\BUILD_DIR\TestManagerTest.exe      Test\TestManagerTest.exe
+file=ABI_DIR\BUILD_DIR\ComponentTesterTest.exe  Test\ComponentTesterTest.exe
+file=ABI_DIR\BUILD_DIR\UnitTestTest.exe         Test\UnitTestTest.exe
+
+// Simple ECom tests
+file=ABI_DIR\BUILD_DIR\t_ecomcancel.exe         Test\t_ecomcancel.exe
+file=ABI_DIR\BUILD_DIR\t_romresolver.exe        Test\t_romresolver.exe
+file=ABI_DIR\BUILD_DIR\t_romonly.exe            Test\t_romonly.exe
+file=ABI_DIR\BUILD_DIR\T_ListImplementation.exe Test\T_ListImplementation.exe
+file=ABI_DIR\BUILD_DIR\T_ExtendedInterfaces.exe Test\T_ExtendedInterfaces.exe
+file=ABI_DIR\BUILD_DIR\t_language.exe		Test\t_language.exe
+file=ABI_DIR\BUILD_DIR\t_downgrade.exe		Test\t_downgrade.exe
+file=ABI_DIR\BUILD_DIR\t_defaultresolver.exe	Test\t_defaultresolver.exe
+file=ABI_DIR\BUILD_DIR\t_loadmanager.exe      	Test\t_loadmanager.exe
+file=ABI_DIR\BUILD_DIR\t_suicide.exe         	Test\t_suicide.exe
+file=ABI_DIR\BUILD_DIR\t_discoverer.exe       	Test\t_discoverer.exe
+file=ABI_DIR\BUILD_DIR\t_registrar.exe        	Test\t_registrar.exe
+file=ABI_DIR\BUILD_DIR\t_registrydata.exe     	Test\t_registrydata.exe
+file=ABI_DIR\BUILD_DIR\t_resolver.exe         	Test\t_resolver.exe
+file=ABI_DIR\BUILD_DIR\t_backupnotifier.exe   	Test\t_backupnotifier.exe
+file=ABI_DIR\BUILD_DIR\t_finalclose.exe		Test\t_finalclose.exe
+file=ABI_DIR\BUILD_DIR\t_ecomdefect.exe		Test\t_ecomdefect.exe
+file=ABI_DIR\BUILD_DIR\t_ServerStartupMgr.exe   Test\t_ServerStartupMgr.exe
+file=ABI_DIR\BUILD_DIR\t_EComSsaEnabled.exe   	Test\t_EComSsaEnabled.exe
+file=ABI_DIR\BUILD_DIR\t_EComSsaDisabled.exe   	Test\t_EComSsaDisabled.exe
+file=ABI_DIR\BUILD_DIR\t_pluginupgrade.exe 	Test\t_pluginupgrade.exe
+file=ABI_DIR\BUILD_DIR\t_drivemount.exe 	Test\t_drivemount.exe
+file=ABI_DIR\BUILD_DIR\t_rogueplugin.exe		Test\t_rogueplugin.exe
+file=ABI_DIR\BUILD_DIR\t_ecomswi.exe		Test\t_ecomswi.exe
+file=ABI_DIR\BUILD_DIR\t_ecombur.exe		Test\t_ecombur.exe
+
+file=ABI_DIR\BUILD_DIR\t_ecomentry.exe 		Test\t_ecomentry.exe
+file=ABI_DIR\BUILD_DIR\t_plugindiscovery.exe 	Test\t_plugindiscovery.exe
+file=ABI_DIR\BUILD_DIR\t_capcheck.exe		Test\t_capcheck.exe
+file=ABI_DIR\BUILD_DIR\t_validateRegistry.exe	Test\t_validateRegistry.exe
+file=ABI_DIR\BUILD_DIR\t_driveinfo.exe		Test\t_driveinfo.exe
+file=ABI_DIR\BUILD_DIR\t_ImplementationInformation.exe		Test\t_ImplementationInformation.exe
+file=ABI_DIR\BUILD_DIR\t_hashcheck.exe		Test\t_hashcheck.exe
+file=ABI_DIR\BUILD_DIR\t_resolverperf.exe	Test\t_resolverperf.exe
+file=ABI_DIR\BUILD_DIR\t_resolvercache.exe	Test\t_resolvercache.exe
+
 // SPI test file
 data=EPOCROOT##epoc32\data\z\Test\Data\EcomTest.spi Test\Data\EcomTest.spi
 data=EPOCROOT##epoc32\data\z\Test\Data\EcomTestType3.spi Test\Data\EcomTestType3.spi
@@ -215,7 +266,7 @@ data=EPOCROOT##epoc32\data\z\Test\Data\ECOMTEST.aif        Test\Data\ECOMTEST.ai
 //corrupt file to replace language and drive index files for robustness tests
 data=EPOCROOT##epoc32\data\z\Test\Data\corruptfile.txt	   Test\Data\corruptfile.txt	
 
-
+file=ABI_DIR\DEBUG_DIR\t_disabledrives.exe		sys\bin\t_disabledrives.exe
 
 //
 // The following include and macro mimic the way that ECOM production code

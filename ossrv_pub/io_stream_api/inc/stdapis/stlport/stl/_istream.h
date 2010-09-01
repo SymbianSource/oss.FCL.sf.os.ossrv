@@ -81,8 +81,8 @@ public:
   typedef _Self& (_STLP_CALL *__istream_fn)(_Self&);
 
 public:                         // Constructor and destructor.
-  _STLP_DUMMY_IMP_DECLSPEC explicit basic_istream(basic_streambuf<_CharT, _Traits>* __buf);
-  _STLP_DUMMY_IMP_DECLSPEC ~basic_istream();
+  _STLP_DECLSPEC explicit basic_istream(basic_streambuf<_CharT, _Traits>* __buf);
+  _STLP_DECLSPEC ~basic_istream();
 
 public:                         // Nested sentry class.
 
@@ -312,8 +312,8 @@ class basic_iostream
 public:
   typedef basic_ios<_CharT, _Traits> _Basic_ios;
 
-  _STLP_DUMMY_IMP_DECLSPEC explicit basic_iostream(basic_streambuf<_CharT, _Traits>* __buf);
-  _STLP_DUMMY_IMP_DECLSPEC virtual ~basic_iostream();
+  _STLP_DECLSPEC explicit basic_iostream(basic_streambuf<_CharT, _Traits>* __buf);
+  _STLP_DECLSPEC virtual ~basic_iostream();
 };
 
 # if defined (_STLP_USE_TEMPLATE_EXPORT)

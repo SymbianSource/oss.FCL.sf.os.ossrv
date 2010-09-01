@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
+Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
 
 Redistribution and use in source and binary forms, with or without 
 modification, are permitted provided that the following conditions are met:
@@ -37,7 +37,7 @@ Description:  Contains implementation for x509_add_symbian_cert - to use certifi
 extern "C" 
 {
 #endif
-int X509_add_symbian_certsL(X509_STORE * store)
+int X509_add_symbian_certs(X509_STORE * store)
 {
 	CActiveScheduler* activeScheduler;
 	CActiveScheduler* CurrentActiveScheduler = CActiveScheduler::Current();
@@ -202,14 +202,14 @@ void CCertRetriever::RunL()
 					}
 					else
 					{
-						AppendCertsL();
+						AppendCerts();
 						break;	
 					}			
 		       		
 		case EDone:
 					if (iState != ENoCerts)
 					{
-						ProcessCertsL();	//Process the last certificate
+						ProcessCerts();	//Process the last certificate
 						iCertCount = 0;	
 					}					
 		case ENoCerts:
@@ -294,10 +294,10 @@ void CCertRetriever::ListCertsL()
     iState = EAppendCerts;
 }
 
-void CCertRetriever::AppendCertsL()
+void CCertRetriever::AppendCerts()
 {
 	if(iCertCount>0)	
-		ProcessCertsL();
+		ProcessCerts();
 	
 	CCTCertInfo *cert = iCerts[iCertCount];
 		
@@ -314,7 +314,7 @@ void CCertRetriever::AppendCertsL()
 }
 
 
-void CCertRetriever::ProcessCertsL()
+void CCertRetriever::ProcessCerts()
 {
 	CX509Certificate *X509Cert;
 	TRAPD(error, X509Cert = CX509Certificate::NewL( iCertPtr ));
@@ -323,7 +323,7 @@ void CCertRetriever::ProcessCertsL()
 		
 	CleanupStack::PushL(X509Cert);
 
-	X509* x509 = CX509_Initializer::CreateX509L(X509Cert);
+	X509* x509 = CX509_Initializer::CreateX509(X509Cert);
 
 	if(x509)
 	{

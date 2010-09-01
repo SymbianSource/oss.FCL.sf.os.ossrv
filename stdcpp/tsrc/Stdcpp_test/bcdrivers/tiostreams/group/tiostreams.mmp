@@ -45,19 +45,17 @@ OS_LAYER_LIBC_SYSTEMINCLUDE
 OS_LAYER_STDCPP_SYSTEMINCLUDE
 OS_LAYER_BOOST_SYSTEMINCLUDE
 
-
-
-LIBRARY			libstdcpp.lib
 LIBRARY         euser.lib
+LIBRARY         stiftestinterface.lib
+LIBRARY			libstdcpp.lib
 LIBRARY     	libc.lib
 LIBRARY			libpthread.lib
-LIBRARY         stiftestinterface.lib
 
 LANG            SC
 
 OPTION CW -wchar_t on
 MACRO  _WCHAR_T_DECLARED
-//END
+END
  
 
 // End of File

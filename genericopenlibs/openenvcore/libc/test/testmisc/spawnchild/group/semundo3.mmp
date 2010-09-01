@@ -31,7 +31,7 @@ OS_LAYER_LIBC_SYSTEMINCLUDE
 
 LIBRARY     	euser.lib
 LIBRARY 		libc.lib libm.lib
-//LIBRARY     	eikdlg.lib 
+LIBRARY     	eikdlg.lib 
 LIBRARY     	eikcore.lib  efsrv.lib c32.lib libpthread.lib ecom.lib bafl.lib 
 
 LIBRARY			backend.lib 

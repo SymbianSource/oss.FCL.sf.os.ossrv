@@ -20,6 +20,8 @@
 PRJ_TESTEXPORTS
 ../data/tlocalsocket.ini		/epoc32/winscw/c/tstdapis/tlocalsocket.ini
 ../scripts/tlocalsocket.script  /epoc32/winscw/c/tstdapis/tlocalsocket.script
+../utils/localsocketsettings.bat /epoc32/winscw/c/tstdapis/localsocketsettings.bat
+../utils/localsocketsettings_hw.bat /epoc32/winscw/c/tstdapis/localsocketsettings_hw.bat
 
 PRJ_TESTMMPFILES
 

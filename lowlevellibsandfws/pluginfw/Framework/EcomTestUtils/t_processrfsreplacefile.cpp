@@ -24,13 +24,8 @@ _LIT(KSeparator, "|"); // Invalid filepath char used to separate filenames
 
 TInt DoReplaceFileL(const TDesC& anOld,const TDesC& aNew)
 	{
-	TInt r = KErrNone;	
 	RFs fs;
-	r = fs.Connect();
-	if (r != KErrNone)
-		{
-			User::Leave(r);
-		}
+	fs.Connect();
 
 	// Ensure the path exists
 	TInt err = fs.MkDirAll(aNew);

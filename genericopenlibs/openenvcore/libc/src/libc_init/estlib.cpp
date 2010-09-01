@@ -111,8 +111,7 @@ void SetupEnviron()
 //
 void GetTmpDirName()
 {
-	TFileName file;
-	TInt r = KErrNone;
+	TFileName file;	
 	RFs iTestSession;
 	TBuf8<PATH_MAX> buf1;
 	TInt len;
@@ -125,11 +124,7 @@ void GetTmpDirName()
 	{
 		User::Panic(_L("LIBRARY-INIT"), KErrNoMemory);
 	}
-	r = iTestSession.Connect(); 
-    if (r != KErrNone)
-        {
-            User::Panic(_L("Connect failed"), r);
-        }
+	iTestSession.Connect();		
 	iTestSession.SessionPath(file);		
 	buf1.Copy(file);
 	iTestSession.Close();

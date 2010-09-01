@@ -17,7 +17,7 @@
 // RTest Dll recognition UID followed by the unique UID for this exe
 UID				0x101FB5A8 0x10009E31
 
-TARGET			t_validateregistry.exe		//RTEST
+TARGET			t_validateregistry.exe
 TARGETTYPE		exe
 
 USERINCLUDE		../../Test_Bed/inc 

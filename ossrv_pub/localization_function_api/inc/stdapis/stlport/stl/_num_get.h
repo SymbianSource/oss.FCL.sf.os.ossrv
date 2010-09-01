@@ -272,8 +272,8 @@ _Initialize_get_float( const ctype<_CharT>& ct,
 }
 #endif
 
-_STLP_DECLSPEC int  _STLP_CALL __string_to_float(const string&, float&);
-_STLP_DECLSPEC int  _STLP_CALL __string_to_float(const string&, double&);
+int  _STLP_CALL __string_to_float(const string&, float&);
+int  _STLP_CALL __string_to_float(const string&, double&);
 # ifndef _STLP_NO_LONG_DOUBLE
 int  _STLP_CALL __string_to_float(const string&, long double&);
 # endif

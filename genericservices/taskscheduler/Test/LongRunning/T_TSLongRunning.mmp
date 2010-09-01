@@ -15,7 +15,7 @@
 *
 */
 
-TARGET			t_tslongrunning.exe	//RTEST
+TARGET			t_tslongrunning.exe
 TARGETTYPE		exe
 
 CAPABILITY WriteDeviceData

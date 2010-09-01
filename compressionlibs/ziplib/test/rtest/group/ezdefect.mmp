@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET			ezdefect.exe	//RTEST
+TARGET			ezdefect.exe
 
 TARGETTYPE		exe
 

@@ -55,7 +55,7 @@ public:                         // Types.
   typedef void (*__free_fn)(void*);
 public:                         // Constructor, destructor
 
-  _STLP_DECLSPEC explicit strstreambuf(streamsize _Initial_capacity = 0);
+  explicit strstreambuf(streamsize _Initial_capacity = 0);
 
   _STLP_DECLSPEC strstreambuf(__alloc_fn, __free_fn);
 
@@ -144,7 +144,7 @@ public:
   _STLP_DECLSPEC explicit istrstream(const char*);
   _STLP_DECLSPEC istrstream(char* , streamsize);
   _STLP_DECLSPEC istrstream(const char*, streamsize);
-  _STLP_DECLSPEC virtual ~istrstream();
+  virtual ~istrstream();
   
   _STLP_DECLSPEC strstreambuf* rdbuf() const;
   _STLP_DECLSPEC char* str();
@@ -164,7 +164,7 @@ class _STLP_CLASS_DECLSPEC ostrstream : public basic_ostream<char, char_traits<c
 public:
   _STLP_DECLSPEC ostrstream();
   _STLP_DECLSPEC ostrstream(char*, int, ios_base::openmode = ios_base::out);
-  _STLP_DECLSPEC virtual ~ostrstream();
+  virtual ~ostrstream();
 
   _STLP_DECLSPEC strstreambuf* rdbuf() const;
   _STLP_DECLSPEC void freeze(bool = true);
@@ -191,7 +191,7 @@ public:
 
   _STLP_DECLSPEC strstream();
   _STLP_DECLSPEC strstream(char*, int, ios_base::openmode = ios_base::in | ios_base::out);
-  _STLP_DECLSPEC virtual ~strstream();
+  virtual ~strstream();
 
   _STLP_DECLSPEC strstreambuf* rdbuf() const;
   _STLP_DECLSPEC void freeze(bool = true);

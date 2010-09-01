@@ -21,13 +21,12 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-int main()
+void main()
 {
     __UHEAP_MARK;	
     int retval =ESuccess;
     char* mycharstring = NULL;
     RBuf8 myRBuf;
-    myRBuf.CreateL(5);
     myRBuf.CleanupClosePushL();
     retval = CharToRbuf8 (mycharstring, myRBuf);
 
@@ -43,5 +42,4 @@ int main()
     CleanupStack::PopAndDestroy(1);
     __UHEAP_MARKEND;
     testResultXml("test_chartorbuf8_negative1");
-	return 0;
 }

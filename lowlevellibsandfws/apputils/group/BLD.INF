@@ -89,11 +89,6 @@ PRJ_EXPORTS
 ../conf/apputils.confml          OS_LAYER_EXPORTS_CONFML(apputils.confml)
 ../conf/apputils_100048aa.crml   OS_LAYER_EXPORTS_CRML(apputils_100048aa.crml)
 
-//exporting .mk files manually for sirocco //to be removed after tools team make changes
-bafl_resource_files.mk  /epoc32/tools/makefile_templates/syslibs/test/bafl_resource_files.mk
-bafl_copytestfiles.mk  /epoc32/tools/makefile_templates/syslibs/test/bafl_copytestfiles.mk
-
-
 PRJ_MMPFILES
 
 ../group/BAFL.MMP

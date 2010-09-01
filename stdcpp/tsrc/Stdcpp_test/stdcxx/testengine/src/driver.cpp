@@ -44,7 +44,7 @@
 // declare fileno in case it's not declared (for strict ANSI conformance)
 extern "C" {
 
-IMPORT_C int (fileno)(FILE*) _LIBC_THROWS ();
+_RWSTD_DLLIMPORT int (fileno)(FILE*) _LIBC_THROWS ();
 
 }   // extern "C"
 
@@ -698,22 +698,10 @@ rw_vtest (int argc, char **argv,
 
         if (_rw_opt_no_stdout (0, 0) && file_name) {
             char fname [256] = "C:\\";
-            
-            char* temp_ret = strchr (file_name, '/');
-            
-            if(temp_ret != NULL)
-            {    
-             const char* const slash = strrchr (file_name, '/');
 
-             strcat (fname, slash ? slash + 1 : file_name);
-            }
-            else
-            {    
-             const char* const slash = strrchr (file_name, _RWSTD_PATH_SEP);
+            const char* const slash = strrchr (file_name, _RWSTD_PATH_SEP);
+            strcat (fname, slash ? slash + 1 : file_name);
 
-             strcat (fname, slash ? slash + 1 : file_name);
-            }
-            
             char* const dot = strchr (fname, '.');
             if (dot)
                 strcpy (dot, ".out");
@@ -872,15 +860,10 @@ _rw_escape (char *buf, size_t bufsize, char esc)
     // count the number of embedded quotes
     char *quote = buf;
     size_t nquotes = 0;
-    
-    #ifdef __ARMCC__
-    #pragma diag_suppress 1293
-    #endif
     while ((quote = strchr (quote, '"'))) {
         ++nquotes;
         ++quote;
     }
-    
 
     // no quotes found, return the original buffer
     if (0 == nquotes)
@@ -966,13 +949,8 @@ _rw_vissue_diag (diag_t diag, int severity, const char *file, int line,
 
     // compute the number of newline characters in the text
     int nlines = 0;
-    
-    #ifdef __ARMCC__
-    #pragma diag_suppress 1293
-    #endif
     for (const char *nl = usrbuf; (nl = strchr (nl, '\n')); ++nl)
         ++nlines;
-    
 
     static const int use_color = _rw_use_color ();
 

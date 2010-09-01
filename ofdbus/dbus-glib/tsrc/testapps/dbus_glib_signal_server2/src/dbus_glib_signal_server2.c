@@ -65,7 +65,6 @@ hello_signal_handler1 (DBusGProxy *proxy, const char *hello_string, gpointer use
 	if(signal_second == 2)
 	{
 		fd = open(fifopath, O_WRONLY);
-		sleep(2);
 		if(fd > 0)
 		{
 			if(signal_first == 1)
@@ -120,7 +119,6 @@ int main()
 	  dbus_g_proxy_connect_signal (proxy, "HelloSignal", G_CALLBACK (hello_signal_handler1),
 		       NULL, NULL);
 	   fd = open(fifopath, O_WRONLY);
-	   sleep(2);
        if (fd > 0)
           {
           err = write(fd, buf1, strlen(buf1));

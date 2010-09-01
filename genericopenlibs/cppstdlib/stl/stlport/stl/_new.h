@@ -16,6 +16,7 @@
 #ifndef _STLP_INTERNAL_NEW
 #define _STLP_INTERNAL_NEW
 
+
 #ifndef _STLP_INTERNAL_CSTDDEF
 // size_t
 #  include <stl/_cstddef.h>

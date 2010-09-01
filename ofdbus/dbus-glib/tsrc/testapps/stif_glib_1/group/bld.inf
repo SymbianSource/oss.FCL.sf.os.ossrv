@@ -42,6 +42,8 @@ stif_glib_1.cfg				/epoc32/winscw/c/TestFramework/stif_glib_1.cfg
 ../data/dbus-glib-server1.service		/epoc32/winscw/c/data/dbus/dbus1/services/dbus-glib-server1.service
 
 PRJ_TESTMMPFILES
+
+PRJ_TESTMMPFILES
 stif_glib_1.mmp
 
 //  End of File

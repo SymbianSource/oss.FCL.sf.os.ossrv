@@ -559,14 +559,13 @@ void test(T)
    //
    // C99 Appendix F special cases:
    static const T zero = 0;
-   
+   static const T m_one = -1;
    BOOST_CHECK_EQUAL(boost::math::log1p(zero), zero);
    BOOST_CHECK_EQUAL(boost::math::log1p(-zero), zero);
    BOOST_CHECK_EQUAL(boost::math::expm1(zero), zero);
    if(std::numeric_limits<T>::has_infinity)
    {
-      #ifndef __SYMBIAN32__
-      static const T m_one = -1; 
+      #ifndef __SYMBIAN32__ 
       BOOST_CHECK_EQUAL(boost::math::log1p(m_one), -std::numeric_limits<T>::infinity());
       BOOST_CHECK_EQUAL(boost::math::expm1(-std::numeric_limits<T>::infinity()), m_one);
       #endif

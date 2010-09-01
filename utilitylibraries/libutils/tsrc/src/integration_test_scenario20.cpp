@@ -20,14 +20,13 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-int main()
+void main()
 {
     __UHEAP_MARK;
     {
     int retval[10];
     wchar_t* mycharstring = L"hello";
     RBuf16 buf;
-    buf.CreateL(30);
     retval[0]= WcharToRbuf16(mycharstring,buf);
 
     wstring str;
@@ -51,12 +50,6 @@ int main()
     wchar_t* temp = new wchar_t[50];
     TPtrC16 tptrc;
     retval[6]= StringToTptrc16(mystring,temp,tptrc);
-    
-    for(int i=1; i<=6; i++)
-        {
-        if (retval[i]!= 0)
-                printf("Conversion failed for retval\n",retval[i]);
-        }
 
     wchar_t* myfinalstring = new wchar_t[50];
     int size_fin=55;
@@ -80,5 +73,4 @@ int main()
     }
     __UHEAP_MARKEND;
     testResultXml("integration_test_scenario20");
-    return 0;
 }

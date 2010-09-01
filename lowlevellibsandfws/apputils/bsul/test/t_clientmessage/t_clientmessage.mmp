@@ -13,11 +13,11 @@
 // Description:
 //
 
-target		t_clientmessage.exe	//RTEST
+target		t_clientmessage.exe
 targettype	exe
 CAPABILITY ReadUserData WriteUserData
 SECUREID	0x10285B57
-MW_LAYER_SYSTEMINCLUDE_SYMBIAN
+
 OS_LAYER_SYSTEMINCLUDE_SYMBIAN
 
 SOURCEPATH	.

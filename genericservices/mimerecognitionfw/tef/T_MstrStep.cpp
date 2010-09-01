@@ -43,12 +43,7 @@ CT_MstrStep::~CT_MstrStep()
 TVerdict CT_MstrStep::doTestStepL()
 	{	
 	INFO_PRINTF1(_L("Test Started"));
-    TInt r = KErrNone;
-    r = iFs.Connect();
-    if (r != KErrNone)
-        {
-            User::Leave(r);
-        }
+	iFs.Connect();
 	__UHEAP_MARK;
 	TRAPD(ret,doMenuL());		
 	TEST(ret==KErrNone);

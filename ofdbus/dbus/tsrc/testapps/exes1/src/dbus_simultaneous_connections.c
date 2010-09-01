@@ -21,8 +21,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
-#include <unistd.h>
-#include <sys/stat.h>
 
 #define LOG_FILE "c:\\logs\\dbus_simultaneous_connections_log1.txt"
 #include "std_log_result.h"

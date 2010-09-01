@@ -18,7 +18,7 @@
 
 // ____________________________________________________________________________
 // 
-class CImplementationLoadMgrExample2 // codescanner::missingcclass
+class CImplementationLoadMgrExample2
 {
 public:
 	static CImplementationLoadMgrExample2* NewL(TAny* aInitParams);

@@ -20,7 +20,7 @@
 
 
 
-TARGET		t_initialiselocale.exe	//RTEST
+TARGET		t_initialiselocale.exe
 CAPABILITY	WriteDeviceData
 TARGETTYPE	EXE
 

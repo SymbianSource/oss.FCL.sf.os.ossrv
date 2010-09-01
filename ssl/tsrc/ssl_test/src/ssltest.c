@@ -114,7 +114,7 @@
  * SUN MICROSYSTEMS, INC., and contributed to the OpenSSL project.
  */
  /*
- © Portions copyright (c) 2006, 2010 Nokia Corporation.  All rights reserved.
+ © Portions copyright (c) 2006 Nokia Corporation.  All rights reserved.
  */
 
 #define _BSD_SOURCE 1		/* Or gethostname won't be declared properly
@@ -128,7 +128,6 @@
 #include <string.h>
 #include <time.h>
 #include <dirent.h>
-#include <sys/stat.h>
 
 #define USE_SOCKETS
 #ifndef SYMBIAN

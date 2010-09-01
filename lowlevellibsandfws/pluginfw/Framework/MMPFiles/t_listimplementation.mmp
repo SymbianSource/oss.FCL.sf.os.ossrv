@@ -17,7 +17,7 @@
 // 
 //
 
-TARGET      t_listimplementation.exe		//RTEST
+TARGET      t_listimplementation.exe
 TARGETTYPE  exe
 
 SOURCEPATH  ../../Framework/ListImplementationTest

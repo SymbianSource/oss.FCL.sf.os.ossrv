@@ -4,7 +4,6 @@
 
 #include <glib.h>
 #include <stdio.h>
-#include <unistd.h>
 
 #ifdef SYMBIAN
 #include "mrt2_glib2_test.h"

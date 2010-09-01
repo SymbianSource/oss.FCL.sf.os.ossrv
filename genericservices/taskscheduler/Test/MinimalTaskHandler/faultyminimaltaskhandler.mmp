@@ -15,7 +15,7 @@
 // 
 //
 
-TARGET          	faultyminimaltaskhandler.exe		//RTEST
+TARGET          	faultyminimaltaskhandler.exe
 TARGETTYPE		EXE
 
 SOURCEPATH	.

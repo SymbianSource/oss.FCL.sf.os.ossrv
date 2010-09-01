@@ -1228,9 +1228,7 @@ TVerdict CTestMisc::testposix()
 	mkdir("C:\\testposix", S_IWUSR);	
 	int fd1= open("c:\\testposix\\posixspawnfile1.txt", O_RDONLY|O_CREAT);
 	int fd2= open("c:\\testposix\\posixspawnfile2.txt", O_RDWR|O_CREAT);		
-	FILE* fp = NULL ;
-	pid_t pid;
-	char **argv=(char**)malloc(3*sizeof(char*));
+	
 	err=posix_spawn_file_actions_addopen(&file_actions,3, "c:\\testposix\\posixspawnfile3.txt", O_RDWR|O_CREAT, 0666);
 	if(err!=0)
 		{
@@ -1246,8 +1244,8 @@ TVerdict CTestMisc::testposix()
 		}
 
 	
-	
-	
+	pid_t pid;
+	char **argv=(char**)malloc(3*sizeof(char*));
 	
 	argv[0]=(char*)malloc(34*sizeof(char));
 	argv[1]=(char*)malloc(4*sizeof(char));	
@@ -1270,7 +1268,7 @@ TVerdict CTestMisc::testposix()
 		goto exit;	
 		}
 	//Get FILE pointer from open file pointer fd2 and read the string which is written by child process.
-	fp = fdopen(fd2, "r");
+	FILE* fp = fdopen(fd2, "r");
 	if (fp == NULL)
 	{
 		ERR_PRINTF1(_L("fdopen after child return failed."));

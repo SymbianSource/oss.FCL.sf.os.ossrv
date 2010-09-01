@@ -139,7 +139,7 @@ User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
 
 			  
 			   string str5a ( "Hello World");
-			    basic_string <char>::iterator strp_Iter;
+			    basic_string <char>::iterator strp_Iter, str1_Iter, str2_Iter;
 			   
 			   
 			   
@@ -207,7 +207,7 @@ User::__DbgSetAllocFail(FALSE,RHeap::ENone,1);
 	 	
 	 
    	 char* wszHello = "Hello World";
-//   	 char wBuffer[128];
+   	 char wBuffer[128];
    	  cout<<"";
 		    #if  STDCPP_OOM
 User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
@@ -281,7 +281,7 @@ User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
     typedef std::basic_ofstream<Input::char_type, Input::traits_type> Output;
 	 
 		
-//    Input::char_type s [200];
+    Input::char_type s [200];
  
     Output out ("c:\\TestFramework\\docs\\basicistream.txt", std::ios::in | std::ios::out | std::ios::trunc);
 
@@ -465,7 +465,7 @@ User::__DbgSetAllocFail(FALSE,RHeap::ENone,1);
  		
  	
  int length;
-//wchar_t * buffer;
+wchar_t * buffer;
 wchar_t getl[16] ;
  
  wfilebuf fb;
@@ -649,7 +649,7 @@ User::__DbgSetAllocFail(FALSE,RHeap::ENone,1);
    	
    
    	int output[5];
-   int n = 0,val = 0;
+   int n,val;
    wstring strvalues ;
    
    strvalues = L"1 2 3 4 5";

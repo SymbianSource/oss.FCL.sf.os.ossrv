@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET		t_processrfsreplacefile.exe			//RTEST
+TARGET		t_processrfsreplacefile.exe
 // needed to access all areas of file system
 CAPABILITY  	TCB AllFiles
 

@@ -160,14 +160,12 @@ PRJ_TESTMMPFILES
 ../TSTLIB/tirping.mmp		manual
 ../TSTLIB/tirpong.mmp		manual
 ../TSTLIB/tsersig.mmp		manual
-// The ignore keyword is not recognized by the raptor as a result generic.mmp and genericm.mmp throws an error because of the target not being present. 
-// These mmp files are used for linking libraries and are included by other mmp files (IGNORE meant not to be built and hence commenting it out).
+../TSTLIB/tserial.mmp		ignore	//useful for writing the test code from..
 
-//../TSTLIB/tserial.mmp		ignore	//useful for writing the test code from..
-//../TSTLIB/WSHELL.MMP		ignore
-//../TSTLIB/GENERIC.MMP		ignore
-//../TSTLIB/GENERICM.MMP	ignore
-//../TSTLIB/TLSTREAM.MMP	ignore
+../TSTLIB/WSHELL.MMP		ignore
+../TSTLIB/GENERIC.MMP		ignore
+../TSTLIB/GENERICM.MMP		ignore
+../TSTLIB/TLSTREAM.MMP		ignore
 ../TSTLIB/tsock.mmp		manual
 
 ../TSTLIB/TSTDLIBDEFECT.MMP	manual

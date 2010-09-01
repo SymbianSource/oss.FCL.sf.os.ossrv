@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
+Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
 
 Redistribution and use in source and binary forms, with or without 
 modification, are permitted provided that the following conditions are met:
@@ -42,19 +42,19 @@ Description:
 class CX509_Initializer : CBase
 {
 public:
-	static X509* CreateX509L(CX509Certificate* X509Cert);
+	static X509* CreateX509(CX509Certificate* X509Cert);
 	
 	
 private:
 	CX509_Initializer(){}
 	static X509_VAL * 	CreateX509_VAL(CX509Certificate* X509Cert);
 	static ASN1_STRING* CreateASN1_STRING(int len, int type, unsigned char* data, long flags);
-	static X509_NAME* 	CreateX509_NAMEL(const CX500DistinguishedName& DistName);
+	static X509_NAME* 	CreateX509_NAME(const CX500DistinguishedName& DistName);
 	static X509_NAME_ENTRY * CreateX509_NAME_ENTRY(char* type, int typeLen, char * value, int valueLen, int stringType);
-	static X509_ALGOR* 	CreateX509_ALGORL(const TPtrC8* ptr);
-	static X509_PUBKEY* CreateX509_PUBKEYL(CX509Certificate* X509Cert);
-	static STACK_OF(X509_EXTENSION) * CreateSTACKOF_X509_EXTENSIONL(CX509Certificate* X509Cert);
-	static TInt Fill_X509_NAME_ENTRYL(X509_NAME* name, const TDesC8& aBinaryData);
+	static X509_ALGOR* 	CreateX509_ALGOR(const TPtrC8* ptr);
+	static X509_PUBKEY* CreateX509_PUBKEY(CX509Certificate* X509Cert);
+	static STACK_OF(X509_EXTENSION) * CreateSTACKOF_X509_EXTENSION(CX509Certificate* X509Cert);
+	static TInt Fill_X509_NAME_ENTRY(X509_NAME* name, const TDesC8& aBinaryData);
 };
 
 

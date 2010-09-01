@@ -20,7 +20,7 @@ VENDORID 0x70000001
 // instead of calling those in estlib.dll.
 OPTION CW -opt nointrinsics
 
-TARGET	tmisc3.exe		//RTEST
+TARGET	tmisc3.exe
 TARGETTYPE	exe
 
 USERINCLUDE		../INC

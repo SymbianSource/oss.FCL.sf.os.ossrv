@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-int main()
+void main()
 {
     __UHEAP_MARK;
     TBuf8<20>src1((TText8*)"recalling");
@@ -47,5 +47,4 @@ int main()
     __UHEAP_MARKEND;
     testResultXml("Test_tbuf8tochar_recalling");
     close_log_file();
-	return 0;
 }

@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET      t_capcheck.exe		//RTEST
+TARGET      t_capcheck.exe
 TARGETTYPE  exe
 
 CAPABILITY  ReadUserData WriteUserData 

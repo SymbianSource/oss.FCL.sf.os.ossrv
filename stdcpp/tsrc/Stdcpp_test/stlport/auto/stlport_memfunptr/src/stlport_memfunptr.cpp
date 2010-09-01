@@ -108,12 +108,8 @@ void Cstlport_memfunptr::ConstructL()
 Cstlport_memfunptr* Cstlport_memfunptr::NewL( 
     CTestModuleIf& aTestModuleIf )
     {
-    #ifdef __ARMCC__
-    #pragma diag_suppress 830	
-    #endif
     Cstlport_memfunptr* self = new (ELeave) Cstlport_memfunptr( aTestModuleIf );
 
-    
     CleanupStack::PushL( self );
     self->ConstructL();
     CleanupStack::Pop();

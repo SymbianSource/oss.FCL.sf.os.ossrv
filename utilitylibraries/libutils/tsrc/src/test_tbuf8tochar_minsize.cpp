@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-int main()
+void main()
 {
     __UHEAP_MARK;
     TBuf8<3>src((TText8*)"min");
@@ -41,5 +41,4 @@ int main()
     delete [] des;	
     __UHEAP_MARKEND;
     testResultXml("Test_tbuf8tochar_minsize");
-	return 0;
 }

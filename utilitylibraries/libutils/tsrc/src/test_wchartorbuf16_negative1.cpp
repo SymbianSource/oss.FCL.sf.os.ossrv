@@ -21,13 +21,12 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-int main()
+void main()
 {
     __UHEAP_MARK;
     int retval =ESuccess;
     wchar_t* mywcharstring = L"Hello Widechar String";
     RBuf16 myRBuf;
-    myRBuf.CreateL(30);
     myRBuf.CleanupClosePushL();
     retval = WcharToRbuf16(mywcharstring, myRBuf);
 
@@ -43,6 +42,4 @@ int main()
     CleanupStack::PopAndDestroy(1);
     __UHEAP_MARKEND;
     testResultXml("test_wchartorbuf16_negative1");
-	
-	return 0;
 }

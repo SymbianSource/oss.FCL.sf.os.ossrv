@@ -113,9 +113,6 @@ Cstlport_copy* Cstlport_copy::NewL(
 #ifdef LIBC_OLD_BACKEND
     MrtInit();
 #endif
- #ifdef __ARMCC__
-    #pragma diag_suppress 830
- #endif    
     Cstlport_copy* self = new (ELeave) Cstlport_copy( aTestModuleIf );
 
     CleanupStack::PushL( self );

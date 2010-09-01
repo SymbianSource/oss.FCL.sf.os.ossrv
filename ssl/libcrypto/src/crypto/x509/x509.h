@@ -61,7 +61,7 @@
  * SUN MICROSYSTEMS, INC., and contributed to the OpenSSL project.
  */
 /*
- © Portions copyright (c) 2006, 2010 Nokia Corporation.  All rights reserved.
+ © Portions copyright (c) 2006 Nokia Corporation.  All rights reserved.
  */
 
 #ifndef HEADER_X509_H
@@ -912,7 +912,7 @@ DECLARE_ASN1_FUNCTIONS(X509_REQ_INFO)
 DECLARE_ASN1_FUNCTIONS(X509_REQ)
 
 DECLARE_ASN1_FUNCTIONS(X509_ATTRIBUTE)
-IMPORT_C X509_ATTRIBUTE *X509_ATTRIBUTE_create(int nid, int atrtype, void *value);
+X509_ATTRIBUTE *X509_ATTRIBUTE_create(int nid, int atrtype, void *value);
 
 DECLARE_ASN1_FUNCTIONS(X509_EXTENSION)
 
@@ -920,7 +920,7 @@ DECLARE_ASN1_FUNCTIONS(X509_NAME_ENTRY)
 
 DECLARE_ASN1_FUNCTIONS(X509_NAME)
 
-IMPORT_C int X509_NAME_set(X509_NAME **xn, X509_NAME *name);
+int		X509_NAME_set(X509_NAME **xn, X509_NAME *name);
 
 DECLARE_ASN1_FUNCTIONS(X509_CINF)
 
@@ -964,8 +964,8 @@ DECLARE_ASN1_FUNCTIONS(NETSCAPE_CERT_SEQUENCE)
 
 #ifndef OPENSSL_NO_EVP
 IMPORT_C X509_INFO *	X509_INFO_new(void);
-IMPORT_C void X509_INFO_free(X509_INFO *a);
-IMPORT_C char* X509_NAME_oneline(X509_NAME *a,char *buf,int size);
+void		X509_INFO_free(X509_INFO *a);
+IMPORT_C char *		X509_NAME_oneline(X509_NAME *a,char *buf,int size);
 
 IMPORT_C int ASN1_verify(i2d_of_void *i2d, X509_ALGOR *algor1,
 		ASN1_BIT_STRING *signature,char *data,EVP_PKEY *pkey);
@@ -1027,7 +1027,7 @@ IMPORT_C int X509_REQ_add1_attr_by_OBJ(X509_REQ *req,
 IMPORT_C int X509_REQ_add1_attr_by_NID(X509_REQ *req,
 			int nid, int type,
 			const unsigned char *bytes, int len);
-IMPORT_C int X509_REQ_add1_attr_by_txt(X509_REQ *req,
+int X509_REQ_add1_attr_by_txt(X509_REQ *req,
 			const char *attrname, int type,
 			const unsigned char *bytes, int len);
 

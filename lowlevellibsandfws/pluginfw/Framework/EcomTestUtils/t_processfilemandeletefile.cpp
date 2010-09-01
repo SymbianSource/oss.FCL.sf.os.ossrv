@@ -23,13 +23,8 @@
 
 void DeleteFileL(const TDesC& aFile)
 	{
-	TInt r = KErrNone;	
 	RFs fs;
-	r = fs.Connect();
-	if (r != KErrNone)
-		{
-			User::Leave(r);
-		}
+	fs.Connect();
 	CleanupClosePushL(fs);
 	
 	CFileMan* fileMan = CFileMan::NewL(fs);

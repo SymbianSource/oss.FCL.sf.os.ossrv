@@ -20,10 +20,6 @@
 #include <rw/_defs.h>
 #include<rw/_exception.h>
 
-#ifdef __ARMCC__
-#pragma diag_suppress 940
-#endif
-
  _RWSTD_EXPORT __rw::__rw_exception::__rw_exception () _THROWS (()){}
  
  _RWSTD_EXPORT __rw::__rw_exception::__rw_exception (const __rw_exception& x){}

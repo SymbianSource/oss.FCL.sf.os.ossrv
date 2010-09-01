@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET      te_authentication_tefsuite.exe		//RTEST
+TARGET      te_authentication_tefsuite.exe
 TARGETTYPE  exe
 UID             0x1000007A 0x101F7784
 

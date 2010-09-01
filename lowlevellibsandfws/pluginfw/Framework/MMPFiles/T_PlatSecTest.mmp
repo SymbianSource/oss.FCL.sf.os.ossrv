@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET           t_platsectest.exe		//RTEST
+TARGET           t_platsectest.exe
 CAPABILITY       ReadUserData WriteUserData
 TARGETTYPE       exe
 

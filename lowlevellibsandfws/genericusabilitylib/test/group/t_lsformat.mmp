@@ -21,7 +21,7 @@
 @SYMPurpose t_lsformat.exe test code for LString formatting
 */
 
-TARGET         t_lsformat.exe //RTEST       
+TARGET         t_lsformat.exe        
 TARGETTYPE     EXE
 CAPABILITY NONE
 UID 0x1000007A 0x10285EF2

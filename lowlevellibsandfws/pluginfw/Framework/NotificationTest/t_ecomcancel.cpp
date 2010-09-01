@@ -743,16 +743,11 @@ GLDEF_C TInt E32Main()
 	TheTest.Title();
 	TheTest.Start(_L("Starting tests..."));
 	TInt err = KErrNone;
-	TInt r = KErrNone;
 
 	CTrapCleanup* cleanup = CTrapCleanup::New();
 	CActiveScheduler* scheduler = new(ELeave)CActiveScheduler;
 	CActiveScheduler::Install(scheduler);
-	r = TheFs.Connect();
-	if (r != KErrNone)
-		{
-			return r;
-		}
+	TheFs.Connect();
 
     // Reset the test environment under textshell in emulator/ROM
 	TRAP(err, ResetEComEnvironmentL());

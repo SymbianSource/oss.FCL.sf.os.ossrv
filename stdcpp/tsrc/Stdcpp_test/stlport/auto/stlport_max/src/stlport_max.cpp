@@ -113,12 +113,8 @@ Cstlport_max* Cstlport_max::NewL(
  #ifdef LIBC_OLD_BACKEND
     MrtInit();
 #endif
- #ifdef __ARMCC__
-    #pragma diag_suppress 830
- #endif    
     Cstlport_max* self = new (ELeave) Cstlport_max( aTestModuleIf );
 
- 
     CleanupStack::PushL( self );
     self->ConstructL();
     CleanupStack::Pop();

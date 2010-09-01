@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-int main()
+void main()
 {
     __UHEAP_MARK;
     TBuf8<20>src((TText8*)"");
@@ -42,5 +42,4 @@ int main()
     des = NULL;	
     __UHEAP_MARKEND;
     testResultXml("test_tbuf8towchar_nodata");
-	return 0;
 }

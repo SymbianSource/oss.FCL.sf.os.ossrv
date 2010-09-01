@@ -1117,7 +1117,7 @@ main (int   argc,
  #endif
 #endif  /* SYMBIAN */
 
-  g_assert((gulong)string2->len == 10323);
+  g_assert((gulong)string2->len == 10319);
   g_string_free (string1, TRUE);
   g_string_free (string2, TRUE);
 

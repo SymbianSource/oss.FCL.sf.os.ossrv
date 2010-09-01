@@ -133,7 +133,7 @@ IMPORT_C int LibHexDumpMessagePartTracer(TLibTraceMessageType aLogMessageType,
 
 #ifdef __cplusplus
 // C++ source code
-class CLogger // codescanner::missingcclass
+class CLogger
     {
     public:
     CLogger(char* aFileName, int aLine) : iFileName ( aFileName ), iLine ( aLine) {}

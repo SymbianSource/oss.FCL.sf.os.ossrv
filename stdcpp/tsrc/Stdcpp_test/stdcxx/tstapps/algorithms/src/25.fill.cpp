@@ -71,7 +71,7 @@ void test_fill (std::size_t            N,
         std::fill (begin, end, *new_t);
 
         // verify 25.2.5, p2
-        bool success = 	true;
+        bool success;
         std::size_t j = 0;
         for ( ; j != i + 1; ++j) {
             success = buf[j].val_ == new_t->val_;

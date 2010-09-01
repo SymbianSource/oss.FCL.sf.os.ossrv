@@ -15,7 +15,7 @@
 // 
 //
 
-target          t_sched.exe	//RTEST
+target          t_sched.exe
 targettype      EXE
 UID		0x1000007a
 VENDORID 0x70000001

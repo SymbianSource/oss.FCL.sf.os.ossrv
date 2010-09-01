@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-int main()
+void main()
 {
     __UHEAP_MARK;
     TBufC<20> buf _L("");
@@ -43,6 +43,4 @@ int main()
     des = NULL;	
     __UHEAP_MARKEND;
     testResultXml("test_tptr16towcharp_nodata");
-	
-	return 0;
 }

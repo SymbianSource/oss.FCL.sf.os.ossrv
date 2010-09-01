@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET			t_baassert.exe	//RTEST
+TARGET			t_baassert.exe
 TARGETTYPE		EXE
 
 UID				0x1000007a

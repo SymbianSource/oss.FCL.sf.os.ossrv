@@ -68,13 +68,6 @@ int check_lock()
     					return 0;
     				}
     			}
-    			else                                             //file is created 
-    			{
-                    _dbus_verbose ("c:\\data\\dbus\\dbus_lock file doesnt exist and is lockfree - dbusdaemon not running\n");
-    			    close(fd);  
-    			    return 1;           
-    			}
-    			
     		}
     	
     		else												//file is created 
@@ -255,14 +248,8 @@ int _dbus_file_open_for_write(const unsigned char* data)
   	dbus_bool_t retval;
 	DBusString dirname;
 
- 	retval = FALSE;
- 	 
- 	TBuf8<100>Filename8;
- 	TBuf16<50>Filename16;
- 	RFs fs;
- 	RFile file;
- 	TBuf8<100>pid_data(data);
- 	
+ 	 retval = FALSE;
+ 
   	if(!_dbus_homedir_from_current_process(&homedir))		      //getting the private or homedir directory of the process
   	{
   	 goto out_0;	
@@ -278,20 +265,25 @@ int _dbus_file_open_for_write(const unsigned char* data)
   	//sid_directory = (const unsigned char*)_dbus_string_get_const_data(homedir);
     sid_directory = (const unsigned char*)_dbus_string_get_const_data(&dirname);
 	
+	TBuf8<100>Filename8;
 	Filename8.Append(sid_directory,strlen((const char*)sid_directory));
 	Filename8.Append(_L8("\\foobar_"));
 	Filename8.Append(sid_directory + 11,strlen((const char*)sid_directory + 11));
 	
-	
+	TBuf16<50>Filename16;
 	Filename16.Copy(Filename8);
 	
+	RFs fs;
 	User::LeaveIfError(fs.Connect());
+	
+	RFile file;
 	
 	User::LeaveIfError(file.Open(fs,Filename16,EFileRead));
 	file.Close();
 	
 	User::LeaveIfError(file.Open(fs,Filename16,EFileWrite));
-	 
+	
+	TBuf8<100>pid_data(data); 
 	User::LeaveIfError(file.Write(pid_data)); 
 	
 	retval = TRUE;

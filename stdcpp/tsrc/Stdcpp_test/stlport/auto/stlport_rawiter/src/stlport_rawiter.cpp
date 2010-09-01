@@ -113,12 +113,8 @@ Cstlport_rawiter* Cstlport_rawiter::NewL(
 #ifdef LIBC_OLD_BACKEND
     MrtInit();
 #endif
- #ifdef __ARMCC__
-    #pragma diag_suppress 830
- #endif    
     Cstlport_rawiter* self = new (ELeave) Cstlport_rawiter( aTestModuleIf );
 
- 
     CleanupStack::PushL( self );
     self->ConstructL();
     CleanupStack::Pop();

@@ -29,7 +29,7 @@
 #include <string.h>
 #include "glib.h"
 #include <stdlib.h>
-#include <glib/gprintf.h>
+
 
 #ifdef SYMBIAN
 #include "mrt2_glib2_test.h"

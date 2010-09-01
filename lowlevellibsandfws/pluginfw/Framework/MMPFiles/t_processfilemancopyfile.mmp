@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET		t_processfilemancopyfile.exe	//RTEST
+TARGET		t_processfilemancopyfile.exe
 // needed to access file system
 CAPABILITY  	TCB AllFiles
 

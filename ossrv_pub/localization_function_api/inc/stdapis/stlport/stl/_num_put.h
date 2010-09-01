@@ -154,7 +154,7 @@ extern _STLP_DECLSPEC int  _STLP_CALL __string_to_float(const string&, float&);
 extern _STLP_DECLSPEC int  _STLP_CALL __string_to_float(const string&, double&);
 extern _STLP_DECLSPEC void _STLP_CALL __write_float(string&, ios_base::fmtflags, int, double);
 # ifndef _STLP_NO_LONG_DOUBLE
-_STLP_DECLSPEC int  _STLP_CALL __string_to_float(const string&, long double&);
+int  _STLP_CALL __string_to_float(const string&, long double&);
 extern _STLP_DECLSPEC void _STLP_CALL __write_float(string&, ios_base::fmtflags, int, long double);
 # endif
 

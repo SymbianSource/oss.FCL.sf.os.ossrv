@@ -113,11 +113,7 @@ Cstlport_lexcmp* Cstlport_lexcmp::NewL(
  #ifdef LIBC_OLD_BACKEND
     MrtInit();
 #endif
- #ifdef __ARMCC__
-    #pragma diag_suppress 830
- #endif    
     Cstlport_lexcmp* self = new (ELeave) Cstlport_lexcmp( aTestModuleIf );
-
 
     CleanupStack::PushL( self );
     self->ConstructL();

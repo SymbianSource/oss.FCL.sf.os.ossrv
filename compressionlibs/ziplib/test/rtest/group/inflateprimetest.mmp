@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET          inflateprimetest.exe	//RTEST
+TARGET          inflateprimetest.exe
 TARGETTYPE      EXE
 UID             0
 VENDORID        0x70000001

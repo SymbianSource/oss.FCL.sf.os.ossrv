@@ -14,7 +14,7 @@
 //
 
 
-TARGET       t_heaptest.exe			//RTEST
+TARGET       t_heaptest.exe
 TARGETTYPE   exe
 CAPABILITY  All -TCB
 

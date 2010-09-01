@@ -211,8 +211,8 @@ EXPORT_C const TDesC& CTextResolver::ResolveErrorString(TInt aError, TInt& aText
 	        								// Nokia-specific version of the errorres.rss file
 	      	TPtr appTextPtr = iTitleText->Des();
 	      	TPtr textPtr = iTextBuffer->Des();
-	      	iCoe->ReadResourceL(appTextPtr, R_BASE);
-	      	iCoe->ReadResourceL(textPtr, R_ERROR_RES_GENERAL);
+	      	iCoe->ReadResource(appTextPtr, R_BASE);
+	      	iCoe->ReadResource(textPtr, R_ERROR_RES_GENERAL);
 	        }
 		}
 	else	// No CCoeEnv available

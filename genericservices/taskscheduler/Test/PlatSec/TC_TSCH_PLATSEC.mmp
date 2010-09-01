@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET          tc_tsch_platsec.exe		//RTEST
+TARGET          tc_tsch_platsec.exe
 TARGETTYPE      exe
 UID 0 0x10203631
 

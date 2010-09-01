@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-int main()
+void main()
 {
     wstring str(L"Hello World");
     __UHEAP_MARK;
@@ -40,5 +40,4 @@ int main()
     delete buf;
     __UHEAP_MARKEND;
     testResultXml("test_wstringtohbufc16_positive");
-	return 0;
 }

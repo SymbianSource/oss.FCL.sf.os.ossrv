@@ -133,7 +133,7 @@ bool acceptance_test(Graph& g, int vec, int e)
     }
 
 
-    bool bellman = true, floyd1 = true, floyd2 = true, floyd3 = true;
+    bool bellman, floyd1, floyd2, floyd3;
     std::less<int> compare;
     inf_plus<int> combine;
     floyd1 =
@@ -310,7 +310,7 @@ bool acceptance_test2(Graph& g, int vec, int e)
     }
 
 
-    bool bellman = true, floyd1 = true, floyd2 = true, floyd3 = true;
+    bool bellman, floyd1, floyd2, floyd3;
     std::less<int> compare;
     inf_plus<int> combine;
     floyd1 =

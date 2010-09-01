@@ -711,11 +711,7 @@ rw_fltcmp (float x, float y)
 {
 #if _RWSTD_SHRT_SIZE == _RWSTD_INT_SIZE
     typedef short IntT;
-    #ifdef __ARMCC__
-    #pragma diag_suppress 68
-    #endif
     const IntT imin = _RWSTD_SHRT_MIN;
-    
 #elif _RWSTD_FLT_SIZE == _RWSTD_INT_SIZE
     typedef int IntT;
     const IntT imin = _RWSTD_INT_MIN;
@@ -816,13 +812,8 @@ rw_ldblcmp (long double x, long double y)
     if (sizeof (long double) == sizeof (double))
         return rw_dblcmp (double (x), double (y));
 
-    #ifdef __ARMCC__
-    #pragma diag_suppress 111
-    #endif
     if (x == y)
         return 0;
-    
-    
 
     // FIXME: use integer math as in the functions above
 
@@ -926,3 +917,6 @@ _TEST_EXPORT
 
 
  #endif
+ 
+
+ 

@@ -55,7 +55,6 @@ extern "C" EXPORT_C char *getProgPath(char *progName)
 		// If successful, convert from TDesC to narrow chars and 
 		// return.
 		TFileName fileName = iProcess.FileName();
-		iProcess.Kill(0);
 		iProcess.Close();
 		
 		pathLength = fileName.Length();

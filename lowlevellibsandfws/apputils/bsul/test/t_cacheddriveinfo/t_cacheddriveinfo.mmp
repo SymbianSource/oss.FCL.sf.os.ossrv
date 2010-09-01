@@ -19,7 +19,7 @@
  @file
 */
 
-TARGET			t_cacheddriveinfo.exe		//RTEST
+TARGET			t_cacheddriveinfo.exe
 CAPABILITY All -Tcb
 TARGETTYPE		EXE
 

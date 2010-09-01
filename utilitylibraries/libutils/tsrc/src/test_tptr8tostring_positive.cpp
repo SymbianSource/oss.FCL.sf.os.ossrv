@@ -19,7 +19,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-int main()
+void main()
 {
     int retval =ESuccess;
     __UHEAP_MARK;
@@ -30,9 +30,7 @@ int main()
 //    int i=0;
 //    while (i<=1000)
 //    {
-      retval = Tptr8ToString(buf, s);
-      if(retval == ESuccess)
-          printf("conversion succeeded\n");
+    retval = Tptr8ToString(buf, s);
 //    i++;
 //    printf("%d\n",i);
 //    }    
@@ -49,6 +47,4 @@ int main()
     }
     __UHEAP_MARKEND;
     testResultXml("test_tptr8tostring_positive");
-	
-	return 0;
 }

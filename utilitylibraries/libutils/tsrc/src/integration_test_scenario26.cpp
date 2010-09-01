@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-int main()
+void main()
 {
     __UHEAP_MARK;
     {
@@ -51,12 +51,6 @@ int main()
     HBufC8* finBuffer = HBufC8::NewL(10);
     *finBuffer = text_fin;
     retval[6] = WcharToHbufc8(Wstr_fin,finBuffer);
-    
-    for(int i=1; i<=6; i++)
-        {
-        if (retval[i]!= 0)
-                printf("Conversion failed for retval\n",retval[i]);
-        }
 
     if(!buffer->Compare(finBuffer->Des()))
     {
@@ -75,5 +69,4 @@ int main()
     }
     __UHEAP_MARKEND;
     testResultXml("integration_test_scenario26");
-    return 0;
 }

@@ -51,12 +51,6 @@
 #define LOG_FILENAME_LINE __FILE__, __LINE__
 int failures=0;
 
-
-#ifdef __ARMCC__
-#pragma diag_suppress 61
-#pragma diag_suppress 236
-#endif
-
 /**************************************************************************/
 //#if 0
 // set by the command line option handler in response to:
@@ -3435,12 +3429,7 @@ void numput_virtuals_test (charT, const char *cname)
 
     ios.flags (std::ios_base::fmtflags ());
 
-
 #define Abs(i)   ((i) < 0 ? (-i) : (i))
-
-#ifdef __ARMCC__
-#pragma diag_suppress 47
-#endif
 
 #define ASSERT(T, N, T2, tname, t2name)                              \
     do {                                                             \

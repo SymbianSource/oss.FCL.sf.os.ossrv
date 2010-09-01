@@ -15,7 +15,7 @@
 // 
 //
 
-TARGET			t_registrydata.exe			//RTEST
+TARGET			t_registrydata.exe
 TARGETTYPE		EXE
 
 // UIDs for loading

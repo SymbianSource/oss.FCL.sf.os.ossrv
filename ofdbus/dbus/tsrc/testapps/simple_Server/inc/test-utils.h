@@ -22,7 +22,6 @@
 #include <dbus/dbus.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #undef DBUS_COMPILATION
 
 #endif

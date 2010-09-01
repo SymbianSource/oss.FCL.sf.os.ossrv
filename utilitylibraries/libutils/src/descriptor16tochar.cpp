@@ -28,7 +28,7 @@
    * reference to the character sream where the result of conversion 
    * is stored , n_size specifies the conversion size of the string 
    * @return Status code (0 is ESuccess, -1 is EInsufficientMemory, 
-   * -2 is EInvalidSize , -4 is EInvalidPointer, -8 is EInvalidWCSSequence)
+   * -2 is EInvalidSize , -4 is EInvalidPointer)
    */
 EXPORT_C int Tbuf16ToChar(TDes16& aSrc, char* aDes, int& n_size)
 {	
@@ -81,8 +81,7 @@ EXPORT_C int Tbuf16ToChar(TDes16& aSrc, char* aDes, int& n_size)
    * reference to the character sream where the result of conversion 
    * is stored , n_size specifies the conversion size of the string
    * @return Status code (0 is ESuccess, -1 is EInsufficientMemory, 
-   * -2 is EInvalidSize , -4 is EInvalidPointer, -5 is EDescriptorNoData
-   * -8 is EInvalidWCSSequence)
+   * -2 is EInvalidSize , -4 is EInvalidPointer)
    */	
 EXPORT_C int Tbufc16ToChar(TDesC& aSrc, char* aDes, int& n_size)
 {
@@ -135,7 +134,7 @@ EXPORT_C int Tbufc16ToChar(TDesC& aSrc, char* aDes, int& n_size)
    * reference to the character sream where the result of conversion 
    * is stored , n_size specifies the  conversion size of the string
    * @return Status code (0 is ESuccess, -1 is EInsufficientMemory, -2 is EInvalidSize
-   * -3 is EDescriptorNoData , -4 is EInvalidPointer, -8 is EInvalidWCSSequence)
+   * -3 is EDescriptorNoData , -4 is EInvalidPointer)
    */
 
 EXPORT_C int Tlitc16ToChar(const TDesC16& aSrc, char* aDes, int& n_size)
@@ -190,7 +189,7 @@ EXPORT_C int Tlitc16ToChar(const TDesC16& aSrc, char* aDes, int& n_size)
    * reference to the character sream where the result of conversion 
    * is stored , n_size specifies the conversion size of the string
    * @return Status code (0 is ESuccess, -1 is EInsufficientMemory, 
-   * -2 is EInvalidSize , -4 is EInvalidPointer, -8 is EInvalidWCSSequence)
+   * -2 is EInvalidSize , -4 is EInvalidPointer)
    */
 
 EXPORT_C int Tptr16ToCharp (const TDes16& aSrc, char* aDes, int& n_size)

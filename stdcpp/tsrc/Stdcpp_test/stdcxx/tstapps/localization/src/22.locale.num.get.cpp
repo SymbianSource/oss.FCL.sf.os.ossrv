@@ -82,12 +82,6 @@
 #define LOG_FILENAME_LINE __FILE__, __LINE__
 int failures=0;
 
-#ifdef __ARMCC__
-#pragma diag_suppress 940
-#pragma diag_suppress 815
-#pragma diag_suppress 177
-#endif
-
 #ifdef __SYMBIAN32__
 #include<assert.h>
 #endif //__SYMBIAN32__

@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-int main()
+void main()
 {
     int retval =ESuccess;
     wstring W(L"Hello World");
@@ -42,5 +42,4 @@ int main()
     temp=NULL;
     __UHEAP_MARKEND;
     testResultXml("test_wstringtotptr8_negative1");
-	return 0;
 }

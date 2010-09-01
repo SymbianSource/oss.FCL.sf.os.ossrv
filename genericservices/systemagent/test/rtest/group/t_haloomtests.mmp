@@ -11,8 +11,9 @@
 // Contributors:
 //
 // Description:
+//
 
-TARGET			t_haloomtests.exe		//RTEST
+TARGET			t_haloomtests.exe
 TARGETTYPE		exe
 //Needed to iniatilise HAL attributes
 CAPABILITY		AllFiles WriteDeviceData

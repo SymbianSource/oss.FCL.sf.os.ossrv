@@ -29,7 +29,7 @@
 #include <string.h>
 #include "glib.h"
 #include <stdlib.h>
-#include <glib/gprintf.h>
+
 
 #ifdef SYMBIAN
 #include "mrt2_glib2_test.h"
@@ -204,11 +204,11 @@ void g_error_test()
 	err.message = "test";
 	err_copy = g_error_copy(&err);
 	g_assert(err_copy->code == 5 && err_copy->code == 5 && !strcmp(err_copy->message,"test"));
-	g_error_free(err_copy);
+	g_free(err_copy);
 	err_copy = NULL;
 	err_copy = g_error_new_literal(err.domain,err.code,"test is %s");
 	g_assert(err_copy->code == 5 && err_copy->code == 5 && !strcmp(err_copy->message,"test is %s"));
-	g_error_free(err_copy);
+	g_free(err_copy);
 	err_copy = NULL;
 }
 

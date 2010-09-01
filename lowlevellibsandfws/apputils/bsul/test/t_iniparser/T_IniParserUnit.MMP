@@ -13,13 +13,12 @@
 // Description:
 //
 
-target          t_iniparserunit.exe		//RTEST
+target          t_iniparserunit.exe
 targettype      EXE
 UID				0x10000077
 VENDORID 		0x70000001
-MW_LAYER_SYSTEMINCLUDE_SYMBIAN
-OS_LAYER_SYSTEMINCLUDE_SYMBIAN
 
+OS_LAYER_SYSTEMINCLUDE_SYMBIAN
 USERINCLUDE		../../src ../../inc
 
 SOURCEPATH		../t_iniparser

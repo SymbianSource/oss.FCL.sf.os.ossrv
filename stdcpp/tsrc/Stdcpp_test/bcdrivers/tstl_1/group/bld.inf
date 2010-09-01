@@ -39,6 +39,7 @@ PRJ_EXPORTS
 tstl_1.cfg   /epoc32/WINSCW/C/TestFramework/tstl_1.cfg
  
 
+PRJ_TESTMMPFILES
 // NOTE: If using ARS requirements .mmp file operation should be done under this.
 // 'abld test build'
 

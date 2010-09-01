@@ -21,13 +21,12 @@
 #include <e32base.h>
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-int main()
+void main()
 {
     string s("");
     __UHEAP_MARK;	
     int retval =ESuccess;
     RBuf16 buff;
-    buff.CreateL(30);
     buff.CleanupClosePushL();
     wchar_t *wptr = new wchar_t[15];
     retval = StringToRbuf16(s, buff);
@@ -47,5 +46,4 @@ int main()
     CleanupStack::PopAndDestroy(1);
     __UHEAP_MARKEND;
     testResultXml("test_stringtorbuf16_negative1");
-	return 0;
 }

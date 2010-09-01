@@ -136,12 +136,10 @@ CTimerServer* CTimerServer::NewLC()
 // -------------------------------------------------------------------------------
 void CTimerServer::ConstructL()
     {
-    CShutdown* shutdown = new(ELeave) CShutdown;
-    CleanupStack::PushL(shutdown);
-    shutdown->ConstructL();
+    iShutdown = new(ELeave) CShutdown;
+    CleanupStack::PushL(iShutdown);
+    iShutdown->ConstructL();
 	CleanupStack::Pop();
-	iShutdown = shutdown;
-	shutdown = 0;
     }
 
 // -------------------------------------------------------------------------------

@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-int main()
+void main()
 {
     __UHEAP_MARK;
     TPtr16 src ((unsigned short *)"",2,30);
@@ -42,5 +42,4 @@ int main()
     des = NULL;
     __UHEAP_MARKEND;
     testResultXml("test_tptr16tocharp_ptrnullcheck");
-	return 0;
 }

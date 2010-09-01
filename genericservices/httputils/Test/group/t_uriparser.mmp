@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET			t_uriparser.exe		//RTEST
+TARGET			t_uriparser.exe
 TARGETTYPE		exe
 CAPABILITY TrustedUI ProtServ
  

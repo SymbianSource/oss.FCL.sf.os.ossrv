@@ -263,7 +263,7 @@ public:                         // Constructor, destructor, assignment.
     return _STLP_CONVERT_ALLOCATOR((const allocator_type&)this->_M_end_of_storage, _CharT);
   }
 
-  _STLP_DUMMY_IMP_DECLSPEC basic_string();
+  _STLP_DECLSPEC basic_string();
 
   explicit basic_string(const allocator_type& __a)
     : _String_base<_CharT,_Alloc>(__a, 8) {
@@ -278,7 +278,7 @@ public:                         // Constructor, destructor, assignment.
     _STLP_POP_CLEANUP_ITEM
   }
 
-  _STLP_DUMMY_IMP_DECLSPEC basic_string(const basic_string<_CharT, _Traits, _Alloc>&);
+  _STLP_DECLSPEC basic_string(const basic_string<_CharT, _Traits, _Alloc>&);
 
   basic_string(const _Self& __s, size_type __pos, size_type __n = npos,
                const allocator_type& __a = allocator_type()) 
@@ -300,7 +300,7 @@ public:                         // Constructor, destructor, assignment.
       _STLP_POP_CLEANUP_ITEM
     }
 
-  _STLP_DUMMY_IMP_DECLSPEC basic_string(const _CharT* __s,
+  _STLP_DECLSPEC basic_string(const _CharT* __s,
                const allocator_type& __a = allocator_type());
 
   basic_string(size_type __n, _CharT __c,
@@ -508,7 +508,7 @@ public:                         // Size, capacity, etc.
   }
   void resize(size_type __n) { resize(__n, _M_null()); }
 
-  _STLP_DUMMY_IMP_DECLSPEC void reserve(size_type = 0);
+  _STLP_DECLSPEC void reserve(size_type = 0);
 
   size_type capacity() const { return (this->_M_end_of_storage._M_data - this->_M_start) - 1; }
 
@@ -675,7 +675,7 @@ public:                         // Assign
   _Self& assign(const _CharT* __s)
     { _STLP_FIX_LITERAL_BUG(__s) return assign(__s, __s + _Traits::length(__s)); }
 
-  _STLP_DUMMY_IMP_DECLSPEC _Self& assign(size_type __n, _CharT __c);
+  _STLP_DECLSPEC _Self& assign(size_type __n, _CharT __c);
 
 #ifdef _STLP_MEMBER_TEMPLATES
 
@@ -802,7 +802,7 @@ public:                         // Insert
 
 #else /* _STLP_MEMBER_TEMPLATES */
 
-  _STLP_DUMMY_IMP_DECLSPEC void insert(iterator __p, const _CharT* __first, const _CharT* __last);
+  _STLP_DECLSPEC void insert(iterator __p, const _CharT* __first, const _CharT* __last);
 
 #endif /* _STLP_MEMBER_TEMPLATES */
 
@@ -1139,7 +1139,7 @@ public:                         // find.
   size_type find(const _CharT* __s, size_type __pos = 0) const 
     { _STLP_FIX_LITERAL_BUG(__s) return find(__s, __pos, _Traits::length(__s)); }
 
-  _STLP_DUMMY_IMP_DECLSPEC size_type find(const _CharT* __s, size_type __pos, size_type __n) const;
+  _STLP_DECLSPEC size_type find(const _CharT* __s, size_type __pos, size_type __n) const;
 
   // WIE: Versant schema compiler 5.2.2 ICE workaround
   size_type find(_CharT __c) const
@@ -1154,8 +1154,8 @@ public:                         // rfind.
   size_type rfind(const _CharT* __s, size_type __pos = npos) const 
     { _STLP_FIX_LITERAL_BUG(__s) return rfind(__s, __pos, _Traits::length(__s)); }
 
-  _STLP_DUMMY_IMP_DECLSPEC size_type rfind(const _CharT* __s, size_type __pos, size_type __n) const;
-  _STLP_DUMMY_IMP_DECLSPEC size_type rfind(_CharT __c, size_type __pos = npos) const;
+  _STLP_DECLSPEC size_type rfind(const _CharT* __s, size_type __pos, size_type __n) const;
+  _STLP_DECLSPEC size_type rfind(_CharT __c, size_type __pos = npos) const;
 
 public:                         // find_first_of
   
@@ -1165,7 +1165,7 @@ public:                         // find_first_of
   size_type find_first_of(const _CharT* __s, size_type __pos = 0) const 
     { _STLP_FIX_LITERAL_BUG(__s) return find_first_of(__s, __pos, _Traits::length(__s)); }
 
-  _STLP_DUMMY_IMP_DECLSPEC size_type find_first_of(const _CharT* __s, size_type __pos, 
+  _STLP_DECLSPEC size_type find_first_of(const _CharT* __s, size_type __pos, 
                           size_type __n) const;
 
   size_type find_first_of(_CharT __c, size_type __pos = 0) const 
@@ -1180,7 +1180,7 @@ public:                         // find_last_of
   size_type find_last_of(const _CharT* __s, size_type __pos = npos) const 
     { _STLP_FIX_LITERAL_BUG(__s) return find_last_of(__s, __pos, _Traits::length(__s)); }
 
-  _STLP_DUMMY_IMP_DECLSPEC size_type find_last_of(const _CharT* __s, size_type __pos, 
+  _STLP_DECLSPEC size_type find_last_of(const _CharT* __s, size_type __pos, 
                          size_type __n) const;
 
   size_type find_last_of(_CharT __c, size_type __pos = npos) const {
@@ -1196,10 +1196,10 @@ public:                         // find_first_not_of
   size_type find_first_not_of(const _CharT* __s, size_type __pos = 0) const 
     { _STLP_FIX_LITERAL_BUG(__s) return find_first_not_of(__s, __pos, _Traits::length(__s)); }
 
-  _STLP_DUMMY_IMP_DECLSPEC size_type find_first_not_of(const _CharT* __s, size_type __pos,
+  _STLP_DECLSPEC size_type find_first_not_of(const _CharT* __s, size_type __pos,
                               size_type __n) const;
 
-  _STLP_DUMMY_IMP_DECLSPEC size_type find_first_not_of(_CharT __c, size_type __pos = 0) const;
+  _STLP_DECLSPEC size_type find_first_not_of(_CharT __c, size_type __pos = 0) const;
 
 public:                         // find_last_not_of
 
@@ -1210,10 +1210,10 @@ public:                         // find_last_not_of
   size_type find_last_not_of(const _CharT* __s, size_type __pos = npos) const
     { _STLP_FIX_LITERAL_BUG(__s) return find_last_not_of(__s, __pos, _Traits::length(__s)); }
 
-  _STLP_DUMMY_IMP_DECLSPEC size_type find_last_not_of(const _CharT* __s, size_type __pos,
+  _STLP_DECLSPEC size_type find_last_not_of(const _CharT* __s, size_type __pos,
                              size_type __n) const;
 
-  _STLP_DUMMY_IMP_DECLSPEC size_type find_last_not_of(_CharT __c, size_type __pos = npos) const;
+  _STLP_DECLSPEC size_type find_last_not_of(_CharT __c, size_type __pos = npos) const;
 
 public:                         // Substring.
 

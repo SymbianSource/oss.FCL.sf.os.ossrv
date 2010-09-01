@@ -25,10 +25,12 @@
 
 #include <pls.h> // For emulator WSD API 
 
+const TUid KLibDbusConvenienceUid3 = {0x20010154};     // This is the UID of the library
+
 struct libdbus_convenience_global_struct *libdbus_convenience_ImpurePtr()
 {
 #if defined(__WINSCW__) || defined(__WINS__)
-    const TUid KLibDbusConvenienceUid3 = {0x20010154};     // This is the UID of the library
+
 	// Access the PLS of this process
 	struct libdbus_convenience_global_struct* p  = Pls<struct libdbus_convenience_global_struct>(KLibDbusConvenienceUid3, &libdbus_convenience_Init);
     return p;

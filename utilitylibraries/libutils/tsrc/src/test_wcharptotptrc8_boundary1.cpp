@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-int main()
+void main()
 {
     int retval =ESuccess;
     wchar_t* mywcharstring = L"Hello Widechar String";
@@ -42,6 +42,4 @@ int main()
     }   
     delete []myptr;   
     testResultXml("test_wcharptotptrc8_boundary1");
-	
-	return 0;
 }

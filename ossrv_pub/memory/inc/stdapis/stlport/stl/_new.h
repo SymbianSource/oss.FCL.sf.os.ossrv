@@ -155,22 +155,22 @@ _STLP_END_NAMESPACE
 # endif /* _STLP_WINCE */
 
 #if defined(__SYMBIAN32__) && !defined(__GCCE__)
-IMPORT_C void *operator new(unsigned int aSize);
+_STLP_DECLSPEC void *operator new(unsigned int aSize);
 
-IMPORT_C void *operator new[](unsigned int aSize);
+_STLP_DECLSPEC void *operator new[](unsigned int aSize);
 #endif
 
-IMPORT_C void operator delete(void* aPtr) __NO_THROW;
+_STLP_DECLSPEC void operator delete(void* aPtr) __NO_THROW;
 
-IMPORT_C void operator delete[](void* aPtr) __NO_THROW;
+_STLP_DECLSPEC void operator delete[](void* aPtr) __NO_THROW;
 
-IMPORT_C void* operator new(unsigned int aSize, const std::nothrow_t& /*aNoThrow*/)  __NO_THROW;
+_STLP_DECLSPEC void* operator new(unsigned int aSize, const std::nothrow_t& /*aNoThrow*/)  __NO_THROW;
 
-IMPORT_C void* operator new[](unsigned int aSize, const std::nothrow_t& aNoThrow)  __NO_THROW;
+_STLP_DECLSPEC void* operator new[](unsigned int aSize, const std::nothrow_t& aNoThrow)  __NO_THROW;
 
-IMPORT_C void operator delete(void* aPtr, const std::nothrow_t& /*aNoThrow*/)  __NO_THROW;
+_STLP_DECLSPEC void operator delete(void* aPtr, const std::nothrow_t& /*aNoThrow*/)  __NO_THROW;
 
-IMPORT_C void operator delete[](void* aPtr, const std::nothrow_t& /*aNoThrow*/)  __NO_THROW;
+_STLP_DECLSPEC void operator delete[](void* aPtr, const std::nothrow_t& /*aNoThrow*/)  __NO_THROW;
 
 
 // placement delete

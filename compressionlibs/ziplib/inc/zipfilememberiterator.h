@@ -32,7 +32,7 @@ An iterator class for iterating though all the entries in the archive.
 @publishedAll
 @released
 */
-class CZipFileMemberIterator // codescanner::missingcclass
+class CZipFileMemberIterator
 	{
 friend class CZipFile;
 

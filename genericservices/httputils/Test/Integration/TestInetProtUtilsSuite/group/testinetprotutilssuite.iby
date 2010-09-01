@@ -26,6 +26,19 @@ file=ABI_DIR\DEBUG_DIR\testinetproutilsuriserver.exe		system\libs\testinetprouti
 file=ABI_DIR\DEBUG_DIR\testinetproutilsuriserver.exe	sys\bin\testinetproutilsuriserver.exe
 #endif
 
+
+
+// Script file for testing the functionality.
+data=DATAZ_\testdata\scripts\testinetproutilsurisuite.script		    testdata\scripts\testinetproutilsurisuite.script
+data=DATAZ_\testdata\scripts\testinetproutilsurisuiteOom.script      testdata\scripts\testinetproutilsurisuiteOom.script
+
+// Ini files
+data=DATAZ_\testdata\ini\testinetproutilsurisuite.ini			    testdata\ini\testinetproutilsurisuite.ini
+
+
+// The batch file to run the functionality tests
+data=EPOCROOT##Epoc32\tools\testinetprotutilssuite.bat	testinetprotutilssuite.bat
+
 // Other dependencies
 //#include <testexecute.iby>
 //#include <INetProtUtil.iby>

@@ -113,7 +113,18 @@ stlport_test.exe -n 1 -s 100
 
 md c:\logs
 
+bad_typeid_cast.exe
+dynamic_cast_test_exe.exe
+exc_interwork.exe
+new_handler_test.exe
+oper_new_test.exe 20
+terminate_handler_test.exe
+typeinfo_test.exe
+uncaught_exception_test.exe
+unexpected_bad_exc_test.exe
+unexpected_handler_test.exe
 
-copy c:\testreport_stdcpp.txt f:\
-
-
+copy c:\eh_test.txt e:\
+copy c:\testreport_stdcpp.txt e:\
+copy c:\logs\libstdcpp_runtime_tests.log e:\libstdcpp_runtime_tests.log
+del e:\sys$rom.zip

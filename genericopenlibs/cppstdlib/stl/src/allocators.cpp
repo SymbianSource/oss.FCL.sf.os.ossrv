@@ -39,6 +39,7 @@
 
 #include "lock_free_slist.h"
 
+
 #if defined(__SYMBIAN32__WSD__)
 #include "libstdcppwsd.h"
 
@@ -374,6 +375,7 @@ private:
 #endif /* _STLP_DO_CLEAN_NODE_ALLOC */
 
 public:
+
   /* __n must be > 0      */
   static void* _M_allocate(size_t& __n);
   /* __p may not be 0 */
@@ -386,6 +388,7 @@ public:
 
 #if !defined (_STLP_USE_LOCK_FREE_IMPLEMENTATION)
 void* __node_alloc_impl::_M_allocate(size_t& __n) {
+
   __n = _S_round_up(__n);
   _Obj * _STLP_VOLATILE * __my_free_list = _S_free_list + _S_FREELIST_INDEX(__n);
   _Obj *__r;
@@ -408,6 +411,7 @@ void* __node_alloc_impl::_M_allocate(size_t& __n) {
 }
 
 void __node_alloc_impl::_M_deallocate(void *__p, size_t __n) {
+   
   _Obj * _STLP_VOLATILE * __my_free_list = _S_free_list + _S_FREELIST_INDEX(__n);
   _Obj * __pobj = __STATIC_CAST(_Obj*, __p);
 

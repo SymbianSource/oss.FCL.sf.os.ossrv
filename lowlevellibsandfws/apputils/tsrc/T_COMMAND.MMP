@@ -13,7 +13,7 @@
 // Description:
 //
 
-target          t_command.exe	//RTEST
+target          t_command.exe
 targettype      EXE
 UID		0x1000007a
 VENDORID 0x70000001

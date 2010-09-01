@@ -57,7 +57,7 @@ EXPORT_C int WcharToTbuf16(const wchar_t* aSrc, TDes16& aDes)
    * reference to the descriptor where the result of conversion 
    * is stored 
    * @return Status code (0 is ESuccess, -1 is EInsufficientMemory, 
-   * -3 is EStringNoData, -6 is EUseNewMaxL )
+   * -3 is EStringNoData )
    */
 
 EXPORT_C  int WcharToHbufc16 (const wchar_t* aSrc ,HBufC16* aDes )
@@ -143,8 +143,7 @@ EXPORT_C int WcharpToTptrc16(const wchar_t* aSrc, TPtrC16& aDes)
    * @param aSrc is the wchar to be converted , aDes is the 
    * reference to the descriptor where the result of conversion 
    * is stored 
-   * @return Status code (0 is ESuccess ,-1 is EInsufficientMemory,
-   * -3 is EStringNoData, -4 is EInvalidPointer )
+   * @return Status code (0 is ESuccess ,-1 is EInsufficientMemory -3 is EStringNoData )
    */
 
 EXPORT_C int WcharToRbuf16(const wchar_t* aSrc, RBuf16& aDes)
@@ -158,8 +157,15 @@ EXPORT_C int WcharToRbuf16(const wchar_t* aSrc, RBuf16& aDes)
 	}
 	
 	wlen = wcslen(aSrc);
-
-  aDes.Copy((const unsigned short *)aSrc, wlen);	
-
+	
+    if (KErrNone == aDes.Create(wlen))
+    {
+    	aDes.Copy((const unsigned short *)aSrc, wlen);	
+    }
+	else 
+	{
+		retval = EInsufficientSystemMemory;
+	}
+	
 	return retval;
 }

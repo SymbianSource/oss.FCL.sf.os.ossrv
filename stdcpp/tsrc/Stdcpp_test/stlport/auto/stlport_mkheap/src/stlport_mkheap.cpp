@@ -113,12 +113,8 @@ Cstlport_mkheap* Cstlport_mkheap::NewL(
  #ifdef LIBC_OLD_BACKEND
     MrtInit();
 #endif
- #ifdef __ARMCC__
-    #pragma diag_suppress 830
- #endif    
     Cstlport_mkheap* self = new (ELeave) Cstlport_mkheap( aTestModuleIf );
 
- 
     CleanupStack::PushL( self );
     self->ConstructL();
     CleanupStack::Pop();

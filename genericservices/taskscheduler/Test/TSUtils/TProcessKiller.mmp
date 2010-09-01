@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET        tprocesskiller.exe		//RTEST
+TARGET        tprocesskiller.exe
 // needed to kill another process
 CAPABILITY  	PowerMgmt
 

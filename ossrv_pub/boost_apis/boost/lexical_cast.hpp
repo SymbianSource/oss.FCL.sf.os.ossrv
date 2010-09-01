@@ -217,7 +217,7 @@ namespace boost
         typedef typename detail::array_to_pointer_decay<Source>::type NewSource;
 
         detail::lexical_stream<Target, NewSource> interpreter;
-        Target result ;
+        Target result;
 
         if(!(interpreter << arg && interpreter >> result))
             throw_exception(bad_lexical_cast(typeid(NewSource), typeid(Target)));

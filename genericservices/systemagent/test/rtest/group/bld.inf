@@ -21,4 +21,4 @@ PRJ_TESTMMPFILES
 t_sysagt2.mmp
 t_persisthal.mmp
 t_initialisehal.mmp
-//t_haloomtests.mmp
+t_haloomtests.mmp

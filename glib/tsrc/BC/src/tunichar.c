@@ -30,7 +30,6 @@
 #include <glib.h>
 #include <fcntl.h>
 #include <goption.h>
-#include <stdlib.h>
 
 #ifdef SYMBIAN
 #include "mrt2_glib2_test.h"

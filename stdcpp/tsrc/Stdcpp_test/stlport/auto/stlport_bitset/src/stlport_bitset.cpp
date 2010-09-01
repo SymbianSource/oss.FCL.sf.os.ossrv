@@ -113,9 +113,6 @@ Cstlport_bitset* Cstlport_bitset::NewL(
 #ifdef LIBC_OLD_BACKEND
     MrtInit();
 #endif
- #ifdef __ARMCC__
-    #pragma diag_suppress 830
- #endif   
     Cstlport_bitset* self = new (ELeave) Cstlport_bitset( aTestModuleIf );
 
     CleanupStack::PushL( self );

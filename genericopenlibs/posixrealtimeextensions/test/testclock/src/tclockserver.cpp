@@ -67,7 +67,7 @@ LOCAL_C void MainL()
 	RProcess().DataCaging(RProcess::EDataCagingOn);
 	RProcess().SecureApi(RProcess::ESecureApiOn);
 #endif
-	//InitCommsL();
+	InitCommsL();
 	
 	CActiveScheduler* sched=NULL;
 	sched=new(ELeave) CActiveScheduler;

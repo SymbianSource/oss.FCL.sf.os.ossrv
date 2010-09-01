@@ -15,7 +15,7 @@
 // 
 //
 
-TARGET          	tu_tsch_schedulestate2.exe		//RTEST
+TARGET          	tu_tsch_schedulestate2.exe
 CAPABILITY			None
 TARGETTYPE			EXE
 

@@ -744,7 +744,7 @@ TInt Ctstl_3::Stack( CStifItemParser& aItem )
 
 
 //__UHEAP_MARK;
-   int failures=0;
+   int failures=0,i=0;
    try
    {
    	
@@ -1332,7 +1332,7 @@ void *f( void * )
  int sum =1;
   int i=2 ;
     list <int> L1;
-//    list <int>::iterator LIter1, LIterend;
+    list <int>::iterator LIter1, LIterend;
 
     int t;
     for ( t = 1 ; t <= 10 ; t++ )
@@ -1499,7 +1499,7 @@ void *f( void * )
     
     /*
     if(output[0]==26500) 
-   if(output[1]==19169)
+    if(output[1]==19169)
     if(output[2]== 18467)
     if(output[3]== 6334)
     if(output[4]== 6262)
@@ -1556,13 +1556,11 @@ void *f( void * )
   	int failures=0;
   //__UHEAP_MARK;
   try{
-  	
      // Create an array of ints
-     // int intArray [ ] = { 10, 20, 30, 40, 100, 200, 300, 1000, 2000 };
+    int intArray [ ] = { 10, 20, 30, 40, 100, 200, 300, 1000, 2000 };
+    int count = sizeof ( intArray ) / sizeof ( int );
+     
 
-    
-    int count = 9; //sizeof ( intArray ) / sizeof ( int );
-		
     pair<int *, ptrdiff_t> resultPair;
     // cout<<""; 
       #if  STDCPP_OOM
@@ -1705,8 +1703,8 @@ void *f( void * )
   	
   vector <int> v1, v2;
     list <int> L1;
-//    vector <int>::iterator Iter1, Iter2;
-//    list <int>::iterator L1_Iter, L1_inIter;
+    vector <int>::iterator Iter1, Iter2;
+    list <int>::iterator L1_Iter, L1_inIter;
 
     int i;
     for ( i = 0 ; i <= 5 ; i++ )
@@ -2199,7 +2197,7 @@ void *f( void * )
    //  __UHEAP_MARK;
  try{
       vector <int> v1;
-//    vector <int>::iterator v1Iter;
+    vector <int>::iterator v1Iter;
     vector <int>:: allocator_type v1Alloc;
      
     int i;
@@ -2479,7 +2477,7 @@ void *f( void * )
      	
      	try{
      vector <int> v1;
-//    vector <int>::iterator v1Iter;
+    vector <int>::iterator v1Iter;
     vector <int>:: allocator_type v1Alloc;
 
      

@@ -28,7 +28,7 @@ char getSystemConfDriveLetter()
 	 TFindFile findFile(fs);
 	 
 	 char *cpath = NULL;
-	 char drive = ' ';
+	 char drive;
 
 	 if (findFile.FindByDir(_L("system.conf"),_L("\\data\\dbus\\")) == KErrNone   )
 	 {

@@ -14,4 +14,4 @@
 @rem Description:
 @rem
 
-testexecute.exe c:\TestData\Scripts\TestFileUriSuite.script
+testexecute.exe Z:\TestData\Scripts\TestFileUriSuite.script

@@ -29,7 +29,6 @@
 #include "testcommon.h"
 #include "testmodule.h"
 #include "mambaz.h"
-#include <stdlib.h>
 
 #ifdef SYMBIAN
 #include "mrt2_glib2_test.h"

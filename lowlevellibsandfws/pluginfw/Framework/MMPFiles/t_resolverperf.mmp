@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET      t_resolverperf.exe		//RTEST
+TARGET      t_resolverperf.exe
 TARGETTYPE  exe
 
 

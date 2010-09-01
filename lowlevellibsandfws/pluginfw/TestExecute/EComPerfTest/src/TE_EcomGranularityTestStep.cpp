@@ -33,7 +33,7 @@ _LIT (KMaxGranImplUidIndex, "MaxGranImplUidIndex");
 
 
 /** Stub class needed to instantiate CRegistrar object. */
-class CTestRegistrarObserver : public MRegistrarObserver // codescanner::missingcclass
+class CTestRegistrarObserver : public MRegistrarObserver
 	{
 public:
 	// This is a stub. Hence do nothing in notification.

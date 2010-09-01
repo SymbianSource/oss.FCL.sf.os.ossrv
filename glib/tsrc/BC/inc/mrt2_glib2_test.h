@@ -28,7 +28,6 @@
 #include <time.h>
 #include <string.h>
 #include <dirent.h>
-#include <sys/stat.h>
 
 gboolean assert_failed = FALSE;
 

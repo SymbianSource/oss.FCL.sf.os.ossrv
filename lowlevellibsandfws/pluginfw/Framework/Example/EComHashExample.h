@@ -18,7 +18,7 @@
 
 // ____________________________________________________________________________
 // 
-class CImplementationHashExample // codescanner::missingcclass
+class CImplementationHashExample
 {
 public:
 	static CImplementationHashExample* NewL(TAny* aInitParams);

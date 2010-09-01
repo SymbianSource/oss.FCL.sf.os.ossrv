@@ -21,7 +21,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-int main()
+void main()
 {
     int retval =ESuccess;
     wstring des;
@@ -31,7 +31,7 @@ int main()
     buf.Create(10);
     buf.Copy((TUint8 *)"Hello", 5);
     buf.CleanupClosePushL();
-    //int size =5;
+    int size =5;
     retval = Rbuf8ToWstring(buf, des  );
 
     if (retval == ESuccess)
@@ -47,5 +47,4 @@ int main()
     }
     __UHEAP_MARKEND;    
     testResultXml("test_rbuf8towstring_negative2");
-	return 0;
 }

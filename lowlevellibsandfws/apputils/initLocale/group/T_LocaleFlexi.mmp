@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET			t_localeflexi.exe		//RTEST
+TARGET			t_localeflexi.exe
 TARGETTYPE		exe
 
 VENDORID 		0x70000001

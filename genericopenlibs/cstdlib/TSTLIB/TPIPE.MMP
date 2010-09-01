@@ -18,7 +18,7 @@
 OPTION CW   -w off
 
 TARGETTYPE		exe
-TARGET			tpipe_cstdlib.exe
+TARGET			tpipe.exe
 
 SOURCEPATH	../TSTLIB
 SOURCE			TPIPE.C

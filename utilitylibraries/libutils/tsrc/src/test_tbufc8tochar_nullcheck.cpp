@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-int main()
+void main()
 {
     __UHEAP_MARK;
     TBufC8<20>src ((TText8*)"#$%^&*()");
@@ -40,5 +40,4 @@ int main()
     }	
     __UHEAP_MARKEND;
     testResultXml("Test_tbufc8tochar_nullcheck");
-	return 0;
 }

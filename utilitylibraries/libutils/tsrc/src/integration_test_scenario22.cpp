@@ -20,7 +20,7 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-int main()
+void main()
 {
     __UHEAP_MARK;
     {
@@ -47,12 +47,6 @@ int main()
     wchar_t* myFinWchar = new wchar_t[21];
     int size = 20;
     retval[5] = Tptrc8ToWcharp(myTptr8,myFinWchar,size);
-    
-    for(int i=1; i<=5; i++)
-        {
-        if (retval[i]!= 0)
-                printf("Conversion failed for retval\n",retval[i]);
-        }
 
     if(!wcscmp(myWchar,myFinWchar))
     {
@@ -69,5 +63,4 @@ int main()
     }
     __UHEAP_MARKEND;
     testResultXml("integration_test_scenario22");
-    return 0;
 }

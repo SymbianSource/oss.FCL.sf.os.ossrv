@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET      t_ecomdefect.exe		//RTEST
+TARGET      t_ecomdefect.exe
 TARGETTYPE  exe
 
 SOURCEPATH  ../../Framework/SimpleTests

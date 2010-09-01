@@ -23,13 +23,8 @@
 
 void DeleteFileL(const TDesC& aFile)
 	{
-	TInt r = KErrNone;
 	RLoader rloader;
-	r = rloader.Connect();
-	if (r != KErrNone)
-		{
-			User::Leave(r);
-		}
+	rloader.Connect();
 	CleanupClosePushL(rloader);
   
     TInt err = rloader.Delete(aFile);

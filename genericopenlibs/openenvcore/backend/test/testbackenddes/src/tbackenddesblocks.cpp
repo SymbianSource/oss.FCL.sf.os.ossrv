@@ -66,7 +66,6 @@ TInt CTestBackendDes::CLSIDesTest()
 	RLibrary lBackendLib;
 	TLibraryFunction backendFn = NULL;
 	CLocalSystemInterface* lClsi = 0;
-	lClsi = lClsi;
 	typedef CLocalSystemInterface* (*fnBackend)();
 	
 	fnBackend backendFnActual = NULL;

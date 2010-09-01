@@ -1011,13 +1011,11 @@ template<class T> inline void _STLP_no_unused_variable_warning(const T &) {}
 #  endif
 #  if defined (_STLP_DESIGNATED_DLL) /* This is a lib which will contain STLport exports */
 #   define  _STLP_DECLSPEC        _STLP_IMPORT_DECLSPEC 
-#   define  _STLP_DUMMY_IMP_DECLSPEC    _STLP_DECLSPEC 
 #   define  _STLP_EXP_DECLSPEC    _STLP_EXPORT_DECLSPEC
 #   define  _STLP_CLASS_DECLSPEC  _STLP_CLASS_EXPORT_DECLSPEC 
 #  else
-#   define  _STLP_DECLSPEC        _STLP_IMPORT_DECLSPEC   /* Other modules, importing STLport exports */
-#   define  _STLP_DUMMY_IMP_DECLSPEC     /* correction for RCT4.0 */
-#   define  _STLP_EXP_DECLSPEC    // _STLP_EXPORT_DECLSPEC
+#   define  _STLP_DECLSPEC        //_STLP_IMPORT_DECLSPEC   /* Other modules, importing STLport exports */
+#   define  _STLP_EXP_DECLSPEC    //_STLP_EXPORT_DECLSPEC
 #   define  _STLP_CLASS_DECLSPEC  _STLP_CLASS_IMPORT_DECLSPEC
 #   undef _STLP_USE_NAMESPACES
 #   define _STLP_USE_NAMESPACES

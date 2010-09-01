@@ -115,12 +115,9 @@ Cstlport_parsrtc* Cstlport_parsrtc::NewL(
     #ifdef LIBC_OLD_BACKEND
       MrtInit();
     #endif
-    #ifdef __ARMCC__
-    #pragma diag_suppress 830
-    #endif
+    
     Cstlport_parsrtc* self = new (ELeave) Cstlport_parsrtc( aTestModuleIf );
 
-    
     CleanupStack::PushL( self );
     self->ConstructL();
     CleanupStack::Pop();

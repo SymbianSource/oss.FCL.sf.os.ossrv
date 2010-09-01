@@ -113,11 +113,7 @@ Cstlport_merge* Cstlport_merge::NewL(
 #ifdef LIBC_OLD_BACKEND
     MrtInit();
 #endif
- #ifdef __ARMCC__
-    #pragma diag_suppress 830
- #endif    
     Cstlport_merge* self = new (ELeave) Cstlport_merge( aTestModuleIf );
-
 
     CleanupStack::PushL( self );
     self->ConstructL();

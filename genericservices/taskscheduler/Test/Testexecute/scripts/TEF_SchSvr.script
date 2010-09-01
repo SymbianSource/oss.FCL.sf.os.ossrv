@@ -17,6 +17,6 @@
 
 PRINT SchSvr TEF Tests
 
-RUN_SCRIPT  C:\TEF_SchSvr\TEF_SSA_ScheduleSuite.script
-RUN_SCRIPT  C:\TEF_SchSvr\te_floating_scheduleSuite.script
-RUN_SCRIPT  C:\TEF_SchSvr\tef_schsvr_bursuite.script
+RUN_SCRIPT  z:\TEF_SchSvr\TEF_SSA_ScheduleSuite.script
+RUN_SCRIPT  z:\TEF_SchSvr\te_floating_scheduleSuite.script
+RUN_SCRIPT  z:\TEF_SchSvr\tef_schsvr_bursuite.script

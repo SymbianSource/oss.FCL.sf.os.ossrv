@@ -208,13 +208,8 @@ EXPORT_C THardwareConfiguration EComTestUtils::GetHardwareConfiguration()
 		}
 
 	//determine the ROM confguration (NAND or non-NAND)
-	TInt r = KErrNone;
 	RFs fs;
-	r = fs.Connect();
-	if (r != KErrNone)
-		{
-			return r;
-		}
+	fs.Connect();
 	TBool nandBuild = (EComTestUtils::RomBuildType(fs)==ENandRomBuild);
 	fs.Close();
 	
@@ -256,12 +251,8 @@ EXPORT_C THardwareConfiguration EComTestUtils::GetHardwareConfiguration()
 			//is also checking the media type of C drive to determine the same.
 			//Currently added this check for WDP enabled in case of H4 'muid == HAL::EMachineUid_OmapH4' only
 			TDriveInfo driveInfo;
-			TInt rf = KErrNone;
-			rf = fs.Connect();
-			if (rf != KErrNone)
-		  		{
-			  return rf;
-		  		}
+			
+			fs.Connect();
 			fs.Drive(driveInfo, EDriveC);
 			fs.Close();
 

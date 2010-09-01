@@ -177,7 +177,6 @@ int main()
     if (fd > 0)
         {
         buf1 = "done2"; //for checkpoint 2
-        sleep(2);
         err = write(fd, buf1, strlen(buf1));
         close(fd);
         }

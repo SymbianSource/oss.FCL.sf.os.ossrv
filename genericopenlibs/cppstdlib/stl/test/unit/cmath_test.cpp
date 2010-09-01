@@ -32,7 +32,7 @@
 //
 // TestCase class
 //
-class CMathTest : public CPPUNIT_NS::TestCase // codescanner::missingcclass
+class CMathTest : public CPPUNIT_NS::TestCase
 {
   CPPUNIT_TEST_SUITE(CMathTest);
   CPPUNIT_TEST(test);

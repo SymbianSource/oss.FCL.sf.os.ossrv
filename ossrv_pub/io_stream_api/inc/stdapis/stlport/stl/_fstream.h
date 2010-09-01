@@ -96,7 +96,7 @@ public:                      // Opening and closing files.
 
   _STLP_DECLSPEC bool _M_open(const char*, ios_base::openmode, long __protection);
   _STLP_DECLSPEC bool _M_open(const char*, ios_base::openmode);
-  bool _M_open(int __id, ios_base::openmode = ios_base::__default_mode);
+  _STLP_DECLSPEC bool _M_open(int __id, ios_base::openmode = ios_base::__default_mode);
   _STLP_DECLSPEC bool _M_close();
 
 public:                      // Low-level I/O, like Unix read/write
@@ -687,7 +687,7 @@ public:                         // Types
 
 public:                         // Constructors, destructor.
   
-  _STLP_DUMMY_IMP_DECLSPEC basic_fstream();
+  _STLP_DECLSPEC basic_fstream();
   explicit basic_fstream(const char* __s,
                          ios_base::openmode __mod = ios_base::in | ios_base::out) :
     basic_ios<_CharT, _Traits>(), basic_iostream<_CharT, _Traits>(0), _M_buf() {
@@ -711,7 +711,7 @@ public:                         // Constructors, destructor.
       this->setstate(ios_base::failbit);  
   }
 # endif    
-  _STLP_DUMMY_IMP_DECLSPEC ~basic_fstream();
+  _STLP_DECLSPEC ~basic_fstream();
 
 public:                         // File and buffer operations.
 

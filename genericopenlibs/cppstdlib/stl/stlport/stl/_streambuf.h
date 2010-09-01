@@ -379,6 +379,7 @@ private: // Data members.
 #endif
 };
 
+
 #if defined (_STLP_USE_TEMPLATE_EXPORT)
 _STLP_EXPORT_TEMPLATE_CLASS basic_streambuf<char, char_traits<char> >;
 #  if !defined (_STLP_NO_WCHAR_T)

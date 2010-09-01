@@ -21,12 +21,11 @@
 #include "libutils.h"
 #include"std_log_result.h"
 #define LOG_FILENAME_LINE __FILE__, __LINE__
-int main()
+void main()
 {
     wstring str(L"Hello World");
     __UHEAP_MARK;
     RBuf16 buf;
-    buf.CreateL(30);
     buf.CleanupClosePushL();
     int retval =ESuccess;
     retval = WstringToRbuf16(str, buf);
@@ -43,5 +42,4 @@ int main()
     CleanupStack::PopAndDestroy(1);
     __UHEAP_MARKEND;
     testResultXml("test_wstringtorbuf16_positive");
-	return 0;
 }

@@ -20,7 +20,7 @@ OPTION MSVC 		/W0
 OPTION GCC  		-w
 
 TARGETTYPE		exe
-TARGET			t_waitpid_launch.exe	//RTEST
+TARGET			t_waitpid_launch.exe
 
 SOURCEPATH		../TSTLIB
 SOURCE			t_waitpid_launch.cpp

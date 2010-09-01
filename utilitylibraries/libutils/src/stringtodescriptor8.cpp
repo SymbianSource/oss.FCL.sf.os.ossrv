@@ -79,7 +79,7 @@ EXPORT_C int StringToTptrc8(string& aSrc, TPtrC8& aDes)
    * @param aSrc is the string to be converted , aDes is the 
    * reference to the descriptor where the result of conversion 
    * is stored
-   * @return Status code (0 is ESuccess, -3 is EStringNoData, -1 is EInsufficientMemory)
+   * @return Status code (0 is ESuccess, -3 is EStringNoData)
    */
 
 EXPORT_C  int StringToTptr8 (string& aSrc, TPtr8& aDes)
@@ -110,7 +110,7 @@ EXPORT_C  int StringToTptr8 (string& aSrc, TPtr8& aDes)
    * reference to the descriptor where the result of conversion 
    * is stored 
    * @return Status code (0 is ESuccess, -1 is EInsufficientMemory, 
-   * -3 is EStringNoData , -5 is EUseNewMaxL , -4 is EInvalidPointer )
+   * -3 is EStringNoData , -5 is EUSENEWMAXL )
    */
 
 EXPORT_C int StringToHbufc8(string& aSrc , HBufC8* aDes)
@@ -148,7 +148,7 @@ EXPORT_C int StringToHbufc8(string& aSrc , HBufC8* aDes)
    * @param aSrc is the string to be converted , aDes is the 
    * reference to the descriptor where the result of conversion 
    * is stored
-   * @return Status code (0 is ESuccess,-3 is EStringNoData, -9 is EInsufficientSystemMemory)
+   * @return Status code (0 is ESuccess,-3 is EStringNoData)
    */  
 
 EXPORT_C int StringToRbuf8(const string& aSrc, RBuf8& aDes)
@@ -161,8 +161,15 @@ EXPORT_C int StringToRbuf8(const string& aSrc, RBuf8& aDes)
     }
     
     int ilen = strlen(charString);
-
-    aDes.Copy((const unsigned char *)charString, ilen);	
+    
+    if (KErrNone == aDes.Create(ilen))
+    {
+    	aDes.Copy((const unsigned char *)charString, ilen);	
+    }
+	else 
+	{
+        retval = EInsufficientSystemMemory;	
+	}
 	
-	  return retval;
+	return retval;
 }

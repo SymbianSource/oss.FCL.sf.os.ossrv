@@ -13,7 +13,7 @@
 // Description:
 //
 
-target		t_backupserverlauncher.exe	//RTEST
+target		t_backupserverlauncher.exe
 CAPABILITY ProtServ
 targettype	exe
 

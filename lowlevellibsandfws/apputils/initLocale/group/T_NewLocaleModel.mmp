@@ -15,7 +15,7 @@
 
 
 
-TARGET		t_NewLocaleModel.exe	//RTEST
+TARGET		t_NewLocaleModel.exe
 CAPABILITY	WriteDeviceData
 TARGETTYPE	EXE
 

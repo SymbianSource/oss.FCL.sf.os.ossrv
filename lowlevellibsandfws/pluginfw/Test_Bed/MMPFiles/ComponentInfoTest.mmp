@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET componentinfotest.exe		//RTEST
+TARGET componentinfotest.exe
 TARGETTYPE EXE
 
 // UIDs for loading

@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET t_fileutils.exe	//RTEST
+TARGET t_fileutils.exe
 TARGETTYPE EXE
 
 // UID for loading

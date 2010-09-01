@@ -114,9 +114,6 @@ Cstlport_iota* Cstlport_iota::NewL(
 #ifdef LIBC_OLD_BACKEND
     MrtInit();
 #endif
- #ifdef __ARMCC__
-    #pragma diag_suppress 830
- #endif    
     Cstlport_iota* self = new (ELeave) Cstlport_iota( aTestModuleIf );
 
     CleanupStack::PushL( self );

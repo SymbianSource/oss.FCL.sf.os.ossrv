@@ -365,7 +365,7 @@ TInt Ctstl_4::Adjacent_difference(CStifItemParser& aItem)
 int array1[10];
 int array2[10];
  list <int> L1;
-// list <int>::iterator LIter1, LIterend, LIterend2;
+ list <int>::iterator LIter1, LIterend, LIterend2;
 
  int t;
  for ( t = 1 ; t <= 10 ; t++ )
@@ -524,7 +524,7 @@ TInt Ctstl_4::Adjacent_find(CStifItemParser& aItem)
  	10,20,30,40,50,60,70
  };
 vector<int> myvector (myints,myints+8) ,myvector1(myints1,myints1+7);
-vector<int>::iterator it; 
+vector<int>::iterator it,it2; 
 //cout<<"";
 #if  STDCPP_OOM
 User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
@@ -1581,12 +1581,13 @@ int array4[4] ={30,40,50,60  }; //not found iterator
 
 vector <int> v1(array1,array1+12), v2(array2,array2+3),v3(array3,array3+4);
   vector<int> v4(array4,array4+4);
-//  vector <int>::iterator Iter1, Iter2,Iter3 ,Iter4;
+  vector <int>::iterator Iter1, Iter2,Iter3 ,Iter4;
 
 
-vector <int>::iterator result1;
+  
 
- 	
+ 
+ vector <int>::iterator result1,result2; 
  //cout<<"";
  #if  STDCPP_OOM
 	User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
@@ -1594,7 +1595,7 @@ vector <int>::iterator result1;
 	 #endif
  result1 = find_end( v1.begin( ), v1.end( ), v3.begin( ), v3.end( ) );
  
-// result2 = find_end ( v1.begin( ), v1.end( ), v4.begin( ), v4.end( ) );
+ result2 = find_end ( v1.begin( ), v1.end( ), v4.begin( ), v4.end( ) );
 #if  STDCPP_OOM 	
 User::__DbgSetAllocFail(FALSE,RHeap::ENone,1);
 
@@ -1728,7 +1729,7 @@ User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
 #endif 
 test_variable1  = *max_element(test_array1,test_array1 + 8);
 test_variable2 = *max_element(test_array2,test_array2+5);
-int test_variable3 =*max_element(test_array1,test_array1 + 7);
+int test_variable3 =*max_element(test_array1,test_array1 + 10);
 
 #if  STDCPP_OOM 	
 User::__DbgSetAllocFail(FALSE,RHeap::ENone,1);
@@ -2149,7 +2150,7 @@ User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
      int result_int1;
      int result_int2;
      char result_char;
-//     float result_float;
+     float result_float;
      #if  STDCPP_OOM
 User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
   
@@ -2526,7 +2527,7 @@ User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
    // vector <int>::iterator vIter;
      
 
-//    vector <int>::reverse_iterator rvIter;
+    vector <int>::reverse_iterator rvIter;
      
     vector <int>::iterator pos;
     
@@ -2586,7 +2587,7 @@ User::__DbgSetAllocFail(FALSE,RHeap::EDeterministic,1);
     }
     
     
-    list <int>::iterator  LPOS = L.begin ( );
+    list <int>::iterator L_Iter, LPOS = L.begin ( );
 
    
   

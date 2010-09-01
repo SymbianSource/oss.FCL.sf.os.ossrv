@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET      t_ecombur.exe		//RTEST
+TARGET      t_ecombur.exe
 TARGETTYPE  exe
 
 SOURCEPATH  ../../Framework/SimpleTests

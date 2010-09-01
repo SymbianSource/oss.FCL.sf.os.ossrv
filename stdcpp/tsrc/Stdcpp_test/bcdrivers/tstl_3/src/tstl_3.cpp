@@ -108,12 +108,8 @@ void Ctstl_3::ConstructL()
 Ctstl_3* Ctstl_3::NewL( 
     CTestModuleIf& aTestModuleIf )
     {
-    #ifdef __ARMCC__	
-    #pragma diag_suppress 830
-    #endif
     Ctstl_3* self = new (ELeave) Ctstl_3( aTestModuleIf );
-    
-    
+
     CleanupStack::PushL( self );
     self->ConstructL();
     CleanupStack::Pop();

@@ -108,12 +108,8 @@ void Ctlocale::ConstructL()
 Ctlocale* Ctlocale::NewL( 
     CTestModuleIf& aTestModuleIf )
     {
-    #ifdef __ARMCC__	
-    #pragma diag_suppress 830
-    #endif
     Ctlocale* self = new (ELeave) Ctlocale( aTestModuleIf );
-    
-    
+
     CleanupStack::PushL( self );
     self->ConstructL();
     CleanupStack::Pop();

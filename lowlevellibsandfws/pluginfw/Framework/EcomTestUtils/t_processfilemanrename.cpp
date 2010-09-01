@@ -24,13 +24,8 @@ _LIT(KSeparator, "|"); // Invalid filepath char used to separate filenames
 
 TInt DoRenameFileL(const TDesC& anOld,const TDesC& aNew)
 	{
-	TInt r = KErrNone;	
 	RFs fs;
-	r = fs.Connect();
-	if (r != KErrNone)
-		{
-			User::Leave(r);
-		}
+	fs.Connect();
 	CFileMan* fileMan = CFileMan::NewL(fs);
 	CleanupStack::PushL(fileMan); 
 	// Ensure the path exists

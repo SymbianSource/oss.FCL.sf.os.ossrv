@@ -15,7 +15,7 @@
 *
 */
 
-TARGET			t_ssnd.exe	//RTEST
+TARGET			t_ssnd.exe
 
 TARGETTYPE		exe
 

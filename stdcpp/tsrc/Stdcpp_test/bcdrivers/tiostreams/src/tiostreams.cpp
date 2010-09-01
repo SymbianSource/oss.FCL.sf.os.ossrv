@@ -108,12 +108,8 @@ void Ctiostreams::ConstructL()
 Ctiostreams* Ctiostreams::NewL( 
     CTestModuleIf& aTestModuleIf )
     {
-    #ifdef __ARMCC__	
-    #pragma diag_suppress 830
-    #endif
     Ctiostreams* self = new (ELeave) Ctiostreams( aTestModuleIf );
-    
-    
+
     CleanupStack::PushL( self );
     self->ConstructL();
     CleanupStack::Pop();

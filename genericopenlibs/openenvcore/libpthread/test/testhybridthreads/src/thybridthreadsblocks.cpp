@@ -78,18 +78,14 @@ TVerdict CTestHybridThreads::Testpthreadjoin (  )
 	SetTestStepResult(EFail);
 	
 	RSemaphore bSem;
-	
-	void* rptr = 0;
 	ret = bSem.CreateGlobal(_L("HybridB"),0);
 	if(ret != KErrNone) 
 		{
 		ERR_PRINTF1(_L("Unable to create semaphore"));
-		bSem.Close();
-		return TestStepResult();
+		goto close;
 		}
 	
 	RSemaphore aSem;
-	RThread tmpThread;
 	ret = aSem.CreateGlobal(_L("HybridA"),0);
 	if(ret != KErrNone) 
 		{
@@ -104,8 +100,7 @@ TVerdict CTestHybridThreads::Testpthreadjoin (  )
 		goto close;
 		}
 
-
-	
+	RThread tmpThread;
 	ret = tmpThread.Create(_L("HybridThread"),reinterpret_cast<TThreadFunction>(threadAMethod),
 								0x5000,NULL,(void*)&threadB);
 	if(0 != ret)
@@ -121,7 +116,7 @@ TVerdict CTestHybridThreads::Testpthreadjoin (  )
 
 	INFO_PRINTF1(_L("Before pthread_join"));
 
-	
+	void* rptr = 0;
 	ret = pthread_join(threadB,&rptr);
 	if(0 != ret){
 		ERR_PRINTF2(_L("Error returned by pthread_join: %d"),ret);
@@ -174,7 +169,6 @@ TInt theThread(TAny *parm)
    threadSpecific_data_t    *gData;
    gData = (threadSpecific_data_t *)parm;
    rc = pthread_setspecific(threadSpecificKey, gData);
-   rc = rc;
    foo();
    pthread_exit(0);
    return 0;
@@ -195,7 +189,6 @@ void dataDestructor(void *data)
     {
     int rc;
     rc = pthread_setspecific(threadSpecificKey, NULL);
-    rc = rc;
     threadSpecific_data_t    *gData = (threadSpecific_data_t    *)data;
     free(gData);
     }

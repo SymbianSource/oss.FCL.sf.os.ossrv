@@ -14,5 +14,5 @@
 @rem Description:
 @rem
 
-testexecute.exe c:\testdata\scripts\TestInetProUtilsUriSuite.script
-testexecute.exe c:\testdata\scripts\TestInetProUtilsUriSuiteOom.script
+testexecute.exe z:\testdata\scripts\TestInetProUtilsUriSuite.script
+testexecute.exe z:\testdata\scripts\TestInetProUtilsUriSuiteOom.script

@@ -76,7 +76,7 @@ protected:
 @test
 @internalComponent
 */
-class CResolverInstallStep : public CinstallStep // codescanner::missingcclass
+class CResolverInstallStep : public CinstallStep
 	{
 public:
 	CResolverInstallStep(CinstallStep::TInstallType aInstallType);
@@ -118,7 +118,7 @@ private:
  * @test
  * @internalComponent
  */
-class CResolverUninstallStep : public CuninstallStep // codescanner::missingcclass
+class CResolverUninstallStep : public CuninstallStep
 	{
 public:
 	CResolverUninstallStep(CuninstallStep::TUninstallType aType);

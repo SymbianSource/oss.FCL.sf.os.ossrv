@@ -17,7 +17,7 @@
 file=ABI_DIR\BUILD_DIR\stlport_test.exe					sys\bin\stlport_test.exe
 file=ABI_DIR\BUILD_DIR\stlport_unit_test.exe			sys\bin\stlport_unit_test.exe
 file=ABI_DIR\BUILD_DIR\stlport_extraExports.dll			sys\bin\stlport_extraExports.dll
-//file=ABI_DIR\BUILD_DIR\stdioserver.exe					sys\bin\stdioserver.exe
+file=ABI_DIR\BUILD_DIR\stdioserver.exe					sys\bin\stdioserver.exe
 file=ABI_DIR\BUILD_DIR\uncaught_exception_test.exe		sys\bin\uncaught_exception_test.exe
 file=ABI_DIR\BUILD_DIR\terminate_handler_test.exe		sys\bin\terminate_handler_test.exe
 file=ABI_DIR\BUILD_DIR\oper_new_test.exe				sys\bin\oper_new_test.exe
