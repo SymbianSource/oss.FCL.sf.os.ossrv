@@ -7,6 +7,10 @@
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
+#if (__ARMCC_VERSION >= 300000)
+#pragma O2
+#endif
+
 #include "zutil.h"
 #include "inftrees.h"
 #include "inflate.h"

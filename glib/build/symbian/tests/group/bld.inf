@@ -95,3 +95,17 @@ uri_test.mmp
 utf8_pointer.mmp
 utf8_validate.mmp
 
+array_test1.mmp
+array_test2.mmp
+app_name.mmp
+at_exit.mmp
+base_name.mmp
+bookmarkfile_test1.mmp
+list_env.mmp
+majorversion_test.mmp
+nullify_ptr.mmp
+test_utils.mmp
+unichar_test.mmp
+uri_funcs.mmp
+utf8_string.mmp
+
