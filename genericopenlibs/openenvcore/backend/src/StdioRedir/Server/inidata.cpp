@@ -156,163 +156,171 @@
  //
 
  TBool CIniData::FindVar(const TDesC &aSectName,const TDesC &aKeyName,TPtrC &aResult)
- /* Find a text value from given aKeyName and aSecName in the ini data file
+ 	{
+ 	TInt posStartOfSection(0);
+ 	TInt posEndOfSection(iPtr.Length()); // Default to the entire length of the ini data
+ 	TPtrC SearchBuf;
 
- @param aSectName Section containing key
- @param aKeyName Key being searched for in aSectName
- @param aResult On return, contains the text result
+ 	// If we have a section, set pos to section start
+ 	TInt posI(0);	// Position in internal data Buffer
+ 	if( aSectName.Length() > 0 )
+ 		{
+ 		TBool FoundSection(false);
+ 		while ( ! FoundSection )
+ 			{
+ 			// Move search buffer to next area of interest
+ 			SearchBuf.Set(iPtr.Mid(posI));
 
- @return ETrue if found, otherwise EFalse
+ 			// Make up token "[SECTIONNAME]", to search for
+ 			TPtr sectionToken=iToken->Des();
+ 			_LIT(sectionTokenFmtString,"[%S]");
+ 			sectionToken.Format(sectionTokenFmtString,&aSectName);
 
- */
-     {
+ 			// Search for next occurrence of aSectName
+ 			TInt posSB = SearchBuf.Find(sectionToken);
 
-     __ASSERT_DEBUG(aSectName.Length()<=KTokenSize,Panic(ESectionNameTooBig));
-     __ASSERT_DEBUG(aKeyName.Length()<=KTokenSize,Panic(EKeyNameTooBig));
+ 			if (posSB==KErrNotFound)
+ 				return(EFalse);
 
-     TInt posStartOfSection(0);
-     TInt posEndOfSection(iPtr.Length()); // Default to the entire length of the ini data
-     TPtrC SearchBuf;
+ 			// Check this is at beginning of line (ie. non-commented)
+ 			// ie. Check preceding char was LF
+ 			if(posSB>0)
+ 				{
+ 				// Create a Buffer, starting one char before found subBuf
+ 				TPtrC CharBefore(SearchBuf.Right(SearchBuf.Length()-posSB+1));
+ 				// Check first char is end of prev
+ 				if(CharBefore[0] == '\n')
+ 					{
+ 					FoundSection = ETrue;		// found
+ 					posI = posI + posSB;
+ 					}
+ 				else
+ 					{
+ 					posI = posI + posSB + 1;	// try again
+ 					}
+ 				}
+ 			else
+ 				{
+ 				FoundSection = ETrue;
+ 				}
 
-     // If we have a section, set pos to section start
-     TInt posI(0);   // Position in internal data Buffer
-     if( aSectName.Length() > 0 )
-         {
-         TBool FoundSection(false);
-         while ( ! FoundSection )
-             {
-             // Move search buffer to next area of interest
-             SearchBuf.Set(iPtr.Mid(posI));
+ 			}	// while ( ! FoundSection ) 
 
-             // Make up token "[SECTIONNAME]", to search for
-             TPtr sectionToken=iToken->Des();
-             _LIT(sectionTokenFmtString,"[%S]");
-             sectionToken.Format(sectionTokenFmtString,&aSectName);
+ 		// Set start of section, after section name, (incl '[' and ']')
+ 		posStartOfSection = posI + aSectName.Length() + 2;
 
-             // Search for next occurrence of aSectName
-             TInt posSB = SearchBuf.Find(sectionToken);
+ 		// Set end of section, by finding begin of next section or end
+ 		SearchBuf.Set(iPtr.Mid(posI));
+ 		_LIT(nextSectionBuf,"\n[");
+ 		TInt posSB = SearchBuf.Find(nextSectionBuf);
+ 		if(posSB != KErrNotFound)
+ 			{
+ 			posEndOfSection = posI + posSB;
+ 			}
+ 		else
+ 			{
+ 			posEndOfSection = iPtr.Length();
+ 			}
 
-             if (posSB==KErrNotFound)
-                 return(EFalse);
+ 		}	// if( aSectName.Length() > 0 )
 
-             // Check this is at beginning of line (ie. non-commented)
-             // ie. Check preceding char was LF
-             if(posSB>0)
-                 {
-                 // Create a Buffer, starting one char before found subBuf
-                 TPtrC CharBefore(SearchBuf.Right(SearchBuf.Length()-posSB+1));
-                 // Check first char is end of prev
-                 if(CharBefore[0] == '\n')
-                     {
-                     FoundSection = ETrue;       // found
-                     posI = posI + posSB;
-                     }
-                 else
-                     {
-                     posI = posI + posSB + 1;    // try again
-                     }
-                 }
-             else
-                 {
-                 FoundSection = ETrue;
-                 }
+ 	// Look for key in ini file data Buffer
+ 	posI = posStartOfSection;
+ 	TBool FoundKey(false);
+ 	while ( ! FoundKey )
+ 		{
+ 		// Search for next occurrence of aKeyName
+ 		SearchBuf.Set(iPtr.Mid(posI,posEndOfSection-posI));
+ 		TInt posSB = SearchBuf.Find(aKeyName);
 
-             }   // while ( ! FoundSection )
+ 		// If not found, return
+ 		if (posSB==KErrNotFound)
+ 			return(EFalse);
 
-         // Set start of section, after section name, (incl '[' and ']')
-         posStartOfSection = posI + aSectName.Length() + 2;
+ 		// Check this is at beginning of line (ie. non-commented)
+ 		// ie. Check preceding char was CR or LF
+ 		if(posSB>0)
+ 			{
+ 			// Create a Buffer, starting one char before found subBuf
+ 			TPtrC CharBefore(SearchBuf.Right(SearchBuf.Length()-posSB+1));
+ 			// Check if the first char is end of prev and also check 
+ 			// if the token found is not a substring of another string  
+ 			TBool beginningOK = ((CharBefore[0] == '\n') || (CharBefore[0] == ' ') || (CharBefore[0] == '\t'));
+ 			TBool endingOK = ((CharBefore[aKeyName.Length()+1] == '=') || (CharBefore[aKeyName.Length()+1] == ' ') || (CharBefore[aKeyName.Length()+1] == '\t'));
+ 			if (beginningOK && endingOK)
+ 				{
+ 				FoundKey = ETrue;
+ 				posI = posI + posSB;
+ 				}
+ 			else
+ 				{
+ 				posI = posI + posSB + 1;
+ 				}
+ 			}
+ 		else
+ 			{
+ 			FoundKey = ETrue;
+ 			}
+ 		}	// while ( ! FoundKey )
 
-         // Set end of section, by finding begin of next section or end
-         SearchBuf.Set(iPtr.Mid(posI));
-         _LIT(nextSectionBuf,"\n[");
-         TInt posSB = SearchBuf.Find(nextSectionBuf);
-         if(posSB != KErrNotFound)
-             {
-             posEndOfSection = posI + posSB;
-             }
-         else
-             {
-             posEndOfSection = iPtr.Length();
-             }
+ 	// Set pos, to just after '=' sign
+ 	SearchBuf.Set(iPtr.Mid(posI));
+ 	TInt posSB = SearchBuf.Locate('=');
+ 	if(posSB==KErrNotFound)		// Illegal format, should flag this...
+ 		return(EFalse);
 
-         }   // if( aSectName.Length() > 0 )
+ 	// Identify start and end of data (EOL or EOF)
+ 	posI = posI + posSB + 1;	// 1 char after '='
+ 	TInt posValStart = posI;
+ 	TInt posValEnd;
+ 	SearchBuf.Set(iPtr.Mid(posI));
+ 	posSB = SearchBuf.Locate('\n');
+ 	if(posSB!=KErrNotFound)
+ 		{
+      		// ini file uses LF for EOL 
+             posValEnd = posI + posSB; 
+ 		}
+ 	else
+ 		{
+ 		posValEnd = iPtr.Length();
+ 		}
 
-     // Look for key in ini file data Buffer
-     posI = posStartOfSection;
-     TBool FoundKey(false);
-     while ( ! FoundKey )
-         {
-         // Search for next occurrence of aKeyName
-         SearchBuf.Set(iPtr.Mid(posI,posEndOfSection-posI));
-         TInt posSB = SearchBuf.Find(aKeyName);
+ 	// Check we are still in the section requested
+ 	if( aSectName.Length() > 0 )
+ 		{
+ 		if( posValEnd > posEndOfSection )
+ 			{
+ 			return(EFalse);
+ 			}
+ 		}
+ 	// Parse Buffer from posn of key
+ 	// Start one space after '='
+ 	TLex lex(iPtr.Mid(posValStart, posValEnd-posValStart));
+ 	lex.SkipSpaceAndMark();		// Should be at the start of the data
+ 	aResult.Set(lex.MarkedToken().Ptr(),posValEnd-posValStart - lex.Offset() );
 
-         // If not found, return
-         if (posSB==KErrNotFound)
-             return(EFalse);
+ 	TInt filterOffset;
+ 	
+ 	// Mark the offset value to the end of the value string
+ 	filterOffset = aResult.Length() - 1;
 
-         // Check this is at beginning of line (ie. non-commented)
-         // ie. Check preceding char was CR or LF
-         if(posSB>0)
-             {
-             // Create a Buffer, starting one char before found subBuf
-             TPtrC CharBefore(SearchBuf.Right(SearchBuf.Length()-posSB+1));
-             // Check if the first char is end of prev and also check
-             // if the token found is not a substring of another string
-             TBool beginningOK = ((CharBefore[0] == '\n') || (CharBefore[0] == ' ') || (CharBefore[0] == '\t'));
-             TBool endingOK = ((CharBefore[aKeyName.Length()+1] == '=') || (CharBefore[aKeyName.Length()+1] == ' ') ||
-(CharBefore[aKeyName.Length()+1] == '\t'));
-             if (beginningOK && endingOK)
-                 {
-                 FoundKey = ETrue;
-                 posI = posI + posSB;
-                 }
-             else
-                 {
-                 posI = posI + posSB + 1;
-                 }
-             }
-         else
-             {
-             FoundKey = ETrue;
-             }
-         }   // while ( ! FoundKey )
+ 	// Loop from end of the value string marked by the offset fetched by above process
+     // And check to see if there is spaces, tabs or carriage returns
+ 	while(filterOffset >= 0 &&
+ 		(aResult[filterOffset] == '\t' ||
+          aResult[filterOffset] == ' ' ||
+          aResult[filterOffset] == '\r'))
+ 		{
+ 		// If found, reduce the offset by 1 for every space and tab during the while loop
+ 		filterOffset--;
+ 		}
 
-// Set pos, to just after '=' sign
-SearchBuf.Set(iPtr.Mid(posI));
-TInt posSB = SearchBuf.Locate('=');
-if(posSB==KErrNotFound)     // Illegal format, should flag this...
-    return(EFalse);
+ 	// The final offset value indicating end of actual value
+ 	// within the ini data is set to the result string reference passed in
+ 	aResult.Set(aResult.Mid(0,filterOffset + 1));
 
-// Identify start and end of data (EOL or EOF)
-posI = posI + posSB + 1;    // 1 char after '='
-TInt posValStart = posI;
-TInt posValEnd;
-SearchBuf.Set(iPtr.Mid(posI));
-posSB = SearchBuf.Locate('\r');
-if(posSB!=KErrNotFound)
-    {
-    posValEnd = posI + posSB;
-    }
-else
-    {
-    posValEnd = iPtr.Length();
-    }
-
-// Check we are still in the section requested
-if( aSectName.Length() > 0 )
-    {
-    if( posValEnd > posEndOfSection )
-        {
-        return(EFalse);
-        }
-    }
-// Parse Buffer from posn of key
-// Start one space after '='
-TLex lex(iPtr.Mid(posValStart, posValEnd-posValStart));
-lex.SkipSpaceAndMark();     // Should be at the start of the data
-aResult.Set(lex.MarkedToken().Ptr(),posValEnd-posValStart - lex.Offset() );
-return(ETrue);
-}
+ 	return(ETrue);
+ 	}
 
 ////////////////////////////////////////////////////////////////////////////////
 TBool CIniData::FindVar(const TDesC &aSection,const TDesC &aKeyName,TInt &aResult)
