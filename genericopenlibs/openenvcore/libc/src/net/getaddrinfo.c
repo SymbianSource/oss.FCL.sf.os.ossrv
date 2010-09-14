@@ -1746,6 +1746,7 @@ explore_hostname(pai, hostname, servname, res, hints)
         struct addrinfo *currNative;
         int haveV6asV4 = 0;
         int haveV4asV6 = 0;
+        int haverealv4 = 0;
         /* Get the list of addresses using the native api */
         int ret = getaddrinfo_private(hostname, pai, &resNative);
         if (ret != 0)
@@ -1776,6 +1777,7 @@ explore_hostname(pai, hostname, servname, res, hints)
                         }
 
                     cur = cur->ai_next;
+                    haverealv4 = 1;
                     }
                 }
 
@@ -1832,7 +1834,7 @@ explore_hostname(pai, hostname, servname, res, hints)
         
         if (haveV6asV4)
             {
-            if ((hints->ai_family == PF_INET && !sentinel.ai_next) || (hints->ai_flags & (AI_V4MAPPED|AI_ALL)))
+            if ((hints->ai_family == PF_INET && !sentinel.ai_next) || (hints->ai_family == PF_UNSPEC && !haverealv4) || (hints->ai_flags & (AI_V4MAPPED|AI_ALL)))
                 {
                 currNative = resNative;
                 while (currNative)
