@@ -24,6 +24,5 @@
 #include "../commonengineresources/group/bld.inf"
 #include "../commontsy/bld.inf"
 #include "../lbs/bld.inf"
-#include "../xmlengine/bld.inf"
 #include "../multipartparser/bld.inf"
 #include "../starter/bld.inf"

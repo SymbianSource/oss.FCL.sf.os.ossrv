@@ -1117,7 +1117,7 @@ gai_addr2scopetype(sa)
 		if (IN6_IS_ADDR_SITELOCAL(&sa6->sin6_addr))
 			return(5); /* site-local scope */
 		return(14);	/* global scope */
-		break;
+
 #endif
 	case AF_INET:
 		/*
@@ -1139,7 +1139,6 @@ gai_addr2scopetype(sa)
 		if (((u_char *)&sa4->sin_addr)[0] == 127)
 			return(2);
 		return(14);
-		break;
 	default:
 		errno = EAFNOSUPPORT; /* is this a good error? */
 		return(-1);
@@ -1682,6 +1681,208 @@ ip6_str2scopeid(scope, sin6, scopeid)
 }
 #endif
 
+#ifdef __SYMBIAN32__
+static long int
+explore_hostname(pai, hostname, servname, res, hints)
+    struct addrinfo *pai;
+    const char *hostname;
+    const char *servname;
+    struct addrinfo **res;
+    const struct addrinfo *hints;
+    {
+    const struct afd *afd;
+    struct addrinfo *cur;
+    struct addrinfo sentinel;
+    int error;
+    int family_flag=0;
+    *res = NULL;
+
+    sentinel.ai_next = NULL;
+    cur = &sentinel;
+
+    /*
+     * if the servname does not match socktype/protocol, ignore it.
+     */
+
+    if (get_portmatch(pai, servname) != 0)
+    return 0;
+    if (pai->ai_family == PF_UNSPEC)
+        {
+#ifdef PF_INET6
+#ifdef __SYMBIAN32__        
+        // XXX: Fix this
+        pai->ai_family = PF_INET;
+#else           
+        pai->ai_family = PF_INET6;
+#endif // __SYMBIAN32__ 
+#else
+        pai->ai_family = PF_INET;
+#endif
+        family_flag=1;
+        }
+
+    afd = find_afd(pai->ai_family);
+    if (afd == NULL && family_flag)
+        {
+        if (pai->ai_family == PF_INET6)
+            {
+            pai->ai_family = PF_INET;
+            }
+        else
+            {
+            pai->ai_family = PF_INET6;
+            }
+        afd = find_afd(pai->ai_family);
+        }
+
+    if (afd == NULL)
+        {
+        return 0;
+        }
+
+    if (pai->ai_family == PF_UNSPEC || pai->ai_family == afd->a_af)
+        {
+        struct addrinfo *resNative;
+        struct addrinfo *currNative;
+        int haveV6asV4 = 0;
+        int haveV4asV6 = 0;
+        int haverealv4 = 0;
+        /* Get the list of addresses using the native api */
+        int ret = getaddrinfo_private(hostname, pai, &resNative);
+        if (ret != 0)
+            {
+            ERR(ret);
+            }
+
+        /* copy the addresses to the local list */
+        currNative = resNative;
+        while (currNative)
+            {
+            if (currNative->ai_family == PF_INET && (hints->ai_family == PF_INET || hints->ai_family == PF_UNSPEC))
+                {
+                if (currNative->ai_flags & AI_V4CONVERTED)
+                    {
+                    haveV6asV4 = 1;
+                    }
+                else
+                    {
+                    struct sockaddr_in* sAddrTmp = (struct sockaddr_in*) (currNative->ai_addr);
+                    GET_AI(cur->ai_next, afd, (char*)&(sAddrTmp->sin_addr));
+                    cur->ai_next->ai_addr->sa_family = cur->ai_next->ai_family = PF_INET;
+                    GET_PORT(cur->ai_next, servname);
+
+                    if (pai->ai_flags & AI_CANONNAME)
+                        {
+                        GET_CANONNAME(cur->ai_next, currNative->ai_canonname);
+                        }
+
+                    cur = cur->ai_next;
+                    haverealv4 = 1;
+                    }
+                }
+
+            if (currNative->ai_family == PF_INET6 && (hints->ai_family == PF_INET6 || hints->ai_family == PF_UNSPEC))
+                {
+                if (currNative->ai_flags & AI_V4MAPPED)
+                    {
+                    haveV4asV6 = 1;
+                    }
+                else
+                    {
+                    struct sockaddr_in6* sAddrTmp = (struct sockaddr_in6*) (currNative->ai_addr);
+                    GET_AI(cur->ai_next, afd, (char*)&(sAddrTmp->sin6_addr));
+                    cur->ai_next->ai_addr->sa_family = cur->ai_next->ai_family = PF_INET6;
+                    GET_PORT(cur->ai_next, servname);
+
+                    if (pai->ai_flags & AI_CANONNAME)
+                        {
+                        GET_CANONNAME(cur->ai_next, currNative->ai_canonname);
+                        }
+                    
+                    cur = cur->ai_next;
+                    }
+                }
+
+            currNative = currNative->ai_next;
+            }
+        
+        if (hints->ai_family == PF_INET6 && hints->ai_flags & AI_V4MAPPED && !sentinel.ai_next && haveV4asV6)
+            {
+            currNative = resNative;
+            while (currNative)
+                {
+                // check for addresses converted from v4 to v6
+                if (currNative->ai_flags & AI_V4MAPPED)
+                    {
+                    struct sockaddr_in6* sAddrTmp = (struct sockaddr_in6*) (currNative->ai_addr);
+                    GET_AI(cur->ai_next, afd, (char*)&(sAddrTmp->sin6_addr));
+                    cur->ai_next->ai_addr->sa_family = cur->ai_next->ai_family = PF_INET6;
+                    GET_PORT(cur->ai_next, servname);
+                    currNative->ai_flags &= ~AI_V4MAPPED;
+    
+                    if (pai->ai_flags & AI_CANONNAME)
+                        {
+                        GET_CANONNAME(cur->ai_next, currNative->ai_canonname);
+                        }
+                    
+                    cur = cur->ai_next;
+                    }
+    
+                currNative = currNative->ai_next;
+                }
+            }
+        
+        if (haveV6asV4)
+            {
+            if ((hints->ai_family == PF_INET && !sentinel.ai_next) || (hints->ai_family == PF_UNSPEC && !haverealv4) || (hints->ai_flags & (AI_V4MAPPED|AI_ALL)))
+                {
+                currNative = resNative;
+                while (currNative)
+                    {
+                    // check for addresses converted from v6 to v4
+                    if (currNative->ai_flags & AI_V4CONVERTED)
+                        {
+                        struct sockaddr_in* sAddrTmp = (struct sockaddr_in*) (currNative->ai_addr);
+                        GET_AI(cur->ai_next, afd, (char*)&(sAddrTmp->sin_addr));
+                        cur->ai_next->ai_addr->sa_family = cur->ai_next->ai_family = PF_INET;
+                        GET_PORT(cur->ai_next, servname);
+                        currNative->ai_flags &= ~AI_V4CONVERTED;
+
+                        if (pai->ai_flags & AI_CANONNAME)
+                            {
+                            GET_CANONNAME(cur->ai_next, currNative->ai_canonname);
+                            }
+                        
+                        cur = cur->ai_next;
+                        }
+
+                    currNative = currNative->ai_next;
+                    }
+                }
+            }
+
+        /* free the address list returned by native api */
+        freeaddrinfo_private(resNative);
+        }
+    else
+        {
+        ERR(EAI_FAMILY);
+        }
+
+    *res = sentinel.ai_next;
+    return 0;
+
+free:
+bad:
+    if (sentinel.ai_next)
+        {
+        freeaddrinfo(sentinel.ai_next);
+        }
+    return error;
+    }
+
+#endif//__SYMBIAN32__
+
 /*
  * FQDN hostname, DNS lookup
  */
@@ -1741,12 +1942,13 @@ free:
 	return error;
 }
 #endif
+
+#ifndef __SYMBIAN32__
 #ifdef DEBUG
 static const char AskedForGot[] =
 	"gethostby*.getanswer: asked for \"%s\", got \"%s\"";
 #endif
 
-#ifndef __SYMBIAN32__
 static struct addrinfo *
 getanswer(answer, anslen, qname, qtype, pai)
 	const querybuf *answer;
@@ -2730,150 +2932,3 @@ res_querydomainN(name, domain, target)
 }
 #endif /*__SYMBIAN32__*/
 
-#ifdef __SYMBIAN32__
-static long int
-explore_hostname(pai, hostname, servname, res, hints)
-	struct addrinfo *pai;
-	const char *hostname;
-	const char *servname;
-	struct addrinfo **res;
-	const struct addrinfo *hints;
-{
-	const struct afd *afd;
-	struct addrinfo *cur;
-	struct addrinfo sentinel;
-	int error;
-    int family_flag=0;
-	*res = NULL;
-	
-	sentinel.ai_next = NULL;
-	cur = &sentinel;
- 
-	/*
-	 * if the servname does not match socktype/protocol, ignore it.
-	 */
- 
- 	if (get_portmatch(pai, servname) != 0)
-	 	return 0;
-        if (pai->ai_family == PF_UNSPEC) {
-#ifdef PF_INET6
-#ifdef __SYMBIAN32__		
-// XXX: Fix this
-			pai->ai_family = PF_INET;
-#else			
-			pai->ai_family = PF_INET6;
-#endif // __SYMBIAN32__	
-#else
-			pai->ai_family = PF_INET;
-#endif
-            family_flag=1;
-        }
-     
-	afd = find_afd(pai->ai_family);
-    if( afd==NULL && family_flag )
-       	{
-       	if(pai->ai_family==PF_INET6)
-       		{
-       		pai->ai_family=PF_INET;
-       		}
-       	else
-       		{
-       		pai->ai_family=PF_INET6;
-       		}
-       	afd=find_afd(pai->ai_family);
-       	}
-
-    if (afd == NULL)
-        {
-        return 0;
-        }
-       
-	if ( pai->ai_family == PF_UNSPEC ||pai->ai_family == afd->a_af)
-		{
-		struct addrinfo *resNative;
-		struct addrinfo *currNative;
-		int haveV4Mapped = 0;
-		/* Get the list of addresses using the native api */
-		int ret = getaddrinfo_private(hostname, pai, &resNative);
-		if(ret != 0)
-			ERR(ret);
-		
-		/* copy the addresses to the local list */
-		currNative = resNative;
-	      while(currNative)
-	            {
-	            if(currNative->ai_family == PF_INET && (hints->ai_family == PF_INET || hints->ai_family == PF_UNSPEC))
-	                {
-	                if(currNative->ai_flags & AI_V4MAPPED)
-	                    {
-	                    haveV4Mapped = 1;
-	                    }
-	                else
-	                    {
-	                    struct sockaddr_in* sAddrTmp = (struct sockaddr_in*) (currNative->ai_addr);
-	                    GET_AI(cur->ai_next, afd, (char*)&(sAddrTmp->sin_addr));
-	                    cur->ai_next->ai_addr->sa_family = cur->ai_next->ai_family  = PF_INET;
-	                    GET_PORT(cur->ai_next, servname);
-	                    
-	                    if((pai->ai_flags & AI_CANONNAME)) 
-	                        GET_CANONNAME(cur->ai_next, currNative->ai_canonname);
-	                    
-	                    cur = cur->ai_next;
-	                    }
-	                }
-	            
-	            if(currNative->ai_family == PF_INET6 && (hints->ai_family == PF_INET6 || hints->ai_family == PF_UNSPEC))
-	                {
-	                struct sockaddr_in6* sAddrTmp = (struct sockaddr_in6*) (currNative->ai_addr);
-	                GET_AI(cur->ai_next, afd, (char*)&(sAddrTmp->sin6_addr));
-	                cur->ai_next->ai_addr->sa_family = cur->ai_next->ai_family = PF_INET6;
-	                GET_PORT(cur->ai_next, servname);
-	                 
-	                if((pai->ai_flags & AI_CANONNAME)) 
-	                    GET_CANONNAME(cur->ai_next, currNative->ai_canonname);
-	                
-	                cur = cur->ai_next;
-	                }
-	            
-	            currNative = currNative->ai_next;   
-	            }
-
-	        if(hints->ai_family == PF_INET && !sentinel.ai_next && haveV4Mapped)
-	            {
-	            currNative = resNative;
-	            while(currNative)
-	                {
-	                //This is the set of Mapped Addresses.
-	                if(currNative->ai_flags & AI_V4MAPPED)
-	                    {
-	                    struct sockaddr_in* sAddrTmp = (struct sockaddr_in*) (currNative->ai_addr);
-	                    currNative->ai_flags &= ~AI_V4MAPPED;
-	                    GET_AI(cur->ai_next, afd, (char*)&(sAddrTmp->sin_addr));
-	                    cur->ai_next->ai_addr->sa_family = cur->ai_next->ai_family  = PF_INET;
-	                    GET_PORT(cur->ai_next, servname);
-	                    
-	                    if((pai->ai_flags & AI_CANONNAME)) 
-	                        GET_CANONNAME(cur->ai_next, currNative->ai_canonname);      
-	                    cur = cur->ai_next;
-	                    }
-	                
-	                currNative = currNative->ai_next;   
-	                }
-	            }
-		/* free the address list returned by native api */
-		freeaddrinfo_private(resNative);
-		}
-	else
-		ERR(EAI_FAMILY);
-
-	*res = sentinel.ai_next;
-	return 0;
-
-free:
-bad:
-	if (sentinel.ai_next)
-		freeaddrinfo(sentinel.ai_next);
-	return error;
-}
-
-#endif//__SYMBIAN32__

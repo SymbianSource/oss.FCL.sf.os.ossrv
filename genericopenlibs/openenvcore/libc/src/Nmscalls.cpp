@@ -296,5 +296,10 @@ EXPORT_C int setdefaultif( const struct ifreq* ifReq )
 	{
 	return _setdefaultif_r(&errno,ifReq);
 	}
+
+EXPORT_C int unsetdefaultif()
+    {
+    return _unsetdefaultif_r(&errno);
+    }
 	
 } // extern "C"

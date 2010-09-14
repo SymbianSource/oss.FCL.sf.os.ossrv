@@ -135,6 +135,7 @@ _LIT(KTestSockFcntl, "TestSockFcntl");
 _LIT(KTestSockIoctl, "TestSockIoctl");
 _LIT(KSockErrnoTest, "SockErrnoTest");
 _LIT(KSockSendOnClosedConn,"SockSendOnClosedConn");
+_LIT(KSockWriteOnClosedConn,"SockWriteOnClosedConn");
 class CTestSocket : public CTestStep
 	{
 public:
@@ -232,5 +233,6 @@ private:
 	TInt close_socket(int fd);
 	TInt SockErrnoTest();
 	TInt SockSendOnClosedConn();
+	TInt SockWriteOnClosedConn();
 	};
 #endif 

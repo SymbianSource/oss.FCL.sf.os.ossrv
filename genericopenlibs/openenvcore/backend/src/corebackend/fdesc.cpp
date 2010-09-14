@@ -333,7 +333,7 @@ CFileDescBase* CFileDescBase::Socket(RSocketServ& aSs, int family, int style, in
 	if (!socketBase)
 		{
 		err=KErrNoMemory;
-		return 0;
+		return NULL;
 		}
 	err = socketBase->Socket(aSs,family,style,protocol);
 

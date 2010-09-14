@@ -37,12 +37,12 @@ TInt CSockDescBase::Fcntl(TUint anArg, TUint aCmd)
 			TUint flags = iFcntlFlag;
 			if( anArg & O_NONBLOCK )
 				{
-				retVal = iSocket.SetOpt(KSONonBlockingIO, KSOLSocket);
+				ATOMICSOCKETOP(retVal = iSocket.SetOpt(KSONonBlockingIO, KSOLSocket),retVal = EBADF;)
 				flags |= O_NONBLOCK;
 				}
 			else
 				{
-				retVal = iSocket.SetOpt(KSOBlockingIO, KSOLSocket);
+				ATOMICSOCKETOP(retVal = iSocket.SetOpt(KSOBlockingIO, KSOLSocket),retVal = EBADF;)				
 				flags &= ~O_NONBLOCK;
 				}
 			if (retVal == KErrNone)
@@ -91,7 +91,8 @@ void CSockDescBase::Read(TDes8& aBuf, TRequestStatus& aStatus)
 	TSockXfrLength len;
 	TRequestStatus tempStatus;
 
-	iSocket.RecvOneOrMore(aBuf, 0, tempStatus, len);	// needs a completion which returns the length
+	ATOMICSOCKETOP(iSocket.RecvOneOrMore(aBuf, 0, tempStatus, len),Complete(tempStatus,KErrBadHandle))
+		// needs a completion which returns the length
 	User::WaitForRequest(tempStatus);
 	if (tempStatus.Int() != KErrNone)
 		{
@@ -108,12 +109,12 @@ void CSockDescBase::Write(TDes8& aBuf, TRequestStatus& aStatus)
 	TRequestStatus tempStatus;
 	TInt bytesWritten = 0;
 	TInt bufLength = aBuf.Length();
-	TSockXfrLength len;
+	TSockXfrLength len = 0;
 	do
 		{
-		iSocket.Send(aBuf.Mid(bytesWritten), 0, tempStatus, len);
+		ATOMICSOCKETOP(iSocket.Send(aBuf.Mid(bytesWritten), 0, tempStatus, len),Complete(tempStatus,KErrBadHandle))		
 		User::WaitForRequest(tempStatus);			
-		if (len() == 0)
+		if (len() == 0 || tempStatus.Int() == KErrDisconnected )
 			{
 			break;
 			}
@@ -155,20 +156,21 @@ void CSockDescBase::RecvFrom(TDes8& aDesc, TSockAddr& from, int flags, TRequestS
 			// recvfrom on a stream ignores the from address - get the peername
 			if (from.Length())
 				SockName(1,from);
-
-			iSocket.RecvOneOrMore(aDesc,rSockFlags,tempStatus,len);            
+			
+			ATOMICSOCKETOP(iSocket.RecvOneOrMore(aDesc,rSockFlags,tempStatus,len),Complete(tempStatus,KErrBadHandle))			            
 			break;
 
 		case SOCK_SEQPACKET:
 			// get the peername (as above)
 			if (from.Length())
 				SockName(1,from);
-			iSocket.Recv(aDesc, rSockFlags, tempStatus);
+			ATOMICSOCKETOP(iSocket.Recv(aDesc, rSockFlags, tempStatus),Complete(tempStatus,KErrBadHandle))
+			
 			break;
 
 		default: // including SOCK_RAW, SOCK_DGRAM
 			// assume datagram, as per behavior of original stdlib code:
-			iSocket.RecvFrom(aDesc,from,rSockFlags,tempStatus,len);
+		    ATOMICSOCKETOP(iSocket.RecvFrom(aDesc,from,rSockFlags,tempStatus,len),Complete(tempStatus,KErrBadHandle))
 		}
 
 	User::WaitForRequest(tempStatus);
@@ -196,8 +198,8 @@ void CSockDescBase::SendTo(TDes8& aDesc, TSockAddr& to, int flags, TRequestStatu
 
 	if (to.Length()==0)
 		{
-		iSocket.Send(aDesc,flags,tempStatus,len);
-		sendflg = ETrue;
+        ATOMICSOCKETOP(iSocket.Send(aDesc,flags,tempStatus,len),Complete(tempStatus,KErrBadHandle))
+        sendflg = ETrue;
 		}	
 	else
 		{
@@ -205,7 +207,7 @@ void CSockDescBase::SendTo(TDes8& aDesc, TSockAddr& to, int flags, TRequestStatu
 			Complete(aStatus,KErrNotSupported);	// can't sendto a stream
 		else 
 			{
-			iSocket.SendTo(aDesc,to,flags,tempStatus,len);
+			ATOMICSOCKETOP(iSocket.SendTo(aDesc,to,flags,tempStatus,len),Complete(tempStatus,KErrBadHandle))			
 			sendflg = ETrue;
 			}
 		}
@@ -242,21 +244,23 @@ TInt CSockDescBase::CompletionStatus(TInt& aLength, TInt aStatus)
 TInt CSockDescBase::Poll(TUint aEvents)
 	{
 	TInt status = 0;
-	TInt err = 0;
 	TInt readyEvents = 0;
-	err = iSocket.GetOpt(KSOSelectPoll, KSOLSocket, status);
+	TInt err = KErrNone;
+	ATOMICSOCKETOP(err = iSocket.GetOpt(KSOSelectPoll, KSOLSocket, status),err = KErrBadHandle)
 	
 	if (err != KErrNone)
 		{
 		// Poll should return any of the requested events.
 		// In case of any error, the error will be set, and can be later checked by the descriptor.
-		
-		iPollErr = err;		
+
+
 		// For non-blocking socket, ensure to reset "iConnectInProgress" flag for a non-connected 
 		// socket on which a connection is pending.
 		if(GetConnectionProgress())
 			{
-			SetConnectionProgress(EFalse);
+            iPollErr = err;
+
+            SetConnectionProgress(EFalse);
 			}
 			
 		// set all the events that has been requested for
@@ -292,8 +296,14 @@ TInt CSockDescBase::Poll(TUint aEvents)
 		
 	if (status & KSockSelectExcept)
 		{
-		if(GetConnectionProgress())
-			{				
+
+		if (GetConnectionProgress())
+			{		
+			TInt val = -1;
+			TInt ret = KErrNone;
+			ATOMICSOCKETOP(ret = iSocket.GetOpt(KSOSelectLastError, KSOLSocket, val),ret = KErrBadHandle)
+
+			(iPollErr = ret) || (iPollErr = val);
 			TBool setExceptFd = ETrue;
 			// Some special checks for non-blocking sockets.
 			if(aEvents & EReadyForWriting)
@@ -360,8 +370,7 @@ TInt CSockDescBase::NotifyActivity(TUint aEvents, TRequestStatus& aRequest, TTim
 		{
 		iSelectEvents() |= KSockSelectExcept;
 		}
-
-	iSocket.Ioctl(KIOctlSelect, aRequest, &iSelectEvents, KSOLSocket);
+	ATOMICSOCKETOP(iSocket.Ioctl(KIOctlSelect, aRequest, &iSelectEvents, KSOLSocket),Complete(aRequest,KErrBadHandle))	
 	return KErrNone;	
 	}
 
@@ -392,6 +401,7 @@ void CSockDescBase::TweakWatchedEvents(TUint& events)
 //
 TInt CSockDescBase::TweakReadyEvents(TInt errval)
     {
+
     TInt returnEvents = 0;
     if( errval >= KErrNone )
         {
@@ -414,8 +424,16 @@ TInt CSockDescBase::TweakReadyEvents(TInt errval)
             // waitforNrequest only after a event
             if(GetConnectionProgress())
                 {
+
+                TInt val = -1;
+                TInt ret = KErrNone;
+                ATOMICSOCKETOP(ret = iSocket.GetOpt(KSOSelectLastError, KSOLSocket, val),ret = KErrBadHandle)
+                (iPollErr = ret) || (iPollErr = val);
+
+            
                 returnEvents |= EReadyForReading;
-                returnEvents |= EReadyForWriting;      
+                returnEvents |= EReadyForWriting;
+                returnEvents |= EAnyException;
                 }
             else
                 {
@@ -428,7 +446,12 @@ TInt CSockDescBase::TweakReadyEvents(TInt errval)
         if( GetConnectionProgress() )
             {
             // Dummy call to retrieve select events also unlocks the socket
-            const TUint events = GetSelectEvents();                    
+            const TUint events = GetSelectEvents();
+            
+            TInt val = -1;
+            TInt ret = KErrNone;
+            ATOMICSOCKETOP(ret = iSocket.GetOpt(KSOSelectLastError, KSOLSocket, val),ret = KErrBadHandle)
+            (iPollErr = ret) || (iPollErr = val);
             // set all the events that has been requested for
             // This handles a scenario where connect fails( in loopback )
             // here all the events requested should be ready ready
@@ -448,18 +471,20 @@ TInt CSockDescBase::TweakReadyEvents(TInt errval)
 
 void CSockDescBase::CancelNotify()
 	{
-	iSocket.CancelIoctl();
+	ATOMICSOCKETOP(iSocket.CancelIoctl(),NOP)	
 	iIoctlLock.Signal();
 	}
 
 TInt CSockDescBase::Listen(TUint qSize)
-	{
-	return iSocket.Listen(qSize);
+	{	
+	TInt ret = KErrNone;
+	ATOMICSOCKETOP(ret = iSocket.Listen(qSize), return KErrBadHandle)
+	return ret;
 	}
 
 void CSockDescBase::ReadCancel()
 	{
-	iSocket.CancelRecv();
+	ATOMICSOCKETOP(iSocket.CancelRecv(),NOP)	
 	}
 
 TInt CSockDescBase::ReadCompletion(TDes8& /*aBuf*/, TInt aStatus)
@@ -473,17 +498,17 @@ TInt CSockDescBase::ReadCompletion(TDes8& /*aBuf*/, TInt aStatus)
 
 void CSockDescBase::RecvFromCancel()
 	{
-	iSocket.CancelRecv();
+	ATOMICSOCKETOP(iSocket.CancelRecv(),NOP)	
 	}
 
 void CSockDescBase::SendToCancel()
 	{
-	iSocket.CancelSend();
+	ATOMICSOCKETOP(iSocket.CancelSend(),NOP)
 	}
 
 void CSockDescBase::WriteCancel()
 	{
-	iSocket.CancelWrite();
+	ATOMICSOCKETOP(iSocket.CancelWrite(),NOP)	
 	}
 
 TInt CSockDescBase::SockName(int anEnd, TSockAddr& anAddr)
@@ -500,9 +525,9 @@ TInt CSockDescBase::SockName(int anEnd, TSockAddr& anAddr)
 
 	anAddr.SetFamily(KBadFamily);
 	if (anEnd==0)
-		iSocket.LocalName(anAddr);
+	    ATOMICSOCKETOP(iSocket.LocalName(anAddr),NOP)		
 	else
-		iSocket.RemoteName(anAddr);
+	    ATOMICSOCKETOP(iSocket.RemoteName(anAddr),NOP)		
 	if (anAddr.Family()==KBadFamily)
 		return ENOTCONN; // assume that the call failed, but there is no way to find out why
 	return KErrNone;
@@ -527,6 +552,6 @@ void CSockDescBase::Shutdown(TUint aHow,TRequestStatus& aStatus)
 			Complete(aStatus,KErrArgument); // Invalid argument
 			return;
 		}
-	iSocket.Shutdown(how,aStatus);
+	ATOMICSOCKETOP(iSocket.Shutdown(how,aStatus),Complete(aStatus,KErrBadHandle))	
 	return;
 	}
