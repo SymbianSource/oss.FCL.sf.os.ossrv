@@ -5204,6 +5204,100 @@ TInt CTestSocket::SockSendOnClosedConn()
     return ret; 
     }
 
+
+void* createNwrite_socket(TAny* aParam)
+    {
+    sockaddr_in serv_addr;
+        int err1;
+        int ret = 0;
+        char *msg ="testing socket send";
+        int sock_fd;
+        serv_addr.sin_family = AF_INET;
+        serv_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+        serv_addr.sin_port = (int)aParam;
+        sock_fd = socket(AF_INET,SOCK_STREAM,0);
+        if (sock_fd < 0)
+            {
+            ret = -1;
+            goto close;
+            }
+        if (connect(sock_fd,(sockaddr*)&serv_addr,sizeof(serv_addr)) < 0)
+            {
+            ret = -1;
+            goto close;
+            }
+        sleep(5);  
+        err1 = write(sock_fd, msg, strlen(msg)+1);
+        if(err1 < 0)
+            {
+            ret = -1;
+            goto close;    
+            }
+        sleep(5);
+        err1 = write(sock_fd, msg,strlen(msg)+1);
+        if(err1 ==  -1 )
+           {
+            printf("write() failed returned errno = %d", errno);
+           }
+        else
+            {
+            ret = -1;
+            }
+        close:
+        close(sock_fd);
+        return (void*)ret;
+
+    }
+TInt CTestSocket::SockWriteOnClosedConn()
+    {
+    
+        int sock_fd,newsock_fd;
+        unsigned int addr_len;  
+        sockaddr_in serv_addr,new_socket;
+        TInt ret = KErrNone;
+        int threadRetVal = 0;
+        void *threadRetValPtr = (void*)&threadRetVal;
+        sock_fd = socket(AF_INET,SOCK_STREAM,0);
+        if (sock_fd < 0)
+            {
+            return KErrSocket;
+            }
+        serv_addr.sin_family = AF_INET;
+        serv_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+        serv_addr.sin_port = htons(12350);
+        pthread_t clientThread;
+        if (bind(sock_fd,(sockaddr*)&serv_addr,sizeof(serv_addr)) < 0)
+            {
+            INFO_PRINTF2(_L("bind return with errno = %d"), errno);
+            return  KErrBind;
+            }
+        if(-1 == listen(sock_fd, 1))
+           {
+             printf("error listen failed");
+             close(sock_fd);
+             return  -1;
+           }
+        pthread_create(&clientThread, NULL, &createNwrite_socket, (void*)(serv_addr.sin_port));
+           addr_len = sizeof(new_socket);
+           newsock_fd = accept(sock_fd,(sockaddr*)&new_socket,&addr_len);  
+           if (errno != 0 )
+               {
+               INFO_PRINTF2(_L("Accept return with errno = %d"), errno);
+               ret = -1;
+               }
+          
+           close(newsock_fd);
+           close(sock_fd);
+           pthread_join(clientThread, &threadRetValPtr );
+           if (threadRetVal < 0)
+               {  
+               INFO_PRINTF1(_L("SockWriteOnClosedConn failed"));
+               ret = threadRetVal;
+               }
+           return ret;
+    }
+
+
 // ========================== OTHER EXPORTED FUNCTIONS =========================
 // None
 

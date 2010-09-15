@@ -114,7 +114,7 @@ void CSockDescBase::Write(TDes8& aBuf, TRequestStatus& aStatus)
 		{
 		ATOMICSOCKETOP(iSocket.Send(aBuf.Mid(bytesWritten), 0, tempStatus, len),Complete(tempStatus,KErrBadHandle))		
 		User::WaitForRequest(tempStatus);			
-		if (len() == 0)
+		if (len() == 0 || tempStatus.Int() == KErrDisconnected )
 			{
 			break;
 			}

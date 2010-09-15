@@ -1188,5 +1188,608 @@ TInt CTestIfioctls::Testioctl1()
 		res=KErrGeneral;
 		}
 
-	return res;
-	}
+    return res;
+    }
+
+TInt CTestIfioctls::GetIapName(char * aIapName, int len)
+    {
+    _LIT(KIAPSectionName, "SectionIAPDetails");
+    _LIT(KIAPName,"IAPName");
+    TPtrC iapName;
+    TBool res = GetStringFromConfig(KIAPSectionName, KIAPName, iapName);
+    if (!res)
+        {
+        INFO_PRINTF1(_L("Unable to read the iapname fro the ini file.")) ;    
+        return KErrGeneral;
+        }
+    TPtr8 iap((unsigned char *)aIapName, len);
+    iap.Copy(iapName);
+    iap.ZeroTerminate();
+    return KErrNone;
+    }
+
+TInt CTestIfioctls::StartIap(const char *aIapName, int &fd)
+    {
+    TPtr8 iapName8((TUint8 * )aIapName,strlen(aIapName),strlen(aIapName)+1);
+    TBuf<IFNAMSIZ> iapName16;
+    iapName16.Copy(iapName8);
+    INFO_PRINTF2(_L("starting iap = %S"), &iapName16);
+
+    if((fd = socket(AF_INET, SOCK_DGRAM , 0)) < 0)
+        {
+        INFO_PRINTF2(_L("Error creating scocket errno = %d\n "),errno);
+        return -1;
+        }
+
+    if(ioctl(fd,SIOCSIFNAME,aIapName) == -1)
+        {
+        INFO_PRINTF2(_L("unable to set the interface name, reason = %d\n"), errno);
+        close(fd);
+        return -1;
+        }
+
+    if(ioctl(fd,SIOCIFSTART,aIapName) == -1)
+        {
+        INFO_PRINTF2(_L("unable to start the interface, reason = %d\n"),errno);
+        close(fd);
+        return -1;
+        }
+    return KErrNone;
+    }
+
+TInt CTestIfioctls::TestGetIfIPAddr()
+    {
+    char iapName[IFNAMSIZ];
+    GetIapName(iapName, sizeof(iapName));
+    int fd;
+    ifreq ifr;
+
+
+    if(StartIap(iapName, fd) != KErrNone)
+        {
+        INFO_PRINTF2(_L("unable to start the iap, reason = %d\n"),errno);
+        return -1;
+        }
+    strcpy(ifr.ifr_name,iapName);
+    if(ioctl(fd,SIOCGIFADDR,&ifr) == -1) //getting the interface ip
+        {
+        INFO_PRINTF2(_L("unable to get ip of the interface, reason = %d\n"),errno);
+        close(fd);
+        return -1;
+        }
+    char address[50];
+
+    if(inet_ntop(ifr.ifr_ifru.ifru_addr.sa_family,&(ifr.ifr_ifru.ifru_addr.sa_data),address,sizeof(address)) == NULL)
+        {
+        INFO_PRINTF2(_L("cannot convert to address to string, reason = %d \n"), errno);
+        close(fd);
+        return -1;
+        }
+    TPtr8 ipAddr8((TUint8*)address,strlen(address),strlen(address)+1);
+    TBuf<50> ipAddr16;
+    ipAddr16.Copy(ipAddr8);
+    INFO_PRINTF3(_L("family = %d, ipaddr = %S\n"),ifr.ifr_ifru.ifru_addr.sa_family,&ipAddr16);
+
+    sockaddr_in addr;
+    memcpy(&addr,&ifr.ifr_ifru.ifru_addr,sizeof(sockaddr_in));
+    addr.sin_port = 12346;
+
+    if (bind(fd,(sockaddr*)&addr,sizeof(addr)) < 0)
+        {
+        INFO_PRINTF2(_L("Error binding to socket, errno = %d\n"),errno);
+        close(fd);
+        return -1;
+        }
+    close(fd);
+    return KErrNone;
+
+    }
+
+void CTestIfioctls::printFlags(TInt flags)
+    {
+    if(flags & IFF_UP)
+        {
+        INFO_PRINTF1(_L("\t\tThe inteface is up\n"));
+        }
+    else
+        {
+        INFO_PRINTF1(_L("\t\tThe inteface is down\n"));
+        }
+    if(flags & IFF_LOOPBACK)
+        {
+        INFO_PRINTF1(_L("\t\tThe inteface a loopback\n"));
+        }
+    if(flags & IFF_POINTOPOINT)
+        {
+        INFO_PRINTF1(_L("\t\tThe inteface a P2P\n"));
+        }
+    if(flags & IFF_BROADCAST)
+        {
+        INFO_PRINTF1(_L("\t\tThe inteface a Broadcast\n"));
+        }
+    }
+
+TInt CTestIfioctls::TestGetIfAttributes()
+    {
+    char iapName[IFNAMSIZ];
+    GetIapName(iapName, sizeof(iapName));
+    int fd;
+    ifreq ifr;
+
+
+    if(StartIap(iapName, fd) != KErrNone)
+        {
+        INFO_PRINTF2(_L("unable to start the iap, reason = %d\n"),errno);
+        return -1;
+        }
+    strcpy(ifr.ifr_name,iapName);
+
+    if(ioctl(fd,SIOCGIFFLAGS,&ifr) == -1)
+        {
+        INFO_PRINTF2(_L("unable to get the flags for iap , reason = %d\n"),errno);
+        close(fd);
+        return -1;
+        }
+
+    printFlags(*((int *)ifr.ifr_ifru.ifru_flags));
+
+    if(ioctl(fd,SIOCGIFMTU,&ifr) == -1)
+        {
+        INFO_PRINTF2(_L("unable to get the mtu for the iap, reason = %d"),errno);
+        close(fd);
+        return -1;
+        }
+    INFO_PRINTF2(_L("The current MTU  = %d\n"),ifr.ifr_ifru.ifru_mtu);
+
+    if(ioctl(fd,SIOCGIFNETMASK,&ifr) == -1)
+        {
+        INFO_PRINTF2(_L("unable to get the netmask for the iap reason = %d\n"), errno);
+        close(fd);
+        return -1;
+        }
+    char addr[50];
+    addr[0] = '\0';
+
+    if(inet_ntop(ifr.ifr_ifru.ifru_addr.sa_family,&(ifr.ifr_ifru.ifru_addr.sa_data),addr,sizeof(addr)) == NULL)
+        {
+        INFO_PRINTF2(_L("cannot convert to address to string, error no = %d\n"),errno);
+        close(fd);
+        return -1;
+        }
+    TPtr8 addr8((TUint8 *)addr, strlen(addr), strlen(addr)+1);
+    TBuf<50> addr16;
+    addr16.Copy(addr8);
+    INFO_PRINTF2(_L("netmask  for the iap = %S \n"),&addr16);
+
+    if(ioctl(fd,SIOCGIFDEFGATEWAY,&ifr) == -1)
+        {
+        INFO_PRINTF2(_L("unable to get the gateway for the iap, reason = %d\n"),errno);
+        close(fd);
+        return -1;
+        }
+    addr[0] = '\0';
+    if(inet_ntop(ifr.ifr_ifru.ifru_addr.sa_family,&(ifr.ifr_ifru.ifru_defgatewayaddr),addr,sizeof(addr)) == NULL)
+        {
+        INFO_PRINTF2(_L("cannot convert to address to string, error no = %d\n"),errno);
+        close(fd);
+        return -1;
+        }
+    addr8.Set((TUint8 *)addr, strlen(addr), strlen(addr)+1);
+    addr16.Copy(addr8);
+    INFO_PRINTF2(_L("gateway  for the iap = %S\n"),&addr16);
+    close(fd);
+    return KErrNone;
+    }
+
+TInt CTestIfioctls::TestSetIfAttributes()
+    {
+    char iapName[IFNAMSIZ];
+    GetIapName(iapName, sizeof(iapName));
+    int fd;
+    ifreq ifr;
+
+
+    if(StartIap(iapName, fd) != KErrNone)
+        {
+        INFO_PRINTF2(_L("unable to start the iap, reason = %d\n"),errno);
+        return -1;
+        }
+    strcpy(ifr.ifr_name,iapName);
+
+
+    ifreq ifr1;
+    strcpy(ifr1.ifr_name,iapName);
+
+    if(ioctl(fd,SIOCGIFMTU,&ifr) == -1)
+        {
+        INFO_PRINTF2(_L("unable to get the mtu for the iap, reason = %d"),errno);
+        close(fd);
+        return -1;
+        }
+    ifr.ifr_ifru.ifru_mtu++;
+
+    if(ioctl(fd,SIOCSIFMTU,&ifr) == -1)
+        {
+        INFO_PRINTF2(_L("unable to set the mtu for the iap, reason = %d"),errno);
+        close(fd);
+        return -1;
+        }
+
+    if(ioctl(fd,SIOCGIFMTU,&ifr1) == -1)
+        {
+        INFO_PRINTF2(_L("unable to get the mtu for the iap , reason = %d"),errno);
+        close(fd);
+        return -1;
+        }
+
+    if(ifr.ifr_ifru.ifru_mtu != ifr1.ifr_ifru.ifru_mtu)
+        {
+        INFO_PRINTF2(_L("unable to set the mtu for the iap = %s"),ifr.ifr_name);
+        close(fd);
+        return -1;
+        }
+    close(fd);
+    return KErrNone;
+    }
+
+void CTestIfioctls::FreeDnsSuffixes(char ** suffixes)
+    {
+    for(int i = 0; suffixes[i]; i++)
+        {
+        delete [] suffixes[i];
+        }
+    delete []suffixes;
+    }
+
+#define MAX_SUFFIXES  3
+#define SUFFIXLEN   50
+TInt CTestIfioctls::TestSetIfDNSSuffix()
+    {
+    char iapName[IFNAMSIZ];
+    //    ifreq ifr1;
+    GetIapName(iapName, sizeof(iapName));
+    int fd;
+
+    struct if_dns_suffixes dns_suffixes;
+    strcpy(dns_suffixes.if_name,iapName);
+
+    if(StartIap(iapName, fd) != KErrNone)
+        {
+        INFO_PRINTF2(_L("unable to start the iap, reason = %d\n"),errno);
+        return -1;
+        }
+
+    char **&suffixes = dns_suffixes.suffixes;
+
+    suffixes = new char*[MAX_SUFFIXES+1];
+    suffixes[MAX_SUFFIXES] = NULL;
+
+    _LIT(KDNSSuffix, "DNSSuffix");
+
+    for(int i = 0; i < MAX_SUFFIXES; i++)
+        {
+        TPtrC suffix16;
+        TBuf<20> suffixTag(KDNSSuffix);
+        suffixTag.AppendNum(i);
+        suffixes[i] = NULL;
+        TBool res = GetStringFromConfig(ConfigSection(), suffixTag, suffix16);
+        if (!res)
+            {
+            INFO_PRINTF1(_L("Unable to read the iapname from the ini file.")) ;    
+            FreeDnsSuffixes(suffixes);
+            close(fd);
+            return KErrGeneral;
+            }
+        suffixes[i] = new char[suffix16.Length() + 1];
+        TPtr8 suffix8((TUint8*)suffixes[i],suffix16.Length() + 1);
+        suffix8.Copy(suffix16);
+        suffix8.ZeroTerminate();
+        }
+
+    if(ioctl(fd,SIOCSETDNSSUFFIX,&dns_suffixes) == -1)
+        {
+        INFO_PRINTF2(_L("unable to set the dbs suffixes , reason = %d\n"),errno);
+        close(fd);
+        FreeDnsSuffixes(suffixes);
+        return -1;
+        }
+    _LIT(KHostname1, "Hostname1");
+    TPtrC hostname16;
+    char hostname[50];
+    TPtr8 hostname8((TUint8*)hostname, sizeof(hostname));
+
+    TBool res = GetStringFromConfig(ConfigSection(), KHostname1, hostname16);
+    if (!res)
+        {
+        INFO_PRINTF1(_L("Unable to read the hostname from the ini file.")) ;    
+        FreeDnsSuffixes(suffixes);
+        close(fd);
+        return KErrGeneral;
+        }
+    hostname8.Copy(hostname16);
+    hostname8.ZeroTerminate();
+    hostent * hentry;
+    ifreq defaultif;
+    strcpy(defaultif.ifr_name, iapName);
+    if(setdefaultif(&defaultif) != KErrNone)
+        {
+        INFO_PRINTF2(_L("setdefaultif failed, reason = %d "),errno) ;    
+        FreeDnsSuffixes(suffixes);
+        close(fd);
+        return KErrGeneral;
+        }
+
+    if((hentry = gethostbyname(hostname)) == NULL)
+        {
+    INFO_PRINTF3(_L("getbyhostname failed for %S with errno = %d"),&hostname16,errno) ;    
+       // FreeDnsSuffixes(suffixes);
+       // close(fd);
+     //   return KErrGeneral;
+
+        } 
+    _LIT(KHostname2, "Hostname2");
+
+ res = GetStringFromConfig(ConfigSection(), KHostname2, hostname16);
+    if (!res)
+        {
+        INFO_PRINTF1(_L("Unable to read the hostname from the ini file.")) ;    
+        FreeDnsSuffixes(suffixes);
+        close(fd);
+        return KErrGeneral;
+        }
+    hostname8.Copy(hostname16);
+    hostname8.ZeroTerminate();
+    if((hentry = gethostbyname(hostname)) == NULL)
+        {
+    INFO_PRINTF3(_L("getbyhostname failed  for %S  with errno = %d "),&hostname16,errno) ;    
+       // FreeDnsSuffixes(suffixes);
+       // close(fd);
+       // return KErrGeneral;
+
+        } 
+
+    hostname8.Copy(_L8("2IND04966"));
+      hostname8.ZeroTerminate();
+      if((hentry = gethostbyname(hostname)) == NULL)
+          {
+          INFO_PRINTF3(_L("getbyhostname failed for %s, errno  =  %d "),&hostname8, errno) ;    
+          } 
+    
+    
+    FreeDnsSuffixes(suffixes);
+    close(fd);
+    return KErrNone;
+
+    }
+
+
+TInt CTestIfioctls::TestGetIfDNSSuffix()
+    {
+    char iapName[IFNAMSIZ];
+    GetIapName(iapName, sizeof(iapName));
+    int fd;
+
+    if(StartIap(iapName, fd) != KErrNone)
+        {
+        INFO_PRINTF2(_L("unable to start the iap, reason = %d\n"),errno);
+        return -1;
+        }
+
+    struct if_dns_suffixes dns_suffixes;
+    strcpy(dns_suffixes.if_name,iapName);
+
+    if(ioctl(fd,SIOCGETDNSSUFFIX,&dns_suffixes) == -1)
+        {
+        INFO_PRINTF2(_L("unable to get the dns suffixes , reason = %d\n"),errno);
+        close(fd);
+        return -1;
+        }
+
+    INFO_PRINTF1(_L("printing dns suffixes"));
+    for(int i = 0; dns_suffixes.suffixes[i]; i++)
+        {
+        TPtr8 suffix8((TUint8 *)dns_suffixes.suffixes[i],strlen(dns_suffixes.suffixes[i]),strlen(dns_suffixes.suffixes[i])+1);
+        TBuf<SUFFIXLEN> suffix16;
+        suffix16.Copy(suffix8);
+        INFO_PRINTF3(_L("suffixes %d =  %S"),i,&suffix16);
+        }
+    freednssuffixes(&dns_suffixes);
+    close(fd);
+    return KErrNone;
+    }
+
+TInt CTestIfioctls::TestGetNameServers()
+    {
+    if_name_servers dns_server;
+    char iapName[IFNAMSIZ];
+    GetIapName(iapName, sizeof(iapName));
+    int sockfd;
+    strcpy(dns_server.if_name, iapName);
+
+    if(StartIap(iapName, sockfd) != KErrNone)
+        {
+        INFO_PRINTF2(_L("unable to start the iap, reason = %d\n"),errno);
+        return -1;
+        }
+
+    TInt ret = ioctl(sockfd, SIOCGNAMESERVER, &dns_server);
+    if(ret == -1)
+        {
+        INFO_PRINTF2(_L("IOCTL option failed with errno =%d"), errno);
+        close(sockfd);
+        return errno;
+        }
+    char addr[50];
+    addr[0] = '\0';
+
+    if(inet_ntop(dns_server.nameserver1.sa_family,&(dns_server.nameserver1.sa_data),addr,sizeof(addr)) == NULL)
+        {
+        INFO_PRINTF2(_L("cannot convert to address to string, error no = %d\n"),errno);
+        close(sockfd);
+        return -1;
+        }
+    TPtr8 addr8((TUint8 *)addr, strlen(addr), strlen(addr)+1);
+    TBuf<50> addr16;
+    addr16.Copy(addr8);
+    INFO_PRINTF2(_L("nameserver2  for the iap = %S \n"),&addr16);
+    if(inet_ntop(dns_server.nameserver2.sa_family,&(dns_server.nameserver2.sa_data),addr,sizeof(addr)) == NULL)
+        {   
+        INFO_PRINTF2(_L("cannot convert to address to string, error no = %d\n"),errno);
+        close(sockfd);
+        return -1;
+        }
+    addr8.Set((TUint8 *)addr, strlen(addr), strlen(addr)+1 );
+    addr16.Copy(addr8);
+    INFO_PRINTF2(_L("nameserver2  for the iap = %S \n"),&addr16);
+    close(sockfd);
+
+        return KErrNone;
+    }
+
+TInt CTestIfioctls::TestSetNameServers()
+    {
+    if_name_servers dns_server;
+
+    char iapName[IFNAMSIZ];
+    GetIapName(iapName, sizeof(iapName));
+
+    memset(&dns_server,0, sizeof(dns_server));
+    strcpy(dns_server.if_name, iapName);
+    TPtrC nameServer16;
+    _LIT(KNameSrv1, "NameServer1");
+    _LIT(KNameSrv2, "NameServer2");
+
+    TBool res = GetStringFromConfig(ConfigSection(), KNameSrv1, nameServer16);
+    if (!res)
+        {
+        INFO_PRINTF1(_L("Unable to read the nameserver1 from the ini file.")) ;    
+        return KErrGeneral;
+        }
+    char nameServer1[50];
+    TPtr8 nameServer8((TUint8 *)nameServer1, sizeof(nameServer1));
+    nameServer8.Copy(nameServer16);
+    nameServer8.ZeroTerminate();
+    res = GetStringFromConfig(ConfigSection(), KNameSrv2, nameServer16);
+    if (!res)
+        {
+        INFO_PRINTF1(_L("Unable to read nameserver2 from the ini file.")) ;    
+        return KErrGeneral;
+        }
+
+    char nameServer2[50];
+    nameServer8.Set((TUint8 *)nameServer2,  0, sizeof(nameServer2));
+    nameServer8.Copy(nameServer16);
+    nameServer8.ZeroTerminate();
+    
+    dns_server.nameserver1.sa_family = AF_INET;
+    dns_server.nameserver2.sa_family = AF_INET;
+    TInt addr1 = inet_addr(nameServer1);
+    TInt addr2 = inet_addr(nameServer2);
+    unsigned char * ptr = (unsigned char *)&addr1;
+    dns_server.nameserver1.sa_data[0] = ptr[0];
+    dns_server.nameserver1.sa_data[1] = ptr[1];
+    dns_server.nameserver1.sa_data[2] = ptr[2];
+    dns_server.nameserver1.sa_data[3] = ptr[3];
+   
+    ptr = (unsigned char *)&addr2;
+    dns_server.nameserver2.sa_data[0] = ptr[0];
+    dns_server.nameserver2.sa_data[1] = ptr[1];
+    dns_server.nameserver2.sa_data[2] = ptr[2];
+    dns_server.nameserver2.sa_data[3] = ptr[3];
+    
+    TInt sockfd;
+    if(StartIap(iapName, sockfd) != KErrNone)
+        {
+        INFO_PRINTF2(_L("unable to start the iap, reason = %d\n"),errno);
+        return -1;
+        }
+
+
+    TInt ret = ioctl(sockfd, SIOCSNAMESERVER, &dns_server);
+    if(ret == -1)
+        {
+        INFO_PRINTF2(_L("IOCTL option failed with errno =%d"), errno);
+        close(sockfd);
+        return errno;
+        }
+
+    return KErrNone;
+
+    }
+
+//Testcase added to enumerate routes configured on the device.
+//Use Ioctl option SIOCENUMROUTES to get the route details.
+//PreCondition: User needs to allocate space for the buffer.
+TInt CTestIfioctls::TestRouteIoctl()
+    {
+    rtconf rtc;
+    TInt ret = 0;
+    rtc.rt_len = 0;
+    TInt sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
+    if(sockfd < 0)
+        {
+        INFO_PRINTF2(_L("Unable to create the socket errno =%d"), errno);
+        return -1;
+        }
+    if((ret = ioctl (sockfd, SIOCENUMROUTES,&rtc)) == -1)
+        {
+        INFO_PRINTF2(_L("Unable to get the routes configured, errno = %d"), errno);
+        close(sockfd);
+        return -1;
+        }
+
+    if (rtc.rt_len == 0)
+        {
+        INFO_PRINTF1(_L("No routes were found,"));
+        close(sockfd);
+        return KErrNone;
+        }
+    if((rtc.rtc_buf = (caddr_t)malloc( rtc.rt_len )) == NULL)
+        {
+        INFO_PRINTF1(_L("Unable to allocate memory "));
+        close(sockfd);
+        return KErrNoMemory;
+        }
+    
+    INFO_PRINTF1(_L("Now will fetch the routes!\n"));
+    if((ret = ioctl (sockfd, SIOCENUMROUTES,&rtc)) == -1)
+        {
+        INFO_PRINTF2(_L("Unable to get the routs configured, errno = %d"), errno);
+        close(sockfd);
+        free(rtc.rtc_buf);
+        return -1;
+        }
+    close(sockfd);
+    free(rtc.rtc_buf);
+    return KErrNone;
+    }
+
+
+//With the route_entry buffer size zero, it should return the number of routes present on the system
+//To use this ioctl effectively, we can find the number of routes by passing length as Zero and then
+//pass the count*sizeof(route_entry) as the len the next time to fecth the route information.
+TInt CTestIfioctls::TestNumberOfRoutesIoctl()
+    {
+    rtconf rtc;
+    rtc.rt_len = 0;
+    TInt ret = 0;
+
+    TInt sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
+    if(sockfd < 0)
+        {
+        INFO_PRINTF2(_L("Unable to create the socket errno =%d"), errno);
+        return -1;
+        }
+    if((ret = ioctl (sockfd, SIOCENUMROUTES,&rtc)) == -1)
+        {
+        INFO_PRINTF2(_L("Unable to get the routs configures, errno = %d"), errno);
+        return -1;
+        }
+
+    INFO_PRINTF2(_L("The number of routes available is %d\n"), rtc.rt_len/sizeof(route_entry));
+    close(sockfd);
+    return KErrNone;
+
+    }
+
+

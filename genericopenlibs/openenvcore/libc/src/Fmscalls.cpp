@@ -333,6 +333,10 @@ EXPORT_C int ioctl (int aFid, unsigned long aCmd, ...)
 	}
 
 
+EXPORT_C void freednssuffixes(if_dns_suffixes * suffixes)
+    {
+    return Backend()->freednssuffixes(suffixes);
+    }
 
 /*
 Gets the path name of the current working directory.

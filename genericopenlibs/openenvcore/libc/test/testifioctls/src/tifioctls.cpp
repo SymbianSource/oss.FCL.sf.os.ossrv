@@ -181,7 +181,65 @@ TVerdict CTestIfioctls::doTestStepL()
    	   			err = Testioctl1();
    	   			SetTestStepResult(err ? static_cast<TVerdict>(err) : EPass);
    	   			}	
-   	   	return TestStepResult(); 
+   	   	else if(TestStepName() == KTestioctlGetIfIpAddr)
+   	   	    {
+            INFO_PRINTF1(_L("TestGetIfIPAddr():"));
+            err = TestGetIfIPAddr();
+            SetTestStepResult(err ? static_cast<TVerdict>(err) : EPass);
+
+   	   	    }
+        else if(TestStepName() == KTestioctlGetIfAttributes)
+            {
+            INFO_PRINTF1(_L("TestGetIfAttributes():"));
+            err = TestGetIfAttributes();
+            SetTestStepResult(err ? static_cast<TVerdict>(err) : EPass);
+
+            }
+        else if(TestStepName() == KTestioctlSetIfAttributes)
+            {
+            INFO_PRINTF1(_L("TestSetIfAttributes():"));
+            err = TestSetIfAttributes();
+            SetTestStepResult(err ? static_cast<TVerdict>(err) : EPass);
+
+            }
+        else if(TestStepName() == KTestioctlSetIfDNSSuffix)
+            {
+            INFO_PRINTF1(_L("TestSetIfDNSSuffix():"));
+            err = TestSetIfDNSSuffix();
+            SetTestStepResult(err ? static_cast<TVerdict>(err) : EPass);
+
+            }
+        else if(TestStepName() == KTestioctlGetIfDNSSuffix)
+            {
+            INFO_PRINTF1(_L("TestGetIfDNSSuffix():"));
+            err = TestGetIfDNSSuffix();
+            SetTestStepResult(err ? static_cast<TVerdict>(err) : EPass);
+            }
+        else if(TestStepName() == KTestRouteIoctl)
+             {
+             INFO_PRINTF1(_L("TestRouteIoctl():"));
+             err = TestRouteIoctl();
+             SetTestStepResult(err ? static_cast<TVerdict>(err) : EPass);
+             }   
+        else if(TestStepName() == KTestNumberOfRoutesIoctl)
+             {
+             INFO_PRINTF1(_L("TestNumberOfRoutesIoctl():"));
+             err = TestNumberOfRoutesIoctl();
+             SetTestStepResult(err ? static_cast<TVerdict>(err) : EPass);
+             }   
+        else if(TestStepName() == KTestSetNameServers)
+            {
+            INFO_PRINTF1(_L("TestSetNameServers():"));
+            err = TestSetNameServers();
+            SetTestStepResult(err ? static_cast<TVerdict>(err) : EPass);
+            }
+        else if(TestStepName() == KTestGetNameServers)
+            {
+            INFO_PRINTF1(_L("TestGetNameServers():"));
+            err = TestGetNameServers();
+            SetTestStepResult(err ? static_cast<TVerdict>(err) : EPass);
+            }
+   		return TestStepResult(); 
 
 	}
  

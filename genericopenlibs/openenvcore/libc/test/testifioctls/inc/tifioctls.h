@@ -43,6 +43,15 @@ _LIT(KTestMacAddress, "TestMacAddress");
 _LIT(KTestMacAddressNegative1, "TestMacAddressNegative1");
 _LIT(KTestioctlfile, "Testioctlfile");
 _LIT(KTestioctl1, "Testioctl1");
+_LIT(KTestioctlGetIfIpAddr, "TestGetIfIPAddr");
+_LIT(KTestioctlGetIfAttributes, "TestGetIfAttributes");
+_LIT(KTestioctlSetIfAttributes, "TestSetIfAttributes");
+_LIT(KTestioctlSetIfDNSSuffix, "TestSetIfDNSSuffix");
+_LIT(KTestioctlGetIfDNSSuffix, "TestGetIfDNSSuffix");
+_LIT(KTestRouteIoctl, "TestRouteIoctl");
+_LIT(KTestNumberOfRoutesIoctl, "TestNumberOfRoutesIoctl");
+_LIT(KTestSetNameServers, "TestSetNameServers");
+_LIT(KTestGetNameServers, "TestGetNameServers");
 
 
 class CTestIfioctls : public CTestStep
@@ -75,7 +84,20 @@ private:
 	TInt TestMacAddressNegative1();
 	TInt Testioctlfile();
 	TInt Testioctl1();
-	
+	TInt TestGetIfIPAddr();
+	TInt GetIapName(char * aIapName,int len);
+	TInt StartIap(const char *aIapName, int &fd);
+	TInt TestGetIfAttributes();
+	void printFlags(TInt flags);
+	TInt TestSetIfAttributes();
+	void FreeDnsSuffixes(char ** suffixes);
+	TInt TestSetIfDNSSuffix();
+	TInt TestGetIfDNSSuffix();	
+	TInt TestRouteIoctl();
+	TInt TestNumberOfRoutesIoctl();
+	TInt TestSetNameServers();
+	TInt TestGetNameServers();
+
 	// util function
 	void ReadStringParam(char* aString);
 public:

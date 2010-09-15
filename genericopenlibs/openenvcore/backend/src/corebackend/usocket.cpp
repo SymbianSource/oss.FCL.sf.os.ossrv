@@ -232,7 +232,11 @@ EXPORT_C void TUSockAddr::Get(TAny* addr, unsigned long* len)
 			fromaddr = (from[15]<<24)+(from[14]<<16)+(from[13]<<8)+from[12];
 		else
 			fromaddr = (from[0]<<24)+(from[1]<<16)+(from[2]<<8)+ from[3];
-		*(TUint32*)sp->sa_data=fromaddr;
+		unsigned char * ptr = (unsigned char *)&fromaddr;
+		sp->sa_data[0] =  ptr[0];
+		sp->sa_data[1] =  ptr[1];
+		sp->sa_data[2] =  ptr[2];
+		sp->sa_data[3] =  ptr[3];
 		*len=8;
 		return;
 		}
@@ -956,7 +960,7 @@ void CSocketDesc::Ioctl(int aCmd, void* aParam, TRequestStatus& aStatus)
 			ATOMICSOCKETOP(ret=iSocket.GetOpt(KSoTcpRcvAtMark,KSolInetTcp,*param), ret = KErrBadHandle)
 			break;	
 		case SIOCGIFADDR:
-			ret = GetIpAddress(aParam);
+		    ret = GetInterfaceAttributes(aParam, EACTIVE_GETIP);
 			break;	
 		case SIOCGIFNUM:
 			ret = GetInterafceNumber(aParam);
@@ -973,7 +977,37 @@ void CSocketDesc::Ioctl(int aCmd, void* aParam, TRequestStatus& aStatus)
 		case SIOCGIFACTIVEIAP:
 		    ret = GetActiveInterface( aParam);
 		    break;
-		
+		case SIOCGIFFLAGS:
+		    ret = GetInterfaceAttributes(aParam, EACCESS_GETFLAGS);
+		    break;
+		case SIOCGIFMTU:
+		    ret = GetInterfaceAttributes(aParam, EACCESS_GETMTU);
+		    break;
+		case SIOCGIFNETMASK:
+		    ret = GetInterfaceAttributes(aParam, EACCESS_GETNETMASK);
+		    break;
+		case SIOCGIFDEFGATEWAY:
+		    ret = GetInterfaceAttributes(aParam, EACCESS_GETDEFGATEWAY);
+		    break;
+
+		case SIOCSIFMTU:
+		    ret = SetInterfaceAttributes(aParam, EACCESS_SETMTU);
+		    break;
+		 case SIOCENUMROUTES:
+            ret = EnumerateRoutes(aParam);
+            break;
+		 case SIOCSETDNSSUFFIX:
+		     ret = SetInterfaceAttributes(aParam, EACCESS_SETDNSSUFFIX);
+			 break;
+		 case SIOCGETDNSSUFFIX:
+		     ret = GetInterfaceAttributes(aParam, EACCESS_GETDNSSUFFIX);
+		     break;
+		 case SIOCSNAMESERVER:
+		     ret = SetNameServer(aParam,EACCESS_SETNAMESERVERS );
+		     break;
+		 case SIOCGNAMESERVER:
+		     ret = GetNameServer(aParam, EACCESS_GETNAMESERVERS);
+             break;
 		default:
 			ret=KErrNotSupported;
 			break;
@@ -1017,7 +1051,7 @@ TInt CSocketDesc::Fcntl(TUint anArg, TUint aCmd)
 
     return CSockDescBase::Fcntl(anArg, aCmd);
 	}
-
+/*
 TInt CSocketDesc :: GetIpAddress( void *aParam )
 	{
 	TInetAddr myAddr;
@@ -1031,7 +1065,7 @@ TInt CSocketDesc :: GetIpAddress( void *aParam )
 	ifreq *ifr = (ifreq *)aParam;
 	((struct sockaddr_in *)&ifr->ifr_addr)->sin_addr.s_addr = myIP;
 	return KErrNone;
-	}
+	}*/
 
 TInt CSocketDesc :: GetRemoteIpAddress( void *aParam )
 	{
@@ -1184,279 +1218,310 @@ void CSocketDesc::FindConnectionInfoL(TAccessPointRecord &aRecord,char *ptr)
 	CleanupStack::PopAndDestroy(iapDatabase);	
 	return;
 	}
+#endif // __SYMBIAN_COMPILE_UNUSED__
 
-TInt CSocketDesc :: SetInterfaceDetails( void *aParam ,TInt aFlag, TInt aType )
+
+
+TInt CSocketDesc::GetInterfaceInfo(TSoInetInterfaceInfo& aIfInfo, TInt aIapId )
 	{
-	ifreq *ifr = (ifreq *)aParam;
-	TPckgBuf<TSoInetIfQuery> ifq;
-	TBuf8 <25> ipBuf8;
-	TName aBuf;			
+	 TPckgBuf<TSoInetInterfaceInfo> info;		
 	TInt ret = KErrNone;
 	ATOMICSOCKETOP( ret = iSocket.SetOpt(KSoInetEnumInterfaces, KSolInetIfCtrl), ret = KErrBadHandle )
 	if (ret != KErrNone)
 		{
 		return KErrGeneral;
 		}    	
-	TPckgBuf<TSoInet6InterfaceInfo> info;
-	TSoInet6InterfaceInfo &in = info();	
 	ATOMICSOCKETOP( ret = iSocket.GetOpt(KSoInetNextInterface, KSolInetIfCtrl, info), ret = KErrBadHandle )
 	while(ret == KErrNone)
 		{			
-		if(info().iName != _L("") && info().iName != _L("loop6") && info().iName != _L("loop4"))
-			{   			
-			TDes16& aName = info().iName;							
-			if( ((aFlag == 0 ) && ( aName.FindC(_L("WLAN")) != KErrNotFound )) ||
-					((aFlag == 1) && (aName.FindC(_L("Generic")) != KErrNotFound )) )
-				{
-				switch(aType)
-					{				
-					case  EACCESS_SETMETRIC:
-						if(info().iState == EIfUp)										 
-							{
-							info().iSpeedMetric =  ifr->ifr_metric;
-							}
-						goto setout;
-
-					case  EACCESS_SETMTU:										 
-						if(info().iState == EIfUp)
-							{
-							info().iMtu = ifr->ifr_mtu ;		
-							}		
-						goto setout;
-
-					case  EACCESS_SETNETMASK :																																																					
-						// Presently netmask address is NULL											
-						if((info().iState == EIfUp) && (ifr->ifr_addr.sa_data !=NULL))
-							{																																																		
-							/*
-							CharToTBuf8(ifr->ifr_addr.sa_data,ipBuf8);											
-											if (CnvUtfConverter::ConvertToUnicodeFromUtf8( aBuf,ipBuf8 ) == KErrNone)
-											{													
-												ret = info().iNetMask.Input(aBuf);												
-											}																							
-							info().iNetMask.SetAddress(INET_ADDR(255,255,255,0));	
-							*/
-							return KErrNotSupported;
-							}
-						break;	
-					case  EACCESS_SETBROADCAST :										
-						if((info().iState == EIfUp) && (ifr->ifr_broadaddr.sa_data !=NULL))
-							{																																																		
-							/*CharToTBuf8(ifr->ifr_broadaddr.sa_data,ipBuf8);											
-											if (CnvUtfConverter::ConvertToUnicodeFromUtf8( aBuf,ipBuf8 ) == KErrNone)
-											{													
-												ret = info().iBrdAddr.Input(aBuf);												
-											} 
-							*/												
-							return KErrNotSupported;
-							}
-
-						break;
-					case  EACCESS_SETPHYSADDR :										
-						// Currently no imeplentation is given as KIfHasHardwareAddr is always 
-						// set to 0 for wlan and GPRS
-						if(info().iFeatures&KIfHasHardwareAddr)
-							{
-							return KErrNotSupported;
-							}
-						break;									
-					case  EACCESS_SETFLAGS :										
-						info().iFeatures = 0;
-						// Interface UP
-						if((ifr->ifr_flags & IFF_UP) && (ifr->ifr_flags & IFF_DRV_RUNNING)) 
-							{
-							info().iState = EIfUp;																						
-							}																						
-						else
-							{
-							info().iState = EIfDown;																																	
-							}																																	
-
-						// Loopback										
-						if(ifr->ifr_flags & IFF_LOOPBACK)
-							{
-							info().iFeatures |= KIfIsLoopback;																				            													           
-							}																				            													           
-
-						// point to point support
-						if(ifr->ifr_flags &  IFF_POINTOPOINT)
-							{
-							info().iFeatures |= KIfIsPointToPoint; 							                
-							} 							                
-
-						// Broadcast
-						if(ifr->ifr_flags & IFF_BROADCAST)
-							{
-							info().iFeatures |=KIfCanBroadcast; 
-							} 
-
-
-						// Multicast
-						if(ifr->ifr_flagshigh & IFF_MULTICAST)
-							{
-							info().iFeatures = KIfCanMulticast;							            	      
-							}
-						//these flags details are available in symbian but not used by lib layer.
-						/* if(info().iFeatures&KIfCanSetMTU)			            	
-							               if(info().iFeatures&KIfHasHardwareAddr)    
-							               if(info().iFeatures&KIfCanSetHardwareAddr) */
-						goto setout;							            	
-
-					default:
-						break;					 
-					}
-				}
-
-			}
-		ATOMICSOCKETOP( ret = iSocket.GetOpt(KSoInetNextInterface, KSolInetIfCtrl, info), ret = KErrBadHandle )
+		if(info().iName != _L(""))
+            {   			
+            TPckgBuf<TSoInetIfQuery> optifquery;
+            optifquery().iName = info().iName;
+			ATOMICSOCKETOP( ret = iSocket.GetOpt(KSoInetIfQueryByName, KSolInetIfQuery, optifquery), ret = KErrBadHandle )
+            if( ret  == KErrNone)
+                {
+                if(optifquery().iZone[1] == aIapId && info().iAddress.Address() != NULL)
+                	{
+                    aIfInfo = info();
+                	return KErrNone;
+                	}
+                }
+            }
+			ATOMICSOCKETOP( ret = iSocket.GetOpt(KSoInetNextInterface, KSolInetIfCtrl, info), ret = KErrBadHandle )
+        }
+    return KErrNotFound;
+	}
+TInt CSocketDesc :: SetInterfaceDetails( void *aParam ,TInt /*aFlag*/, TInt aType, TInt aIapId )
+	{
+	TSoInet6InterfaceInfo ifInfo; 
+	TInt ret = KErrNone;
+	if((ret = GetInterfaceInfo(ifInfo,aIapId)) != KErrNone)
+		{
+		return ret;
 		}
-	setout:	
-	TPckgBuf<TSoInet6InterfaceInfo> changeToNew(info());
-	ATOMICSOCKETOP(ret = iSocket.SetOpt(KSoInetConfigInterface, KSolInetIfCtrl,changeToNew), return KErrBadHandle )
+    ifreq *ifr = (ifreq *)aParam;
+	switch(aType)
+		{				
+		case  EACCESS_SETMETRIC:
+			if(ifInfo.iState == EIfUp)										 
+				{
+				ifInfo.iSpeedMetric =  ifr->ifr_metric;
+				}
+			break;
+
+		case  EACCESS_SETMTU:										 
+			if(ifInfo.iState == EIfUp)
+				{
+				ifInfo.iMtu = ifr->ifr_mtu ;		
+				}		
+			break;
+
+		case  EACCESS_SETPHYSADDR :										
+			// Currently no imeplentation is given as KIfHasHardwareAddr is always 
+			// set to 0 for wlan and GPRS
+			if(ifInfo.iFeatures&KIfHasHardwareAddr)
+				{
+				return KErrNotSupported;
+				}
+			break;							
+		case EACCESS_SETDNSSUFFIX:
+			{
+			if_dns_suffixes * dns_suffix = static_cast<if_dns_suffixes *>(aParam);
+			char **suffixes = dns_suffix->suffixes;
+			TSoInetInterfaceInfoExtnDnsSuffix interfaceInfo;
+			(TSoInetInterfaceInfo &)interfaceInfo = ifInfo;
+			interfaceInfo.iDomainSuffix.DeleteAll();
+            TPckgBuf<TSoInetInterfaceInfoExtnDnsSuffix> configInfo(interfaceInfo);
+
+			ATOMICSOCKETOP(ret = iSocket.SetOpt(KSoInetConfigInterface,KSolInetIfCtrl,configInfo), ret = KErrBadHandle)
+
+			for(int i = 0; suffixes[i]; i++)  //check the number of suffixes that can be configured
+				{
+				TPtrC8 suffix((const unsigned char *)suffixes[i]); 
+				/*ret = configInfo().iDomainSuffix.Copy(suffix);
+				if(ret != KErrNone)
+				    {
+                    return ret;
+				    }*/
+				ret = CnvUtfConverter::ConvertToUnicodeFromUtf8(configInfo().iDomainSuffix.iSuffixName,suffix);
+				configInfo().iDomainSuffix.iDomainSuffixFunction = EInetAddSuffix;
+               ATOMICSOCKETOP( ret = iSocket.SetOpt(KSoInetConfigInterface,KSolInetIfCtrl,configInfo), ret = KErrBadHandle)
+                if(ret != KErrNone)
+                    {
+                    return ret;
+                    }
+				
+				}
+			return ret;
+			}
+		case EACCESS_SETNAMESERVERS:
+			{
+			if_name_servers *name_server = static_cast<if_name_servers*>(aParam);
+			if((ret = ConvertSockToTInetAddr(&name_server->nameserver1,ifInfo.iNameSer1)) != KErrNone)
+				{
+				return ret;
+				}
+			if((ret = ConvertSockToTInetAddr(&name_server->nameserver2,ifInfo.iNameSer2)) != KErrNone)
+				{
+				return ret;
+				}
+			break;
+			}
+
+		default:
+			return KErrArgument;					 
+		}
+	TPckgBuf<TSoInet6InterfaceInfo> pkgIfInfo(ifInfo);
+	ATOMICSOCKETOP(ret = iSocket.SetOpt(KSoInetConfigInterface, KSolInetIfCtrl,pkgIfInfo), ret = KErrBadHandle)
 	return ret;
 	}
-#endif // __SYMBIAN_COMPILE_UNUSED__
 
-TInt CSocketDesc::GetInterfaceDetails( void *aParam ,TInt aFlag, TInt aType )
+//This function frees the memory allocated by SIOCGETDNSSUFFIX ioctl
+void CSocketDesc::FreeDNSSuffixes(char ** suffixes)
+    {
+    for(int i = 0; suffixes[i]; i++)
+        {
+        delete[] suffixes[i];
+        }
+    delete[] suffixes;
+    }
+
+TInt CSocketDesc::GetInterfaceDetails( void *aParam ,TInt /*aFlag*/, TInt aType, TInt aIapId )
 	{
-	TPckgBuf<TSoInetIfQuery> ifq;
 
-	TInt ret = KErrNone; 
-	ATOMICSOCKETOP( ret = iSocket.SetOpt(KSoInetEnumInterfaces, KSolInetIfCtrl), ret = KErrBadHandle )
-	if (ret != KErrNone)
-		{
-		return KErrGeneral;
-		}
-	
 	ifreq *ifr = (ifreq *)aParam;
-    *(ifr->ifr_addr.sa_data) = '\0';
+	*(ifr->ifr_addr.sa_data) = '\0';
+    TInt ret = 0;
 
-	TPckgBuf<TSoInetInterfaceInfo> info;
-	ATOMICSOCKETOP( ret = iSocket.GetOpt(KSoInetNextInterface, KSolInetIfCtrl, info), ret = KErrBadHandle )
-	while( ret == KErrNone)
+    TSoInetInterfaceInfo ifInfo; 
+
+	if((ret = GetInterfaceInfo(ifInfo,aIapId)) != KErrNone)
+		{
+		return ret;
+		}
+
+	switch(aType)
 		{
 
-		if(info().iName != _L("") && info().iName != _L("loop6") && info().iName != _L("loop4"))
-			{   
-			TDes16& aName = info().iName;
-			TName aBuf;
-			TBuf8<KMaxName> ipAddr;
-			if( ((aFlag == 0 ) && ( aName.FindC(_L("WLAN")) != KErrNotFound )) ||
-					((aFlag == 1) && (aName.FindC(_L("Generic")) != KErrNotFound )) )
+		case  EACTIVE_GETIP :
+			if(ifInfo.iState == EIfUp)
 				{
-				switch(aType)
-					{
-
-					case  EACTIVE_GETIP :
-						if((info().iState == EIfUp) && (info().iAddress.Address() != NULL))
-							{
-							if(!((info().iAddress.IsLinkLocal()) || (info().iAddress.IsSiteLocal())))
-								{
-								info().iAddress.Output(aBuf);  
-								if (CnvUtfConverter::ConvertFromUnicodeToUtf8( ipAddr, aBuf ) == KErrNone)
-									{			
-									StrlCopy(ifr->ifr_addr.sa_data,(const char *) ipAddr.PtrZ(),ipAddr.Length()+1);														
-									}  
-								}
-							}
-						break;
-					case  EACCESS_GETMETRIC:
-						ifr->ifr_metric = 0;
-						if (info().iState == EIfUp)
-							{
-							ifr->ifr_metric = info().iSpeedMetric;
-							}
-						break;
-					case  EACCESS_GETMTU:
-						ifr->ifr_mtu = 0;
-						if (info().iState == EIfUp)
-							{
-							ifr->ifr_mtu = info().iMtu;
-							}
-						break;	
-					case  EACCESS_GETNETMASK :
-						*(ifr->ifr_addr.sa_data) = '\0';
-						// Presently netmask address is NULL
-						if((info().iState == EIfUp) && (info().iNetMask.Address() != NULL))
-							{
-							//anAddr = info().iNetMask.Address();	
-							info().iNetMask.Output(aBuf);  
-							if (CnvUtfConverter::ConvertFromUnicodeToUtf8( ipAddr, aBuf ) == KErrNone)
-								{			
-								StrlCopy(ifr->ifr_addr.sa_data,(const char *) ipAddr.PtrZ(),ipAddr.Length()+1);												
-								}  											
-							}
-						break;	
-					case  EACCESS_GETBROADCAST :
-						*(ifr->ifr_broadaddr.sa_data) = '\0';
-						// Presently Breaodcast address is NULL
-						if((info().iState == EIfUp) && (info().iBrdAddr.Address() != NULL))
-							{
-
-							//anAddr = info().iBrdAddr.Address();	
-							info().iBrdAddr.Output(aBuf);  
-							if (CnvUtfConverter::ConvertFromUnicodeToUtf8( ipAddr, aBuf ) == KErrNone)
-								{			
-								StrlCopy(ifr->ifr_broadaddr.sa_data,(const char *) ipAddr.PtrZ(),ipAddr.Length()+1);												
-								}											
-							}
-						break;
-					case  EACCESS_GETPHYSADDR :
-						ifr->ifr_phys = 0;
-						// Currently no imeplentation is given as KIfHasHardwareAddr is always 
-						// set to 0 for wlan and GPRS
-						if(info().iFeatures&KIfHasHardwareAddr)
-							{
-							//nada.
-							}
-						break;									
-					case  EACCESS_GETFLAGS :
-						ifr->ifr_flags = 0;
-						ifr->ifr_flagshigh=0;
-						// Interface UP
-						if(info().iState == EIfUp)
-							{
-							ifr->ifr_flags |= IFF_UP; 
-							ifr->ifr_flags |= IFF_DRV_RUNNING;
-							}
-						// Loopback
-						if(info().iFeatures&KIfIsLoopback)
-							{
-							ifr->ifr_flags |= IFF_LOOPBACK;
-							}										            													           
-
-						// point to point support
-						if(info().iFeatures&KIfIsPointToPoint) 
-							{
-							ifr->ifr_flags |= IFF_POINTOPOINT;	
-							}
-						
-						// Broadcast
-						if(info().iFeatures&KIfCanBroadcast)
-							{
-							ifr->ifr_flags |= IFF_BROADCAST;
-							}      
-
-						// Multicast
-						if(info().iFeatures&KIfCanMulticast)
-							{
-							ifr->ifr_flagshigh |= ((IFF_MULTICAST & 0xff00) >> 8);
-							}
-						//these flags details are available in symbian but not used by lib layer.
-						/* if(info().iFeatures&KIfCanSetMTU)			            	
-							               if(info().iFeatures&KIfHasHardwareAddr)    
-							               if(info().iFeatures&KIfCanSetHardwareAddr) */
-
-						break;																 				 
-				 
-					}
+				ret = ConvertTInetToSockAddr(ifInfo.iAddress,&ifr->ifr_addr);
+				return ret;
 				}
+			break;
+		case  EACCESS_GETMETRIC:
+			if(ifInfo.iState == EIfUp)
+				{
+				ifr->ifr_metric = ifInfo.iSpeedMetric;
+				return KErrNone;
+				}
+			break;
+		case  EACCESS_GETMTU:
+			if(ifInfo.iState == EIfUp)
+				{
+				ifr->ifr_mtu = ifInfo.iMtu;
+				return KErrNone;
+				}
+			break;	
+		case  EACCESS_GETNETMASK :
+			// Presently netmask address is NULL
+			if(ifInfo.iState == EIfUp)
+				{
+				ret = ConvertTInetToSockAddr(ifInfo.iNetMask,&ifr->ifr_addr);
+				return ret;
+				}
+			break;	
+		case  EACCESS_GETBROADCAST :
+			// Presently Breaodcast address is NULL
+			if(ifInfo.iState == EIfUp)
+				{
+				ret = ConvertTInetToSockAddr(ifInfo.iBrdAddr,&ifr->ifr_broadaddr);
+				return ret;
+				}
+			break;
+		case EACCESS_GETDNSSUFFIX:
+		    {
+
+		    TInetSuffix data;
+		    TPckgBuf<TInetSuffix> opt(data);
+		    // Set the option to start enumeration of domain suffix on the active interface
+			TInt err = KErrNone;
+		    ATOMICSOCKETOP( err = iSocket.SetOpt(KSoInetEnumDomainSuffix, KSolInetIfCtrl), err = KErrBadHandle) 
+		    if(err != KErrNone) 
+		        {
+		        return err;
+		        }
+		    struct if_dns_suffixes * dns_suffix = static_cast<if_dns_suffixes *>(aParam);
+		    RPointerArray<char> suffixArray;
+			ATOMICSOCKETOP (err = iSocket.GetOpt(KSoInetNextDomainSuffix, KSolInetIfCtrl, opt),err = KErrBadHandle)
+		    while(err == KErrNone)
+		        {
+                char *suffix = new char[opt().iSuffixName.Length()+1];
+                if((ret = suffixArray.Append(suffix)) != KErrNone)
+                    {
+                    suffixArray.ResetAndDestroy();
+                    return ret;
+                    }
+                TPtr8 ptr((unsigned char *)suffix,opt().iSuffixName.Length()+1);
+                ret = CnvUtfConverter::ConvertFromUnicodeToUtf8(ptr,opt().iSuffixName);
+                //ptr.Copy(opt().iSuffixName);
+                if(ret != KErrNone)
+                    {
+                    suffixArray.ResetAndDestroy();
+                    return ret;
+                    }
+                ptr.ZeroTerminate();
+				ATOMICSOCKETOP (err = iSocket.GetOpt(KSoInetNextDomainSuffix, KSolInetIfCtrl, opt),err = KErrBadHandle)
+		    	}
+
+		    dns_suffix->suffixes = new char*[suffixArray.Count() + 1];
+		    for(int i = 0 ; i< suffixArray.Count(); i++)
+		    	{
+                dns_suffix->suffixes[i] = suffixArray[i];
+		    	}
+            dns_suffix->suffixes[suffixArray.Count()] = NULL;
+            suffixArray.Close();
+            return KErrNone;
+
+		}
+			
+		case EACCESS_GETNAMESERVERS:
+			{
+			if_name_servers *name_server = static_cast<if_name_servers*>(aParam);
+			if((ret = ConvertTInetToSockAddr(ifInfo.iNameSer1, &name_server->nameserver1)) != KErrNone)
+				{
+				return ret;
+				}
+			if((ret = ConvertTInetToSockAddr(ifInfo.iNameSer2, &name_server->nameserver2)) != KErrNone)
+				{
+				return ret;
+				}
+			return KErrNone;
 
 			}
-		ATOMICSOCKETOP( ret = iSocket.GetOpt(KSoInetNextInterface, KSolInetIfCtrl, info), ret = KErrBadHandle )
+
+		case  EACCESS_GETPHYSADDR :
+			ifr->ifr_phys = 0;
+			// Currently no imeplentation is given as KIfHasHardwareAddr is always 
+			// set to 0 for wlan and GPRS
+			if(ifInfo.iFeatures&KIfHasHardwareAddr)
+				{
+				//nada.
+				}
+			return KErrNotSupported;
+
+		case EACCESS_GETDEFGATEWAY:
+			if(ifInfo.iState == EIfUp)
+				{
+				ret = ConvertTInetToSockAddr(ifInfo.iDefGate,&ifr->ifr_defgatewayaddr);
+				return ret;
+				}
+			break;
+
+
+		case  EACCESS_GETFLAGS :
+			ifr->ifr_flags = 0;
+			ifr->ifr_flagshigh=0;
+			// Interface UP
+			if(ifInfo.iState == EIfUp)
+				{
+				ifr->ifr_flags |= IFF_UP; 
+				ifr->ifr_flags |= IFF_DRV_RUNNING;
+				}
+			// Loopback
+			if(ifInfo.iFeatures&KIfIsLoopback)
+				{
+				ifr->ifr_flags |= IFF_LOOPBACK;
+				}										            													           
+
+			// point to point support
+			if(ifInfo.iFeatures&KIfIsPointToPoint) 
+				{
+				ifr->ifr_flags |= IFF_POINTOPOINT;  
+				}
+
+			// Broadcast
+			if(ifInfo.iFeatures&KIfCanBroadcast)
+				{
+				ifr->ifr_flags |= IFF_BROADCAST;
+				}      
+
+			// Multicast
+			if(ifInfo.iFeatures&KIfCanMulticast)
+				{
+				ifr->ifr_flagshigh |= ((IFF_MULTICAST & 0xff00) >> 8);
+				}
+			return KErrNone;
+
+		default:
+			return KErrArgument;                   
 		}
 
-	return KErrNone;	
+
+	return KErrNotFound;
+
 	}
 
 TInt CSocketDesc::Poll(TPollMode aMode,TBool& aReadyStatus,TInt& aErrno)
@@ -1673,7 +1738,7 @@ TInt CSocketDesc::GetInterface(void *aParam, TInt aType)
 				{
 				servFlag  = 1;	
 				}
-			GetInterfaceDetails(ifr,servFlag,EACTIVE_GETIP);
+			GetInterfaceDetails(ifr,servFlag,EACTIVE_GETIP,ref.iId);
 			}
 		}
 	ifc->ifc_len = sizeof(ifreq) * apIndex;
@@ -2245,4 +2310,155 @@ TInt CSocketDesc::GetActiveInterface( void *aParam)
     ifreq *ifr = (ifreq * )aParam;
     ifr->ifr_index  = opt().iZone[1]; //IAP_ID
     return KErrNone;
+    }
+
+
+TInt CSocketDesc::GetActiveInterfaceIAPIdByName(const char *aIapName,TInt& aIapId)
+    {
+
+    TInt rcIndex = 0;
+    RConnection *rc;
+    TAccessPointRecord tempRecord;
+    char iapName[IFNAMSIZ];
+    TInt ret = KErrNotFound;
+//    ifreq * ifr = static_cast<ifreq *> (aParam); //may not work, will have to reinterper_cast
+
+    while(((CFileTable*)iFids)->RConnectionAt(rcIndex++, rc) == KErrNone)
+        {
+        if( GetRConnectionDetails(rc, tempRecord) != KErrNone )
+            {
+            continue;
+            }
+        TPtr8 ptr((TText8*)iapName, IFNAMSIZ-1);  
+
+        ret = CnvUtfConverter::ConvertFromUnicodeToUtf8(ptr, tempRecord.iName);
+        if(ret == KErrNone)
+            {
+           ptr.ZeroTerminate();
+            if(StrCmp(iapName, aIapName) == 0)
+                {
+                aIapId = tempRecord.iId;
+                return KErrNone; 
+                }
+            }
+        }
+    return ret;  //is it okay? ret contains rite val?
+    }
+//converts Symbian Inetaddres structure to posix sockaddr structure
+TInt CSocketDesc::ConvertTInetToSockAddr(const TInetAddr& aInetAddr, sockaddr * aSockAddr )
+    {
+    TUSockAddr addr(aInetAddr); 
+    unsigned long len = sizeof(sockaddr);
+    addr.Get(aSockAddr,&len);
+    return addr.iError;
+    }
+
+//converts posix sockaddr structure to Symbian Inetaddres structure 
+TInt CSocketDesc::ConvertSockToTInetAddr(const sockaddr * aSockAddr, TInetAddr& aInetAddr)
+    {
+    unsigned int len = sizeof(sockaddr);
+    TUSockAddr addr(aSockAddr,len);  
+    aInetAddr =  addr;
+    return addr.iError;
+    }
+
+//Gets the Iap id by IAP name and using iap id gets the interface details
+TInt CSocketDesc::GetInterfaceAttributes(void *aParam, int aFlag)
+    {
+    ifreq * ifr = static_cast<ifreq *> (aParam); //may not work, will have to reinterper_cast
+    TInt ret = KErrGeneral, iapId;
+    ret = GetActiveInterfaceIAPIdByName(ifr->ifr_name,iapId);
+    if(ret == KErrNone)
+        {
+        ret = GetInterfaceDetails( ifr ,0, aFlag, iapId);  //what to do with return value
+        }
+    return ret;
+        
+    }
+
+//Gets the Iap id by IAP name and using iap id sets the interface details
+TInt CSocketDesc::SetInterfaceAttributes(void *aParam, int aFlag)
+    {
+    ifreq * ifr = static_cast<ifreq *> (aParam); //access of only if_name guaranteed to work.
+    TInt ret = KErrGeneral, iapId;
+    ret = GetActiveInterfaceIAPIdByName(ifr->ifr_name,iapId);
+    if(ret == KErrNone)
+        {
+        ret = SetInterfaceDetails( aParam ,0, aFlag, iapId);  //what to do with return value
+        }
+    return ret;
+    }
+
+//Enumerates the routes configured on the system	
+TInt CSocketDesc::EnumerateRoutes(void *aParam)
+    {
+    TInt ret = KErrNone;
+    rtconf *rtc = (rtconf*)aParam;
+    TInt routeCount = (rtc->rt_len) /sizeof (route_entry);
+    route_entry *rtentry = rtc->rtc_rtcu.rtcu_entry;
+    ATOMICSOCKETOP(ret =  iSocket.SetOpt(KSoInetEnumRoutes, KSolInetRtCtrl),ret = KErrBadHandle)
+    if(ret != KErrNone )
+        {
+        return ret;
+        }
+    //If the length is zero, we fill the number of routes available information
+    TInt count = 0;
+    TPckgBuf<TSoInetRouteInfo> route;
+    if(routeCount <=0 || rtc->rtc_buf ==NULL)
+        {
+		ATOMICSOCKETOP(ret = iSocket.GetOpt(KSoInetNextRoute, KSolInetRtCtrl, route), ret = KErrBadHandle)
+        while(ret == KErrNone)
+        	{
+        	count++;
+			ATOMICSOCKETOP(ret = iSocket.GetOpt(KSoInetNextRoute, KSolInetRtCtrl, route), ret = KErrBadHandle)
+        	}
+        rtc->rt_len = count * sizeof(route_entry) ;
+        return KErrNone;
+        }
+    for(TInt i=0; i<routeCount ; i++) 
+    	{
+		ATOMICSOCKETOP(ret = iSocket.GetOpt(KSoInetNextRoute, KSolInetRtCtrl, route),ret = KErrBadHandle)
+    	if(ret != KErrNone)
+    		{
+    		break;
+    		}	
+    	ConvertTInetToSockAddr(route().iDstAddr, &rtentry[i].dst_addr);
+    	ConvertTInetToSockAddr(route().iIfAddr, &rtentry[i].ifaddr);
+    	ConvertTInetToSockAddr(route().iGateway, &rtentry[i].gateway_addr);
+    	ConvertTInetToSockAddr(route().iNetMask, &rtentry[i].dst_netmask);
+    	TInt state = route().iState;
+    	TInt type = route().iType;
+    	rtentry[i].rt_metric = route().iMetric;
+    	rtentry[i].rt_flags.state = state;
+    	rtentry[i].rt_flags.type = type;
+
+    	}
+
+    return KErrNone;    
+    }
+
+//Sets the nameserver of an interface
+TInt CSocketDesc::SetNameServer(void *aParam, int aFlag)
+    {
+    if_name_servers * dns_server = static_cast<if_name_servers *> (aParam); //access of only if_name guaranteed to work.
+    TInt iapId;
+    TInt ret = GetActiveInterfaceIAPIdByName(dns_server->if_name, iapId);
+    if(ret == KErrNone)
+        {
+        ret = SetInterfaceDetails( aParam ,0, aFlag, iapId);  //what to do with return value
+        }
+    return ret;
+    }
+
+//Gets the nameserver of an interface
+TInt CSocketDesc::GetNameServer(void *aParam, int aFlag)
+    {
+    if_name_servers * dns_server = static_cast<if_name_servers *> (aParam); //access of only if_name guaranteed to work.
+    TInt iapId;
+    TInt ret = GetActiveInterfaceIAPIdByName(dns_server->if_name, iapId);
+    if(ret == KErrNone)
+        {
+        ret = GetInterfaceDetails( dns_server ,0, aFlag, iapId);  //what to do with return value
+        }
+    return ret;     
     }

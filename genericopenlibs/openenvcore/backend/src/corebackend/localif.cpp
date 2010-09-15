@@ -79,10 +79,42 @@ EXPORT_C CLocalSystemInterface* Backend()
 		return &backend;
 #endif
 		}
+		
+EXPORT_C RTz& CLocalSystemInterface::TZServer(TInt &aStatus)
+	{
+	aStatus = OnDemandTZServerConnection();
+	return iTzServer;
+	} 
+		
+TInt CLocalSystemInterface::OnDemandTZServerConnection()
+        {
+		TInt v = EFalse;
+		TInt err = KErrNone;
+		
+		if(__e32_atomic_load_acq32(&iIsRTzConnected))
+			return err;
+			
+		iTzServerLock.Wait();
+		if (!iIsRTzConnected) 
+			{
+			err = iTzServer.Connect();
+			if ( err == KErrNone ) 
+				{
+				err = iTzServer.ShareAuto();
+				if( err == KErrNone) {
+					v = ETrue;
+					}
+				}
+			__e32_atomic_store_rel32(&iIsRTzConnected, v); 
+			}
+		iTzServerLock.Signal();
+		
+        return err;
+        } 
 
 // Construction of Backend Object which is going to be singleton object for the process
 EXPORT_C CLocalSystemInterface::CLocalSystemInterface() : iOpenDirList(CLocalSystemInterface::KDirGran),
-iTLDInfoList(CLocalSystemInterface::KTLDInfoListGran), iDefConnResurrect(ETrue), iDefConnPref(NULL)
+iTLDInfoList(CLocalSystemInterface::KTLDInfoListGran), iDefConnResurrect(ETrue), iDefConnPref(NULL), iIsRTzConnected(EFalse)
 		{
 #ifdef SYMBIAN_OE_POSIX_SIGNALS
 		iSignalsInitialized = EFalse;
@@ -165,17 +197,9 @@ iTLDInfoList(CLocalSystemInterface::KTLDInfoListGran), iDefConnResurrect(ETrue),
 			err |=  iASelectLock.CreateLocal();
 	        //Protect the iDefConnection from concurrent GetDefaultConnection calls
 	        err |= iDefConnLock.CreateLocal();
+			//Protect the time zone server while connecting
+			err |= iTzServerLock.CreateLocal();
 			}
-
-        if(err == KErrNone)
-            {
-            err = iTzServer.Connect();
-            if(!err)
-                {
-                err = iTzServer.ShareAuto();
-                }
-            }
-
 
 		//Panic if any of the above operation returns with error
 		if (err)
@@ -183,7 +207,7 @@ iTLDInfoList(CLocalSystemInterface::KTLDInfoListGran), iDefConnResurrect(ETrue),
 			User::Panic(KEstlibInit, err);
 			}
 
-		iCleanup.StorePtrs(iPrivateHeap, &iFs, &iSs, &iCs, &iSSLock, &iCSLock,&iDefConnLock,&iASelectLock);
+		iCleanup.StorePtrs(iPrivateHeap, &iFs, &iSs, &iCs, &iSSLock, &iCSLock,&iDefConnLock,&iASelectLock,&iTzServerLock);
 
 		}
 
@@ -218,7 +242,6 @@ EXPORT_C CLocalSystemInterface::~CLocalSystemInterface()
 	iASelectRequest.Close();
 	//close the RTz connection
 	iTzServer.Close();
-
 
 	if( iDefConnPref )
 	    {
@@ -1740,6 +1763,11 @@ int CLocalSystemInterface::ioctl (int fid, int cmd, void* param, TRequestStatus&
 	return MapError(err,anErrno);
 	}
 
+EXPORT_C void CLocalSystemInterface::freednssuffixes(if_dns_suffixes * suffixes)
+    {
+    CSocketDesc::FreeDNSSuffixes(suffixes->suffixes);
+    }
+
 int CLocalSystemInterface::ioctl_complete (int fid, int cmd, void* param, TRequestStatus& aStatus, int& anErrno)
 	{
 	return iFids.ioctlcomplete(fid,cmd,param,aStatus,anErrno);
@@ -2166,7 +2194,7 @@ int CLocalSystemInterface::eselect(int maxfd, fd_set *readfds, fd_set *writefds,
         { 
         timer.After(*reqarray[numReqs+arraycount], timeout); 
         // Wait for any request to complete 
-        CLocalSystemInterface::WaitForNRequest(*reqarray, numReqs+arraycount+1);     
+        CLocalSystemInterface::WaitForNRequest(reqarray, numReqs+arraycount+1);     
         if( (*reqarray[numReqs+arraycount]).Int() == KRequestPending) 
             {
             // The timer hasn't fired yet.
@@ -2181,7 +2209,7 @@ int CLocalSystemInterface::eselect(int maxfd, fd_set *readfds, fd_set *writefds,
         } 
     else 
         { 
-        CLocalSystemInterface::WaitForNRequest(*reqarray, numReqs+arraycount);
+        CLocalSystemInterface::WaitForNRequest(reqarray, numReqs+arraycount);
         // Completion Status of one request has been gathered
         onedown = ETrue;
         }
@@ -3620,6 +3648,47 @@ const CFileTable& CLocalSystemInterface::FileTable() const
 {
 return iFids;
 }
+
+// ---------------------------------------------------------------------------------
+// CLocalSystemInterface::WaitForNRequest
+// Wait for any one of the input asynchronous requests to complete
+// Used in lieu of User::WaitForNRequest because of need to support pre-Argus builds
+// ---------------------------------------------------------------------------------
+//
+void CLocalSystemInterface::WaitForNRequest(TRequestStatus **aStatusArray, TInt aNum)
+	{
+	if (aNum)
+		{
+		// used to keep count of requests we have not been asked to wait for
+		TInt nOther = -1;
+		TBool done = EFalse;
+
+		do
+			{
+			++nOther;
+			User::WaitForAnyRequest();
+			for (TInt i = 0; i < aNum; ++i)
+				{
+				if ((*aStatusArray[i]).Int() != KRequestPending)
+					{
+					done = ETrue;
+					break;
+					}
+				}
+			} while (!done);
+
+		if (nOther)
+			{
+			// Adjust the thread's signal semaphore to account for the requests
+			// we were not asked to wait for.
+			RThread thrd;
+			for (TInt i = 0; i < nOther; ++i)
+				{
+				thrd.RequestSignal();
+				}
+			}
+		}
+	}
 
 // ---------------------------------------------------------------------------------
 // CLocalSystemInterface::WaitForNRequest

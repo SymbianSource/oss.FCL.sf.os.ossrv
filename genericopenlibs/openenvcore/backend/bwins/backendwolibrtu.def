@@ -171,3 +171,6 @@ EXPORTS
 	_memmove_r @ 170 NONAME
 	_lstat_r @ 171 NONAME
 	_unsetdefaultif_r @ 172 NONAME
+	?freednssuffixes@CLocalSystemInterface@@QAEXPAUif_dns_suffixes@@@Z @ 173 NONAME ; void CLocalSystemInterface::freednssuffixes(struct if_dns_suffixes *)
+	?TZServer@CLocalSystemInterface@@QAEAAVRTz@@AAH@Z @ 174 NONAME ; class RTz & CLocalSystemInterface::TZServer(int &)
+

@@ -202,6 +202,42 @@ CTestStep* CIfioctlsTestServer::CreateTestStep(const TDesC& aStepName)
 		{
 		testStep = new CTestIfioctls(aStepName);
 		}
+	if(aStepName == KTestioctlGetIfIpAddr)
+	    {
+	    testStep = new CTestIfioctls(aStepName);
+	    }
+	if(aStepName == KTestioctlGetIfAttributes)
+	    {
+	    testStep = new CTestIfioctls(aStepName);
+	    }
+	if(aStepName == KTestioctlSetIfAttributes)
+	    {
+	    testStep = new CTestIfioctls(aStepName);
+	    }
+	if(aStepName == KTestioctlSetIfDNSSuffix)
+	    {
+	    testStep = new CTestIfioctls(aStepName);
+	    }
+	if(aStepName == KTestioctlGetIfDNSSuffix)
+	    {
+	    testStep = new CTestIfioctls(aStepName);
+	    }
+   if(aStepName == KTestRouteIoctl)
+        {
+        testStep = new CTestIfioctls(aStepName);
+        }
+   if(aStepName == KTestNumberOfRoutesIoctl)
+        {
+        testStep = new CTestIfioctls(aStepName);
+        }
+   if(aStepName == KTestSetNameServers)
+        {
+        testStep = new CTestIfioctls(aStepName);
+        }
+   if(aStepName == KTestGetNameServers)
+        {
+        testStep = new CTestIfioctls(aStepName);
+        }
 	return testStep;
 	}
 

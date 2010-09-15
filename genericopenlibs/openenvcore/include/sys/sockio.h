@@ -53,7 +53,20 @@
 #define	SIOCGIFNUM			_IOR('i', 87, int)	/* get interface numbers */
 #define	SIOCADDRT	 _IOW('r', 12, struct rtentry)	/* add route */
 #define	SIOCDELRT	 _IOW('r', 13, struct rtentry)	/* delete route */
+#define SIOCENUMROUTES _IOWR('r', 14, struct rtentry)  /*enumerate routes*/
 #define	SIOCGIFHWADDR _IOW('s', 14, struct ifreq)	/* get MAC address*/
+#define SIOCGIFFLAGS    _IOWR('i', 17, struct ifreq)    /* get ifnet flags */
+#define SIOCGIFMTU  _IOWR('i', 51, struct ifreq)    /* get IF mtu */
+#define SIOCGIFNETMASK  _IOWR('i', 37, struct ifreq)    /* get net addr mask */
+#define SIOCSIFADDR  _IOW('i', 12, struct ifreq)    /* set ifnet address */
+#define SIOCSIFFLAGS     _IOW('i', 16, struct ifreq)    /* set ifnet flags */
+#define SIOCSIFMTU   _IOW('i', 52, struct ifreq)    /* set IF mtu */
+#define SIOCSIFNETMASK   _IOW('i', 22, struct ifreq)    /* set net addr mask */
+#define SIOCGIFDEFGATEWAY _IOWR('i',123,struct ifreq) /* get the default gateway of the interface */
+#define SIOCSETDNSSUFFIX _IOWR('i',124,struct if_dns_suffixes) /* set the dns suffixes of the interface */
+#define SIOCGETDNSSUFFIX _IOWR('i',125,struct if_dns_suffixes) /* get the dns suffixes of the interface */
+#define SIOCSNAMESERVER  _IOWR('i', 41, struct if_name_servers)  /*Set the name server on the interface */
+#define SIOCGNAMESERVER  _IOWR('i', 42, struct if_name_servers) /*Get the name server on the interface*/
 #else	// __SYMBIAN32__
 #define	SIOCSHIWAT	 _IOW('s',  0, int)		/* set high watermark */
 #define	SIOCGHIWAT	 _IOR('s',  1, int)		/* get high watermark */

@@ -138,6 +138,36 @@ struct rtentry {
 #endif //__SYMBIAN32__  
 };
 
+#ifdef __SYMBIAN32__
+struct rtconf
+    {
+    int rt_len; //size of the allocated buffer
+    union
+        {
+        caddr_t rtcu_buf;
+        struct route_entry * rtcu_entry;
+        }rtc_rtcu;
+#define rtc_buf rtc_rtcu.rtcu_buf   /* buffer address */
+#define rtc_req rtc_rtcu.rtcu_entry   /* array of structures returned */
+    };
+
+struct route_entry
+    {
+    struct sockaddr ifaddr;  //address of the interface
+    struct sockaddr dst_addr; //destination address
+    struct sockaddr  gateway_addr;
+    struct sockaddr dst_netmask;
+    struct
+        {
+        int state;
+        int type;
+        }rt_flags;
+    short int rt_metric;
+    char rt_dev[IFNAMSIZ]; //name of the interface
+    };
+#endif
+
+
 #define	RTF_UP		0x1		/* route usable */
 #define	RTF_GATEWAY	0x2		/* destination is a gateway */
 #define	RTF_HOST	0x4		/* host entry (net otherwise) */

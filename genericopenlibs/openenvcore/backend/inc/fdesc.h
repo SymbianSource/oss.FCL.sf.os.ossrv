@@ -641,7 +641,7 @@ public:
 	    {
 	    return ESocketDesc;
 	    }
-	
+	static void FreeDNSSuffixes(char ** suffixes);
 protected:
 	TInt FinalClose();
 private:
@@ -671,8 +671,10 @@ private:
 	TInt StartSubConnection(void *aParam);
 	TInt GetInterface(void *Param, TInt aType);
 	TInt GetInterafceNumber(void *aParam);
-	TInt GetIpAddress( void *aParam );
+	TInt EnumerateRoutes(void* aParam);
 	
+	TInt SetNameServer(void *aParam, int aFlag);
+	TInt GetNameServer(void *aParam, int aFlag);
 	TInt RouteRequest(TInt aReq, void *aParam);
 	TInt GetInterfaceHWAddress(void *aParam);
 	
@@ -686,11 +688,16 @@ private:
 	TInt GetInterafceParamInfo( void *aParam,TInt aType);
 	void FindConnectionDetailsL(CArrayFixFlat<TAccessPointRecord>*& aRecordPtr, TInt& aCount);    
 	void FindConnectionInfoL(TAccessPointRecord &aRecord,char *ptr);
-	TInt GetInterfaceDetails( void *aParam ,TInt aFlag, TInt aType );
+	TInt GetInterfaceDetails( void *aParam ,TInt aFlag, TInt aType, TInt aIapId );
 	TInt SetInterafceParamInfo( void *aParam,TInt aType);
-	TInt SetInterfaceDetails( void *aParam ,TInt aFlag, TInt aType );
-	
-	TInt maybe_reopen_socket()
+	TInt SetInterfaceDetails( void *aParam ,TInt aFlag, TInt aType,TInt aIapId );
+	TInt GetInterfaceAttributes(void *aParam, int aFlag);
+	TInt GetActiveInterfaceIAPIdByName(const char *aIapName,TInt& aIapId);
+	TInt SetInterfaceAttributes(void *aParam, int aFlag);
+	TInt ConvertTInetToSockAddr(const TInetAddr& aInetAddr, sockaddr * aSockAddr );
+	TInt ConvertSockToTInetAddr(const sockaddr * aSockAddr, TInetAddr& aInetAddr);
+	TInt GetInterfaceInfo(TSoInetInterfaceInfo& aIfInfo, TInt aIapId );
+		TInt maybe_reopen_socket()
 	    {
 	    TInt err = KErrNone;
 	    if (!__e32_atomic_load_acq32(&iSocketPtr))
@@ -716,13 +723,18 @@ private:
 		EACCESS_GETBROADCAST,
 		EACCESS_GETPHYSADDR,
 		EACCESS_GETFLAGS,
+		EACCESS_GETDEFGATEWAY,
 		EACCESS_SETMETRIC,
 		EACCESS_SETMTU,
 		EACCESS_SETFLAGS,
 		EACCESS_SETPHYSADDR,
 		EACTIVE_SETIP,
 		EACCESS_SETNETMASK,
-		EACCESS_SETBROADCAST
+		EACCESS_SETBROADCAST,
+		EACCESS_GETDNSSUFFIX,
+		EACCESS_SETDNSSUFFIX,
+		EACCESS_SETNAMESERVERS,
+		EACCESS_GETNAMESERVERS
 		};
 
 	TPtr8 iIoctlBuf;

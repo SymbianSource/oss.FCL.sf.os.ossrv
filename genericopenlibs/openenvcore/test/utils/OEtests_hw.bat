@@ -162,3 +162,4 @@ testexecute   z:\tstdapis\tsetjmp.script
 del e:\sys$rom.zip
 del c:\logs\testexecute\TestResults.htm
 copy c:\logs\testexecute\*.* e:\
+copy c:\ced.log e:\

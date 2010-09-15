@@ -98,3 +98,76 @@ Socket ioctl's. get MAC address.
 @released
 */
 
+/** @def SIOCGIFFLAGS
+Socket Ioctl option. Gets MAC address.
+
+@publishedAll
+@released
+*/
+
+/** @def SIOCGIFMTU
+
+Socket Ioctl option. Gets IF MTU .
+
+@publishedAll
+@released
+*/
+
+
+/** @def SIOCGIFNETMASK
+Socket Ioctl option. Gets net addr mask .
+
+@publishedAll
+@released
+*/
+
+/** @def SIOCGIFDEFGATEWAY
+Socket Ioctl option. Gets the default gateway of the interface .
+
+@publishedAll
+@released
+*/
+
+
+/** @def SIOCSIFMTU
+Socket Ioctl option. set IF mtu .
+
+@publishedAll
+@released
+*/
+
+/** @def SIOCENUMROUTES
+Socket Ioctl option. Enumerate routes .
+
+@publishedAll
+@released
+*/
+
+/** @def SIOCSETDNSSUFFIX
+Socket Ioctl option. Sets the dns suffixes of the interface  .
+
+@publishedAll
+@released
+*/
+
+/** @def SIOCGETDNSSUFFIX
+Socket Ioctl option. Gets the dns suffixes of the interface .
+
+@publishedAll
+@released
+*/
+
+/** @def SIOCSNAMESERVER
+Socket Ioctl option. Sets the name server on the interface .
+
+@publishedAll
+@released
+*/
+
+
+/** @def SIOCGNAMESERVER
+Socket Ioctl option. Get the name server on the interface .
+
+@publishedAll
+@released
+*/
