@@ -243,6 +243,7 @@ IMPORT_C int _setecho_r(int *aErrno, int aFd, uint8_t aEchoVal);
 struct ifreq;
 
 IMPORT_C int _setdefaultif_r(int *aErrno, const struct ifreq* aIfReq);
+IMPORT_C int _unsetdefaultif_r(int *aErrno);
 
 IMPORT_C void *_memcpy_r(void *dst0, const void *src0, size_t length);
 IMPORT_C void *_memmove_r(void *dst0, const void *src0, size_t length);

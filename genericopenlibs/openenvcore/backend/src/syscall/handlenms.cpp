@@ -143,9 +143,7 @@ EXPORT_C int _gethostname_r (int *aErrno, char *name, size_t size)
 		}
 	
 	RHostResolver hr;
-	/* Get the default RConnection instance and use it if configured. 
-	   NOTE: This RConnection, if configured, would be created using the
-	   socket server on backend. The same server has to be used here */
+	/* Get the default RConnection instance and use it */
 	RConnection& defConnection = Backend()->GetDefaultConnection();
 	if(defConnection.SubSessionHandle() != 0)
 	    {
@@ -153,7 +151,7 @@ EXPORT_C int _gethostname_r (int *aErrno, char *name, size_t size)
 	    }
 	else
 	    {
-		err = hr.Open(ss, AF_INET, IPPROTO_UDP);
+		err = ECONNABORTED;
 	    }
 	
 	if (err == KErrNone)
@@ -173,8 +171,9 @@ EXPORT_C int _gethostname_r (int *aErrno, char *name, size_t size)
 				}
 				
 			}
-		}
+
 		hr.Close();
+		}
 	return MapError(err, *aErrno);
 	}
 
@@ -321,9 +320,7 @@ EXPORT_C struct hostent* _gethostbyaddr_r (struct _reent* rp, const char* addr, 
 	if (err == KErrNone)
 		{
 		RHostResolver r;
-		/* Get the default RConnection instance and use it if configured. 
-		   NOTE: This RConnection, if configured, would be created using the
-		   socket server on backend. The same server has to be used here */
+		/* Get the default RConnection instance and use it */
 		RConnection& defConnection = Backend()->GetDefaultConnection();
 		if(defConnection.SubSessionHandle() != 0)
 		    {
@@ -331,7 +328,7 @@ EXPORT_C struct hostent* _gethostbyaddr_r (struct _reent* rp, const char* addr, 
 		    }
 		else
 		    {
-			err=r.Open(ss, format, IPPROTO_UDP);
+            err = -ECONNABORTED; // needs to be negative for logic below to return NO_RECOVERY to caller
 		    }
 		
 		if (err == KErrNone)
@@ -375,6 +372,11 @@ EXPORT_C struct hostent* _gethostbyaddr_r (struct _reent* rp, const char* addr, 
                         }
                     err = r.Next(entry);
                     }
+                
+                if (err == -5121) // KErrDndAddrNotFound, equivalent to a KErrNotFound?
+                    {
+                    err = HOST_NOT_FOUND;
+                    }
                 }
 		             if (err == KErrNone)
 		                {
@@ -415,9 +417,7 @@ EXPORT_C struct hostent* _gethostbyname_r (struct _reent* rp, const char* name)
 		}
 	
     RHostResolver r;
-    /* Get the default RConnection instance and use it if configured. 
-       NOTE: This RConnection, if configured, would be created using the
-       socket server on backend. The same server has to be used here */
+    /* Get the default RConnection instance and use it */
     RConnection& defConnection = Backend()->GetDefaultConnection();
     if (defConnection.SubSessionHandle() != 0)
         {
@@ -425,7 +425,7 @@ EXPORT_C struct hostent* _gethostbyname_r (struct _reent* rp, const char* name)
         }
     else
         {
-        err = r.Open(ss, AF_INET, IPPROTO_UDP);
+        err = -ECONNABORTED; // needs to be negative for logic below to return NO_RECOVERY to caller
         }
     
     if (err == KErrNone)
@@ -457,7 +457,7 @@ EXPORT_C struct hostent* _gethostbyname_r (struct _reent* rp, const char* name)
                         break;
                         }
                     
-                    if (addr.Family() == KAfInet6 && (addr.IsV4Compat() || addr.IsV4Mapped()))
+                    if (addr.Family() == KAfInet6 && addr.IsV4Mapped())
                         {
                         addr.ConvertToV4(); 
                         entry().iAddr = addr;
@@ -465,6 +465,11 @@ EXPORT_C struct hostent* _gethostbyname_r (struct _reent* rp, const char* name)
                         }
                     }
                 err = r.Next(entry);
+                }
+            
+            if (err == -5120) // KErrDndNameNotFound, equivalent to a KErrNotFound
+                {
+                err = HOST_NOT_FOUND;
                 }
             }
         
@@ -519,6 +524,11 @@ EXPORT_C int _setdefaultif_r(int *aErrno, const struct ifreq* aIfReq)
 	
 	return 0;
 	}
+
+EXPORT_C int _unsetdefaultif_r(int* /*aErrno*/)
+    {
+    return Backend()->unsetdefaultif(EFalse);
+    }
 
 /*
  * Helper function to create an addrinfo node and fill it.
@@ -634,14 +644,16 @@ EXPORT_C int _getaddrinfo_r(int* aErrno, const char* aHostName,
 	
 	//Open the host resolver
 	RHostResolver resolver;
-	/* Get the default RConnection instance and use it if configured. 
-	   NOTE: This RConnection, if configured, would be created using the
-	   socket server on backend. The same server has to be used here */
+	/* Get the default RConnection instance and use it */
 	RConnection& defConnection = Backend()->GetDefaultConnection();
-	if(defConnection.SubSessionHandle() != 0)
+	if (defConnection.SubSessionHandle() != 0)
+	    {
 		err = resolver.Open(sockServ, KAfInet, KProtocolInetUdp, defConnection);
+	    }
 	else
-		err = resolver.Open(sockServ, KAfInet, KProtocolInetUdp);
+	    {
+        err = ECONNABORTED;
+	    }
 	
 	if (err != KErrNone)
 		{
@@ -663,48 +675,70 @@ EXPORT_C int _getaddrinfo_r(int* aErrno, const char* aHostName,
 	//Create a list of addrinfo nodes from the result
 	*aRes = NULL;
 	struct addrinfo** curr = aRes;
-	  do
-	        {
-	        nameRec = nameEntry();
-	        TInetAddr inetAddr(nameRec.iAddr);
-	        //Create the node if the address is valid, and the family matches that of hints
-	        if(!inetAddr.IsUnspecified())
-	            {
-	            if (inetAddr.Family() == KAfInet)
-	                {
-	                err = CreateAddrInfoNode(nameRec, aHints, curr);
-	                }
-	            else if (inetAddr.Family() == KAfInet6)
-	                {
-	                err = CreateAddrInfoNode(nameRec, aHints, curr);
-	                if (err != 0)
-	                    break;
-	                
-	                curr = &((*curr)->ai_next);
-	                if (inetAddr.IsV4Mapped())
-	                    {
-	                    inetAddr.ConvertToV4();
-	                    nameRec.iAddr = inetAddr;
-	                    err = CreateAddrInfoNode(nameRec, aHints, curr);
-	                    
-	                    if(err != 0)
-	                        break;
-	                    
-	                    if (err == 0)
-	                        {
-	                        (*curr)->ai_flags |= AI_V4MAPPED;
-	                        curr = &((*curr)->ai_next);
-	                        }
-	                    }
-	                }
-	            }
-	        err = resolver.Next(nameEntry); //Get the next record
-	        if(err != KErrNone)
-	            {//No more records. Not an error, just stop iterating
-	            err = KErrNone;
-	            break;
-	            }
-	        } while(err == KErrNone);
+	do
+        {
+        nameRec = nameEntry();
+        TInetAddr inetAddr(nameRec.iAddr);
+        
+        
+        //Create the node if the address is valid, and the family matches that of hints
+        if (!inetAddr.IsUnspecified())
+            {
+            if (inetAddr.Family() == KAfInet)
+                {
+                err = CreateAddrInfoNode(nameRec, aHints, curr);
+                if (err != 0)
+                    {
+                    break;
+                    }
+                
+                curr = &((*curr)->ai_next);
+                
+                inetAddr.ConvertToV4Mapped();
+                nameRec.iAddr = inetAddr;
+                
+                err = CreateAddrInfoNode(nameRec, aHints, curr);
+                if (err != 0)
+                    {
+                    break;
+                    }
+                
+                (*curr)->ai_flags |= AI_V4MAPPED;
+                curr = &((*curr)->ai_next);
+                }
+            else if (inetAddr.Family() == KAfInet6)
+                {
+                err = CreateAddrInfoNode(nameRec, aHints, curr);
+                if (err != 0)
+                    {
+                    break;
+                    }
+                
+                curr = &((*curr)->ai_next);
+                if (inetAddr.IsV4Mapped())
+                    {
+                    inetAddr.ConvertToV4();
+                    nameRec.iAddr = inetAddr;
+                    
+                    err = CreateAddrInfoNode(nameRec, aHints, curr);
+                    if (err != 0)
+                        {
+                        break;
+                        }
+                    
+                    (*curr)->ai_flags |= AI_V4CONVERTED;
+                    curr = &((*curr)->ai_next);
+                    }
+                }
+            }
+
+        err = resolver.Next(nameEntry); //Get the next record
+        if (err != KErrNone)
+            {//No more records. Not an error, just stop iterating
+            err = KErrNone;
+            break;
+            }
+        } while(err == KErrNone);
 	       
 	
 	//If no nodes are created even when the operation is succes, it's an error
@@ -719,6 +753,7 @@ EXPORT_C int _getaddrinfo_r(int* aErrno, const char* aHostName,
 	if(err != 0 && err != EAI_MEMORY)
         err = EAI_FAIL;
 	resolver.Close();
+
 	return err;
 	}
 

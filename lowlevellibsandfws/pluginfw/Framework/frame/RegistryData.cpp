@@ -684,6 +684,7 @@ TBool CRegistryData::CDllData::SaveSecurityInfoL()
 			return EFalse;
 			}
 		err = loader.CheckLibraryHash(dllFullName, ETrue);
+		loader.Close();
 		if(err != KErrNone)
 			{
 #ifdef __ECOM_TRACE 

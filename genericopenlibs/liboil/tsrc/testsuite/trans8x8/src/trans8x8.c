@@ -70,7 +70,7 @@ void test_oil_trans8x8_u16()
     //uint16_t * d_8x8, int ds, const uint16_t * s_8x8, int ss
     uint16_t output[SIZE];
     uint16_t input[SIZE];
-    uint16_t linux_output[SIZE] = {2816,8470,14124,19778,14124,19778,25432,31086,33792,36608,39424,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+	uint16_t expected_output[SIZE] = {2816,5643,8470,11297,14124,16951,19778,22605,28259,33913,39567,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     int i = 0;
     
     for(i=0; i<SIZE; i++)
@@ -83,9 +83,9 @@ void test_oil_trans8x8_u16()
     
     for(i=0; i<SIZE; i++)
         {
-        if(output[i] != linux_output[i])
+        if(output[i] != expected_output[i])
             {
-            std_log(LOG_FILENAME_LINE, "output[%d]: expected value - %d, actual value - %d", i,linux_output[i],output[i]);
+            std_log(LOG_FILENAME_LINE, "output[%d]: expected value - %d, actual value - %d", i,expected_output[i],output[i]);
             assert_failed = 1;
             }
         }
@@ -143,12 +143,12 @@ void test_oil_trans8x8_u8()
         }
     }
 
-int main (int argc, char *argv[])
+int main (/*int argc, char *argv[]*/)
 {
   oil_init ();
-
-  std_log(LOG_FILENAME_LINE,"START oil_trans8x8_f64 TEST");
-  test_oil_trans8x8_f64();
+  
+  std_log(LOG_FILENAME_LINE,"START oil_trans8x8_u8 TEST");
+  test_oil_trans8x8_u8();
   std_log(LOG_FILENAME_LINE,"END TEST\n");
   
   std_log(LOG_FILENAME_LINE,"START oil_trans8x8_u16 TEST");
@@ -159,10 +159,10 @@ int main (int argc, char *argv[])
   test_oil_trans8x8_u32();
   std_log(LOG_FILENAME_LINE,"END TEST\n");
   
-  std_log(LOG_FILENAME_LINE,"START oil_trans8x8_u8 TEST");
-  test_oil_trans8x8_u8();
+  std_log(LOG_FILENAME_LINE,"START oil_trans8x8_f64 TEST");
+  test_oil_trans8x8_f64();
   std_log(LOG_FILENAME_LINE,"END TEST\n");
-  
+      
   if(assert_failed)
       std_log(LOG_FILENAME_LINE,"Test Failed");
   else

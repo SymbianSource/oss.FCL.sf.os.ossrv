@@ -22,6 +22,7 @@
 #define _FDESC_H
 
 #include <e32std.h>
+#include <e32atomics.h>
 #include <e32cons.h>
 #include <f32file.h>
 #include <es_sock.h>
@@ -64,6 +65,22 @@ const TUint KSpawnCloseInChild = 0x00000040;
 
 #endif //SYMBIAN_OE_LARGE_FILE_SUPPORT && !SYMBIAN_OE_NO_LFS
 
+// Atomic socket operations support
+
+#define ATOMICSOCKETOP(realcall,on_error) \
+    { \
+    if (__e32_atomic_tau_ord32((void *)&iCount, 0x8000, 0, 1) >= 0x8000) \
+        { \
+        on_error; \
+        } \
+    else \
+        { \
+        realcall; \
+        __e32_atomic_tas_ord32((void *)&iCount, 0, -1, 0); \
+        } \
+    }
+
+#define NOP 
 
 //Enumarations for Polling
 enum TPollMode
@@ -511,10 +528,20 @@ public:
 		 iIoctlLock.Signal();
 		 return iSelectEvents();
 		 }
-	 inline int CreateLock() 
+	 
+	 inline TInt CreateLock() 
 		 {
-		 return (iIoctlLock.CreateLocal(1)|| iReadLock.CreateLocal() || iWriteLock.CreateLocal());
+	     TInt err = iIoctlLock.CreateLocal(1) || iReadLock.CreateLocal() || iWriteLock.CreateLocal();
+	     if (err != KErrNone)
+	         {
+             // closes on unopened handles are safe
+             iIoctlLock.Close();
+             iReadLock.Close();
+             iWriteLock.Close();
+	         }
+	     return err;
 		 }
+		 
 	 inline RSemaphore& GetIoctlLock()
 		 {
 		 return iIoctlLock;
@@ -531,9 +558,9 @@ public:
 	 
 protected:
 		//rearrange these 
-	CSockDescBase():iAddrFamily(-1),iProtocol(KUndefinedProtocol),iIoctlFlag(EFalse)
+	CSockDescBase():iAddrFamily(-1),iProtocol(KUndefinedProtocol),iIoctlFlag(EFalse),iCount(0)
 	{
-
+	
 	}	
 	RSocket iSocket;
 	TSockXfrLength iLength;
@@ -545,8 +572,10 @@ protected:
 	// For preventing simultaneous ioctl calls.
 	// No native support.
 	RSemaphore iIoctlLock;
+	// Is this required?
 	TBool iIoctlFlag;
-	
+	// Safeguard against issue of a second Read/Write request while the first is pending.
+	// The iReadLock also guards OpenUsingPreference
 	//For locking the descriptor before any operation.
 	//To make it thread safe.
 	RFastLock iReadLock;
@@ -555,6 +584,7 @@ protected:
 	//Flag to mark the connect status of a non-blocking socket as "in progress"
 	//to prevent duplicate connection request
 	TBool iConnectInProgress;
+	volatile TInt iCount;
 protected:
 
 	inline TInt isStream() const	// inline, but private
@@ -659,6 +689,22 @@ private:
 	TInt GetInterfaceDetails( void *aParam ,TInt aFlag, TInt aType );
 	TInt SetInterafceParamInfo( void *aParam,TInt aType);
 	TInt SetInterfaceDetails( void *aParam ,TInt aFlag, TInt aType );
+	
+	TInt maybe_reopen_socket()
+	    {
+	    TInt err = KErrNone;
+	    if (!__e32_atomic_load_acq32(&iSocketPtr))
+	        {
+            iReadLock.Wait();
+            if (!iSocketPtr)
+                {
+                err = OpenUsingPreference();
+                }
+            iReadLock.Signal();
+	        }
+	    return err;
+	    }
+	
 	enum InterfaceType
 		{
 		EACCESS_POINT,

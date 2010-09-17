@@ -563,7 +563,7 @@ void test_oil_mas8_u8_sym_l15()
     int16_t input2[8];
     int16_t input3[2];
     uint8_t output[SIZE];
-    int16_t linux_output[] = {3,3,4,5,6,7,8,9,10,10,11,12,13,14,15,16,17,17,18,19};
+    int16_t expected_output[] = {7,8,10,11,13,15,16,18,20,21,23,24,26,28,29,31,33,34,36,37};
     int i;
     
     for(i = 0; i < SIZE+7; i++)
@@ -585,9 +585,9 @@ void test_oil_mas8_u8_sym_l15()
     
     for(i = 0; i < SIZE; i++)
         {
-        if(output[i] != linux_output[i])
+        if(output[i] != expected_output[i])
             {
-            std_log(LOG_FILENAME_LINE, "output[%d]: expected value - %d, actual value - %d", i,linux_output[i],output[i]);
+            std_log(LOG_FILENAME_LINE, "output[%d]: expected value - %d, actual value - %d", i,expected_output[i],output[i]);
             assert_failed = 1;
             }
         }
