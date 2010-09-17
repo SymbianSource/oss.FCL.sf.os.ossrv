@@ -31,7 +31,7 @@ const TInt KMaxUserEntrySize = 50;
 
 //Test Harness Logging
 
-#define KLogsDir				_L("c:\\logs\\")
+#define KLogsDir				_L("c:\\logs\\testexecute\\")
 #define KInuLogsDirName			_L("InetProtUtil")
 
 #define KTestHeader				_L("Test Results")

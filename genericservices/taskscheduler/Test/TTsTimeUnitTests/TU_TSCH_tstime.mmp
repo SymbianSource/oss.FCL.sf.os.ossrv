@@ -16,7 +16,7 @@
 // 
 //
 
-TARGET          	tu_tsch_tstime.exe
+TARGET          	tu_tsch_tstime.exe		//RTEST
 TARGETTYPE			EXE
 
 // WDD capability required for RTz::SetTimeZoneL()
@@ -38,7 +38,7 @@ library				euser.lib
 library				efsrv.lib
 library				estor.lib
 library				tzclient.lib
-library 			tsutils.lib
+library 			tsutils_tsk.lib
 
 
 

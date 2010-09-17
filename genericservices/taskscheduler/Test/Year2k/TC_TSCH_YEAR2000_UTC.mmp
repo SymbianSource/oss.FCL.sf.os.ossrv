@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET          tc_tsch_year2000_utc.exe
+TARGET          tc_tsch_year2000_utc.exe		//RTEST
 TARGETTYPE      exe
 
 //WriteDeviceData needed to create persistent schedules 
@@ -26,7 +26,7 @@ OS_LAYER_SYSTEMINCLUDE_SYMBIAN
 USERINCLUDE     ../TSUtils
 USERINCLUDE     ../../INC
 
-LIBRARY         euser.lib schsvr.lib efsrv.lib tsutils.lib
+LIBRARY         euser.lib schsvr.lib efsrv.lib tsutils_tsk.lib
 
 VENDORID 0x70000001
 

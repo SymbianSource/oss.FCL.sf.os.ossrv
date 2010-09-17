@@ -43,6 +43,10 @@ void Defect_DEF074278()
 	TInt err=me.Create(_L("T_UCRT0P2"),arguments);
 	if (err==KErrNotFound)
 		err=me.Create(_L("z:\\test\\T_UCRT0P2"),arguments);
+    if (err==KErrNotFound)
+        err=me.Create(_L("c:\\test\\T_UCRT0P2"),arguments);
+    if (err==KErrNotFound)
+        err=me.Create(_L("z:\\sys\\bin\\T_UCRT0P2"),arguments);
 	test(err==KErrNone);
 
 	//Checking that the child proces T_UCRT0P2 executes properly with no panic

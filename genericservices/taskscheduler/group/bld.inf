@@ -62,7 +62,7 @@ PRJ_TESTMMPFILES
 ../Test/Robustness/TC_TSCH_ROBUSTNESS.mmp 
 ../Test/Robustness/TC_TSCH_IPC.mmp 
 ../Test/LongRunning/T_TSLongRunning.mmp 			manual
-../Test/TSUtils/TSUtils.mmp 						support
+../Test/TSUtils/tsutils_tsk.mmp 						support
 ../Test/MinimalTaskHandler/minimaltaskhandler.mmp	support
 ../Test/MinimalTaskHandler/faultyminimaltaskhandler.mmp	support
 ../Test/PlatSec/tschsvrclient1.mmp 					support

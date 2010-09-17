@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET          tpropertydefine.exe
+TARGET          tpropertydefine.exe		//RTEST
 CAPABILITY		WriteDeviceData
 TARGETTYPE      exe
 
@@ -24,7 +24,7 @@ SOURCE          TPropertyDefine.cpp
 MW_LAYER_SYSTEMINCLUDE_SYMBIAN
 USERINCLUDE     ../TSUtils
 
-LIBRARY         euser.lib schsvr.lib efsrv.lib tsutils.lib numberconversion.lib
+LIBRARY         euser.lib schsvr.lib efsrv.lib tsutils_tsk.lib numberconversion.lib
 
 VENDORID 0x70000001
 

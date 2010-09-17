@@ -41,7 +41,7 @@ LIBRARY		testexecuteutils.lib
 LIBRARY		testexecutelogclient.lib 
 
 LIBRARY		schsvr.lib
-LIBRARY		tsutils.lib
+LIBRARY		tsutils_tsk.lib
 LIBRARY		sbeclient.lib	
 LIBRARY		efsrv.lib
 LIBRARY		bafl.lib

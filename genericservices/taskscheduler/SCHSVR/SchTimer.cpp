@@ -1,4 +1,4 @@
-// Copyright (c) 2004-2009 Nokia Corporation and/or its subsidiary(-ies).
+// Copyright (c) 2004-2010 Nokia Corporation and/or its subsidiary(-ies).
 // All rights reserved.
 // This component and the accompanying materials are made available
 // under the terms of "Eclipse Public License v1.0"
@@ -17,6 +17,7 @@
 #include "SchTimer.h"
 #include "SCHMAN.H"
 #include "SCHEDULE.H"
+#include "schlogger.h"
 
 // system includes
 #include <e32property.h>
@@ -30,6 +31,8 @@ manager via the CScheduleCriteriaManager::DueSchedule() method.
 
 @internalComponent
 */
+_LIT(KTaskSchedulerPanic, "TaskScheduler ");
+
 NONSHARABLE_CLASS(CScheduleTimer) : public CTimer
 	{
 public:
@@ -139,10 +142,11 @@ private:
 	// From CActive
 	void RunL();
 	void DoCancel();
+	TInt RunError(TInt aError);
 
 public:
 	void SetPropertyL(const TUid& aCategory, TUint aKey);
-	
+
 private:
 	TUid iCategory;
 	TUint iKey;
@@ -404,6 +408,7 @@ CPropertyNotifier::CPropertyNotifier(CConditionManager& aManager)
 CPropertyNotifier::~CPropertyNotifier()
 	{
 	Cancel();
+	iProperty.Close();
 	}
 
 void CPropertyNotifier::AttachL()
@@ -416,7 +421,10 @@ void CPropertyNotifier::AttachL()
 void CPropertyNotifier::SetPropertyL(const TUid& aCategory, TUint aKey)
 	{
 	if (IsActive())
+	    {
 		Cancel();
+		iProperty.Close();
+	    }
 	iCategory = aCategory;
 	iKey = aKey;
 	AttachL();	
@@ -446,7 +454,15 @@ void CPropertyNotifier::DoCancel()
 	iProperty.Cancel();
 	}
 	
-	
+TInt CPropertyNotifier::RunError(TInt aError)
+    {
+    if (aError)
+        {
+        LOGSTRING("CPropertyNotifier::RunL() leaves.");
+        User::Panic(KTaskSchedulerPanic, aError);
+        }
+    return KErrNone;
+    }
 	
 //
 
@@ -627,4 +643,14 @@ CConditionManager* CScheduleCriteriaManager::FindCondition(TInt aSchedule)
 	return condition;
 	}	
 	
-	
+TInt CScheduleCriteriaManager::RunError(TInt aError)
+    {
+    if (aError)
+        {
+        LOGSTRING("CScheduleCriteriaManager::RunL() leaves.");
+        User::Panic(KTaskSchedulerPanic, aError);
+        }    
+    return KErrNone;
+    }
+
+

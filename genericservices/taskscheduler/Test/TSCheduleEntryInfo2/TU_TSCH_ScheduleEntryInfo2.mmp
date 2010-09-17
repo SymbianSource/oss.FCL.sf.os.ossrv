@@ -15,7 +15,7 @@
 // 
 //
 
-TARGET          	tu_tsch_scheduleentryinfo2.exe
+TARGET          	tu_tsch_scheduleentryinfo2.exe		//RTEST
 CAPABILITY			NONE 
 TARGETTYPE			EXE
 
@@ -33,7 +33,7 @@ library				euser.lib
 library				efsrv.lib
 library				estor.lib
 library				schsvr.lib 
-library				tsutils.lib
+library				tsutils_tsk.lib
 
 
 SMPSAFE

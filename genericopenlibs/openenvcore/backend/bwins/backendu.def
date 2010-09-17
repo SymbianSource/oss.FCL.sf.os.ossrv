@@ -171,3 +171,5 @@ EXPORTS
 	_memmove_r @ 170 NONAME
 	_lstat_r @ 171 NONAME
 	_unsetdefaultif_r @ 172 NONAME
+	?TZServer@CLocalSystemInterface@@QAEAAVRTz@@AAH@Z @ 173 NONAME ; class RTz & CLocalSystemInterface::TZServer(int &)
+
