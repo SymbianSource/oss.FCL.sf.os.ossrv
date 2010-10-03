@@ -33,7 +33,7 @@ library				euser.lib
 library				efsrv.lib
 library				estor.lib
 library				schsvr.lib 
-library				tsutils.lib
+library				tsutils_tsk.lib
 
 
 SMPSAFE

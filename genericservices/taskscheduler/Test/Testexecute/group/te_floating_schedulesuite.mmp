@@ -47,7 +47,7 @@ LIBRARY		testexecutelogclient.lib
 
 LIBRARY		schsvr.lib
 LIBRARY		efsrv.lib
-LIBRARY		tsutils.lib
+LIBRARY		tsutils_tsk.lib
 library		tzclient.lib
 
 // WDD capability required for RTz::SetTimeZoneL()

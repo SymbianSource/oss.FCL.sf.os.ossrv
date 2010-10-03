@@ -44,6 +44,10 @@ void Defect_073739()
 	TInt err=me.Create(_L("T_WAITPID"),_L(""));
 	if (err==KErrNotFound)
 		err=me.Create(_L("z:\\test\\T_WAITPID"),_L(""));
+	if (err==KErrNotFound)
+		err=me.Create(_L("c:\\test\\T_WAITPID"),_L(""));
+	if (err==KErrNotFound)
+		err=me.Create(_L("c:\\sys\\bin\\T_WAITPID"),_L(""));
 	test(err==KErrNone);
 
 	//Checking that the child proces T_WAITPID executes properly with no panic

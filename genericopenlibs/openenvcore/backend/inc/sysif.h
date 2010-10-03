@@ -36,6 +36,7 @@
 #include <rpipe.h>
 
 #include<tz.h>
+#include <e32atomics.h>
 
 #ifdef SYMBIAN_OE_POSIX_SIGNALS
 #include "signalclient.h"
@@ -114,7 +115,7 @@ class TCLSICleanup
 */
 	{
 public:
-	void StorePtrs(RHeap* aHeap, RFs* aFs, RSocketServ* aSs, RCommServ* aCs, RFastLock* aSsLock, RFastLock* aCsLock)
+	void StorePtrs(RHeap* aHeap, RFs* aFs, RSocketServ* aSs, RCommServ* aCs, RFastLock* aSsLock, RFastLock* aCsLock,RFastLock* aDefConnLock,RFastLock* aAESelectLock,RFastLock* aTzServerLock)
 		{
 		iHeap = aHeap;
 		iFs = aFs;
@@ -122,6 +123,9 @@ public:
 		iCs = aCs;
 		iSsLock = aSsLock;
 		iCsLock = aCsLock;
+		iDefConnLock = aDefConnLock;
+		iAESelectLock = aAESelectLock;
+		iTzServerLock = aTzServerLock;
 		}
 
 	~TCLSICleanup()
@@ -132,6 +136,9 @@ public:
 		iCs->Close();
 		iCsLock->Close();
 		iHeap->Close();
+		iDefConnLock->Close();
+		iAESelectLock->Close();
+		iTzServerLock->Close();
 		}
 private:
 	RHeap* iHeap;
@@ -140,6 +147,9 @@ private:
 	RCommServ* iCs;
 	RFastLock* iSsLock;
 	RFastLock* iCsLock;
+	RFastLock* iDefConnLock;
+	RFastLock* iAESelectLock;
+	RFastLock* iTzServerLock;
 	};
 
 
@@ -607,6 +617,8 @@ private:
 	// default RConnection with the new settings.
 	TInt StartDefConnection();
 	
+	// Helper function for doing an on-demand connection to RTz server
+	TInt OnDemandTZServerConnection();
 private:
 	// NOTE: iCleanup should be the first member of CLSI, since iPrivateHeap
 	// will be destroyed from within iCleanup destructor.
@@ -683,6 +695,8 @@ private:
 	// Default connection settings, set/cleared using setdefaultif
 	TConnPref* iDefConnPref;
     RTz     iTzServer;	
+	RFastLock iTzServerLock;
+	TBool	iIsRTzConnected;
     RPointerArray<CSocketDesc> iSocketArray;
 #ifdef SYMBIAN_OE_POSIX_SIGNALS
 	// Signal handler thread
@@ -836,10 +850,8 @@ private:
 #endif // SYMBIAN_OE_POSIX_SIGNALS
 public:
 
-   inline RTz & TZServer()
-        {
-        return iTzServer;
-        } 
+	IMPORT_C RTz & TZServer(TInt& aStatus);
+	
 //ipc server session
 RIpcSession iIpcS;
 friend class RFileDesTransferSession;

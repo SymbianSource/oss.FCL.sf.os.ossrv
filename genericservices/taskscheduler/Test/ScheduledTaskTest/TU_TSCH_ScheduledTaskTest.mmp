@@ -36,7 +36,7 @@ library				euser.lib
 library				efsrv.lib
 library				estor.lib
 library				tzclient.lib
-library				tsutils.lib
+library				tsutils_tsk.lib
 
 VENDORID 			0x70000001
 

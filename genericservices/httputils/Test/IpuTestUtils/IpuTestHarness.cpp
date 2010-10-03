@@ -14,7 +14,7 @@
 //
 
 #include "IpuTestUtils.h"
-
+#include <e32consf.h>
 //
 //	Constants
 _LIT(KTestPanic, "IpuTestHarness");
@@ -29,6 +29,7 @@ CIpuTestHarness::CIpuTestHarness(const TDesC& aTitle)
 //
 //	Default c'tor
 	{
+    LogRTestToFile(iTest);
 	iTest.Title();
 	iCanStartTest = ETrue;
 	}

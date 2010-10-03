@@ -39,6 +39,7 @@
 #include "tsignalmessage.h"
 #endif // SYMBIAN_OE_POSIX_SIGNALS
 
+
 #ifdef SYMBIAN_OE_POSIX_SIGNALS
 #define SIG_SIGNAL_PRESENT_IN_SIGSET(sig,set) ((set & (1ULL << (sig-1))) != 0x0000000000000000ULL)
 #define SIG_ISEMPTY_SIGSET(set) (set == 0x0000000000000000ULL)
@@ -79,10 +80,42 @@ EXPORT_C CLocalSystemInterface* Backend()
 		return &backend;
 #endif
 		}
+		
+EXPORT_C RTz& CLocalSystemInterface::TZServer(TInt &aStatus)
+	{
+	aStatus = OnDemandTZServerConnection();
+	return iTzServer;
+	} 
+		
+TInt CLocalSystemInterface::OnDemandTZServerConnection()
+        {
+		TInt v = EFalse;
+		TInt err = KErrNone;
+		
+		if(__e32_atomic_load_acq32(&iIsRTzConnected))
+			return err;
+			
+		iTzServerLock.Wait();
+		if (!iIsRTzConnected) 
+			{
+			err = iTzServer.Connect();
+			if ( err == KErrNone ) 
+				{
+				err = iTzServer.ShareAuto();
+				if( err == KErrNone) {
+					v = ETrue;
+					}
+				}
+			__e32_atomic_store_rel32(&iIsRTzConnected, v); 
+			}
+		iTzServerLock.Signal();
+		
+        return err;
+        } 
 
 // Construction of Backend Object which is going to be singleton object for the process
 EXPORT_C CLocalSystemInterface::CLocalSystemInterface() : iOpenDirList(CLocalSystemInterface::KDirGran),
-iTLDInfoList(CLocalSystemInterface::KTLDInfoListGran), iDefConnResurrect(ETrue), iDefConnPref(NULL)
+iTLDInfoList(CLocalSystemInterface::KTLDInfoListGran), iDefConnResurrect(ETrue), iDefConnPref(NULL), iIsRTzConnected(EFalse)
 		{
 #ifdef SYMBIAN_OE_POSIX_SIGNALS
 		iSignalsInitialized = EFalse;
@@ -165,17 +198,9 @@ iTLDInfoList(CLocalSystemInterface::KTLDInfoListGran), iDefConnResurrect(ETrue),
 			err |=  iASelectLock.CreateLocal();
 	        //Protect the iDefConnection from concurrent GetDefaultConnection calls
 	        err |= iDefConnLock.CreateLocal();
+			//Protect the time zone server while connecting
+			err |= iTzServerLock.CreateLocal();
 			}
-
-        if(err == KErrNone)
-            {
-            err = iTzServer.Connect();
-            if(!err)
-                {
-                err = iTzServer.ShareAuto();
-                }
-            }
-
 
 		//Panic if any of the above operation returns with error
 		if (err)
@@ -183,7 +208,7 @@ iTLDInfoList(CLocalSystemInterface::KTLDInfoListGran), iDefConnResurrect(ETrue),
 			User::Panic(KEstlibInit, err);
 			}
 
-		iCleanup.StorePtrs(iPrivateHeap, &iFs, &iSs, &iCs, &iSSLock, &iCSLock);
+		iCleanup.StorePtrs(iPrivateHeap, &iFs, &iSs, &iCs, &iSSLock, &iCSLock,&iDefConnLock,&iASelectLock,&iTzServerLock);
 
 		}
 
@@ -194,10 +219,6 @@ EXPORT_C CLocalSystemInterface::~CLocalSystemInterface()
 	{
 	iTLDListLock.Close();
 	iSessionPathLock.Close();
-	// Close the aselect lock
-	iASelectLock.Close();
-	// Close the default connection lock
-	iDefConnLock.Close();
 	
 	//close the default RConnection
 	if(iDefConnection.SubSessionHandle() != 0)
