@@ -15,7 +15,7 @@
 // 
 //
 
-TARGET		t_ecomeikerrortest.exe
+TARGET		t_ecomeikerrortest.exe		//RTEST
 
 targettype	EXE
 

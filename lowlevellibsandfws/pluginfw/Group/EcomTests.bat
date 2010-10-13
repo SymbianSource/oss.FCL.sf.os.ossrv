@@ -61,3 +61,4 @@ T_ExtendedInterfaces.EXE
 T_RESOLVERPERF.EXE
 T_RESOLVERCACHE.EXE
 T_HEAPTEST.EXE
+t_ecomeikerrortest.exe

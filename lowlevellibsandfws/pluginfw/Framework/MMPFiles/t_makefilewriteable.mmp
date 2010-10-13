@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET		t_makefilewriteable.exe
+TARGET		t_makefilewriteable.exe			//RTEST
 // miscellaneous file operations for test harnesses
 CAPABILITY  	TCB AllFiles
 

@@ -27,6 +27,7 @@ int main()
     int retval =ESuccess;
     char* mycharstring = NULL; 
     RBuf16 myRBuf;
+    myRBuf.CreateL(30);
     myRBuf.CleanupClosePushL();
     retval = CharToRbuf16(mycharstring, myRBuf);
 

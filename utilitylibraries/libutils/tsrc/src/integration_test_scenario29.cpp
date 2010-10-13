@@ -73,6 +73,7 @@ int main()
 
     string src11=des10;
     RBuf16 des11;
+    des11.CreateL(30);
     retval[10]= StringToRbuf16(src11,des11);
 
     RBuf16 src12;
@@ -85,6 +86,7 @@ int main()
 
     char *src13=des12;
     RBuf16 des13;
+    des13.CreateL(30);
     retval[12]=CharToRbuf16(src13,des13);
 
     string des14;
@@ -92,6 +94,7 @@ int main()
 
     string src15=des14;
     RBuf8 des15;
+    des15.CreateL(30);
     retval[14]= StringToRbuf8(src15,des15);
 
     RBuf8 src16;
@@ -101,6 +104,7 @@ int main()
 
     char *src17=des16;
     RBuf16 des17;
+    des17.CreateL(30);
     retval[16]=CharToRbuf16(src17,des17);
 
     RBuf16 src18;
@@ -110,6 +114,7 @@ int main()
 
     wchar_t *src19=des18;
     RBuf8 des19;
+    des19.CreateL(50);
     retval[18]=WcharToRbuf8(src19,des19);
 
     wstring src20;
@@ -123,6 +128,7 @@ int main()
     retval[21] = Tbuf16ToWchar(des20,src21,size_new);
 
     RBuf16 des21;
+    des21.CreateL(30);
     retval[22]= WcharToRbuf16(src21,des21);
 
     wstring src22;
@@ -136,6 +142,7 @@ int main()
     retval[25]= Tbuf16ToWchar(des22,src23,size);
 
     RBuf8 des23;
+    des23.CreateL(50);
     retval[26]= WcharToRbuf8(src23,des23);
 
     wstring src24;

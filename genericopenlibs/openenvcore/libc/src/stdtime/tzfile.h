@@ -1,21 +1,14 @@
 #ifndef TZFILE_H
-#define TZFILE_H/*
-* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
-* All rights reserved.
-* This component and the accompanying materials are made available
-* under the terms of "Eclipse Public License v1.0"
-* which accompanies this distribution, and is available
-* at the URL "http://www.eclipse.org/legal/epl-v10.html".
-*
-* Initial Contributors:
-* Nokia Corporation - initial contribution.
-*
-* Contributors:
-*
-* Description: 
-*
-*/
+#define TZFILE_H
 
+
+/*
+** This file is in the public domain, so clarified as of
+** 1996-06-05 by Arthur David Olson (arthur_david_olson@nih.gov).
+**
+** $FreeBSD: src/lib/libc/stdtime/tzfile.h,v 1.8 2002/03/22 23:42:05 obrien Exp $
+** © Portions copyright (c) 2005-2006 Nokia Corporation.  All rights reserved.
+*/
 
 /*
 ** This header is for use ONLY with the time conversion code.

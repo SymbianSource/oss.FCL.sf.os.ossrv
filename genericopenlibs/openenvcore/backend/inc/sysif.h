@@ -595,6 +595,8 @@ public:
 	//Save the file server session path
 	TInt SaveSessionPath(const TDesC& aPath);
 	
+	static void WaitForNRequest(TRequestStatus **aStatusArray, TInt aNum);
+	
 	static void WaitForNRequest(TRequestStatus aStatusArray[], TInt aNum);
 
 private:

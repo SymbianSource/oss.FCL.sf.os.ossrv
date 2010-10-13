@@ -27,7 +27,7 @@ int main()
     char* mycharstring = NULL; 
     TPtrC myTptrc;
     wchar_t* myptr= new wchar_t[10];
-    retval = CharpToTptrc16(mycharstring,myptr, myTptrc);
+    retval = CharpToTptrc16(mycharstring, myptr, myTptrc);
 
     if (retval == EInvalidPointer)
     {

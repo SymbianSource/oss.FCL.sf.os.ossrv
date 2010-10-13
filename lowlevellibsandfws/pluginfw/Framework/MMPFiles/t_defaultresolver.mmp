@@ -16,7 +16,7 @@
 // Uses sid of EComserver process to allow access to private dir.
 UID 			0x101FB5A8 0x10009D8F
 
-TARGET      t_defaultresolver.exe
+TARGET      t_defaultresolver.exe		//RTEST
 TARGETTYPE  exe
 
 SOURCEPATH  ../../Framework/DefaultResolverTest

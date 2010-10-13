@@ -766,7 +766,10 @@ void __node_alloc_impl::_S_chunk_dealloc() {
 struct __node_alloc_cleaner {
   ~__node_alloc_cleaner()
       {
-      __node_alloc_impl::_S_dealloc_call(); 
+      __node_alloc_impl::_S_dealloc_call();
+#ifndef _STLP_USE_LOCK_FREE_IMPLEMENTATION
+      std::_Node_Alloc_Lock::_S_lock._M_destroy();
+#endif//_STLP_USE_LOCK_FREE_IMPLEMENTATION
       }
 };
 

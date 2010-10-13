@@ -15,7 +15,7 @@
 // 
 //
 
-TARGET		t_string.exe
+TARGET		t_string.exe	//RTEST
 TARGETTYPE	exe
 UID		0x1000007a
 

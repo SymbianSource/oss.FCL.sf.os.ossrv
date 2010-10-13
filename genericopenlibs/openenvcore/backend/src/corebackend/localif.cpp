@@ -189,7 +189,6 @@ iTLDInfoList(CLocalSystemInterface::KTLDInfoListGran), iDefConnResurrect(ETrue),
 			//Create Server Locks
 			err |= iSSLock.CreateLocal();
 			err |= iCSLock.CreateLocal();
-			err |= iIpcS.iLock.CreateLocal();
 			//Create TLDList Lock
 			err |= iTLDListLock.CreateLocal();
 			//Create the lock for Session Path
@@ -2191,7 +2190,7 @@ int CLocalSystemInterface::eselect(int maxfd, fd_set *readfds, fd_set *writefds,
         { 
         timer.After(*reqarray[numReqs+arraycount], timeout); 
         // Wait for any request to complete 
-        CLocalSystemInterface::WaitForNRequest(*reqarray, numReqs+arraycount+1);     
+        CLocalSystemInterface::WaitForNRequest(reqarray, numReqs+arraycount+1);     
         if( (*reqarray[numReqs+arraycount]).Int() == KRequestPending) 
             {
             // The timer hasn't fired yet.
@@ -2206,7 +2205,7 @@ int CLocalSystemInterface::eselect(int maxfd, fd_set *readfds, fd_set *writefds,
         } 
     else 
         { 
-        CLocalSystemInterface::WaitForNRequest(*reqarray, numReqs+arraycount);
+        CLocalSystemInterface::WaitForNRequest(reqarray, numReqs+arraycount);
         // Completion Status of one request has been gathered
         onedown = ETrue;
         }
@@ -3645,6 +3644,47 @@ const CFileTable& CLocalSystemInterface::FileTable() const
 {
 return iFids;
 }
+
+// ---------------------------------------------------------------------------------
+// CLocalSystemInterface::WaitForNRequest
+// Wait for any one of the input asynchronous requests to complete
+// Used in lieu of User::WaitForNRequest because of need to support pre-Argus builds
+// ---------------------------------------------------------------------------------
+//
+void CLocalSystemInterface::WaitForNRequest(TRequestStatus **aStatusArray, TInt aNum)
+	{
+	if (aNum)
+		{
+		// used to keep count of requests we have not been asked to wait for
+		TInt nOther = -1;
+		TBool done = EFalse;
+
+		do
+			{
+			++nOther;
+			User::WaitForAnyRequest();
+			for (TInt i = 0; i < aNum; ++i)
+				{
+				if ((*aStatusArray[i]).Int() != KRequestPending)
+					{
+					done = ETrue;
+					break;
+					}
+				}
+			} while (!done);
+
+		if (nOther)
+			{
+			// Adjust the thread's signal semaphore to account for the requests
+			// we were not asked to wait for.
+			RThread thrd;
+			for (TInt i = 0; i < nOther; ++i)
+				{
+				thrd.RequestSignal();
+				}
+			}
+		}
+	}
 
 // ---------------------------------------------------------------------------------
 // CLocalSystemInterface::WaitForNRequest

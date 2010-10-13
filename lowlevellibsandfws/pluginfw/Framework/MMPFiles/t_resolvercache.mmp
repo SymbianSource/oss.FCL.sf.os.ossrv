@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET t_resolvercache.exe
+TARGET t_resolvercache.exe			//RTEST
 TARGETTYPE EXE
 
 // Uses sid of EComserver process to allow access to private dir.

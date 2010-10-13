@@ -81,7 +81,7 @@ void StringUtils::LogIt1(TRefByValue<const TDesC8> aFmt)
 
 	TBuf<KMaxFileName> buf16;
 	buf16.Copy(buf);
-	BaflShowTrace(_L("%S"), &buf16);
+	BaflShowTrace(buf16);
 	BaflShowTrace(_L("\n"));
 	}
 

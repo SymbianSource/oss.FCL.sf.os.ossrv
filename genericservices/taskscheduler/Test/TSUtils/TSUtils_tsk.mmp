@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET        tsutils.dll
+TARGET        tsutils_tsk.dll
 CAPABILITY All -Tcb
 
 TARGETTYPE    dll
@@ -27,7 +27,7 @@ OS_LAYER_SYSTEMINCLUDE_SYMBIAN
 
 LIBRARY       euser.lib schsvr.lib efsrv.lib
 
-DEFFILE		tsutils.def
+DEFFILE		tsutils_tsk.def
 
 
 VENDORID 0x70000001

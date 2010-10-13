@@ -18,11 +18,10 @@
 #define __TEF_SCHSVR_IBY__
 
 //Main SchSvr TEF Scripts
-data=EPOCROOT##Epoc32\release\winscw\udeb\z\TEF_SchSvr\TEF_SchSvr.script 	TEF_SchSvr\TEF_SchSvr.script
 
 
 #include <te_floating_schedulesuite.iby>
 #include <TEF_SSA_ScheduleSuite.iby>
-#include <tef_schsvr_bursuite.iby>
+//#include <tef_schsvr_bursuite.iby>
 
 #endif

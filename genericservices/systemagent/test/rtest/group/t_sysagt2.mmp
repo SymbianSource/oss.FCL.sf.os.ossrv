@@ -11,9 +11,9 @@
 // Contributors:
 //
 // Description:
-//
 
-TARGET			t_sysagt2.exe
+
+TARGET			t_sysagt2.exe	//RTEST
 TARGETTYPE		exe
 CAPABILITY		ReadDeviceData
 

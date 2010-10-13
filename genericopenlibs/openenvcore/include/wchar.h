@@ -81,6 +81,11 @@ extern "C"
 #include <sys/dirent.h>
 #ifdef __SYMBIAN32__
 #include <stdarg.h>
+#ifdef __WINSCW__
+#ifndef __SOFTFP
+#define __SOFTFP
+#endif /* __SOFTFP */
+#endif//__WINSCW__
 #endif //__SYMBIAN32__
 
 #ifndef _MBSTATE_T_DECLARED
@@ -190,7 +195,7 @@ IMPORT_C wchar_t	*wcsstr(const wchar_t * __restrict, const wchar_t * __restrict)
 	    __pure;
 IMPORT_C size_t	wcsxfrm(wchar_t * __restrict, const wchar_t * __restrict, size_t);
 IMPORT_C int	wctob(wint_t);
-IMPORT_C double	wcstod(const wchar_t * __restrict, wchar_t ** __restrict);
+IMPORT_C double	wcstod(const wchar_t * __restrict, wchar_t ** __restrict) __SOFTFP;
 IMPORT_C wchar_t	*wcstok(wchar_t * __restrict, const wchar_t * __restrict,
 	    wchar_t ** __restrict);
 IMPORT_C long	 wcstol(const wchar_t * __restrict, wchar_t ** __restrict, int);
@@ -236,9 +241,9 @@ IMPORT_C int	vfwscanf(struct __sFILE * __restrict, const wchar_t * __restrict,
 IMPORT_C int	vswscanf(const wchar_t * __restrict, const wchar_t * __restrict,
 	    va_list);
 IMPORT_C int	vwscanf(const wchar_t * __restrict, va_list);
-IMPORT_C float	wcstof(const wchar_t * __restrict, wchar_t ** __restrict);
+IMPORT_C float	wcstof(const wchar_t * __restrict, wchar_t ** __restrict) __SOFTFP;
 IMPORT_C long double
-	wcstold(const wchar_t * __restrict, wchar_t ** __restrict);
+	wcstold(const wchar_t * __restrict, wchar_t ** __restrict) __SOFTFP;
 #ifdef __LONG_LONG_SUPPORTED
 /* LONGLONG */
 IMPORT_C long long

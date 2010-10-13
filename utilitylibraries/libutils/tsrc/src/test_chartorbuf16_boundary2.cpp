@@ -28,6 +28,7 @@ int main()
     char* mycharstring = "Hello Char String";
     int char_length= strlen(mycharstring);
     RBuf16 myRBuf;
+    myRBuf.CreateL(30);
     myRBuf.CleanupClosePushL();
     retval = CharToRbuf16(mycharstring, myRBuf);
 

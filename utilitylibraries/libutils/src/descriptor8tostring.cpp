@@ -235,7 +235,8 @@ EXPORT_C int Rbuf8ToString(TDes8& aSrc, string& aDes)
    * @param aSrc is the descriptor to be converted , aDes is the 
    * reference to the string to which the result of conversion 
    * is stored , n_size specifies the conversion size of the string
-   * @return Status code (0 is ESuccess,  -5 is EDescriptorNoData)
+   * @return Status code (0 is ESuccess,  -5 is EDescriptorNoData
+   * -9 is EInsufficientSystemMemory)
    */
 
 EXPORT_C int Tlit8ToString(const TDesC8& aSrc, string& aDes)

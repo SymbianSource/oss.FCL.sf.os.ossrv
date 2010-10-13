@@ -290,4 +290,5 @@ EXPORTS
 	?DummyForwardingFunctionForCompatibility@EscapeUtils@@CAPAVHBufC8@@ABVTDesC8@@0@Z @ 289 NONAME ; class HBufC8 * EscapeUtils::DummyForwardingFunctionForCompatibility(class TDesC8 const &, class TDesC8 const &)
 	??0TBase64@@QAE@XZ @ 290 NONAME ; TBase64::TBase64(void)
 	?NormaliseUriL@UriUtils@@SAPAVCUri8@@ABVTUriC8@@@Z @ 291 NONAME ; class CUri8 * UriUtils::NormaliseUriL(class TUriC8 const &)
+	?PortableEncode@TBase64@@QAEHABVTDesC8@@AAVTDes8@@H@Z @ 292 NONAME ; int TBase64::PortableEncode(class TDesC8 const &, class TDes8 &, int)
 

@@ -255,14 +255,16 @@ void CSignalServer::ServiceL(const RMessage2& aMessage)
 				lHdl.mPid = lPid;
 				lHdl.mPipe.Open(aMessage,0);
 				iProcessHdlList.Append(lHdl);
+				aMessage.Complete(KErrNone);
 				}
 			else
 				{
 				if(iProcessHdlList[lIndex].mPipe.Open(aMessage,0)!=KErrNone)
 					aMessage.Complete(KErrGeneral);
+				else
+					aMessage.Complete(KErrNone);
 				}
-			aMessage.Complete(KErrNone);
-			
+
 			lProcess.Close();
 			lClientThread.Close();
 			break;

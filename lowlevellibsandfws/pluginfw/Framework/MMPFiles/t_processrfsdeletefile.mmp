@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET		t_processrfsdeletefile.exe
+TARGET		t_processrfsdeletefile.exe		//RTEST
 // needed to access file system
 CAPABILITY  	TCB AllFiles
 

@@ -37,10 +37,16 @@ EXPORT_C int Tbuf16ToString(TDes16& aSrc, string& aDes)
     int minusone = -1;
     char* charString = new char[ilen*2+1];
     
+    if (!charString)
+    {
+    	return EInsufficientSystemMemory;
+    }
+    
     wchar_t *wcharString = new wchar_t[ilen+1];
     
-    if (!charString || !wcharString)
+    if (!wcharString)
     {
+    	delete []charString;
     	return EInsufficientSystemMemory;
     }
     
@@ -77,10 +83,17 @@ EXPORT_C int Tbufc16ToString(TDesC16& aSrc, string& aDes)
     int ilen = aSrc.Length(), retval = ESuccess;
     int minusone = -1;
     char* charString = new char[ilen*2+1];
+    
+    if (!charString)
+    {
+    	return EInsufficientSystemMemory;
+    }
+    
     wchar_t *wcharString = new wchar_t[ilen+1];
     
-    if (!charString || !wcharString)
+    if (!wcharString)
     {
+    	delete []charString;
     	return EInsufficientSystemMemory;
     }
     
@@ -118,10 +131,16 @@ EXPORT_C int Tptr16ToString (TDes16& aSrc, string& aDes)
     unsigned int ilen= aSrc.Length();
 	  int minusone = -1;
 	  char* charString = new char[ilen*2+1];
+	  
+	  if (!charString)
+    {
+    	return EInsufficientSystemMemory;
+    }
     wchar_t *wcharString = new wchar_t[ilen+1];
     
-    if (!charString || !wcharString)
+    if (!wcharString)
     {
+    	delete []charString;
     	return EInsufficientSystemMemory;
     }
     
@@ -158,12 +177,19 @@ EXPORT_C int Tptrc16ToString (const TDesC16& aSrc, string& aDes)
 {
     int retval = ESuccess;	
 	  int ilen= aSrc.Length();
-	int minusone = -1;
+	  int minusone = -1;
 	  char* buf = new char[ilen*2 +1];
+	  
+	  if (!buf)
+    {
+    	return EInsufficientSystemMemory;
+    }
+    
     wchar_t *wcharString = new wchar_t[ilen+1];
     
-    if (!buf || !wcharString)
+    if (!wcharString)
     {
+    	delete []buf;
     	return EInsufficientSystemMemory;
     }
     
@@ -220,11 +246,18 @@ EXPORT_C int Hbufc16ToString(HBufC16* aSrc, string& aDes, int& n_size)
     	}
     }
     
-	char* buf = new char[ilen*2 +1];
+	  char* buf = new char[ilen*2 +1];
+	
+	  if (!buf)
+    {
+    	return EInsufficientSystemMemory;
+    }
+    
     wchar_t *wcharString = new wchar_t[ilen+1];
     
-    if (!buf || !wcharString)
+    if (!wcharString)
     {
+    	delete []buf;
     	return EInsufficientSystemMemory;
     }
     
@@ -235,7 +268,7 @@ EXPORT_C int Hbufc16ToString(HBufC16* aSrc, string& aDes, int& n_size)
 	if(minusone != wcstombs(buf, wcharString, ilen*2))
 	{
 	    buf[ilen*2] = '\0';
-	    aDes.append(buf, ilen*2);		
+	    aDes.assign(buf, ilen*2);		
 		
 	}
 	else 
@@ -270,10 +303,17 @@ EXPORT_C int Rbuf16ToString(TDes16& aSrc, string& aDes)
     }
     
     char* buf = new char[ilen*2 +1];
+        
+    if (!buf)
+    {
+    	return EInsufficientSystemMemory;
+    }
+    
     wchar_t *wcharString = new wchar_t[ilen+1];
     
-    if (!buf || !wcharString)
+    if (!wcharString)
     {
+    	delete []buf;
     	return EInsufficientSystemMemory;
     }
     
@@ -321,10 +361,17 @@ EXPORT_C int Tlit16ToString(const TDesC16& aSrc, string& aDes)
    }
 
    char* buf = new char[ilen*2 +1];
+   
+   if (!buf)
+   {
+       return EInsufficientSystemMemory;
+   }
+   
    wchar_t *wcharString = new wchar_t[ilen+1];
     
-   if (!buf || !wcharString)
+   if (!wcharString)
    {
+   	   delete []buf;
        return EInsufficientSystemMemory;
    }
     

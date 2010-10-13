@@ -15,7 +15,7 @@
 // 
 //
 
-target          t_baflutilsimp.exe
+target          t_baflutilsimp.exe	//RTEST
 targettype      EXE
 
 sourcepath	../src

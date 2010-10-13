@@ -15,7 +15,7 @@
 // 
 //
 
-TARGET        t_processkiller.exe
+TARGET        t_processkiller.exe	//RTEST
 // needed to kill another process
 CAPABILITY  	PowerMgmt
 

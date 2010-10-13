@@ -1449,9 +1449,9 @@ get_ai(pai, afd, addr)
 	ai->ai_addr->sa_len = afd->a_socklen;
 #endif /* __SYMBIAN32__ */
 	ai->ai_addrlen = afd->a_socklen;
-#ifndef __SYMBIAN32__
+
 	ai->ai_addr->sa_family = ai->ai_family = afd->a_af;
-#endif
+
 	p = (char *)(void *)(ai->ai_addr);
 #ifdef FAITH
 	if (translate == 1)

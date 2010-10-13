@@ -70,6 +70,9 @@ _global_data_t::_global_data_t()
 // Destructor to supress warnings
 _global_data_t::~_global_data_t()
 	{
+    globalLockForMutex.Close(); 
+    lockThreadTable.Close();
+    lockSemTable.Close();
 	}
 	
 _global_data_t* GetGlobals()

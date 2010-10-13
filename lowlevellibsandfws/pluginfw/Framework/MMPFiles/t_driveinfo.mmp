@@ -19,7 +19,7 @@ UID					0x101FB5A8 0x10009E30
 CAPABILITY DiskAdmin   // For RFs::SetSubst
 VENDORID			0x70000001
 
-TARGET				t_driveinfo.exe
+TARGET				t_driveinfo.exe		//RTEST
 TARGETTYPE		exe
 
 USERINCLUDE		../../Framework/frame

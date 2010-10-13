@@ -27,6 +27,7 @@ int main()
     int retval[10];
     wchar_t* mycharstring = L"HelloHello";
     RBuf8 buf;
+    buf.CreateL(20);
     retval[1]=WcharToRbuf8(mycharstring,buf);
 
     wstring str;

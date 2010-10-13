@@ -28,6 +28,7 @@ int main()
     RBuf8 des1;
     int ret,retval1,retval2,retval3,retval4,retval5,retval6;
     int size1=39;
+    des1.CreateL(30);
     retval1= CharToRbuf8(src1,des1);
     printf("retval1 value is %d\n", retval1);
 

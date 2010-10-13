@@ -19,7 +19,7 @@
 
 UID 0x101FB5A8 0x10009E2C
 
-TARGET      t_ecomssadisabled.exe
+TARGET      t_ecomssadisabled.exe			//RTEST
 TARGETTYPE  exe
 
 SOURCEPATH  ../../Framework/EcomSsaDisabledTest

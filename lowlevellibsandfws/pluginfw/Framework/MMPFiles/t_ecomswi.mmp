@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET      t_ecomswi.exe
+TARGET      t_ecomswi.exe		//RTEST
 TARGETTYPE  exe
 
 SOURCEPATH  ../../Framework/SimpleTests

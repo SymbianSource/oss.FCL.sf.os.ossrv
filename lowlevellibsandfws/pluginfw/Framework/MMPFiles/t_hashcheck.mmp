@@ -13,7 +13,7 @@
 // Description:
 //
 
-TARGET      t_hashcheck.exe
+TARGET      t_hashcheck.exe		//RTEST
 TARGETTYPE  exe
 
 //CAPABILITY  ReadUserData WriteUserData 

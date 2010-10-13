@@ -26,6 +26,7 @@
 #undef G_LOG_DOMAIN
 
 #include <stdio.h>
+#include <unistd.h>
 #include <string.h>
 #include <sys/stat.h>
 #include "glib.h"
