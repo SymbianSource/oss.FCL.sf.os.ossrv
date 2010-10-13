@@ -277,8 +277,7 @@ struct	ifreq {
 		struct	sockaddr ifru_addr;
 		struct	sockaddr ifru_dstaddr;
 		struct	sockaddr ifru_broadaddr;
-		struct sockaddr ifru_hwaddr;
-		struct sockaddr ifru_defgatewayaddr;
+		struct sockaddr ifru_hwaddr;		
 		short	ifru_flags[2];
 		short	ifru_index;
 		int	ifru_metric;
@@ -305,7 +304,6 @@ struct	ifreq {
 #define	ifr_reqcap	ifr_ifru.ifru_cap[0]	/* requested capabilities */
 #define	ifr_curcap	ifr_ifru.ifru_cap[1]	/* current capabilities */
 #define	ifr_index	ifr_ifru.ifru_index	/* interface index */
-#define ifr_defgatewayaddr ifr_ifru.ifru_defgatewayaddr /* default gateway address*/
 };
 
 #define	_SIZEOF_ADDR_IFREQ(ifr) \
@@ -408,25 +406,6 @@ struct thread;
 #ifdef __SYMBIAN32__
 IMPORT_C int setdefaultif(const struct ifreq*);
 IMPORT_C int unsetdefaultif();
-#endif
-
-#ifdef  __SYMBIAN32__
-
-#define MAXDNSSUFFIXES   16
-
-struct if_dns_suffixes
-{
-char if_name[IFNAMSIZ];
-char ** suffixes;
-};
-
-void freednssuffixes(struct if_dns_suffixes *);
-struct if_name_servers
-    {
-    char if_name[IFNAMSIZ];
-    struct sockaddr nameserver1;
-    struct sockaddr nameserver2;
-    };
 #endif
 
 #ifdef __SYMBIAN32__

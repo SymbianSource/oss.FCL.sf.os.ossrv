@@ -221,12 +221,7 @@ void ConvertUtcToLocalTimeL(const time_t* aUTCTime, struct tm* const atmStruct)
     TDateTime tdt = time.DateTime();
     
     //enable the cache
-	TInt status = KErrNone;
-	RTz& rtzServer = Backend()->TZServer(status);
-	if(status != KErrNone)
-		User::Leave(status);
-
-    CTzConverter* ctzConverter = CTzConverter::NewL(rtzServer);
+    CTzConverter* ctzConverter = CTzConverter::NewL(Backend()->TZServer());
     
     CleanupStack::PushL(ctzConverter);
     if(ctzConverter->ConvertToLocalTime(time) == KErrNone)      
@@ -248,7 +243,7 @@ void ConvertUtcToLocalTimeL(const time_t* aUTCTime, struct tm* const atmStruct)
         CleanupStack::PushL(zoneid);
         
         atmStruct->tm_isdst  = -1;
-        UpdateDstAndTznameL(rtzServer, *zoneid, atmStruct, time, Utime, tdt, ETzWallTimeReference);
+        UpdateDstAndTznameL(Backend()->TZServer(), *zoneid, atmStruct, time, Utime, tdt, ETzWallTimeReference);
         CleanupStack::PopAndDestroy(zoneid);
         }   
     
@@ -285,12 +280,8 @@ void ConvertLocalToUtcTimeL(time_t* aUTCTime, struct tm* const aTmStruct)
         return;
         }
 
-	TInt status = KErrNone;
-	RTz& rtzServer = Backend()->TZServer(status);
-	if(status != KErrNone)
-		User::Leave(status);
 
-    CTzConverter* ctzConverter = CTzConverter::NewL(rtzServer);      
+    CTzConverter* ctzConverter = CTzConverter::NewL(Backend()->TZServer());      
     CleanupStack::PushL(ctzConverter);
  /* Following fields are updated if successful:
   * tm_wday
@@ -314,7 +305,7 @@ void ConvertLocalToUtcTimeL(time_t* aUTCTime, struct tm* const aTmStruct)
         CleanupStack::PushL(zoneid);
 
         aTmStruct->tm_isdst  = -1;
-        UpdateDstAndTznameL(rtzServer, *zoneid, aTmStruct, oldTime, time, tdt, ETzUtcTimeReference);
+        UpdateDstAndTznameL(Backend()->TZServer(), *zoneid, aTmStruct, oldTime, time, tdt, ETzUtcTimeReference);
         CleanupStack::PopAndDestroy(zoneid);
         }
     cachetm = *aTmStruct;

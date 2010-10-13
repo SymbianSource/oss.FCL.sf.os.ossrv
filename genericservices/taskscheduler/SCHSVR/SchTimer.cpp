@@ -404,7 +404,6 @@ CPropertyNotifier::CPropertyNotifier(CConditionManager& aManager)
 CPropertyNotifier::~CPropertyNotifier()
 	{
 	Cancel();
-	iProperty.Close();
 	}
 
 void CPropertyNotifier::AttachL()
@@ -417,10 +416,7 @@ void CPropertyNotifier::AttachL()
 void CPropertyNotifier::SetPropertyL(const TUid& aCategory, TUint aKey)
 	{
 	if (IsActive())
-	    {
 		Cancel();
-		iProperty.Close();
-	    }
 	iCategory = aCategory;
 	iKey = aKey;
 	AttachL();	

@@ -36,7 +36,6 @@
 #include <rpipe.h>
 
 #include<tz.h>
-#include <e32atomics.h>
 
 #ifdef SYMBIAN_OE_POSIX_SIGNALS
 #include "signalclient.h"
@@ -115,7 +114,7 @@ class TCLSICleanup
 */
 	{
 public:
-	void StorePtrs(RHeap* aHeap, RFs* aFs, RSocketServ* aSs, RCommServ* aCs, RFastLock* aSsLock, RFastLock* aCsLock,RFastLock* aDefConnLock,RFastLock* aAESelectLock,RFastLock* aTzServerLock)
+	void StorePtrs(RHeap* aHeap, RFs* aFs, RSocketServ* aSs, RCommServ* aCs, RFastLock* aSsLock, RFastLock* aCsLock,RFastLock* aDefConnLock,RFastLock* aAESelectLock)
 		{
 		iHeap = aHeap;
 		iFs = aFs;
@@ -125,7 +124,6 @@ public:
 		iCsLock = aCsLock;
 		iDefConnLock = aDefConnLock;
 		iAESelectLock = aAESelectLock;
-		iTzServerLock = aTzServerLock;
 		}
 
 	~TCLSICleanup()
@@ -138,7 +136,6 @@ public:
 		iHeap->Close();
 		iDefConnLock->Close();
 		iAESelectLock->Close();
-		iTzServerLock->Close();
 		}
 private:
 	RHeap* iHeap;
@@ -148,8 +145,7 @@ private:
 	RFastLock* iSsLock;
 	RFastLock* iCsLock;
 	RFastLock* iDefConnLock;
-	RFastLock* iAESelectLock;
-	RFastLock* iTzServerLock;
+	RFastLock* iAESelectLock;	
 	};
 
 
@@ -457,8 +453,6 @@ public:
 	int popen (const wchar_t* file, const wchar_t* cmd, const char* mode, int& anErrno);
 	int pclose (int aFid, int& anErrno);
 	IMPORT_C void CheckOrigins (wchar_t**& wenvp, int& aCount);
-    IMPORT_C void freednssuffixes(if_dns_suffixes * suffixes);
-    
 #ifdef SYMBIAN_OE_POSIX_SIGNALS
 	TInt SignalHandler();
 	IMPORT_C void InitSignalHandler();
@@ -597,8 +591,6 @@ public:
 	//Save the file server session path
 	TInt SaveSessionPath(const TDesC& aPath);
 	
-	static void WaitForNRequest(TRequestStatus **aStatusArray, TInt aNum);
-	
 	static void WaitForNRequest(TRequestStatus aStatusArray[], TInt aNum);
 
 private:
@@ -621,8 +613,6 @@ private:
 	// default RConnection with the new settings.
 	TInt StartDefConnection();
 	
-	// Helper function for doing an on-demand connection to RTz server
-	TInt OnDemandTZServerConnection();
 private:
 	// NOTE: iCleanup should be the first member of CLSI, since iPrivateHeap
 	// will be destroyed from within iCleanup destructor.
@@ -699,8 +689,6 @@ private:
 	// Default connection settings, set/cleared using setdefaultif
 	TConnPref* iDefConnPref;
     RTz     iTzServer;	
-	RFastLock iTzServerLock;
-	TBool	iIsRTzConnected;
     RPointerArray<CSocketDesc> iSocketArray;
 #ifdef SYMBIAN_OE_POSIX_SIGNALS
 	// Signal handler thread
@@ -854,8 +842,10 @@ private:
 #endif // SYMBIAN_OE_POSIX_SIGNALS
 public:
 
-	IMPORT_C RTz & TZServer(TInt& aStatus);
-	
+   inline RTz & TZServer()
+        {
+        return iTzServer;
+        } 
 //ipc server session
 RIpcSession iIpcS;
 friend class RFileDesTransferSession;
@@ -966,7 +956,6 @@ public:
 	TUSockAddr() : TSockAddr(), iError(0) {}
 
 	TUSockAddr(TAny* addr);			// constructor form of Prepare
-	TUSockAddr(const TSockAddr& aSockAddr):TSockAddr(aSockAddr),iError(0){};
 	IMPORT_C TUSockAddr(const TAny* addr, TUint len);	// constructor form of Set
 private:
 	void Prepare(TAny* addr);

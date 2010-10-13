@@ -17,7 +17,7 @@
 #ifndef __INETPROTUTIL_IBY__
 #define __INETPROTUTIL_IBY__
 
-file=ABI_DIR\BUILD_DIR\inetprotutil.dll		System\Libs\INetProtUtil.dll
+file=ABI_DIR\BUILD_DIR\INetProtUtil.dll		System\Libs\INetProtUtil.dll
 
 
 #endif

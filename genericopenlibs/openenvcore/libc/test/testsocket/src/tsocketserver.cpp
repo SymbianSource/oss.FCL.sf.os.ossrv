@@ -455,10 +455,6 @@ CTestStep* CSocketTestServer::CreateTestStep(const TDesC& aStepName)
             {
             testStep = new CTestSocket(aStepName);
             }
-	if(aStepName == KSockWriteOnClosedConn )
-	    {
-        testStep = new CTestSocket(aStepName);
-	    }
 	
 	return testStep;
 	}

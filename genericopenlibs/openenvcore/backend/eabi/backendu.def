@@ -175,6 +175,3 @@ EXPORTS
 	_memmove_r @ 174 NONAME
 	_lstat_r @ 175 NONAME
 	_unsetdefaultif_r @ 176 NONAME
-	_ZN21CLocalSystemInterface15freednssuffixesEP15if_dns_suffixes @ 177 NONAME
-	_ZN21CLocalSystemInterface8TZServerERi @ 178 NONAME
-

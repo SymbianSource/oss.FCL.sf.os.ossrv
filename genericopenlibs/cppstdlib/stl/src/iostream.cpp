@@ -447,6 +447,9 @@ void _STLP_CALL ios_base::_S_uninitialize() {
   _Destroy(ptr_wcerr);
   _Destroy(ptr_wclog);
 #endif
+  fclose(stdin);
+  fclose(stdout);
+  fclose(stderr);
 }
 
 

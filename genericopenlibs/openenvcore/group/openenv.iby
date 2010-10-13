@@ -19,8 +19,8 @@
 // libc.dll has a dependancy on Timezone Server
 #include "timezonelocalization.iby"
 
-file=ABI_DIR\BUILD_DIR\liblogger.dll       	   sys\bin\LibLogger.dll 
-file=ABI_DIR\BUILD_DIR\libcipcserver.exe   	   sys\bin\LibCIpcServer.exe 
+file=ABI_DIR\BUILD_DIR\LibLogger.dll       	   sys\bin\LibLogger.dll 
+file=ABI_DIR\BUILD_DIR\LibCIpcServer.exe   	   sys\bin\LibCIpcServer.exe 
 file=ABI_DIR\BUILD_DIR\backend.dll         	   sys\bin\backend.dll 
 file=ABI_DIR\BUILD_DIR\libm.dll            	   sys\bin\libm.dll 
 file=ABI_DIR\BUILD_DIR\libc.dll            	   sys\bin\libc.dll 
@@ -34,7 +34,6 @@ data = EPOCROOT##epoc32\winscw\c\resource\pips\locales.txt	   \resource\pips\loc
 data = EPOCROOT##epoc32\winscw\c\resource\pips\services	   \resource\pips\services
 data = EPOCROOT##epoc32\data\z\system\install\openc_stdlibs_stub.sis	\system\install\openc_stdlibs_stub.sis
 data = EPOCROOT##epoc32\data\z\system\install\openc_signalserver_stub.sis	\system\install\openc_signalserver_stub.sis
-
 #include <stdcpp.iby> 	/* StdC++ library*/
 
 #ifdef SYMBIAN_OE_POSIX_SIGNALS

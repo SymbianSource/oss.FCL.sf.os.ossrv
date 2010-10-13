@@ -1,1 +1,0 @@
-CED -i C:\tstdapis\gosethernetced.xml

@@ -26,8 +26,6 @@ copy z:\input.txt c:\tstdapis\input.txt
 copy z:\tstdapis\data.txt c:\data.txt
 copy z:\tstdapis\10202be9\*.* c:\private\10202be9\
 copy z:\input c:\data\input
- 
-CED -i z:\tstdapis\gosethernetced.xml
 
 testexecute z:\tstdapis\tprogname.script
 testexecute z:\tstdapis\tlibcwchar.script
@@ -162,4 +160,3 @@ testexecute   z:\tstdapis\tsetjmp.script
 del e:\sys$rom.zip
 del c:\logs\testexecute\TestResults.htm
 copy c:\logs\testexecute\*.* e:\
-copy c:\ced.log e:\

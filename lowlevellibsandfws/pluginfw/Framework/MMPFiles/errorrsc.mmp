@@ -23,7 +23,7 @@ OS_LAYER_SYSTEMINCLUDE_SYMBIAN
 // generated for the system error // resolver, 
 // must eventually end up in Z:\System\Errors
 SOURCEPATH 		../../Framework/frame
-START RESOURCE		ecomerr.rss
+START RESOURCE		EComErr.rss
 
 TARGETPATH		/resource/errors
 

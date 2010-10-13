@@ -23,16 +23,16 @@
 #define __ECOM_IBY__
 
 // Make sure the error strings appear in the ROM
-data=MULTI_LINGUIFY(RSC ZRESOURCE\errors\ecomerr	Resource\Errors\ecomerr)
+data=MULTI_LINGUIFY(RSC ZRESOURCE\Errors\ECOMERR	Resource\Errors\ecomerr)
 
 // Framework Components
-file=ABI_DIR\BUILD_DIR\ecom.dll				System\Libs\ECom.dll
-file=ABI_DIR\BUILD_DIR\ecomserver.exe		System\Libs\EComServer.exe
-file=ABI_DIR\BUILD_DIR\ecompatchdata.dll				System\Libs\EComPatchData.dll
+file=ABI_DIR\BUILD_DIR\ECOM.dll				System\Libs\ECom.dll
+file=ABI_DIR\BUILD_DIR\ECOMSERVER.exe		System\Libs\EComServer.exe
+file=ABI_DIR\BUILD_DIR\EComPatchData.dll				System\Libs\EComPatchData.dll
 
 //
 // ECOM uses a custom scheme to do patchable constants. Licensees are instructed to
-// edit EPOCROOT##epoc32\rom\include\ecompatchconstants.hby if they want to patch anyone of
+// edit \epoc32\rom\include\ecompatchconstants.hby if they want to patch anyone of
 // the patchable constants below. Direct use of the patchdata command outside here
 // is not supported because ECOM may change which binaries need the patches.
 //

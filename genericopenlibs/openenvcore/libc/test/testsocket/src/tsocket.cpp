@@ -637,13 +637,6 @@ TVerdict CTestSocket::doTestStepL()
             err = SockSendOnClosedConn();
             SetTestStepResult(err ? static_cast<TVerdict>(err) : EPass);
             }
-   	if(TestStepName() == KSockWriteOnClosedConn )
-   	            {
-   	            INFO_PRINTF1(_L("SockWriteOnClosedConn():"));
-   	            err = SockWriteOnClosedConn();
-   	            SetTestStepResult(err ? static_cast<TVerdict>(err) : EPass);
-   	            }
-   	
    	
 return TestStepResult(); 
 
