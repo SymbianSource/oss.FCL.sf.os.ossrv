@@ -5,6 +5,7 @@
 
 #include <errno.h>
 #include <glib.h>
+#include <unistd.h>
 
 #ifdef G_OS_UNIX
 #include <unistd.h>

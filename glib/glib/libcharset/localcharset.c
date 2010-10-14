@@ -71,13 +71,12 @@
 # define relocate(pathname) (pathname)
 #endif
 
-#ifdef __SYMBIAN32__
-#define LIBDIR "c:\\sys\\bin\\"
-#endif//__SYMBIAN32__
+#ifndef __SYMBIAN32__
 /* Get LIBDIR.  */
 #ifndef LIBDIR
 # include "configmake.h"
 #endif
+#endif//__SYMBIAN32__
 
 #if defined _WIN32 || defined __WIN32__ || defined __CYGWIN__ || defined __EMX__ || defined __DJGPP__
   /* Win32, Cygwin, OS/2, DOS */
@@ -127,6 +126,7 @@ _g_locale_get_charset_aliases (void)
   if (cp == NULL)
     {
 #if !(defined VMS || defined WIN32_NATIVE || defined __CYGWIN__)
+#ifndef __SYMBIAN32__      
       FILE *fp;
       const char *dir;
       const char *base = "charset.alias";
@@ -155,7 +155,9 @@ _g_locale_get_charset_aliases (void)
 
       if (file_name == NULL || (fp = fopen (file_name, "r")) == NULL)
 	/* Out of memory or file not found, treat it as empty.  */
+#endif//__SYMBIAN32__          
 	cp = "";
+#ifndef __SYMBIAN32__
       else
 	{
 	  /* Parse the file's contents.  */
@@ -224,7 +226,7 @@ _g_locale_get_charset_aliases (void)
 
       if (file_name != NULL)
 	free (file_name);
-
+#endif//__SYMBIAN32__
 #else
 
 # if defined VMS

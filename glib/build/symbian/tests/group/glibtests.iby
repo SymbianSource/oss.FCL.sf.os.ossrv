@@ -15,7 +15,7 @@
 *
 */
 #include "glib.iby"
-#include <locale.iby>
+#include <locale_new.iby>
 define ZDRIVE \epoc32\winscw\c 
 // for manual test cases
 file=ABI_DIR\BUILD_DIR\stdioserver.exe   	   sys\bin\stdioserver.exe
@@ -29,7 +29,7 @@ data=ZDRIVE\collate-1.unicode					\collate-1.unicode
 data=ZDRIVE\NormalizationTest.txt				\NormalizationTest.txt
 data=ZDRIVE\4096-random-bytes 					\4096-random-bytes
 data=ZDRIVE\valid-01.xbel						\valid-01.xbel
-data=ZDRIVE\valid-01.xbel						\Private\e00000e6\file.xbel
+data=ZDRIVE\valid-01.xbel						\Private\0x0AC240C6\file.xbel
 
 //batch file
 data=\epoc32\winscw\c\testglib_hardware.bat		\testglib_hardware.bat
@@ -136,9 +136,9 @@ file=ABI_DIR\BUILD_DIR\base_name.exe	\sys\bin\base_name.exe
 file=ABI_DIR\BUILD_DIR\bookmarkfile_test1.exe	\sys\bin\bookmarkfile_test1.exe
 file=ABI_DIR\BUILD_DIR\list_env.exe	\sys\bin\list_env.exe 
 file=ABI_DIR\BUILD_DIR\majorversion_test.exe	\sys\bin\majorversion_test.exe 
-file=ABI_DIR\BUILD_DIR\nullity_ptr.exe	\sys\bin\nullity_ptr.exe 
+file=ABI_DIR\BUILD_DIR\nullify_ptr.exe	\sys\bin\nullify_ptr.exe 
 file=ABI_DIR\BUILD_DIR\test_utils.exe	\sys\bin\test_utils.exe 
-file=ABI_DIR\BUILD_DIR\unichar_test.exe	\sys\bin\unichar_test.exe
+file=ABI_DIR\BUILD_DIR\unichar1_test.exe	\sys\bin\unichar1_test.exe
 file=ABI_DIR\BUILD_DIR\uri_funcs.exe	\sys\bin\uri_funcs.exe
 file=ABI_DIR\BUILD_DIR\utf8_string.exe	\sys\bin\utf8_string.exe 
 

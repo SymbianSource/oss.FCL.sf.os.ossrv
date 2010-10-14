@@ -60,4 +60,3 @@ PRJ_TESTMMPFILES
 ../BC/group/mem_profile_test.mmp 
 ../BC/group/g_test1.mmp 
 ../BC/group/g_test2.mmp 
-../BC/group/helloworld.mmp 

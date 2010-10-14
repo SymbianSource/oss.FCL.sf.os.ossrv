@@ -38,6 +38,7 @@ USERINCLUDE		../../common/inc
 
 SYSTEMINCLUDE	/epoc32/include
 SYSTEMINCLUDE 	/epoc32/include/ecom
+SYSTEMINCLUDE	/epoc32/include/platform
 
 START RESOURCE	2000371D.rss
 TARGETPATH		/ecom

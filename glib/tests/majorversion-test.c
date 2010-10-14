@@ -17,21 +17,13 @@
 #undef G_DISABLE_ASSERT
 #undef G_LOG_DOMAIN
 
-#include<stdio.h>
+#include <sys/stat.h>
+#include <stdio.h>
 #include "glib.h"
-#define LOG_FILE "c:\\logs\\majorversion_test_log.txt"
-#include "std_log_result.h"
-#define LOG_FILENAME_LINE __FILE__, __LINE__
-
-void create_xml(int result)
-{
-    if(result)
-        assert_failed = 1;
-    
-    testResultXml("version-test");
-    close_log_file();
-}
-
+#include <glib/gprintf.h>
+#ifdef __SYMBIAN32__
+#include "mrt2_glib2_test.h"
+#endif /*__SYMBIAN32__*/
 
 int
 main (int   argc,
@@ -43,28 +35,35 @@ main (int   argc,
     const guint *interface_age = NULL;
     const guint *binary_age = NULL;
     const gchar *check_version = NULL;
+    #ifdef __SYMBIAN32__
+    g_log_set_handler (NULL,  G_LOG_FLAG_FATAL| G_LOG_FLAG_RECURSION | G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_MESSAGE | G_LOG_LEVEL_INFO | G_LOG_LEVEL_DEBUG, &mrtLogHandler, NULL);
+    g_set_print_handler(mrtPrintHandler);
+    #endif /*__SYMBIAN32__*/
+    
+    g_print("Test majorversion-test Start");
     major_version = _glib_major_version();
     minor_version = _glib_minor_version(); 
     micro_version = _glib_micro_version();
     interface_age = _glib_interface_age();
     binary_age    = _glib_binary_age();  
-    std_log(LOG_FILENAME_LINE,"Binary age :%d\n Interface age:%d",*binary_age,*interface_age);
+    g_print("Binary age :%d\n Interface age:%d",*binary_age,*interface_age);
     check_version = glib_check_version((*major_version),(*minor_version),(*micro_version));
     if(check_version != NULL)
         {
-        std_log(LOG_FILENAME_LINE,"GLib library in use is not compatible with the given verison");
+        g_print("GLib library in use is not compatible with the given verison");
         assert_failed = 1;
         }
     if(assert_failed)
         {
-        std_log(LOG_FILENAME_LINE,"%s",check_version);
-        std_log(LOG_FILENAME_LINE,"Test Fail");
+        g_print("%s",check_version);
+        g_print("Test majorversion-test Fail");
         }
     else
-        std_log(LOG_FILENAME_LINE,"Test Successful");    
-          
+        g_print("Test majorversion-test Successful");          
     
-    create_xml(assert_failed);
+    #if __SYMBIAN32__
+    testResultXml("majorversion-test");
+    #endif /* EMULATOR */
     return 0;
     }
     

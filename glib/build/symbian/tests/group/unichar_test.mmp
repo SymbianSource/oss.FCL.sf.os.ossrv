@@ -16,7 +16,7 @@
 */
 
 #include <platform_paths.hrh>
-target			unichar_test.exe
+target			unichar1_test.exe
 targettype			exe
 
 UID            0 0x0AB23DD2

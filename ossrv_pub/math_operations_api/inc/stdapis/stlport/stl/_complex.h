@@ -766,9 +766,9 @@ inline _Tp _STLP_CALL imag(const complex<_Tp>& __z) {
 
 #ifdef __SYMBIAN32__
 template <class _Tp>
-#ifdef __WINSCW__
+//#ifdef __WINSCW__
 _STLP_DECLSPEC 
-#endif
+//#endif
 _Tp  _STLP_CALL abs_tp(const complex<_Tp>&);
 
 template <class _Tp>

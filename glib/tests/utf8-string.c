@@ -16,40 +16,38 @@
 #undef G_DISABLE_ASSERT
 #undef G_LOG_DOMAIN
 
+#include <sys/stat.h>
 #include <glib.h>
 #include <errno.h>
-#define LOG_FILE "c:\\logs\\utf8_string_log.txt"
-#include "std_log_result.h"
-#define LOG_FILENAME_LINE __FILE__, __LINE__
-
-void create_xml(int result)
-{
-    if(result)
-        assert_failed = 1;
-    
-    testResultXml("utf8_string_log");
-    close_log_file();
-}
+#include <glib/gprintf.h>
+#ifdef __SYMBIAN32__
+#include "mrt2_glib2_test.h"
+#endif /*__SYMBIAN32__*/
 
 int main (int argc, char *argv[])
 {
     gchar *src = "TestString";
     gchar dest[20];
     gchar *p;
+    #ifdef __SYMBIAN32__
+    g_log_set_handler (NULL,  G_LOG_FLAG_FATAL| G_LOG_FLAG_RECURSION | G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_MESSAGE | G_LOG_LEVEL_INFO | G_LOG_LEVEL_DEBUG, &mrtLogHandler, NULL);
+    g_set_print_handler(mrtPrintHandler);
+    #endif /*__SYMBIAN32__*/
     
+    g_print("Test utf8-string Start");
     p = g_utf8_strncpy(dest, src, strlen(src));
     
     if(p == dest)
         {
         if(strcmp(dest, src))
             {
-            std_log(LOG_FILENAME_LINE,"g_utf8_strncpy didnt work as expected");
+            g_print("g_utf8_strncpy didnt work as expected");
             assert_failed = 1;
             }
         }
     else
         {
-        std_log(LOG_FILENAME_LINE,"g_utf8_strncpy's return value is invalid");
+        g_print("g_utf8_strncpy's return value is invalid");
         assert_failed = 1;
         }
     
@@ -57,16 +55,18 @@ int main (int argc, char *argv[])
     p = g_utf8_strrchr(src, strlen(src), 't');
     if(strcmp(p, "tring"))
         {
-        std_log(LOG_FILENAME_LINE,"g_utf8_strrchr didnt work as expected");
+        g_print("g_utf8_strrchr didnt work as expected");
         assert_failed = 1;
         }
     
 	if(assert_failed)
-          std_log(LOG_FILENAME_LINE,"Test Failed");
+          g_print("Test utf8-string Failed");
     else
-          std_log(LOG_FILENAME_LINE,"Test Successful");
+          g_print("Test utf8-string Successful");
 	
-    create_xml(0);
+    #if __SYMBIAN32__
+    testResultXml("utf8-string");
+    #endif /* EMULATOR */
 
 	return 0;
 }

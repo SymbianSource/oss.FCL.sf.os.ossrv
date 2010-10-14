@@ -27,6 +27,7 @@ SOURCE			../common/src/TPCopyFileUtility.cpp
 
 USERINCLUDE		../common/inc
 SYSTEMINCLUDE	/epoc32/include
+SYSTEMINCLUDE	/epoc32/include/platform
 LIBRARY			euser.lib
 LIBRARY			EFSRV.LIB
 

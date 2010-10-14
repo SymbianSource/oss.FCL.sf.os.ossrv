@@ -26,11 +26,11 @@
 #undef G_LOG_DOMAIN
 
 #include <stdio.h>
-#include <unistd.h>
 #include <string.h>
 #include <sys/stat.h>
 #include "glib.h"
 #include <errno.h>
+#include <unistd.h>
 #ifdef SYMBIAN
 #include "mrt2_glib2_test.h"
 #endif /*SYMBIAN*/
@@ -59,7 +59,7 @@ int main (int   argc,char *argv[])
 	g_dir_close(dir);
 	
 	#if SYMBIAN
-  	testResultXml("dirname_test");
+  	testResultXml("dirnme_test");
   	#endif /* EMULATOR */
 
 	rmdir("c:\\temp\\tmp");

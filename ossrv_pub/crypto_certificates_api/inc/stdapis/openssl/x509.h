@@ -61,7 +61,7 @@
  * SUN MICROSYSTEMS, INC., and contributed to the OpenSSL project.
  */
 /*
- © Portions copyright (c) 2006 Nokia Corporation.  All rights reserved.
+ © Portions copyright (c) 2006-2010 Nokia Corporation.  All rights reserved.
  */
 
 #ifndef HEADER_X509_H
@@ -1027,7 +1027,7 @@ IMPORT_C int X509_REQ_add1_attr_by_OBJ(X509_REQ *req,
 IMPORT_C int X509_REQ_add1_attr_by_NID(X509_REQ *req,
 			int nid, int type,
 			const unsigned char *bytes, int len);
-int X509_REQ_add1_attr_by_txt(X509_REQ *req,
+IMPORT_C int X509_REQ_add1_attr_by_txt(X509_REQ *req,
 			const char *attrname, int type,
 			const unsigned char *bytes, int len);
 

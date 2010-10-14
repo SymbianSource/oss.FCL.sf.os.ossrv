@@ -16,20 +16,13 @@
 #undef G_DISABLE_ASSERT
 #undef G_LOG_DOMAIN
 
+#include <sys/stat.h>
 #include <glib.h>
 #include <errno.h>
-#define LOG_FILE "c:\\logs\\unichar_test_log.txt"
-#include "std_log_result.h"
-#define LOG_FILENAME_LINE __FILE__, __LINE__
-
-void create_xml(int result)
-{
-    if(result)
-        assert_failed = 1;
-    
-    testResultXml("unichar_testlog");
-    close_log_file();
-}
+#include <glib/gprintf.h>
+#ifdef __SYMBIAN32__
+#include "mrt2_glib2_test.h"
+#endif /*__SYMBIAN32__*/
 
 int main (int argc, char *argv[])
 {  
@@ -41,72 +34,78 @@ int main (int argc, char *argv[])
     gunichar tel_symbol = 0x32C0; //telegraphic symbol for january
     gunichar CR = 0x000D; //carriage return
     GUnicodeBreakType type;
+    #ifdef __SYMBIAN32__
+    g_log_set_handler (NULL,  G_LOG_FLAG_FATAL| G_LOG_FLAG_RECURSION | G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_MESSAGE | G_LOG_LEVEL_INFO | G_LOG_LEVEL_DEBUG, &mrtLogHandler, NULL);
+    g_set_print_handler(mrtPrintHandler);
+    #endif /*__SYMBIAN32__*/
     
+    g_print("Test unichar-test Start");
     g_unichar_get_mirror_char('(', &ret);
     
     if(!(')' == ret))
         {
-        std_log(LOG_FILENAME_LINE,"g_unichar_get_mirror_char didnt work as expected");
+        g_print("g_unichar_get_mirror_char didnt work as expected");
         assert_failed = 1;
         }
     
     
     if(!g_unichar_ismark(mark))
         {
-        std_log(LOG_FILENAME_LINE,"g_unichar_ismark didnt work as expected");
+        g_print("g_unichar_ismark didnt work as expected");
         assert_failed = 1;
         }
     
     if(!g_unichar_istitle(title))
         {
-        std_log(LOG_FILENAME_LINE,"g_unichar_istitle didnt work as expected");
+        g_print("g_unichar_istitle didnt work as expected");
         assert_failed = 1;
         }
     
     if(!g_unichar_isdefined(square))
         {
-        std_log(LOG_FILENAME_LINE,"g_unichar_isdefined didnt work as expected");
+        g_print("g_unichar_isdefined didnt work as expected");
         assert_failed = 1;
         }
     
     if(!g_unichar_iszerowidth(space))
         {
-        std_log(LOG_FILENAME_LINE,"g_unichar_iszerowidth didnt work as expected");
+        g_print("g_unichar_iszerowidth didnt work as expected");
         assert_failed = 1;
         }
     
     if(!g_unichar_iswide(tel_symbol))
         {
-        std_log(LOG_FILENAME_LINE,"g_unichar_iswide didnt work as expected");
+        g_print("g_unichar_iswide didnt work as expected");
         assert_failed = 1;
         }
     
     if(!g_unichar_iswide_cjk(tel_symbol))
         {
-        std_log(LOG_FILENAME_LINE,"g_unichar_iswide_cjk didnt work as expected");
+        g_print("g_unichar_iswide_cjk didnt work as expected");
         assert_failed = 1;
         }
     
     ret = g_unichar_totitle('a');
     if(!(ret == 'A'))
         {
-        std_log(LOG_FILENAME_LINE,"g_unichar_totitle didnt work as expected");
+        g_print("g_unichar_totitle didnt work as expected");
         assert_failed = 1;
         }
     
     type = g_unichar_break_type(CR);
     if(type != G_UNICODE_BREAK_CARRIAGE_RETURN)
         {
-        std_log(LOG_FILENAME_LINE,"g_unichar_break_type didnt work as expected");
+        g_print("g_unichar_break_type didnt work as expected");
         assert_failed = 1;
         }
     
 	if(assert_failed)
-          std_log(LOG_FILENAME_LINE,"Test Failed");
+          g_print("Test unichar-test Failed");
     else
-          std_log(LOG_FILENAME_LINE,"Test Successful");
+          g_print("Test unichar-test Successful");
 	
-    create_xml(0);
-
+    #if __SYMBIAN32__
+    testResultXml("unichar-test");
+    #endif /* EMULATOR */
 	return 0;
 }

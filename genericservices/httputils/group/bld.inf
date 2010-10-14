@@ -61,6 +61,7 @@ InetProtUtil.mmp
 PRJ_TESTEXPORTS
 ../Test/strings/WspDummyConstants.st			/epoc32/build/generated/t_decode/wspdummyconstants.st
 ../Test/strings/T_UriParserSipUri.txt			z:/t_uriparser/t_uriparsersipuri.txt
+../Test/IpuTestUtils/e32consf.h /epoc32/include/e32consf.h
 
 ../Test/group/inetprotutiltest.iby			/epoc32/rom/include/inetprotutiltest.iby
 ../Test/group/fileuritest.iby				/epoc32/rom/include/fileuritest.iby

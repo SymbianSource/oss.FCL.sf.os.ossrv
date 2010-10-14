@@ -8,6 +8,9 @@
  */
 
 /* @(#) $Id$ */
+#if (__ARMCC_VERSION >= 300000)
+#pragma O2
+#endif
 
 #define ZLIB_INTERNAL
 #include "libzcore.h"

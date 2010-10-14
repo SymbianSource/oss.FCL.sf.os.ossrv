@@ -4,7 +4,7 @@
 <SystemDefinition name="ossrv" schema="1.4.0">  
 <systemModel> 
 <!-- Common file for prebuild layers-->          
-<layer name="mw_layer">                        
+<layer name="os_layer">                        
 <module name="ossrv">                             
 <unit name="ossrv" unitID="mrtdo.ossrv" bldFile="&layer_real_source_path;/group" mrp="" />
 </module>    

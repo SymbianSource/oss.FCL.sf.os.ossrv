@@ -14,22 +14,14 @@
 //
 
 
+#include <sys/stat.h>
 #include<stdio.h>
 #include <glib.h>
-#define LOG_FILE "c:\\logs\\bookmark_test1_log.txt"
-#include "std_log_result.h"
-#define LOG_FILENAME_LINE __FILE__, __LINE__
+#include <glib/gprintf.h>
+#ifdef __SYMBIAN32__
+#include "mrt2_glib2_test.h"
+#endif /*__SYMBIAN32__*/
 #define in_FILE "file.xbel"
-
-
-void create_xml(int result)
-{
-    if(result)
-        assert_failed = 1;
-    
-    testResultXml("bookmark-test1");
-    close_log_file();
-}
 
 int
 main (int   argc,
@@ -44,46 +36,52 @@ main (int   argc,
     const gchar *bookmark_filename = argv[1];
     GError        *error = NULL;
     gchar **bookmark_uri = NULL;
-        
+    
+    #ifdef __SYMBIAN32__
+    g_log_set_handler (NULL,  G_LOG_FLAG_FATAL| G_LOG_FLAG_RECURSION | G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_MESSAGE | G_LOG_LEVEL_INFO | G_LOG_LEVEL_DEBUG, &mrtLogHandler, NULL);
+    g_set_print_handler(mrtPrintHandler);
+    #endif /*__SYMBIAN32__*/
+    
+    g_print("Test bookmarkfile-test1 Start");
     bookmark = g_bookmark_file_new();
     file_load= g_bookmark_file_load_from_file(bookmark, bookmark_filename, &error);
     if(file_load != TRUE)
         {
-        std_log(LOG_FILENAME_LINE,"g_bookmark_file_load_from_file fails with err:%s",error->message);
+        g_print("g_bookmark_file_load_from_file fails with err:%s",error->message);
         assert_failed = 1;
         }
     bookmark_data = g_bookmark_file_to_data(bookmark,&uris_len,&error);
     if(bookmark_data == NULL)
         {
-        std_log(LOG_FILENAME_LINE,"Bg_bookmark_file_to_data fails with err:%s",error->message);
+        g_print("Bg_bookmark_file_to_data fails with err:%s",error->message);
         assert_failed = 1;
         }
     rel_path = in_FILE; // Code changed to Hardcode the data file in the c:\ private path. 
     file_written = g_bookmark_file_load_from_data_dirs(bookmark, rel_path,NULL, &error);
     if(file_written == FALSE)
            {
-           std_log(LOG_FILENAME_LINE,"g_bookmark_file_load_from_data_dirs fails with err:%s",error->message);
+           g_print("g_bookmark_file_load_from_data_dirs fails with err:%s",error->message);
            assert_failed = 1;
            }
     
     bookmark_uri = g_bookmark_file_get_uris(bookmark, NULL);
     if(bookmark_uri == NULL)
             {
-            std_log(LOG_FILENAME_LINE,"g_bookmark_file_get_uris fails");
+            g_print("g_bookmark_file_get_uris fails");
             assert_failed = 1;
             }
           
     bookmark_data = g_bookmark_file_get_mime_type(bookmark,*bookmark_uri,&error);
     if(bookmark_data == NULL)
         {
-        std_log(LOG_FILENAME_LINE,"URI cannot be found and the error code:%s",error->message);
+        g_print("URI cannot be found and the error code:%s",error->message);
         assert_failed = 1;
         }
     g_bookmark_file_set_is_private(bookmark,*bookmark_uri, TRUE);
     file_written = g_bookmark_file_get_is_private(bookmark,*bookmark_uri, &error);
     if(file_written == FALSE)
         {
-        std_log(LOG_FILENAME_LINE,"Private flag is not set in the URI and fails with :%s",error->message);
+        g_print("Private flag is not set in the URI and fails with :%s",error->message);
         assert_failed = 1;
         }
     
@@ -91,18 +89,19 @@ main (int   argc,
     time = g_bookmark_file_get_added(bookmark,*bookmark_uri,&error);
     if(time == -1)
         {
-        std_log(LOG_FILENAME_LINE,"URI cannot be found and fails with :%s",error->message);
+        g_print("URI cannot be found and fails with :%s",error->message);
         assert_failed = 1;
         } 
     g_strfreev(bookmark_uri);  
     g_bookmark_file_free(bookmark);
     
     if(assert_failed)
-        std_log(LOG_FILENAME_LINE,"Test Fail");
+        g_print("Test bookmarkfile-test1 Fail");
     else
-        std_log(LOG_FILENAME_LINE,"Test Successful");
-         
+        g_print("Test bookmarkfile-test1 Successful");         
    
-    create_xml(assert_failed);
+    #if __SYMBIAN32__
+    testResultXml("bookmarkfile-test1");
+    #endif /* EMULATOR */
     return 0;
     }

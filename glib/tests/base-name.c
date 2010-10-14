@@ -16,24 +16,17 @@
 #undef G_DISABLE_ASSERT
 #undef G_LOG_DOMAIN
 
+#include <sys/stat.h>
 #include <glib.h>
 #include <errno.h>
 #include <string.h>
-#define LOG_FILE "c:\\logs\\base_name_log.txt"
-#include "std_log_result.h"
-#define LOG_FILENAME_LINE __FILE__, __LINE__
+#include <glib/gprintf.h>
+#ifdef __SYMBIAN32__
+#include "mrt2_glib2_test.h"
+#endif /*__SYMBIAN32__*/
 
 #define MAX_FILENAME_LENGTH	256
 #define MAX_PATH_LENGTH		256
-
-void create_xml(int result)
-{
-    if(result)
-        assert_failed = 1;
-    
-    testResultXml("base_name_log");
-    close_log_file();
-}
 
 int main (int argc, char *argv[])
 {
@@ -42,7 +35,13 @@ int main (int argc, char *argv[])
 	const gchar *ret_file_name;
 
 	gchar input_file[MAX_PATH_LENGTH];
-	sprintf(input_file, "%s%s", folder_name, file_name);
+    #ifdef __SYMBIAN32__
+    g_log_set_handler (NULL,  G_LOG_FLAG_FATAL| G_LOG_FLAG_RECURSION | G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_MESSAGE | G_LOG_LEVEL_INFO | G_LOG_LEVEL_DEBUG, &mrtLogHandler, NULL);
+    g_set_print_handler(mrtPrintHandler);
+    #endif /*__SYMBIAN32__*/
+	
+    g_print("Test base-name Start");
+    sprintf(input_file, "%s%s", folder_name, file_name);
 
 	ret_file_name = g_basename(input_file);
 	
@@ -50,23 +49,25 @@ int main (int argc, char *argv[])
 	    {
         if(g_strcmp0(ret_file_name, file_name) !=0 )
             {
-            std_log(LOG_FILENAME_LINE, "g_basename returned wrong file name");
+            g_print( "g_basename returned wrong file name");
             assert_failed = 1;
             }
 	    }
 	else
 	    {
-        std_log(LOG_FILENAME_LINE, "g_basename returned NULL. errno  = %d", errno);
+        g_print( "g_basename returned NULL. errno  = %d", errno);
         assert_failed = 1;
 	    }
 
 	
 	if(assert_failed)
-          std_log(LOG_FILENAME_LINE,"Test Failed");
+          g_print("Test base-name Failed");
     else
-          std_log(LOG_FILENAME_LINE,"Test Successful");
+          g_print("Test base-name Successful");
 	
-    create_xml(0);
+    #if __SYMBIAN32__
+    testResultXml("base-name");
+    #endif /* EMULATOR */
 
 	return 0;
 }

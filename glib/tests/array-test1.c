@@ -18,19 +18,11 @@
 #undef G_LOG_DOMAIN
 
 #include <glib.h>
-#define LOG_FILE "c:\\logs\\array1_test_log.txt"
-#include "std_log_result.h"
-#define LOG_FILENAME_LINE __FILE__, __LINE__
-
-
-void create_xml(int result)
-{
-    if(result)
-        assert_failed = 1;
-
-    testResultXml("array-test");
-    close_log_file();
-}
+#include <sys/stat.h>
+#include <glib/gprintf.h>
+#ifdef __SYMBIAN32__
+#include "mrt2_glib2_test.h"
+#endif /*__SYMBIAN32__*/
 
 static gint sort (gconstpointer a, gconstpointer b)
 {
@@ -86,7 +78,7 @@ void test_remove_array_index()
     garray = g_array_new (FALSE,FALSE,sizeof(gint));
     if(garray == NULL)
 	{
-      std_log(LOG_FILENAME_LINE, "Array not created");
+      g_print( "Array not created");
       assert_failed = 1;
 	  return ;
 	}
@@ -95,12 +87,12 @@ void test_remove_array_index()
     g_array_insert_vals(garray,0,array,ARRAY_SIZE);
 
     /* test for deleting single element in an array. Removing the element with index 1*/
-    std_log(LOG_FILENAME_LINE, "Delete array element at index 1");
+    g_print( "Delete array element at index 1");
     garray = g_array_remove_index(garray,1);
 
 	if(garray == NULL )
 	{
-		std_log(LOG_FILENAME_LINE, "NULL return by g_array_remove_index");
+		g_print( "NULL return by g_array_remove_index");
 		assert_failed = 1;
 		return ;
 	}
@@ -108,7 +100,7 @@ void test_remove_array_index()
     /*Print the array elements after remove*/
     for(i=0; i<garray->len; i++)
     {
-          std_log(LOG_FILENAME_LINE, "Current array element at index %d is %d", i,g_array_index(garray, gint, i));
+          g_print( "Current array element at index %d is %d", i,g_array_index(garray, gint, i));
 	}
 
 	/*Check if the array size is now 4 and element at index 1 is not 5 after removal*/
@@ -116,7 +108,7 @@ void test_remove_array_index()
 	ret = compare_array(garray, array_after_remove_index_1, ARRAY_SIZE_AFTER_REMOVE_INDEX);
 	if ( !ret)
 	{
-		std_log(LOG_FILENAME_LINE, "Array Element not properly deleted by g_array_remove_index");
+		g_print( "Array Element not properly deleted by g_array_remove_index");
 		assert_failed = 1;
 		g_array_free(garray,TRUE);
 		return ;
@@ -125,24 +117,24 @@ void test_remove_array_index()
 
 	/* Test to remove index element 2 using g_array_remove_index_fast*/
 
-    std_log(LOG_FILENAME_LINE, "Delete array element at index 2");
+    g_print( "Delete array element at index 2");
     garray =g_array_remove_index_fast(garray,2);
     if(garray == NULL)
     {
-		std_log(LOG_FILENAME_LINE, "NULL return by g_array_remove_index_fast");
+		g_print( "NULL return by g_array_remove_index_fast");
 		assert_failed = 1;
 		return ;
 	}
 
     for(i=0; i<garray->len; i++)
 	{
-		std_log(LOG_FILENAME_LINE, "Current array element at index %d is %d", i,g_array_index(garray, gint, i));
+		g_print( "Current array element at index %d is %d", i,g_array_index(garray, gint, i));
 	}
 
 	ret = compare_array(garray, array_after_remove_index_fast_2, ARRAY_SIZE_AFTER_REMOVE_INDEX_FAST);
 	if ( !ret)
 	{
-		std_log(LOG_FILENAME_LINE, "Array Element not properly deleted by g_array_remove_index_fast");
+		g_print( "Array Element not properly deleted by g_array_remove_index_fast");
 		assert_failed = 1;
 		g_array_free(garray,TRUE);
 		return;
@@ -166,7 +158,7 @@ void test_test_remove_array_index_range()
 	garray = g_array_new (FALSE,FALSE,sizeof(gint));
 	if(garray == NULL)
 	{
-		  std_log(LOG_FILENAME_LINE, "Array not created");
+		  g_print( "Array not created");
 		  assert_failed = 1;
 		  return ;
 	}
@@ -174,14 +166,14 @@ void test_test_remove_array_index_range()
 	g_array_insert_vals(garray,0,array,ARRAY_SIZE);
 	for(i=0; i<garray->len;i++)
 	{
-		std_log(LOG_FILENAME_LINE, "Current array elements %d is %d", i,g_array_index(garray, gint, i));
+		g_print( "Current array elements %d is %d", i,g_array_index(garray, gint, i));
 	}
 
 	garray = g_array_remove_range(garray,3,2); /*remove two elements from index 3 */
 
 	if(garray == NULL)
 	{
-		std_log(LOG_FILENAME_LINE,"Elements not deleted properly by g_array_remove_range");
+		g_print("Elements not deleted properly by g_array_remove_range");
 		assert_failed = 1;
 		return ;
 
@@ -190,14 +182,14 @@ void test_test_remove_array_index_range()
 	/*print the array elements */
 	for(i=0; i<garray->len;i++)
 	{
-		std_log(LOG_FILENAME_LINE, "Curent array element(after deletion) %d is %d", i,g_array_index(garray, gint, i));
+		g_print( "Curent array element(after deletion) %d is %d", i,g_array_index(garray, gint, i));
 	}
 
 
 	ret = compare_array(garray, array_after_remove_index_range, ARRAY_SIZE_AFTER_REMOVE_INDEX_RANGE);
 	if(!ret)
 	{
-		std_log(LOG_FILENAME_LINE,"Elements not deleted properly");
+		g_print("Elements not deleted properly");
 		assert_failed = 1;
 		g_array_free(garray,TRUE);
 		return ;
@@ -223,7 +215,7 @@ void test_sort_array()
 
 	if(garray == NULL)
 	{
-		std_log(LOG_FILENAME_LINE, "Array not created");
+		g_print( "Array not created");
 		assert_failed = 1;
 		return ;
 	}
@@ -233,23 +225,23 @@ void test_sort_array()
 
 	if(garray == NULL)
 	{
-		std_log(LOG_FILENAME_LINE, "Array not sorted");
+		g_print( "Array not sorted");
 		assert_failed = 1;
 		return ;
 	}
 
-	std_log(LOG_FILENAME_LINE,"SORTED ARRAY");
+	g_print("SORTED ARRAY");
 
 	for(i=0;i<garray->len;i++)
 	{
-		std_log(LOG_FILENAME_LINE, "Element %d is %d", i,g_array_index(garray, gint, i));
+		g_print( "Element %d is %d", i,g_array_index(garray, gint, i));
 	}
 
 	ret = compare_array(garray, sort_array, ARRAY_SIZE);
 
 	if(!ret)
 	{
-		std_log(LOG_FILENAME_LINE, "Array not sorted correctly");
+		g_print( "Array not sorted correctly");
 		assert_failed = 1;
 		return ;
 	}
@@ -260,7 +252,7 @@ void test_sort_array()
     garray = g_array_new (FALSE,FALSE,sizeof(gint));
 	if(garray == NULL)
 	{
-      std_log(LOG_FILENAME_LINE, "Array not created");
+      g_print( "Array not created");
 	  return ;
 	}
 	g_array_insert_vals(garray,0,array,ARRAY_SIZE);
@@ -269,21 +261,21 @@ void test_sort_array()
 
 	if(garray == NULL)
 	{
-		std_log(LOG_FILENAME_LINE, "Array not sorted with user data");
+		g_print( "Array not sorted with user data");
 		assert_failed = 1;
 		return ;
 	}
 
-	std_log(LOG_FILENAME_LINE,"SORTED ARRAY WITH USERDATA");
+	g_print("SORTED ARRAY WITH USERDATA");
 	for(i=0;i<garray->len;i++)
 	{
-		std_log(LOG_FILENAME_LINE, "Element %d is %d", i,g_array_index(garray, gint, i));
+		g_print( "Element %d is %d", i,g_array_index(garray, gint, i));
 	}
 
 	ret = compare_array(garray, sort_array, ARRAY_SIZE);
 	if(!ret)
 	{
-		std_log(LOG_FILENAME_LINE, "Array not sorted correctly with user data");
+		g_print( "Array not sorted correctly with user data");
 		assert_failed = 1;
 		return ;
 	}
@@ -293,16 +285,24 @@ void test_sort_array()
 
 int main (void)
 {
-	test_test_remove_array_index_range();
+    #ifdef __SYMBIAN32__
+    g_log_set_handler (NULL,  G_LOG_FLAG_FATAL| G_LOG_FLAG_RECURSION | G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_MESSAGE | G_LOG_LEVEL_INFO | G_LOG_LEVEL_DEBUG, &mrtLogHandler, NULL);
+    g_set_print_handler(mrtPrintHandler);
+    #endif /*__SYMBIAN32__*/
+    
+    g_print("Test array1-test Start");
+    test_test_remove_array_index_range();
 	test_sort_array();
 	test_remove_array_index();
 
 	if(assert_failed)
-		std_log(LOG_FILENAME_LINE,"Test Failed");
+		g_print("Test array1-test Failed");
 	else
-		std_log(LOG_FILENAME_LINE,"Test Successful");
+		g_print("Test array1-test Successful");
 
-    create_xml(0);
+    #if __SYMBIAN32__
+    testResultXml("array1-test");
+    #endif /* EMULATOR */
     return 0;
 }
 

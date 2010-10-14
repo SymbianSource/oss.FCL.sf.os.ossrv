@@ -34,90 +34,86 @@ Description:
 X509* CX509_Initializer::CreateX509L(CX509Certificate* X509Cert)
 {
 	X509* ret = X509_new();
-	TBool serail = ETrue;
+	if(ret == NULL)
+		return NULL;
 	
-	if(ret != NULL)
-	{
-	
-//validity
-		X509_VAL_free(ret->cert_info->validity);
-		ret->cert_info->validity = CreateX509_VAL(X509Cert); 
-
-//issuer
-		const CX500DistinguishedName& IssName = X509Cert->IssuerName();	
-		X509_NAME_free(ret->cert_info->issuer);
-		ret->cert_info->issuer = CreateX509_NAMEL(IssName);
-
-//subject
-		const CX500DistinguishedName& SubName = X509Cert->SubjectName();	
-		X509_NAME_free(ret->cert_info->subject);
-		ret->cert_info->subject = CreateX509_NAMEL(SubName);
-	//	const HBufC * name = SubName.DisplayNameL();
-
-//signature
-		const TPtrC8* sig_alg_ptr = X509Cert->DataElementEncoding(CX509Certificate::EAlgorithmId);
-		X509_ALGOR_free(ret->cert_info->signature);
-		ret->cert_info->signature = CreateX509_ALGORL(sig_alg_ptr);
-
-//serialnumber
-		const TPtrC8 sernum = X509Cert->SerialNumber();
-		ASN1_INTEGER_free(ret->cert_info->serialNumber);
-		ret->cert_info->serialNumber = CreateASN1_STRING(sernum.Length(),V_ASN1_INTEGER,(unsigned char *)sernum.Ptr(),0);		
-		if((sernum.Length()== 1) && sernum[0]==0)
-			serail = EFalse;
+	TCleanupItem item((void(*)(void*))X509_free,(void*)ret);
+	CleanupStack::PushL(item);
 			
-//version
-
-		TInt ver = X509Cert->Version();
-		unsigned char verVal = (unsigned char)(ver-1);		
-		ASN1_INTEGER_free(ret->cert_info->version);
-		if( (verVal) || (!serail))// for X509 V1 certificates, version is null if any serial number present.
-			ret->cert_info->version = CreateASN1_STRING(1,V_ASN1_INTEGER,&verVal,0);
-
-
-//issuerUID
-		const TPtrC8* issUID_enc = X509Cert->DataElementEncoding(CX509Certificate::EIssuerUID);
-		if(issUID_enc)
-			ret->cert_info->issuerUID = CreateASN1_STRING(issUID_enc->Length(),V_ASN1_BIT_STRING,(unsigned char *)issUID_enc->Ptr(),0);
-		
-
-//subjectUID
-		const TPtrC8* subUID_enc = X509Cert->DataElementEncoding(CX509Certificate::ESubjectUID);
-		if(subUID_enc)
-			ret->cert_info->subjectUID = CreateASN1_STRING(subUID_enc->Length(),V_ASN1_BIT_STRING,(unsigned char *)subUID_enc->Ptr(),0);
-
-//key
-		X509_PUBKEY_free(ret->cert_info->key);
-		ret->cert_info->key = CreateX509_PUBKEYL(X509Cert);
-
+	TBool serial = ETrue;
 	
-//extension
-
-
-		ret->cert_info->extensions = CreateSTACKOF_X509_EXTENSIONL(X509Cert);
-
+	//validity
+	X509_VAL_free(ret->cert_info->validity);
+	ret->cert_info->validity = CreateX509_VAL(X509Cert); 
+	
+	//issuer
+	const CX500DistinguishedName& IssName = X509Cert->IssuerName();	
+	X509_NAME_free(ret->cert_info->issuer);
+	ret->cert_info->issuer = CreateX509_NAMEL(IssName);
+	
+	//subject
+	const CX500DistinguishedName& SubName = X509Cert->SubjectName();	
+	X509_NAME_free(ret->cert_info->subject);
+	ret->cert_info->subject = CreateX509_NAMEL(SubName);
+	//	const HBufC * name = SubName.DisplayNameL();
+	
+	//signature
+	const TPtrC8* sig_alg_ptr = X509Cert->DataElementEncoding(CX509Certificate::EAlgorithmId);
+	X509_ALGOR_free(ret->cert_info->signature);
+	ret->cert_info->signature = CreateX509_ALGORL(sig_alg_ptr);
+	
+	//serialnumber
+	const TPtrC8 sernum = X509Cert->SerialNumber();
+	ASN1_INTEGER_free(ret->cert_info->serialNumber);
+	ret->cert_info->serialNumber = CreateASN1_STRING(sernum.Length(),V_ASN1_INTEGER,(unsigned char *)sernum.Ptr(),0);		
+	if((sernum.Length()== 1) && sernum[0]==0)
+		serial = EFalse;
 		
-//name
-		ret->name = X509_NAME_oneline(ret->cert_info->subject, NULL, 0);
-
-//sig_alg
-		X509_ALGOR_free(ret->sig_alg);
-		ret->sig_alg = CreateX509_ALGORL(sig_alg_ptr);
-		
-//signature
-		const TPtrC8 sig = X509Cert->Signature();
-		ASN1_STRING_free(ret->signature);
-		ret->signature = CreateASN1_STRING(sig.Length(), V_ASN1_BIT_STRING, (unsigned char *)sig.Ptr(), ASN1_STRING_FLAG_BITS_LEFT);
-	}
-		
+	//version
+	TInt ver = X509Cert->Version();
+	unsigned char verVal = (unsigned char)(ver-1);		
+	ASN1_INTEGER_free(ret->cert_info->version);
+	if( (verVal) || (!serial))// for X509 V1 certificates, version is null if any serial number present.
+		ret->cert_info->version = CreateASN1_STRING(1,V_ASN1_INTEGER,&verVal,0);
+	
+	
+	//issuerUID
+	const TPtrC8* issUID_enc = X509Cert->DataElementEncoding(CX509Certificate::EIssuerUID);
+	if(issUID_enc)
+		ret->cert_info->issuerUID = CreateASN1_STRING(issUID_enc->Length(),V_ASN1_BIT_STRING,(unsigned char *)issUID_enc->Ptr(),0);
+	
+	
+	//subjectUID
+	const TPtrC8* subUID_enc = X509Cert->DataElementEncoding(CX509Certificate::ESubjectUID);
+	if(subUID_enc)
+		ret->cert_info->subjectUID = CreateASN1_STRING(subUID_enc->Length(),V_ASN1_BIT_STRING,(unsigned char *)subUID_enc->Ptr(),0);
+	
+	//key
+	X509_PUBKEY_free(ret->cert_info->key);
+	ret->cert_info->key = CreateX509_PUBKEYL(X509Cert);
+	
+	//extension
+	ret->cert_info->extensions = CreateSTACKOF_X509_EXTENSIONL(X509Cert);
+	
+	//name
+	ret->name = X509_NAME_oneline(ret->cert_info->subject, NULL, 0);
+	
+	//sig_alg
+	X509_ALGOR_free(ret->sig_alg);
+	ret->sig_alg = CreateX509_ALGORL(sig_alg_ptr);
+	
+	//signature
+	const TPtrC8 sig = X509Cert->Signature();
+	ASN1_STRING_free(ret->signature);
+	ret->signature = CreateASN1_STRING(sig.Length(), V_ASN1_BIT_STRING, (unsigned char *)sig.Ptr(), ASN1_STRING_FLAG_BITS_LEFT);
+	
+	CleanupStack::Pop(ret);
 	return ret;
 }
 
 
 X509_ALGOR* CX509_Initializer::CreateX509_ALGORL(const TPtrC8* ptr)
 {
-	X509_ALGOR* ret = X509_ALGOR_new();
-	
 	TASN1DecGeneric dec((TDesC8 &)*ptr);	
 	dec.InitL();
 	
@@ -126,6 +122,8 @@ X509_ALGOR* CX509_Initializer::CreateX509_ALGORL(const TPtrC8* ptr)
 	
 	TASN1DecGeneric& AlgorEncSeq = *(seq->At(0));
 
+	X509_ALGOR* ret = X509_ALGOR_new();
+		
 	if (dec.LengthDERContent() > AlgorEncSeq.LengthDER()) // can also check for (seq->Count() > 1) alternatively
 	{
 		// parameter part is present in the encoding.
@@ -170,8 +168,6 @@ X509_ALGOR* CX509_Initializer::CreateX509_ALGORL(const TPtrC8* ptr)
 
 X509_NAME* CX509_Initializer::CreateX509_NAMEL(const CX500DistinguishedName& DistName)
 {
-	X509_NAME* ret = X509_NAME_new();
-	
 	CASN1EncSequence * Asn1Seq = DistName.EncodeASN1LC();			
 
 	HBufC8* octetData = HBufC8::NewMaxLC(5000);
@@ -181,8 +177,14 @@ X509_NAME* CX509_Initializer::CreateX509_NAMEL(const CX500DistinguishedName& Dis
 	TUint writePos = 0;
 	Asn1Seq->WriteDERL(oct, writePos);			
 
+	X509_NAME* ret = X509_NAME_new();
+	// push the object to a cleanup stack as it is passed to a leaving function.
+	TCleanupItem item((void(*)(void*))X509_NAME_free,(void*)ret);
+	CleanupStack::PushL(item);
+	
   	TInt len = Fill_X509_NAME_ENTRYL(ret, octetData->Des());
 	
+  	CleanupStack::Pop(ret);
 	char *p = (char *)oct.PtrZ();
 
     ret->bytes->data = (char *)OPENSSL_malloc(len);        // no need to free this. BUF_MEM_free will free if not NULL

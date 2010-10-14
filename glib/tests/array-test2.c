@@ -14,25 +14,17 @@
 //
 
 
+#include <sys/stat.h>
+
 #undef G_DISABLE_ASSERT
 #undef G_LOG_DOMAIN
 
-#define LOG_FILENAME_LINE __FILE__, __LINE__
 #include <stdio.h>
 #include <glib.h>
-
-#define LOG_FILE "c:\\logs\\array2_test_log.txt"
-#include "std_log_result.h"
-
-
-void create_xml(int result)
-{
-    if(result)
-        assert_failed = 1;
-
-    testResultXml("ptrarray-test");
-    close_log_file();
-}
+#include <glib/gprintf.h>
+#ifdef __SYMBIAN32__
+#include "mrt2_glib2_test.h"
+#endif /*__SYMBIAN32__*/
 
 static gint psort (gconstpointer a, gconstpointer b)
 {
@@ -86,7 +78,7 @@ void test_pointer_array_remove_range()
 	gparray = g_ptr_array_new ();
  	if(gparray == NULL)
  	{
- 		std_log(LOG_FILENAME_LINE, "Pointer Array Not created");
+ 		g_print( "Pointer Array Not created");
  		assert_failed = 1;
  		return;
  	}
@@ -95,25 +87,25 @@ void test_pointer_array_remove_range()
 	for (i = 0; i < ARRAY_SIZE; i++)
 	{
 		g_ptr_array_add (gparray, &(array[i]));
-		std_log(LOG_FILENAME_LINE, "Ptr Array element at index %d is %d",i, array[i]);
+		g_print( "Ptr Array element at index %d is %d",i, array[i]);
 	}
 
 	g_ptr_array_remove_range(gparray,3,3);
 
-	std_log(LOG_FILENAME_LINE, "AFTER DELETING THE RANGE");
+	g_print( "AFTER DELETING THE RANGE");
 
 	/*Print the garray pointer->values*/
 	for(i=0;i<gparray->len;i++)
 	{
         gpointer val = g_ptr_array_index (gparray,i);	
-        std_log(LOG_FILENAME_LINE, "Ptr Array element at index %d is %d",i,  *((int*)val));	
+        g_print( "Ptr Array element at index %d is %d",i,  *((int*)val));	
 	}
 
 	ret = compare_pointer_array(gparray, array_after_remove_range, ARRAY_SIZE_AFTER_REMOVE_RANGE );
 
     if(ret != TRUE)
     {
-		std_log(LOG_FILENAME_LINE, "Pointer Array Elements not properly deleted by g_ptr_array_remove_range");
+		g_print( "Pointer Array Elements not properly deleted by g_ptr_array_remove_range");
 		assert_failed = 1;
 		g_ptr_array_free(gparray,TRUE);
 		return ;
@@ -137,7 +129,7 @@ void sort_pointer_array()
 	gparray = g_ptr_array_new ();
 	if(gparray == NULL)
 	{
-		std_log(LOG_FILENAME_LINE, "Pointer Array not created");
+		g_print( "Pointer Array not created");
 		assert_failed = 1;
 		g_ptr_array_free(gparray,TRUE);
 		return ;
@@ -146,25 +138,25 @@ void sort_pointer_array()
 	for (i = 0; i < ARRAY_SIZE; i++)
 	{
 		g_ptr_array_add (gparray, &array[i]);
-		std_log(LOG_FILENAME_LINE, "Ptr Array element at index %d is %d",i, array[i]);
+		g_print( "Ptr Array element at index %d is %d",i, array[i]);
 	}
 
 	g_ptr_array_sort(gparray,psort);
 
 	/*Print the sorted Array*/
-	std_log(LOG_FILENAME_LINE, "SORTED ARRAY");
+	g_print( "SORTED ARRAY");
 
 	for(i=0;i<gparray->len;i++)
 	{
         gpointer val = g_ptr_array_index (gparray,i);
-        std_log(LOG_FILENAME_LINE, "Ptr Array element at index %d is %d",i, *((int*)val));
+        g_print( "Ptr Array element at index %d is %d",i, *((int*)val));
 	}
 
 
 	ret = compare_pointer_array(gparray, sorted_array, ARRAY_SIZE);
     if(ret != TRUE)
     {
-		std_log(LOG_FILENAME_LINE, "Pointer Array Elements not sorted by g_ptr_array_sort");
+		g_print( "Pointer Array Elements not sorted by g_ptr_array_sort");
 		assert_failed = 1;
 		g_ptr_array_free(gparray,TRUE);
 		return ;
@@ -188,7 +180,7 @@ void sort_pointer_array_with_data()
 	gparray = g_ptr_array_new ();
 	if(gparray == NULL)
 	{
-		std_log(LOG_FILENAME_LINE, "Pointer Array not created");
+		g_print( "Pointer Array not created");
 		assert_failed = 1;
 		g_ptr_array_free(gparray,TRUE);
 		return ;
@@ -198,19 +190,19 @@ void sort_pointer_array_with_data()
 	{
 		g_ptr_array_add (gparray, &array[i]);
 		
-		std_log(LOG_FILENAME_LINE, "Ptr Array element at index %d is %d",i, array[i]);
+		g_print( "Ptr Array element at index %d is %d",i, array[i]);
 	}
 
 	g_ptr_array_sort_with_data(gparray,psort_userdata, NULL);
 
 
 	/*Print the sorted Array*/
-	std_log(LOG_FILENAME_LINE, "SORTED ARRAY");
+	g_print( "SORTED ARRAY");
 
 	for(i=0;i<gparray->len;i++)
 	{
         gpointer val = g_ptr_array_index (gparray,i);
-        std_log(LOG_FILENAME_LINE, "Ptr Array element at index %d is %d",i, *((int*)val) );
+        g_print( "Ptr Array element at index %d is %d",i, *((int*)val) );
 	}
 
 
@@ -218,7 +210,7 @@ void sort_pointer_array_with_data()
 
     if(ret != TRUE)
     {
-		std_log(LOG_FILENAME_LINE, "Pointer Array Elements not sorted by g_ptr_array_sort");
+		g_print( "Pointer Array Elements not sorted by g_ptr_array_sort");
 		assert_failed = 1;
 		g_ptr_array_free(gparray,TRUE);
 		return ;
@@ -229,15 +221,23 @@ void sort_pointer_array_with_data()
 
 int main (void)
 {
-	test_pointer_array_remove_range();
+    #ifdef __SYMBIAN32__
+    g_log_set_handler (NULL,  G_LOG_FLAG_FATAL| G_LOG_FLAG_RECURSION | G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_MESSAGE | G_LOG_LEVEL_INFO | G_LOG_LEVEL_DEBUG, &mrtLogHandler, NULL);
+    g_set_print_handler(mrtPrintHandler);
+    #endif /*__SYMBIAN32__*/
+    
+    g_print("Test array2-test Start");
+    test_pointer_array_remove_range();
 	sort_pointer_array();
 	sort_pointer_array_with_data();
 
 	if(assert_failed)
-		std_log(LOG_FILENAME_LINE,"Test Failed");
+		g_print("Test array2-test Failed");
 	else
-		std_log(LOG_FILENAME_LINE,"Test Successful");
+		g_print("Test array2-test Successful");
 
-	create_xml(0);
+    #if __SYMBIAN32__
+    testResultXml("array2-test");
+    #endif /* EMULATOR */
 	return 0;
 }

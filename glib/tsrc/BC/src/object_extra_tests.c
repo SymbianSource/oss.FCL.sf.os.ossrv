@@ -60,7 +60,7 @@ struct _GTestClass
 static GType g_test_get_type (void);
 
 static void g_test_class_init (GTestClass * klass);
-static void g_test_init (GTest * test);
+//static void g_test_init (GTest * test);
 static void g_test_dispose (GObject * object);
 static void g_test_get_property (GObject    *object,
 				 guint       prop_id,
@@ -133,13 +133,13 @@ g_test_class_init (GTestClass * klass)
 						     G_PARAM_READWRITE));
   
 }
-
+/*
 static void
 g_test_init (GTest * test)
 {
   //g_print ("init %p\n", test);
 }
-
+*/
 static void
 g_test_dispose (GObject * object)
 {

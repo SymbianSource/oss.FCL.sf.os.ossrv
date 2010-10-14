@@ -171,10 +171,7 @@ CCertRetriever* CCertRetriever::NewL(X509_STORE* aStore,
 
 void CCertRetriever::ConstructL()
 	{
-		TInt err = iFs.Connect();
-		if(err != KErrNone)
-			User::Leave(err);
-		
+		User::LeaveIfError(iFs.Connect());
  		iState = EInitializeCertStore;
  		iBuf = HBufC8::NewL(KMaxCertLength);
 	}

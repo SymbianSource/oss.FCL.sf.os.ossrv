@@ -16,7 +16,7 @@
 */
 
 
-TARGET          dirname_test.exe
+TARGET          dirnme_test.exe
 TARGETTYPE      exe
 UID             0x1000008D 0xE1000005
 

@@ -16,20 +16,13 @@
 #undef G_DISABLE_ASSERT
 #undef G_LOG_DOMAIN
 
+#include <sys/stat.h>
 #include <glib.h>
 #include <errno.h>
-#define LOG_FILE "c:\\logs\\list_env_log.txt"
-#include "std_log_result.h"
-#define LOG_FILENAME_LINE __FILE__, __LINE__
-
-void create_xml(int result)
-{
-    if(result)
-        assert_failed = 1;
-    
-    testResultXml("list_env_log");
-    close_log_file();
-}
+#include <glib/gprintf.h>
+#ifdef __SYMBIAN32__
+#include "mrt2_glib2_test.h"
+#endif /*__SYMBIAN32__*/
 
 int main (int argc, char *argv[])
 {
@@ -41,7 +34,12 @@ int main (int argc, char *argv[])
     gint i, found = 0;
     guint no_of_variables =0;
     gboolean found_var1 = 0,  found_var2 = 0;
-    	
+    #ifdef __SYMBIAN32__
+    g_log_set_handler (NULL,  G_LOG_FLAG_FATAL| G_LOG_FLAG_RECURSION | G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_MESSAGE | G_LOG_LEVEL_INFO | G_LOG_LEVEL_DEBUG, &mrtLogHandler, NULL);
+    g_set_print_handler(mrtPrintHandler);
+    #endif /*__SYMBIAN32__*/
+    
+    g_print("Test list-env Start");
     if(g_setenv (variable1, value1, TRUE) && g_setenv (variable2, value2, TRUE))
         {
         env_list = g_listenv();
@@ -64,13 +62,13 @@ int main (int argc, char *argv[])
                 
                 if(!(found_var1 && found_var2))
                     {
-                    std_log(LOG_FILENAME_LINE, "g_listenv failed");
+                    g_print( "g_listenv failed");
                     assert_failed = 1;
                     }
                 }
             else
                 {
-                std_log(LOG_FILENAME_LINE, "g_listenv returned list is of length 0");
+                g_print( "g_listenv returned list is of length 0");
                 assert_failed = 1;
                 }
             
@@ -78,21 +76,23 @@ int main (int argc, char *argv[])
             }
         else
             {
-            std_log(LOG_FILENAME_LINE, "g_listenv returned NULL");
+            g_print( "g_listenv returned NULL");
             assert_failed = 1;
             }
         }
     else
         {
-        std_log(LOG_FILENAME_LINE, "setting env variable failed. errno = %d", errno);
+        g_print( "setting env variable failed. errno = %d", errno);
         }
     
     if(assert_failed)
-          std_log(LOG_FILENAME_LINE,"Test Failed");
+          g_print("Test list-env Failed");
     else
-          std_log(LOG_FILENAME_LINE,"Test Successful");
+          g_print("Test list-env Successful");
 	
-    create_xml(0);
+    #if __SYMBIAN32__
+    testResultXml("list-env");
+    #endif /* EMULATOR */
 
 	return 0;
 }

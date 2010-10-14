@@ -16,20 +16,14 @@
 #undef G_DISABLE_ASSERT
 #undef G_LOG_DOMAIN
 
+#include <sys/stat.h>
+#include <stdlib.h>
 #include <glib.h>
 #include <errno.h>
-#define LOG_FILE "c:\\logs\\test_utils_log.txt"
-#include "std_log_result.h"
-#define LOG_FILENAME_LINE __FILE__, __LINE__
-
-void create_xml(int result)
-{
-    if(result)
-        assert_failed = 1;
-    
-    testResultXml("test_utils_log");
-    close_log_file();
-}
+#include <glib/gprintf.h>
+#ifdef __SYMBIAN32__
+#include "mrt2_glib2_test.h"
+#endif /*__SYMBIAN32__*/
 
 static void
 gstring_overwrite_int (GString *gstring,
@@ -99,7 +93,7 @@ void test_g_test_trap()
     
     if(!g_test_trap_has_passed())
         {
-        std_log(LOG_FILENAME_LINE, "g_test_trap_has_passed didnt work as expected");
+        g_print( "g_test_trap_has_passed didnt work as expected");
         assert_failed = 1;
         }
     }
@@ -111,7 +105,7 @@ void test_g_test_log_type_name()
     
     if(strcmp(ret, "message"))
         {
-        std_log(LOG_FILENAME_LINE, "g_test_log_type_name didnt work as expected");
+        g_print( "g_test_log_type_name didnt work as expected");
         assert_failed = 1;
         }
     }
@@ -126,7 +120,7 @@ void test_g_test_timer()
     
     if(!(ret_time1 == ret_time2))
         {
-        std_log(LOG_FILENAME_LINE, "g_test_timer* didnt work as expected");
+        g_print( "g_test_timer* didnt work as expected");
         assert_failed = 1;
         }
     }
@@ -163,7 +157,7 @@ void test_g_log_buffer()
             }
         else
             {
-            std_log(LOG_FILENAME_LINE, "g_test_log_buffer_pop returned NULL");
+            g_print( "g_test_log_buffer_pop returned NULL");
             assert_failed = 1;
             }
         
@@ -171,7 +165,7 @@ void test_g_log_buffer()
         }
     else
         {
-        std_log(LOG_FILENAME_LINE, "g_test_log_buffer_new returned NULL");
+        g_print( "g_test_log_buffer_new returned NULL");
         assert_failed = 1;
         }
 
@@ -180,6 +174,12 @@ void test_g_log_buffer()
 
 int main (int argc, char *argv[])
 {
+    #ifdef __SYMBIAN32__
+    g_log_set_handler (NULL,  G_LOG_FLAG_FATAL| G_LOG_FLAG_RECURSION | G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_MESSAGE | G_LOG_LEVEL_INFO | G_LOG_LEVEL_DEBUG, &mrtLogHandler, NULL);
+    g_set_print_handler(mrtPrintHandler);
+    #endif /*__SYMBIAN32__*/
+    
+    g_print("Test test-utils Start");
     g_test_init(&argc, &argv);
     
     test_g_test_trap();
@@ -188,11 +188,13 @@ int main (int argc, char *argv[])
     test_g_log_buffer();
     
     if(assert_failed)
-          std_log(LOG_FILENAME_LINE,"Test Failed");
+          g_print("Test test-utils Failed");
     else
-          std_log(LOG_FILENAME_LINE,"Test Successful");
+          g_print("Test test-utils Successful");
 	
-    create_xml(0);
+    #if __SYMBIAN32__
+    testResultXml("test-utils");
+    #endif /* EMULATOR */
 
 	return 0;
 }

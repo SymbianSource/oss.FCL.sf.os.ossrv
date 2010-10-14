@@ -18,28 +18,29 @@
 
 #include <glib.h>
 #include <errno.h>
-#define LOG_FILE "c:\\logs\\at_exit_log.txt"
-#include "std_log_result.h"
-#define LOG_FILENAME_LINE __FILE__, __LINE__
-
-void create_xml(int result)
-{
-    if(result)
-        assert_failed = 1;
-    
-    testResultXml("at_exit_log");
-    close_log_file();
-}
+#include <sys/stat.h>
+#include <glib/gprintf.h>
+#ifdef __SYMBIAN32__
+#include "mrt2_glib2_test.h"
+#endif /*__SYMBIAN32__*/
 
 void on_exit()
     {
-    std_log(LOG_FILENAME_LINE,"Test Successful");
-    create_xml(0);    
+    g_print("Test at_exit Successful");
+    #if __SYMBIAN32__
+    testResultXml("at-exit");
+    #endif /* EMULATOR */    
     }
 
 int main (int argc, char *argv[])
 {
+    #ifdef __SYMBIAN32__
+    g_log_set_handler (NULL,  G_LOG_FLAG_FATAL| G_LOG_FLAG_RECURSION | G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_MESSAGE | G_LOG_LEVEL_INFO | G_LOG_LEVEL_DEBUG, &mrtLogHandler, NULL);
+    g_set_print_handler(mrtPrintHandler);
+    #endif /*__SYMBIAN32__*/
+    
+    g_print("Test at_exit Start");
     g_atexit(on_exit);
-    std_log(LOG_FILENAME_LINE, "Test ll be considered failed if on_exit() is not called");
+    g_print( "Test will be considered failed if on_exit() is not called");
     return 0;
 }

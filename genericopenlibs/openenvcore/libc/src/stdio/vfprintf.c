@@ -498,7 +498,7 @@ __vfprintf(FILE *fp, const char *fmt0, va_list ap)
 		long double ldbl;
 	} fparg;
 	int expt;		/* integer value of exponent */
-	char expchar;		/* exponent character: [eEpP\0] */
+	char expchar = '\0';		/* exponent character: [eEpP\0] */
 	char *dtoaend;		/* pointer to end of converted digits */
 	int expsize;		/* character count for expstr */
 	int lead;		/* sig figs before decimal or group sep */

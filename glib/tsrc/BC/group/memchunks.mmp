@@ -31,8 +31,7 @@ CAPABILITY ALL -TCB
 VENDORID        0x00000000
 #endif
 
-SYSTEMINCLUDE 	../../../inc
-SYSTEMINCLUDE 	../inc
+userinclude		../inc
 SYSTEMINCLUDE		/epoc32/include 
 //SYSTEMINCLUDE		/epoc32/include/osextensions/stdapis
 //SYSTEMINCLUDE		/epoc32/include/osextensions/stdapis/glib-2.0

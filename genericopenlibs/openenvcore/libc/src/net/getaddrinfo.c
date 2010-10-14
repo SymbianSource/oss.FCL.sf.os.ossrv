@@ -408,6 +408,10 @@ getaddrinfo(hostname, servname, hints, res)
 	struct addrinfo *pai;
 	const struct explore *ex;
     int numeric = 0;
+	#ifdef __SYMBIAN32__
+    int hints_specified = 0;
+	struct addrinfo hints_local;
+	#endif
 	memset(&sentinel, 0, sizeof(sentinel));
 	cur = &sentinel;
 	pai = &ai;
@@ -422,6 +426,10 @@ getaddrinfo(hostname, servname, hints, res)
 	if (hostname == NULL && servname == NULL)
 		return EAI_NONAME;
 	if (hints) {
+		#ifdef __SYMBIAN32__
+        /* Real hint specified do not set hints to NULL */
+        hints_specified = 1;
+		#endif
 		/* error check for hints */
 		if (hints->ai_addrlen || hints->ai_canonname ||
 		    hints->ai_addr || hints->ai_next)
@@ -459,7 +467,17 @@ getaddrinfo(hostname, servname, hints, res)
 			}
 		}
 	}
-
+	#ifdef __SYMBIAN32__
+	else {
+	/* No hints specified by caller, create local hint with
+	 * ai_family set to AF_UNSPEC, this is to handle NULL hint 
+	 * specification
+	 */
+	memset((void *)&hints_local,0,sizeof(struct addrinfo));
+	hints_local.ai_family = AF_UNSPEC;
+	hints = &hints_local;
+	}
+	#endif
 	/*
 	 * post-2553: AI_ALL and AI_V4MAPPED are effective only against
 	 * AF_INET6 query.  They need to be ignored if specified in other
@@ -635,6 +653,16 @@ good:
 			 * list, so that the application would try the list
 			 * in the most efficient order.
 			 */
+            /* 
+             * Since hints is not specified by caller, remove reference
+             * to hints_local, this is used to handle NULL hint specification
+             * Here doesnt matter as Symbian port doesnt provide reorder policy
+             * May be useful for future implementation 
+             */            
+			#ifdef __SYMBIAN32__ 
+            if(!hints_specified)
+                hints = NULL;
+			#endif	
 			if (hints == NULL || !(hints->ai_flags & AI_PASSIVE)) {
 				if (!numeric)
 					(void)reorder(&sentinel);

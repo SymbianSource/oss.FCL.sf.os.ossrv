@@ -39,7 +39,7 @@ LIBRARY		bafl.lib
 LIBRARY		testexecuteutils.lib 
 LIBRARY		testexecutelogclient.lib 
 // LIBRARY		systemtest_utils.lib
-LIBRARY		instrumentationhandler.lib 
+//LIBRARY		instrumentationhandler.lib 
 LIBRARY		insock.lib
 LIBRARY		esock.lib
 LIBRARY		libpthread.lib 

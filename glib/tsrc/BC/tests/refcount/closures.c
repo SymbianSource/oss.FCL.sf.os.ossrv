@@ -45,14 +45,14 @@ typedef struct {
   void (*test_signal3) (GTest * test, gint an_int);
 } GTestClass;
 
-#define G_TYPE_TEST               (g_test_get_type ())
-#define G_TEST(test)              (G_TYPE_CHECK_INSTANCE_CAST ((test), G_TYPE_TEST, GTest))
-#define G_IS_TEST(test)           (G_TYPE_CHECK_INSTANCE_TYPE ((test), G_TYPE_TEST))
-#define G_TEST_CLASS(tclass)      (G_TYPE_CHECK_CLASS_CAST ((tclass), G_TYPE_TEST, GTestClass))
-#define G_IS_TEST_CLASS(tclass)   (G_TYPE_CHECK_CLASS_TYPE ((tclass), G_TYPE_TEST))
-#define G_TEST_GET_CLASS(test)    (G_TYPE_INSTANCE_GET_CLASS ((test), G_TYPE_TEST, GTestClass))
+#define G_TYPE_TEST                (my_test_get_type ())
+#define MY_TEST(test)              (G_TYPE_CHECK_INSTANCE_CAST ((test), G_TYPE_TEST, GTest))
+#define MY_IS_TEST(test)           (G_TYPE_CHECK_INSTANCE_TYPE ((test), G_TYPE_TEST))
+#define MY_TEST_CLASS(tclass)      (G_TYPE_CHECK_CLASS_CAST ((tclass), G_TYPE_TEST, GTestClass))
+#define MY_IS_TEST_CLASS(tclass)   (G_TYPE_CHECK_CLASS_TYPE ((tclass), G_TYPE_TEST))
+#define MY_TEST_GET_CLASS(test)    (G_TYPE_INSTANCE_GET_CLASS ((test), G_TYPE_TEST, GTestClass))
 
-G_DEFINE_TYPE (GTest, g_test, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GTest, my_test, G_TYPE_OBJECT);
 
 /* --- variables --- */
 static volatile gboolean stopping = FALSE;
@@ -69,7 +69,7 @@ static gboolean          seen_thread2 = FALSE;
 
 /* --- functions --- */
 static void
-g_test_init (GTest * test)
+my_test_init (GTest * test)
 {
   //g_print ("init %p\n", test);
 
@@ -84,12 +84,12 @@ enum {
 };
 
 static void
-g_test_set_property (GObject      *object,
+my_test_set_property (GObject      *object,
                      guint         prop_id,
                      const GValue *value,
                      GParamSpec   *pspec)
 {
-  GTest *test = G_TEST (object);
+  GTest *test = MY_TEST (object);
   switch (prop_id)
     {
     case ARG_TEST_PROP:
@@ -102,12 +102,12 @@ g_test_set_property (GObject      *object,
 }
 
 static void
-g_test_get_property (GObject    *object,
+my_test_get_property (GObject    *object,
                      guint       prop_id,
                      GValue     *value,
                      GParamSpec *pspec)
 {
-  GTest *test = G_TEST (object);
+  GTest *test = MY_TEST (object);
   switch (prop_id)
     {
     case ARG_TEST_PROP:
@@ -120,38 +120,38 @@ g_test_get_property (GObject    *object,
 }
 
 static void
-g_test_test_signal2 (GTest *test,
-                     gint   an_int)
+my_test_test_signal2 (GTest *test,
+                      gint   an_int)
 {
 }
 
 static void
-g_test_emit_test_signal1 (GTest *test,
-                          gint   vint)
+my_test_emit_test_signal1 (GTest *test,
+                           gint   vint)
 {
   g_signal_emit (G_OBJECT (test), test_signal1, 0, vint);
 }
 
 static void
-g_test_emit_test_signal2 (GTest *test,
-                          gint   vint)
+my_test_emit_test_signal2 (GTest *test,
+                           gint   vint)
 {
   g_signal_emit (G_OBJECT (test), test_signal2, 0, vint);
 }
 
 static void
-g_test_emit_test_signal3 (GTest *test,
+my_test_emit_test_signal3 (GTest *test,
                           gint   vint)
 {
   g_signal_emit (G_OBJECT (test), test_signal3, 0, vint);
 }
 static void
-g_test_class_init (GTestClass *klass)
+my_test_class_init (GTestClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  gobject_class->set_property = g_test_set_property;
-  gobject_class->get_property = g_test_get_property;
+  gobject_class->set_property = my_test_set_property;
+  gobject_class->get_property = my_test_get_property;
 
   test_signal1 = g_signal_new ("test-signal1", G_TYPE_FROM_CLASS (klass), G_SIGNAL_RUN_LAST,
                                G_STRUCT_OFFSET (GTestClass, test_signal1), NULL, NULL,
@@ -168,8 +168,8 @@ g_test_class_init (GTestClass *klass)
   g_object_class_install_property (G_OBJECT_CLASS (klass), ARG_TEST_PROP,
                                    g_param_spec_int ("test-prop", "Test Prop", "Test property",
                                                      0, 1, 0, G_PARAM_READWRITE));
-  klass->test_signal2 = g_test_test_signal2;
-  klass->test_signal3 = g_test_test_signal2;
+  klass->test_signal2 = my_test_test_signal2;
+  klass->test_signal3 = my_test_test_signal2;
 }
 
 static inline guint32
@@ -266,9 +266,9 @@ destroy_data (gpointer  data,
 static void
 test_emissions (GTest *test)
 {
-  g_test_emit_test_signal1 (test, TEST_INT1);
-  g_test_emit_test_signal2 (test, TEST_INT2);
-  g_test_emit_test_signal3 (test, TEST_INT3);
+  my_test_emit_test_signal1 (test, TEST_INT1);
+  my_test_emit_test_signal2 (test, TEST_INT2);
+  my_test_emit_test_signal3 (test, TEST_INT3);
 }
 
 int
@@ -280,11 +280,10 @@ main (int    argc,
   GTest *object;
   guint i;
 
-  #ifdef SYMBIAN
+  #ifdef __SYMBIAN32__
   g_log_set_handler (NULL,  G_LOG_FLAG_FATAL| G_LOG_FLAG_RECURSION | G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_MESSAGE | G_LOG_LEVEL_INFO | G_LOG_LEVEL_DEBUG, &mrtLogHandler, NULL);
   g_set_print_handler(mrtPrintHandler);
-  #endif /*SYMBIAN*/
-  
+  #endif /*__SYMBIAN32__*/
   g_thread_init (NULL);
   
   //g_print ("START: %s\n", argv[0]);

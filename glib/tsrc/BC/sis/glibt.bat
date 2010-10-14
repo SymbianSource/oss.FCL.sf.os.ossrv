@@ -35,7 +35,7 @@ completion-test.exe
 convert-test.exe
 date-test.exe
 defaultiface.exe
-dirname-test.exe
+dirnme-test.exe
 env-test.exe
 extra_tests.exe
 gio-test.exe

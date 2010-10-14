@@ -29,6 +29,7 @@ locale_new.iby  								/epoc32/rom/include/locale_new.iby
 ../../../../tests/collate/collate-1.unicode	/epoc32/winscw/c/collate-1.unicode
 ../../../../tests/NormalizationTest.txt		/epoc32/winscw/c/NormalizationTest.txt
 ../../../../tests/bookmarks/valid-01.xbel	/epoc32/winscw/c/valid-01.xbel
+../../../../tests/bookmarks/valid-01.xbel	/epoc32/winscw/c/Private/0ac240c6/file.xbel
 testglib_emulator.bat  				/epoc32/winscw/c/testglib_emulator.bat
 testglib_hardware.bat  				/epoc32/winscw/c/testglib_hardware.bat
 

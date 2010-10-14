@@ -192,3 +192,5 @@ RESOURCE TBUF r_ecom_error_noextendedinterfacereleasefunction{ buf="The extended
 RESOURCE TBUF r_ecom_error_noextendedinterfacereleaseobject{ buf="The extended interface release function was not found."; }
 RESOURCE TBUF r_ecom_error_notfoundscantimer{ buf="The Interface implementation could not find a scan timer"; }
 RESOURCE TBUF r_ecom_error_listcurrentlyunavailable{ buf="The list is currently unavailable"; }
+
+

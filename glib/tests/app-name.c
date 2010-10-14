@@ -18,24 +18,22 @@
 
 #include <glib.h>
 #include <errno.h>
-#define LOG_FILE "c:\\logs\\app_name_log.txt"
-#include "std_log_result.h"
-#define LOG_FILENAME_LINE __FILE__, __LINE__
-
-void create_xml(int result)
-{
-    if(result)
-        assert_failed = 1;
-    
-    testResultXml("app_name_log");
-    close_log_file();
-}
+#include <sys/stat.h>
+#include <glib/gprintf.h>
+#ifdef __SYMBIAN32__
+#include "mrt2_glib2_test.h"
+#endif /*__SYMBIAN32__*/
 
 int main (int argc, char *argv[])
 {
     char appName[] = "TestApp";
     const char *retAppName;
+    #ifdef __SYMBIAN32__
+    g_log_set_handler (NULL,  G_LOG_FLAG_FATAL| G_LOG_FLAG_RECURSION | G_LOG_LEVEL_CRITICAL | G_LOG_LEVEL_WARNING | G_LOG_LEVEL_MESSAGE | G_LOG_LEVEL_INFO | G_LOG_LEVEL_DEBUG, &mrtLogHandler, NULL);
+    g_set_print_handler(mrtPrintHandler);
+    #endif /*__SYMBIAN32__*/
     
+    g_print("Test app-name Start");
     g_set_application_name(appName);
     
     retAppName = g_get_application_name();
@@ -44,24 +42,26 @@ int main (int argc, char *argv[])
 	    {
         if(g_strcmp0(appName, retAppName) !=0 )
             {
-            std_log(LOG_FILENAME_LINE, "g_get_application_name returned wrong name");
+            g_print( "g_get_application_name returned wrong name");
             assert_failed = 1;
             }
 	    }
 	else
 	    {
-        std_log(LOG_FILENAME_LINE, "g_get_application_name returned NULL. errno  = %d", errno);
+        g_print( "g_get_application_name returned NULL. errno  = %d", errno);
         assert_failed = 1;
 	    }
 	
 	g_free((void *)retAppName);
 	
 	if(assert_failed)
-          std_log(LOG_FILENAME_LINE,"Test Failed");
+          g_print("Test app-name Failed");
     else
-          std_log(LOG_FILENAME_LINE,"Test Successful");
+          g_print("Test app-name Successful");
 	
-    create_xml(0);
+    #if __SYMBIAN32__
+	testResultXml("app-name");
+    #endif /* EMULATOR */
 
 	return 0;
 }

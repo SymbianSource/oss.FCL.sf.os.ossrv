@@ -18,14 +18,11 @@
 
 
 #include <e32std.h>
-#include <e32base.h>
 #include <e32cons.h>
-#include <utf.h>
 #include <errno.h>
 #include <wchar.h>
 #include <stdlib.h>
 #include <string.h>
-#include <pdrstore.h>
 #include "glibbackend.h"
 
 #define MAX_COMMAND_LINE_LENGTH 256

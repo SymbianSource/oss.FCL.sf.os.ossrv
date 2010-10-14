@@ -103,6 +103,8 @@ IMPORT_C void oil_test_init (OilTest *test);
 IMPORT_C void oil_test_set_test_header (OilTest *test, OilParameter *p, int test_header);
 IMPORT_C void oil_test_set_test_footer (OilTest *test, OilParameter *p, int test_footer);
 
+IMPORT_C void oil_test_set_impl (OilTest *test, OilFunctionImpl *impl);
+
 void _oil_test_marshal_function (void *func, unsigned long *args, int n_args,
     unsigned int pointer_mask, OilProfile *prof);
 

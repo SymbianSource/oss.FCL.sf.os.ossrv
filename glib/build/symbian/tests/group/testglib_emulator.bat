@@ -117,7 +117,7 @@ nullify_ptr.exe
 test_utils.exe
 utf8_string.exe
 uri_funcs.exe
-unichar_test.exe
+unichar1_test.exe
 
 //from BC
 tutf8.exe 
@@ -159,4 +159,3 @@ main_loop_test.exe
 mem_profile_test.exe 
 g_test1.exe 
 g_test2.exe 
-helloworld.exe 
