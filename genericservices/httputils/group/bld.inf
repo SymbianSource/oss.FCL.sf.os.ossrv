@@ -48,7 +48,7 @@ PRJ_EXPORTS
 ../inc/TConvBase64.h SYMBIAN_OS_LAYER_PLATFORM_EXPORT_PATH(tconvbase64.h)
 
 // Export CUri Usage Guide to engdocs
-"../Documents/CUri Usage Guide.doc"			"/epoc32/engdoc/application-protocols/curi_usage_guide.doc"
+//"../Documents/CUri Usage Guide.doc"			"/epoc32/engdoc/application-protocols/curi_usage_guide.doc"
 
 INetProtUtil.iby	/epoc32/rom/include/inetprotutil.iby
 
