@@ -1,0 +1,27 @@
+<component>
+		<name>gcce_gcce-load_blr_hw_component</name>
+		<testset>
+				<id>gcce_gcce-load_blr</id>
+				<priority>High</priority>
+
+		<install type="binary">
+				<src>gcce-load.exe</src>
+				<dst>c:\sys\bin\gcce-load.exe</dst>
+		</install> 
+				
+	  		<install type="binary">
+				<src>gcce-lib.dll</src>
+				<dst>c:\sys\bin\gcce-lib.dll</dst>
+ 			</install>
+
+
+		
+		<execute>
+				<file>c:\sys\bin\gcce-load.exe</file>
+        <result type="common">
+            <file>c:\spd_logs\xml\gcce-load.xml</file>
+        </result>
+        <timeout>300</timeout>
+		</execute> 
+</testset>
+</component>

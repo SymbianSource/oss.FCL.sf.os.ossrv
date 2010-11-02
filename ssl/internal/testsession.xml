@@ -1,0 +1,326 @@
+<?xml version="1.0"?>
+<testsession>
+	<symbian-version>SSL_CRYPTO_Combined_TestDrop_blr_component</symbian-version>
+	<testitem>at</testitem>
+	<resultfile>ATSOUTPUT\testsession_results.xml</resultfile>
+	
+	<!--Inclusion of winsspd xml for ssltest -->
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libssl_ssltest\libssl_blr_winsspd_component.xml</testplan>
+ <target hardware="winsspd" platform="winscw" build="udeb" />
+	</component>
+
+	<!--Inclusion of Hw xml for ssltest -->
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libssl_ssltest\libssl_blr_hw_component.xml</testplan>
+  <target hardware="scarfe"  build="urel" />
+	</component>
+	
+	<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libssl_ssltest\libssl_blr_hw_component.xml</testplan>
+  <target hardware="zeus"  build="urel" />
+	</component>
+	
+
+	<!--Inclusion of winsspd xml for cryptotest -->
+	
+	<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_crypto_test\libcrypto_blr_winsspd_component.xml</testplan>
+ <target hardware="winsspd" platform="winscw" build="udeb" />
+	</component>
+
+
+	<!--Inclusion of Hw xml for cryptotest -->
+	
+	<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_crypto_test\libcrypto_blr_hw_component.xml</testplan>
+		<target hardware="scarfe" build="urel" />
+	</component>
+
+<!--Inclusion of Zeus xml for cryptotest -->
+	
+	<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_crypto_test\libcrypto_blr_hw_component.xml</testplan>
+		<target hardware="zeus" build="urel" />
+	</component>
+
+	<!--Inclusion of winsspd xmls for topenssl -->
+<!--
+	<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltestss_blr_winsspd_component.xml</testplan>
+  <target hardware="winsspd" platform="winscw" build="udeb" />
+	</component>
+
+
+	<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltestverify_blr_winsspd_component.xml</testplan>
+ 	<target hardware="winsspd" platform="winscw" build="udeb" />
+	</component>
+-->
+
+	<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltestenc_blr_winsspd_component.xml</testplan>
+  <target hardware="winsspd" platform="winscw" build="udeb" />
+	</component>
+	
+	<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltestgen_blr_winsspd_component.xml</testplan>
+  <target hardware="winsspd" platform="winscw" build="udeb" />
+	</component>
+	
+
+	<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltpkcs7_blr_winsspd_component.xml</testplan>
+ 	<target hardware="winsspd" platform="winscw" build="udeb" />
+	</component>
+
+	<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltpkcs7d_blr_winsspd_component.xml</testplan>
+ 	<target hardware="winsspd" platform="winscw" build="udeb" />
+	</component>
+
+	<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltreq_blr_winsspd_component.xml</testplan>
+ 	<target hardware="winsspd" platform="winscw" build="udeb" />
+	</component>
+
+
+	<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltreq2_blr_winsspd_component.xml</testplan>
+	<target hardware="winsspd" platform="winscw" build="udeb" />
+	</component>
+
+	<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltrsa_blr_winsspd_component.xml</testplan>
+ 	<target hardware="winsspd" platform="winscw" build="udeb" />
+	</component>
+
+	<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltcrl_blr_winsspd_component.xml</testplan>
+  <target hardware="winsspd" platform="winscw" build="udeb" />
+	</component>
+
+	<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltsid_blr_winsspd_component.xml</testplan>
+  <target hardware="winsspd" platform="winscw" build="udeb" />
+	</component>
+<!--
+	<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltx509_blr_winsspd_component.xml</testplan>
+  <target hardware="winsspd" platform="winscw" build="udeb" />
+	</component>	
+
+	<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltx5091_blr_winsspd_component.xml</testplan>
+  <target hardware="winsspd" platform="winscw" build="udeb" />
+	</component>		
+
+	<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltx5092_blr_winsspd_component.xml</testplan>
+  <target hardware="winsspd" platform="winscw" build="udeb" />
+	</component>
+-->
+	<!--Inclusion of Hw xml for topenssl -->
+	
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltestss_blr_hw_component.xml</testplan>
+ <target hardware="scarfe" platform="armv5" build="urel" />
+</component>
+
+
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltestverify_blr_hw_component.xml</testplan>
+ <target hardware="scarfe" platform="armv5" build="urel" />
+</component>
+
+
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltestenc_blr_hw_component.xml</testplan>
+ <target hardware="scarfe" platform="armv5" build="urel" />
+	</component>
+	
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltestgen_blr_hw_component.xml</testplan>
+ <target hardware="scarfe" platform="armv5" build="urel" />
+	</component>
+	
+
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltpkcs7_blr_hw_component.xml</testplan>
+ <target hardware="scarfe" platform="armv5" build="urel" />
+	</component>
+
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltpkcs7d_blr_hw_component.xml</testplan>
+ <target hardware="scarfe" platform="armv5" build="urel" />
+	</component>
+
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltreq_blr_hw_component.xml</testplan>
+ <target hardware="scarfe" platform="armv5" build="urel" />
+	</component>
+
+
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltreq2_blr_hw_component.xml</testplan>
+ <target hardware="scarfe" platform="armv5" build="urel" />
+	</component>
+
+
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltrsa_blr_hw_component.xml</testplan>
+ <target hardware="scarfe" platform="armv5" build="urel" />
+</component>
+
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltcrl_blr_hw_component.xml</testplan>
+ <target hardware="scarfe" platform="armv5" build="urel" />
+</component>
+
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltsid_blr_hw_component.xml</testplan>
+ <target hardware="scarfe" platform="armv5" build="urel" />
+	</component>
+
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltx509_blr_hw_component.xml</testplan>
+ <target hardware="scarfe" platform="armv5" build="urel" />
+	</component>	
+
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltx5091_blr_hw_component.xml</testplan>
+ <target hardware="scarfe" platform="armv5" build="urel" />
+	</component>		
+
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltx5092_blr_hw_component.xml</testplan>
+ <target hardware="scarfe" platform="armv5" build="urel" />
+	</component>
+	
+	<!--Inclusion of Hw xml for topenssl -->
+	
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltestss_blr_hw_component.xml</testplan>
+ <target hardware="zeus" platform="armv5" build="urel" />
+</component>
+
+
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltestverify_blr_hw_component.xml</testplan>
+ <target hardware="zeus" platform="armv5" build="urel" />
+</component>
+
+
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltestenc_blr_hw_component.xml</testplan>
+ <target hardware="zeus" platform="armv5" build="urel" />
+	</component>
+	
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltestgen_blr_hw_component.xml</testplan>
+ <target hardware="zeus" platform="armv5" build="urel" />
+	</component>
+	
+
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltpkcs7_blr_hw_component.xml</testplan>
+ <target hardware="zeus" platform="armv5" build="urel" />
+	</component>
+
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltpkcs7d_blr_hw_component.xml</testplan>
+ <target hardware="zeus" platform="armv5" build="urel" />
+	</component>
+
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltreq_blr_hw_component.xml</testplan>
+ <target hardware="zeus" platform="armv5" build="urel" />
+	</component>
+
+
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltreq2_blr_hw_component.xml</testplan>
+ <target hardware="zeus" platform="armv5" build="urel" />
+	</component>
+
+
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltrsa_blr_hw_component.xml</testplan>
+ <target hardware="zeus" platform="armv5" build="urel" />
+</component>
+
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltcrl_blr_hw_component.xml</testplan>
+ <target hardware="zeus" platform="armv5" build="urel" />
+</component>
+
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltsid_blr_hw_component.xml</testplan>
+ <target hardware="zeus" platform="armv5" build="urel" />
+	</component>
+
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltx509_blr_hw_component.xml</testplan>
+ <target hardware="zeus" platform="armv5" build="urel" />
+	</component>	
+
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltx5091_blr_hw_component.xml</testplan>
+ <target hardware="zeus" platform="armv5" build="urel" />
+	</component>		
+
+<component>
+		<factory>Symbian</factory>
+		 <testplan>ATSINPUT\components\libcrypto_openssl\libcrypto_topenssltx5092_blr_hw_component.xml</testplan>
+ <target hardware="zeus" platform="armv5" build="urel" />
+	</component>
+	
+</testsession>
+

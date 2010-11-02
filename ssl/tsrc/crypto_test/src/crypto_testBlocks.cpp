@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
+* Copyright (c) 2009-2010 Nokia Corporation and/or its subsidiary(-ies). All rights reserved.
 
 * Redistribution and use in source and binary forms, with or without 
 * modification, are permitted provided that the following conditions are met:
@@ -33,7 +33,7 @@
 // INCLUDE FILES
 #include <e32svr.h>
 #include <StifParser.h>
-#include <Stiftestinterface.h>
+#include <StifTestInterface.h>
 #include "crypto_test.h"
 #include "tcrypto_test.h"
 #include <stdio.h>

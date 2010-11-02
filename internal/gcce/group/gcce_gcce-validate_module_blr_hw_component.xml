@@ -1,0 +1,27 @@
+<component>
+		<name>gcce_gcce-validate_blr_hw_component</name>
+		<testset>
+				<id>gcce_gcce-validate_blr</id>
+				<priority>High</priority>
+
+		<install type="binary">
+				<src>gcce-validate.exe</src>
+				<dst>c:\sys\bin\gcce-validate.exe</dst>
+		</install> 
+				
+	  		<install type="binary">
+				<src>testharness.dll</src>
+				<dst>c:\sys\bin\testharness.dll</dst>
+ 			</install>
+
+
+		
+		<execute>
+				<file>c:\sys\bin\gcce-validate.exe</file>
+        <result type="common">
+            <file>c:\spd_logs\xml\gcce-validate.xml</file>
+        </result>
+        <timeout>300</timeout>
+		</execute> 
+</testset>
+</component>

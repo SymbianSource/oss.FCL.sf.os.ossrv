@@ -1,0 +1,158 @@
+.\" Portions Copyright © 2005-2006 Nokia. All rights reserved.
+.\" FreeSec: libcrypt for NetBSD
+.\"
+.\" Copyright (c) 1994 David Burren
+.\" All rights reserved.
+.\"
+.\" Redistribution and use in source and binary forms, with or without
+.\" modification, are permitted provided that the following conditions
+.\" are met:
+.\" 1. Redistributions of source code must retain the above copyright
+.\"    notice, this list of conditions and the following disclaimer.
+.\" 2. Redistributions in binary form must reproduce the above copyright
+.\"    notice, this list of conditions and the following disclaimer in the
+.\"    documentation and/or other materials provided with the distribution.
+.\" 4. Neither the name of the author nor the names of other contributors
+.\"    may be used to endorse or promote products derived from this software
+.\"    without specific prior written permission.
+.\"
+.\" THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+.\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+.\" IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+.\" ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+.\" FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+.\" DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+.\" OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+.\" HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+.\" LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+.\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+.\" SUCH DAMAGE.
+.\"
+.\" $FreeBSD: src/lib/libcrypt/crypt.3,v 1.31 2005/02/09 18:03:14 ru Exp $
+.\"
+.Dd January 19, 1997
+.Dt ENCRYPT 3
+.Os
+.Sh NAME
+.Nm encrypt, setkey
+.Nd encrypt 64-bit messages
+.Sh LIBRARY
+.Lb libcrypt
+.Sh SYNOPSIS
+.In unistd.h
+.Ft void
+.Fn encrypt "char block[64]" "int edflag"
+.In stdlib.h
+.Ft void
+.Fn setkey "const char *key"
+.Sh RETURN VALUES
+The
+.Fn encrypt 
+and 
+.Fn setkey
+functions do not return any value.
+.Sh DESCRIPTION
+.Fn encrypt()
+function encrypts and decrypts 64-bit messages. The algorithm used to perform 
+encryption/decryption is Data Encryption Standard (DES).
+.Pp
+.Fn setkey()
+is invoked to set the key for the DES machine.
+.Fn setkey()'
+s
+.Fn key
+parameter is an array of 64 bytes, and the numerical value of each byte in this
+array is either 0 or 1. The 56-bit key for the DES algorithm is computed from the
+.Fn key
+parameter.
+.Pp
+.Fn encrypt
+function either encrypts or decrypts the data block. The exact operation depends 
+on the value of 
+.Fn edflag
+parameter. 
+.Fn block
+is encrypted if 
+.Fn edflag
+parameter is 0, and decrypted if 1 is being passed as the value of 
+.Fn edflag 
+parameter. 
+.Fn block
+is an array of 64 bytes, wherein the numerical value of each byte is either 0 or 1.
+Like the 
+.Fn setkey'
+s
+.Fn key 
+parameter, 
+.Fn block 
+is a bit vector representation of the actual value that is encoded. It is modified in place
+to return the result.
+.Pp
+.Fn encrypt
+and
+.Fn setkey
+are not reentrant as the key is stored statically.
+
+.Sh ERRORS
+.Fn errno
+should be set to zero prior to calling any of the above functions. The behavior of
+.Fn encrypt
+will be undefined if size of
+.Fn block
+argument is not 64.
+.Sh EXAMPLE
+.Bd -literal -offset indent
+#include <stdlib.h>
+#include <unistd.h>
+
+void encrypt_user()
+{
+	/* bit vector containing the key */
+	char key[64] = 
+	{
+			0, 0, 0, 0, 0, 0, 0, 1,
+			0, 0, 1, 1, 0, 0, 0, 1,
+			1, 1, 0, 1, 1, 0, 0, 1,
+			0, 1, 1, 0, 0, 0, 0, 1,
+			1, 0, 0, 1, 1, 1, 0, 1,
+			1, 1, 0, 0, 0, 0, 0, 1,
+			0, 0, 1, 1, 0, 1, 1, 1,
+			0, 1, 1, 0, 1, 1, 1, 0
+	};
+
+	/* bit vector containing the data block to be encrypted */
+	char block[64] = 
+	{
+		0, 1, 0, 1, 1, 1, 0, 0,
+		1, 1, 0, 1, 0, 1, 0, 1,
+		0, 1, 0, 0, 1, 1, 0, 0,
+		1, 0, 1, 0, 1, 0, 0, 0,
+		0, 0, 1, 1, 1, 1, 0, 1,
+		1, 1, 1, 0, 1, 1, 1, 1,
+		0, 1, 0, 1, 0, 1, 1, 1,
+		1, 1, 0, 1, 1, 0, 1, 0
+	};
+
+	setkey(key);		/* Set the key for DES encryption */
+	
+	/* Perform encryption/decryption of the message block */
+	encrypt(block, 0);	/* Encryption. The input block is modified in place
+					 * to return the output to the user
+					 */
+
+	encrypt(block, 1);	/* Decryption. The input block is modified in place
+					 * to return the result of the decryption operation
+					 */
+}
+.Ed
+.Sh SEE ALSO
+.Sh HISTORY
+.Sh BUGS
+If 
+.Fn encrypt
+is called without priorly invoking 
+.Fn setkey
+the implementation assumes a bit vector consisting of all zeroes as the key
+for the DES algorithm. In this scenaro the outcome of 
+.Fn encrypt
+function is different from that of Linux's.

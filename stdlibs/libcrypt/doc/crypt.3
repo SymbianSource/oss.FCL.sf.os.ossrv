@@ -1,0 +1,174 @@
+.\" Portions Copyright © 2005-2006 Nokia. All rights reserved.
+.\" FreeSec: libcrypt for NetBSD
+.\"
+.\" Copyright (c) 1994 David Burren
+.\" All rights reserved.
+.\"
+.\" Redistribution and use in source and binary forms, with or without
+.\" modification, are permitted provided that the following conditions
+.\" are met:
+.\" 1. Redistributions of source code must retain the above copyright
+.\"    notice, this list of conditions and the following disclaimer.
+.\" 2. Redistributions in binary form must reproduce the above copyright
+.\"    notice, this list of conditions and the following disclaimer in the
+.\"    documentation and/or other materials provided with the distribution.
+.\" 4. Neither the name of the author nor the names of other contributors
+.\"    may be used to endorse or promote products derived from this software
+.\"    without specific prior written permission.
+.\"
+.\" THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+.\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+.\" IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+.\" ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+.\" FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+.\" DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+.\" OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+.\" HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+.\" LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+.\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+.\" SUCH DAMAGE.
+.\"
+.\" $FreeBSD: src/lib/libcrypt/crypt.3,v 1.31 2005/02/09 18:03:14 ru Exp $
+.\"
+.Dd January 19, 1997
+.Dt CRYPT 3
+.Os
+.Sh NAME
+.Nm crypt
+.Nd password and data encryption
+.Sh LIBRARY
+.Lb libcrypt
+.Sh SYNOPSIS
+.In unistd.h
+.Ft char *
+.Fn crypt "const char *key" "const char *salt"
+.Sh RETURN VALUES
+The
+.Fn crypt
+function returns a pointer to the encrypted value on success, and NULL on
+failure.
+.Pp
+.Sh DESCRIPTION
+The
+.Fn crypt
+function performs password hashing with additional code added to
+thwart dictionary attack.
+Different algorithms can be used in the hash.
+.\"
+.\" NOTICE:
+.\" If you add more algorithms, make sure to update this list
+.\" and the default used for the Traditional format, below.
+.\"
+Currently the implementation supports
+.Tn Data Encryption Standard (DES) 
+and
+.Tn MD5
+hash algorithms. However, the actual algorithm used during the call to
+.Fn crypt
+depends on the 
+.Fn salt
+parameter.
+.Pp
+The first argument to
+.Fn crypt 
+is the data to hash (usually a password), in a
+.Dv NULL Ns -terminated
+string.
+The second is the salt, in one of two forms:
+.Pp
+.Bl -tag -width Traditional -compact -offset indent
+.It Modular
+If 
+.Fn salt
+begins with the string
+.Dq $digit$
+then the Modular Crypt Format is used.
+.It Traditional
+.Fn salt
+parameter is a two-character string chosen from the set [a-zA-Z0-9./].
+.El
+.Pp
+.Ss "Modular" crypt:
+.Pp
+If
+.Fn salt
+begins with the string
+.Fa $digit$
+then Modular Crypt Format is used.
+The
+.Fa digit
+identifies the algorithm used for encryption. Currently MD5 hash is implemented. So 
+.Fa digit
+will be 1 and hence the second argument to this function will be a string beginning with
+.Dq $1$
+followed by at most 8 characters (actual salt to be used in the encryption), and optionally
+terminated by 
+.Dq $
+.
+If the optional 
+.Dq $
+is included then the characters following the dollar sign are ignored. 
+The output of this operation will be a string
+containing 34 characters in the format
+.Dq $1$<string>$
+.Pp
+.Dq <string>
+consists of the actual salt (the at most 8 characters string following 
+.Dq $1$
+in the 
+.Fn salt),
+followed by 22 bytes of data from the set [a-zA-Z0-9./].
+.El
+.Pp
+Other crypt formats may be easily added.
+An example salt would be:
+.Bl -tag -offset indent
+.It Cm "$4$thesalt$rest"
+.El
+.Pp
+.Ss "Traditional" crypt:
+.Pp
+It is based on Data Encryption Standard algorithm (DES).
+.Fn salt
+is a two-character string chosen from the set [a-zA-Z0-9./]. In order to thwart the 
+Dictionary Attack, the two-character 
+.Fn salt
+is used to perturb the algorithm in 4096 ways.
+.Pp
+The 56-bit key for the DES algorithm is obtained by taking the lowest 7 bits of each 
+of the first eight characters of the 
+.Fn key.
+The key thus obtained is used to encrypt a constant string (a string containing all zeroes).
+.Pp
+The return value of this function is a pointer to a static buffer. So the function
+is not reentrant.
+
+.Sh Example
+.Bd -literal -offset indent
+#include <stdlib.h>
+#include <unistd.h>
+
+void crypt_user()
+{
+	char *p = NULL,
+	     *q = NULL;
+
+	/* Invoke crypt() to perform password hashing */
+	p = crypt("password", "S1");	/* p contains the hash of "password"
+						 * when "S1" is used as the key. DES
+						 * encryption algoritm is used in this
+						 * scenario
+						 */
+
+	q = crypt("password", "$1$Salt1");
+						/* q contains the hash of "password"
+						 * as computed by the MD5 hash algorithm
+						 */
+}
+.Ed
+.Sh SEE ALSO
+.Sh BUGS
+Output of 
+.Fn crypt
+differs from that of Linux's when NULL passed as 
+.Fn salt .
