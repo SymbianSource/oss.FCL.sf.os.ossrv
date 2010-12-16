@@ -39,6 +39,7 @@
 #include "tsignalmessage.h"
 #endif // SYMBIAN_OE_POSIX_SIGNALS
 
+
 #ifdef SYMBIAN_OE_POSIX_SIGNALS
 #define SIG_SIGNAL_PRESENT_IN_SIGSET(sig,set) ((set & (1ULL << (sig-1))) != 0x0000000000000000ULL)
 #define SIG_ISEMPTY_SIGSET(set) (set == 0x0000000000000000ULL)
@@ -164,17 +165,8 @@ iTLDInfoList(CLocalSystemInterface::KTLDInfoListGran), iDefConnResurrect(ETrue),
 			err |=  iASelectLock.CreateLocal();
 	        //Protect the iDefConnection from concurrent GetDefaultConnection calls
 	        err |= iDefConnLock.CreateLocal();
+			//Protect the time zone server while connecting
 			}
-
-        if(err == KErrNone)
-            {
-            err = iTzServer.Connect();
-            if(!err)
-                {
-                err = iTzServer.ShareAuto();
-                }
-            }
-
 
 		//Panic if any of the above operation returns with error
 		if (err)
@@ -215,9 +207,7 @@ EXPORT_C CLocalSystemInterface::~CLocalSystemInterface()
 
 	// Close the array that maintains aselect request details 
 	iASelectRequest.Close();
-	//close the RTz connection
-	iTzServer.Close();
-
+	
 
 	if( iDefConnPref )
 	    {

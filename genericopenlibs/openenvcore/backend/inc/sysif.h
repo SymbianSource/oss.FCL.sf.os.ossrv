@@ -36,6 +36,7 @@
 #include <rpipe.h>
 
 #include<tz.h>
+#include <e32atomics.h>
 
 #ifdef SYMBIAN_OE_POSIX_SIGNALS
 #include "signalclient.h"
@@ -145,7 +146,7 @@ private:
 	RFastLock* iSsLock;
 	RFastLock* iCsLock;
 	RFastLock* iDefConnLock;
-	RFastLock* iAESelectLock;	
+	RFastLock* iAESelectLock;
 	};
 
 
@@ -688,7 +689,7 @@ private:
 	
 	// Default connection settings, set/cleared using setdefaultif
 	TConnPref* iDefConnPref;
-    RTz     iTzServer;	
+	
     RPointerArray<CSocketDesc> iSocketArray;
 #ifdef SYMBIAN_OE_POSIX_SIGNALS
 	// Signal handler thread
@@ -842,10 +843,7 @@ private:
 #endif // SYMBIAN_OE_POSIX_SIGNALS
 public:
 
-   inline RTz & TZServer()
-        {
-        return iTzServer;
-        } 
+	
 //ipc server session
 RIpcSession iIpcS;
 friend class RFileDesTransferSession;

@@ -339,7 +339,8 @@ CFileDescBase* CFileDescBase::Socket(RSocketServ& aSs, int family, int style, in
 
 	if (err)
 		{
-		delete socketBase;
+	    socketBase->FinalClose();
+		delete socketBase;		
 		if (err == KErrBadName) // Some mismatch in family-style-protocol
 			{
 			err = EPROTONOSUPPORT;

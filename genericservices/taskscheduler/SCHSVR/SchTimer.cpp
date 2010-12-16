@@ -404,11 +404,11 @@ CPropertyNotifier::CPropertyNotifier(CConditionManager& aManager)
 CPropertyNotifier::~CPropertyNotifier()
 	{
 	Cancel();
+	iProperty.Close();
 	}
 
 void CPropertyNotifier::AttachL()
 	{
-	User::LeaveIfError(iProperty.Attach(iCategory, iKey));
 	iProperty.Subscribe(iStatus);
 	SetActive();
 	}
@@ -416,10 +416,14 @@ void CPropertyNotifier::AttachL()
 void CPropertyNotifier::SetPropertyL(const TUid& aCategory, TUint aKey)
 	{
 	if (IsActive())
+	    {
 		Cancel();
+		iProperty.Close();
+	    }
 	iCategory = aCategory;
 	iKey = aKey;
-	AttachL();	
+	User::LeaveIfError(iProperty.Attach(iCategory, iKey));
+	AttachL();
 	}
 
 //	Respond to a condition changing
@@ -436,7 +440,7 @@ void CPropertyNotifier::RunL()
 	// never gets met and iConditionManager.VariableChanged which 
 	// makes sense.
 	else if (iStatus.Int() == KErrNotFound)
-		AttachL();			
+		AttachL();
 	// If status is another error we have a problem!!! Whatever the case 
 	// we should just ignore this condition from now on by doing nothing.
 	}
